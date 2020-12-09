@@ -1,0 +1,9 @@
+apiVersion: shulker.io/v1beta1
+kind: MinecraftServerTemplate
+metadata:
+  name: mc-test-template-hard
+spec:
+  inherit:
+    - mc-test-template-survival
+  additionalProperties:
+    difficulty: '2'

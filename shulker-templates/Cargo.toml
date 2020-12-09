@@ -1,0 +1,25 @@
+[package]
+name = "shulker-templates"
+edition = "2018"
+version = "0.1.0"
+authors = ["Jérémy Levilain <jeremy.levilain@epitech.eu>"]
+license = "MIT"
+readme = "../README.md"
+keywords = []
+repository = "https://github.com/IamBlueSlime/Shulker"
+description = """
+TODO
+"""
+
+[lib]
+name = "shulker_templates"
+path = "src/lib.rs"
+
+[dependencies]
+shulker-crds = { path = "../shulker-crds" }
+kube = { version = "0.43.0", features = ["derive"] }
+kube-runtime = "0.43.0"
+k8s-openapi = { version = "0.9.0", default-features = false, features = ["v1_18"] }
+futures = "0.3.5"
+merge = "0.1.0"
+serde = { version = "1.0.115", features = ["derive"] }

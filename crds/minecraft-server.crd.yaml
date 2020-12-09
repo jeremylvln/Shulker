@@ -1,0 +1,115 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: minecraftservers.shulker.io
+spec:
+  group: shulker.io
+  names:
+    categories:
+      - shulker
+    kind: MinecraftServer
+    listKind: MinecraftServerList
+    plural: minecraftservers
+    shortNames:
+      - mc
+    singular: minecraftserver
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      additionalPrinterColumns:
+        - name: Ready
+          jsonPath: .status.conditions[?(@.type=="Ready")].status
+          type: string
+        - name: Status
+          jsonPath: .status.conditions[?(@.type=="Ready")].message
+          type: string
+        - name: Template
+          jsonPath: .spec.template
+          type: string
+        - name: Players
+          jsonPath: .status.players
+          format: int32
+          type: number
+        - name: Age
+          jsonPath: .metadata.creationTimestamp
+          type: date
+      schema:
+        openAPIV3Schema:
+          description: 'A MinecraftServer resource describe how a Minecraft
+            server should be created.'
+          type: object
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+                object represents. Servers may infer this from the endpoint the client
+                submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: Desired state of the MinecraftServer resource.
+              properties:
+                template:
+                  description: 'Template to use to create to create the properties
+                    of the Minecraft server.'
+                  type: string
+              required:
+                - template
+              type: object
+            status:
+              description: Status of the MinecraftServer. This is set and managed automatically.
+              properties:
+                conditions:
+                  description: 'List of status conditions to indicate the status of the
+                    MincraftServer. Known condition types are `Constructing`, `Starting`
+                    and `Ready`.'
+                  items:
+                    description: 'MinecraftServerCondition contains condition information
+                      for an MinecraftServer.'
+                    properties:
+                      lastTransitionTime:
+                        description: 'LastTransitionTime is the timestamp corresponding
+                          to the last status change of this condition.'
+                        type: string
+                        format: date-time
+                      message:
+                        description: 'Message is a human readable description of the
+                          details of the last transition, complementing reason.'
+                        type: string
+                      reason:
+                        description: "Reason is a brief machine readable explanation
+                          for the condition's last transition."
+                        type: string
+                      status:
+                        description: 'Status of the condition, one of (`True`, `False`).'
+                        type: string
+                        enum:
+                          - "True"
+                          - "False"
+                      type:
+                        description: 'Type of the condition, known values are
+                          (`Constructing`, `Starting` and `Ready`).'
+                        enum:
+                          - Constructing
+                          - Starting
+                          - Ready
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                players:
+                  description: 'Count of players connected to the Minecraft server.'
+                  format: int32
+                  type: number
+              type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

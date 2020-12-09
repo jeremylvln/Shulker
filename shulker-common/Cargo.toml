@@ -1,0 +1,19 @@
+[package]
+name = "shulker-common"
+edition = "2018"
+version = "0.1.0"
+authors = ["Jérémy Levilain <jeremy.levilain@epitech.eu>"]
+license = "MIT"
+readme = "../README.md"
+keywords = []
+repository = "https://github.com/IamBlueSlime/Shulker"
+description = """
+TODO
+"""
+
+[lib]
+name = "shulker_common"
+path = "src/lib.rs"
+
+[dependencies]
+merge = "0.1.0"

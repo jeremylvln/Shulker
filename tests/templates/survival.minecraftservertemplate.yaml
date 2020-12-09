@@ -1,0 +1,7 @@
+apiVersion: shulker.io/v1beta1
+kind: MinecraftServerTemplate
+metadata:
+  name: mc-test-template-survival
+spec:
+  additionalProperties:
+    gamemode: '0'

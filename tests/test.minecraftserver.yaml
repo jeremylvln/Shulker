@@ -1,0 +1,17 @@
+apiVersion: shulker.io/v1beta1
+kind: MinecraftServerTemplate
+metadata:
+  name: mc-test-template
+spec:
+  inherit:
+    - mc-test-template-v1-16-4
+    - mc-test-template-hard
+  playersCount: 25
+
+---
+apiVersion: shulker.io/v1beta1
+kind: MinecraftServer
+metadata:
+  name: mc-test
+spec:
+  template: mc-test-template
