@@ -11,8 +11,9 @@ use tokio::time::Duration;
 use tracing::{debug, error, info, instrument};
 
 use shulker_crds::minecraft_server::*;
+use shulker_instance::minecraft_server::spawn;
 
-use crate::template::get_template;
+use crate::templates::get_template;
 
 #[derive(Debug, Snafu)]
 pub enum Error {
@@ -20,6 +21,10 @@ pub enum Error {
     MinecraftServerTemplateNotFound {
         template: String,
         source: kube::Error,
+    },
+    #[snafu(display("Failed to spawn MinecraftServer: {}", source))]
+    MinecraftServerSpawnFailed {
+        source: shulker_instance::minecraft_server::spawn::Error,
     },
     #[snafu(display("Failed to patch MinecraftServer: {}", source))]
     MinecraftServerPatchFailed {
@@ -43,11 +48,15 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
     debug!("reconcile MinecraftServer {}/{}: {:?}", ns, name, mc);
     let mcs: Api<MinecraftServer> = Api::namespaced(client.clone(), &ns);
 
-    get_template(client.clone(), &mc.spec.template, &ns)
+    let template = get_template(client.clone(), &mc.spec.template, &ns)
         .await
         .context(MinecraftServerTemplateNotFound {
-            template: mc.spec.template,
+            template: mc.spec.template.clone(),
         })?;
+
+    spawn::spawn_instance(client.clone(), "mc-test", &ns, &template)
+        .await
+        .context(MinecraftServerSpawnFailed)?;
 
     let new_status = serde_json::to_vec(&json!({
         "status": MinecraftServerStatus {
@@ -63,7 +72,7 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
                     last_transition_time: Utc::now(),
                     message: Some("Creating pod".to_owned()),
                     reason: Some("Creating pod".to_owned()),
-                    status: "False".to_owned(),
+                    status: "True".to_owned(),
                     r#type: "Constructing".to_owned(),
                 }
             ],

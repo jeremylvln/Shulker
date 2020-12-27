@@ -2,7 +2,7 @@ use std::error::Error;
 use tracing::{info, warn};
 
 mod reconcilers;
-mod template;
+mod templates;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 

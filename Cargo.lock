@@ -1529,6 +1529,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "shulker-instance"
+version = "0.1.0"
+dependencies = [
+ "futures",
+ "k8s-openapi",
+ "kube",
+ "kube-runtime",
+ "serde",
+ "serde_json",
+ "shulker-crds",
+ "snafu",
+ "tracing",
+ "tracing-futures",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "shulker-operator"
 version = "0.1.0"
 dependencies = [
@@ -1537,28 +1554,16 @@ dependencies = [
  "k8s-openapi",
  "kube",
  "kube-runtime",
+ "merge",
  "serde",
  "serde_json",
  "shulker-crds",
- "shulker-templates",
+ "shulker-instance",
  "snafu",
  "tokio",
  "tracing",
  "tracing-futures",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "shulker-templates"
-version = "0.1.0"
-dependencies = [
- "futures",
- "k8s-openapi",
- "kube",
- "kube-runtime",
- "merge",
- "serde",
- "shulker-crds",
 ]
 
 [[package]]

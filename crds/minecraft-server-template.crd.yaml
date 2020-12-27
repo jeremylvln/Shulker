@@ -17,8 +17,8 @@ spec:
   versions:
     - name: v1beta1
       additionalPrinterColumns:
-        - name: Parents
-          jsonPath: .spec.parents
+        - name: Inherit from
+          jsonPath: .spec.inherit
           type: string
         - name: Instances
           jsonPath: .status.instances
@@ -69,6 +69,14 @@ spec:
                       description: Version distribution channel to use.
                       enum:
                         - vanilla
+                        - forge
+                        - bukkit
+                        - spigot
+                        - paper
+                        - spongevanilla
+                        - magma
+                        - mohist
+                        - catserver
                       type: string
                   required:
                     - name
@@ -105,14 +113,21 @@ spec:
                 automatically.'
               properties:
                 instances:
+                  default: 0
                   description: 'Count of instances using this MinecraftServerTemplate.'
                   format: int32
                   type: number
                 players:
+                  default: 0
                   description: 'Count of players connected to the instances using this
                     MinecraftServerTemplate.'
                   format: int32
                   type: number
+                composeResult:
+                  default: null
+                  description: 'Result of the composition of this MinecraftServerTemplate and
+                    with the properties inherited from its parents.'
+                  type: string
               type: object
       served: true
       storage: true

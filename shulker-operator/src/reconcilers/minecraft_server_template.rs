@@ -7,10 +7,10 @@ use kube_runtime::controller::{Context, Controller, ReconcilerAction};
 use serde_json::json;
 use snafu::{ResultExt, Snafu};
 use tokio::time::Duration;
-use tracing::{debug, error, info, instrument, warn};
+use tracing::{debug, error, info, instrument};
 
+use crate::templates::compose::fold_template_spec;
 use shulker_crds::minecraft_server_template::*;
-use shulker_templates::compose::fold_template_spec;
 
 #[derive(Debug, Snafu)]
 pub enum Error {
@@ -46,15 +46,15 @@ async fn reconcile(
     );
     let mcs: Api<MinecraftServerTemplate> = Api::namespaced(client.clone(), &ns);
 
-    let ttt = fold_template_spec(client.clone(), &mct)
+    let composed = fold_template_spec(client.clone(), &mct)
         .await
         .context(MinecraftServerTemplateAggregationFailed)?;
-    warn!("{} -> {:#?}", name, ttt);
 
     let new_status = serde_json::to_vec(&json!({
         "status": MinecraftServerTemplateStatus {
             instances: 0,
             players: 0,
+            compose_result: serde_json::to_string(&composed).context(SerializationFailed)?,
         }
     }))
     .context(SerializationFailed)?;

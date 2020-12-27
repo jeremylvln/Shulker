@@ -2,5 +2,5 @@
 members = [
     "shulker-operator",
     "shulker-crds",
-    "shulker-templates"
+    "shulker-instance"
 ]

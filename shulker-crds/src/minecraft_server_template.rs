@@ -44,6 +44,7 @@ pub struct MinecraftServerTemplateCountSpec {
 pub struct MinecraftServerTemplateStatus {
     pub instances: i32,
     pub players: i32,
+    pub compose_result: String,
 }
 
 impl Template<MinecraftServerTemplateSpec> for MinecraftServerTemplate {
