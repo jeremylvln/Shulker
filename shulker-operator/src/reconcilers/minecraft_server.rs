@@ -11,7 +11,7 @@ use tokio::time::Duration;
 use tracing::{debug, error, info, instrument};
 
 use shulker_crds::minecraft_server::*;
-use shulker_instance::minecraft_server::spawn;
+use shulker_instance::minecraft_server::deployment;
 
 use crate::templates::get_template;
 
@@ -22,9 +22,9 @@ pub enum Error {
         template: String,
         source: kube::Error,
     },
-    #[snafu(display("Failed to spawn MinecraftServer: {}", source))]
-    MinecraftServerSpawnFailed {
-        source: shulker_instance::minecraft_server::spawn::Error,
+    #[snafu(display("Failed to deploy MinecraftServer: {}", source))]
+    MinecraftServerDeploymentFailed {
+        source: shulker_instance::minecraft_server::deployment::Error,
     },
     #[snafu(display("Failed to patch MinecraftServer: {}", source))]
     MinecraftServerPatchFailed {
@@ -54,26 +54,29 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
             template: mc.spec.template.clone(),
         })?;
 
-    spawn::spawn_instance(client.clone(), "mc-test", &ns, &template)
+    if !template.spec.schedulable.unwrap_or(false) {
+        error!(
+            "primary template of MinecraftServer {}/{} is not schedulable",
+            ns, name
+        );
+        return Ok(ReconcilerAction {
+            requeue_after: Some(Duration::from_secs(60 * 5)),
+        });
+    }
+
+    deployment::ensure_deployment(client.clone(), &name, &name, &ns, &template)
         .await
-        .context(MinecraftServerSpawnFailed)?;
+        .context(MinecraftServerDeploymentFailed)?;
 
     let new_status = serde_json::to_vec(&json!({
         "status": MinecraftServerStatus {
             conditions: vec![
                 MinecraftServerStatusCondition {
                     last_transition_time: Utc::now(),
-                    message: None,
-                    reason: None,
-                    status: "False".to_owned(),
-                    r#type: "Ready".to_owned(),
-                },
-                MinecraftServerStatusCondition {
-                    last_transition_time: Utc::now(),
-                    message: Some("Creating pod".to_owned()),
-                    reason: Some("Creating pod".to_owned()),
+                    message: Some("Deployment synced with template".to_owned()),
+                    reason: Some("Deployment synced with template".to_owned()),
                     status: "True".to_owned(),
-                    r#type: "Constructing".to_owned(),
+                    r#type: "Ready".to_owned(),
                 }
             ],
             players: 0
@@ -81,8 +84,7 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
     }))
     .context(SerializationFailed)?;
 
-    let ps = PatchParams::default();
-    mcs.patch_status(&name, &ps, new_status)
+    mcs.patch_status(&name, &PatchParams::default(), new_status)
         .await
         .context(MinecraftServerPatchFailed)?;
 

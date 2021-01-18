@@ -6,7 +6,10 @@ spec:
   inherit:
     - mc-test-template-v1-16-4
     - mc-test-template-hard
+  schedulable: true
   playersCount: 25
+  count:
+    min: 1
 
 ---
 apiVersion: shulker.io/v1beta1

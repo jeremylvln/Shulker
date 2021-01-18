@@ -40,6 +40,7 @@ async fn reconcile(
     let client = ctx.get_ref().client.clone();
     let name = Meta::name(&mct);
     let ns = Meta::namespace(&mct).expect("MinecraftServerTemplate is namespaced");
+
     debug!(
         "reconcile MinecraftServerTemplate {}/{}: {:?}",
         ns, name, mct
@@ -59,8 +60,7 @@ async fn reconcile(
     }))
     .context(SerializationFailed)?;
 
-    let ps = PatchParams::default();
-    mcs.patch_status(&name, &ps, new_status)
+    mcs.patch_status(&name, &PatchParams::default(), new_status)
         .await
         .context(MinecraftServerTemplatePatchFailed)?;
 

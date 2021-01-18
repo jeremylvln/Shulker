@@ -18,6 +18,7 @@ use shulker_common::merge::merge_hash_map;
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateSpec {
     pub inherit: Option<Vec<String>>,
+    pub schedulable: Option<bool>,
     pub version: Option<MinecraftServerTemplateVersionSpec>,
     pub count: Option<MinecraftServerTemplateCountSpec>,
     pub players_count: Option<i32>,
@@ -35,8 +36,8 @@ pub struct MinecraftServerTemplateVersionSpec {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateCountSpec {
-    pub minimum: Option<i32>,
-    pub maximum: Option<i32>,
+    pub min: Option<i32>,
+    pub max: Option<i32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

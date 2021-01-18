@@ -29,6 +29,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .expect("Missing Shulker's Kubernetes CRDs");
 
     tokio::select! {
+        _ = reconcilers::deployment::drainer(client.clone()) => warn!("Deployment controller drained"),
         _ = reconcilers::minecraft_server_template::drainer(client.clone()) => warn!("MinecraftServerTemplate controller drained"),
         _ = reconcilers::minecraft_server::drainer(client.clone()) => warn!("MinecraftServer controller drained"),
     }

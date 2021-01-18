@@ -58,6 +58,11 @@ spec:
                       properties from.'
                     type: string
                   type: array
+                schedulable:
+                  default: false
+                  description: 'Is the MinecraftServerTemplate allowed to be scheduled
+                    to create instances.'
+                  type: boolean
                 version:
                   description: Describe the version of the Minecraft server to run.
                   properties:
@@ -84,12 +89,12 @@ spec:
                 count:
                   description: Limits to the number of instances the operator can deploy.
                   properties:
-                    minimum:
+                    min:
                       description: Minimum count of Minecraft server instances to deploy.
                       format: int32
                       minimum: 0
                       type: integer
-                    maximum:
+                    max:
                       description: Maximum count of Minecraft server instances to deploy.
                       format: int32
                       minimum: 1

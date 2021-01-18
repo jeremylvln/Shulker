@@ -66,8 +66,7 @@ spec:
               properties:
                 conditions:
                   description: 'List of status conditions to indicate the status of the
-                    MincraftServer. Known condition types are `Constructing`, `Starting`
-                    and `Ready`.'
+                    MincraftServer. Known condition types are `Ready`.'
                   items:
                     description: 'MinecraftServerCondition contains condition information
                       for an MinecraftServer.'
@@ -93,10 +92,8 @@ spec:
                           - "False"
                       type:
                         description: 'Type of the condition, known values are
-                          (`Constructing`, `Starting` and `Ready`).'
+                          `Ready`.'
                         enum:
-                          - Constructing
-                          - Starting
                           - Ready
                         type: string
                     required:
