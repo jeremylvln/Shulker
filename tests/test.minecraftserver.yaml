@@ -4,7 +4,7 @@ metadata:
   name: mc-test-template
 spec:
   inherit:
-    - mc-test-template-v1-16-4
+    - mc-test-template-v1-16-5
     - mc-test-template-hard
   schedulable: true
   playersCount: 25

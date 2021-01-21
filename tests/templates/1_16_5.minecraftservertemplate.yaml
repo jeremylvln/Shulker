@@ -1,8 +1,8 @@
 apiVersion: shulker.io/v1beta1
 kind: MinecraftServerTemplate
 metadata:
-  name: mc-test-template-v1-16-4
+  name: mc-test-template-v1-16-5
 spec:
   version:
-    name: 1.16.4
+    name: 1.16.5
     channel: vanilla

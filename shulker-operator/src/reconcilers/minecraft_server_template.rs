@@ -80,7 +80,7 @@ pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),
     });
-    let resources = Api::<MinecraftServerTemplate>::all(client);
+    let resources: Api<MinecraftServerTemplate> = Api::all(client);
 
     info!("starting reconciliation for MinecraftServerTemplate resources");
     Controller::new(resources, ListParams::default())

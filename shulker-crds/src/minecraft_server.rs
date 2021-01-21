@@ -1,9 +1,10 @@
 use kube::CustomResource;
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use chrono::{DateTime, Utc};
 
-#[derive(CustomResource, Clone, Debug, Deserialize, Serialize)]
+#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     group = "shulker.io",
     version = "v1beta1",
@@ -16,14 +17,14 @@ pub struct MinecraftServerSpec {
     pub template: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerStatus {
     pub conditions: Vec<MinecraftServerStatusCondition>,
     pub players: i32,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerStatusCondition {
     pub last_transition_time: DateTime<Utc>,

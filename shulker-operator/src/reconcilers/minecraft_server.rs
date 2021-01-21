@@ -13,6 +13,7 @@ use tracing::{debug, error, info, instrument};
 use shulker_crds::minecraft_server::*;
 use shulker_instance::minecraft_server::deployment;
 
+use crate::config::Config;
 use crate::templates::get_template;
 
 #[derive(Debug, Snafu)]
@@ -100,11 +101,11 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     }
 }
 
-pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
+pub fn drainer(_config: Config, client: Client) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),
     });
-    let resources = Api::<MinecraftServer>::all(client);
+    let resources: Api<MinecraftServer> = Api::all(client);
 
     info!("starting reconciliation for MinecraftServer resources");
     Controller::new(resources, ListParams::default())

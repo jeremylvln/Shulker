@@ -14,14 +14,9 @@ use shulker_crds::minecraft_server::*;
 #[derive(Debug, Snafu)]
 pub enum Error {
     #[snafu(display("Deployment {} is malformed: {}", deployment, reason))]
-    DeploymentMalformed {
-        deployment: String,
-        reason: String,
-    },
+    DeploymentMalformed { deployment: String, reason: String },
     #[snafu(display("Failed to delete a deployment: {}", source))]
-    DeploymentDeletionFailed {
-        source: kube::Error,
-    },
+    DeploymentDeletionFailed { source: kube::Error },
 }
 
 #[derive(Clone)]
@@ -81,7 +76,7 @@ pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),
     });
-    let resources = Api::<Deployment>::all(client);
+    let resources: Api<Deployment> = Api::all(client);
     let lp = ListParams::default().labels("shulker.io/managed-by=shulker");
 
     info!("starting reconciliation for Deployment resources");

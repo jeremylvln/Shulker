@@ -1,5 +1,6 @@
 use kube::CustomResource;
 use merge::Merge;
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
@@ -7,7 +8,7 @@ use std::collections::HashMap;
 use crate::template::{Template, TemplateSpec};
 use shulker_common::merge::merge_hash_map;
 
-#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, Merge)]
+#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, Merge, JsonSchema)]
 #[kube(
     group = "shulker.io",
     version = "v1beta1",
@@ -26,21 +27,21 @@ pub struct MinecraftServerTemplateSpec {
     pub additional_properties: Option<HashMap<String, String>>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateVersionSpec {
     pub name: String,
     pub channel: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateCountSpec {
     pub min: Option<i32>,
     pub max: Option<i32>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateStatus {
     pub instances: i32,
