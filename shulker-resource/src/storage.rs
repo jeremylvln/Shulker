@@ -1,5 +1,6 @@
 use futures::future;
 use snafu::{ResultExt, Snafu};
+use std::collections::HashMap;
 use std::path::PathBuf;
 use tracing::{debug, info};
 
@@ -31,27 +32,30 @@ impl ResourceStorage {
             Ok(_) => {
                 info!("synced resource proxies");
                 Ok(())
-            },
+            }
             Err(error) => Err(Error::ProxyError { source: error }),
         }
     }
 
-    pub fn push(
+    pub async fn push(
         &mut self,
         name: &str,
         provider: &str,
-        spec: &serde_json::Value,
+        spec: &HashMap<String, String>,
     ) -> Result<(), Error> {
-        if self.proxies.iter().position(|p| p.name == name).is_some() {
+        if self.proxies.iter().any(|p| p.name == name) {
             debug!("found existing proxy for resource \"{}\"", name);
             Ok(())
         } else {
             debug!("creating new proxy for resource \"{}\"", name);
-            self.proxies.push(ResourceProxy::new(
+            let mut proxy = ResourceProxy::new(
                 name,
                 self.dir.clone(),
                 ResourceProvider::deserialize(provider, spec).context(ProviderError)?,
-            ));
+            );
+
+            proxy.fetch().await.context(ProxyError)?;
+            self.proxies.push(proxy);
             Ok(())
         }
     }

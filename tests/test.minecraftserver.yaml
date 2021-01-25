@@ -6,10 +6,11 @@ spec:
   inherit:
     - mc-test-template-v1-16-5
     - mc-test-template-hard
+    - mc-test-template-worldedit
   schedulable: true
-  playersCount: 25
-  count:
+  replicas:
     min: 1
+  playersCount: 25
 
 ---
 apiVersion: shulker.io/v1beta1

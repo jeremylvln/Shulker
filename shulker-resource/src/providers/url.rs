@@ -1,14 +1,14 @@
 use snafu::{ensure, ResultExt, Snafu};
+use std::collections::HashMap;
 use std::fs::File;
 
 use crate::provider::ResourceProvider;
 
 #[derive(Debug, Snafu)]
 pub enum Error {
-    #[snafu(display("Malformed spec for resource provider url: {} ({})", reason, spec))]
+    #[snafu(display("Malformed spec for resource provider url: {}", reason))]
     MalformedSpec {
         reason: String,
-        spec: serde_json::Value,
     },
     NotFoundError,
     #[snafu(display(
@@ -33,11 +33,11 @@ pub struct UrlResourceProvider {
 }
 
 impl UrlResourceProvider {
-    pub fn deserialize(spec: &serde_json::Value) -> Result<ResourceProvider, Error> {
+    pub fn deserialize(spec: &HashMap<String, String>) -> Result<ResourceProvider, Error> {
         UrlResourceProvider::validate_spec(spec)?;
 
         Ok(ResourceProvider::Url(UrlResourceProvider {
-            url: spec.get("url").unwrap().as_str().unwrap().to_owned(),
+            url: spec.get("url").unwrap().clone(),
         }))
     }
 
@@ -72,14 +72,11 @@ impl UrlResourceProvider {
         }
     }
 
-    fn validate_spec(spec: &serde_json::Value) -> Result<(), Error> {
-        let url = spec.get("url");
-
+    fn validate_spec(spec: &HashMap<String, String>) -> Result<(), Error> {
         ensure!(
-            url.is_some() && url.unwrap().as_str().is_some(),
+            spec.contains_key("url"),
             MalformedSpec {
                 reason: "malformed url".to_owned(),
-                spec: spec.clone()
             }
         );
 

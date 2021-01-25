@@ -1,9 +1,8 @@
 use envconfig::Envconfig;
 use shulker_resource::storage::ResourceStorage;
 use std::error::Error;
+use std::sync::{Arc, RwLock};
 use tracing::{info, warn};
-
-use serde_json::json;
 
 mod config;
 mod reconcilers;
@@ -26,17 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     info!("   ##");
 
     let c = config::Config::init_from_env().unwrap();
-    let mut rc = ResourceStorage::new(&c.cache_dir);
-    rc.push(
-        "test",
-        "url",
-        &json!({
-            "url": "https://i.jeremylvln.fr/skyconqueror.zip"
-        }),
-    )
-    .expect("ERR");
-
-    rc.sync().await.expect(":(");
+    let resource_storage = Arc::new(RwLock::new(ResourceStorage::new(&c.cache_dir)));
 
     let client = kube::Client::try_default()
         .await
@@ -48,8 +37,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     tokio::select! {
         _ = reconcilers::deployment::drainer(client.clone()) => warn!("Deployment controller drained"),
-        _ = reconcilers::minecraft_server_template::drainer(client.clone()) => warn!("MinecraftServerTemplate controller drained"),
-        _ = reconcilers::minecraft_server::drainer(c.clone(), client.clone()) => warn!("MinecraftServer controller drained"),
+        _ = reconcilers::minecraft_server_template::drainer(client.clone(), resource_storage.clone()) => warn!("MinecraftServerTemplate controller drained"),
+        _ = reconcilers::minecraft_server::drainer(client.clone()) => warn!("MinecraftServer controller drained"),
     }
 
     Ok(())

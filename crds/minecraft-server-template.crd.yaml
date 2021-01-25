@@ -86,7 +86,7 @@ spec:
                   required:
                     - name
                   type: object
-                count:
+                replicas:
                   description: Limits to the number of instances the operator can deploy.
                   properties:
                     min:
@@ -99,6 +99,58 @@ spec:
                       format: int32
                       minimum: 1
                       type: integer
+                  type: object
+                assets:
+                  description: Resources to link as volume before starting the Minecraft server.
+                  properties:
+                    maps:
+                      items:
+                        description: "List of resources to link as maps. Will be extracted in server's
+                          root directory."
+                        properties:
+                          name:
+                            description: Name of the resource.
+                            type: string
+                          provider:
+                            description: Provider of the resource.
+                            enum:
+                              - url
+                              - maven
+                            type: string
+                          spec:
+                            additionalProperties:
+                              type: string
+                            description: Provider-related configuration for the resource.
+                            type: object
+                        required:
+                          - name
+                          - provider
+                        type: object
+                      type: array
+                    plugins:
+                      items:
+                        description: "List of resources to link as plugins. Will be extracted in server's
+                          plugins directory"
+                        properties:
+                          name:
+                            description: Name of the resource.
+                            type: string
+                          provider:
+                            description: Provider of the resource.
+                            enum:
+                              - url
+                              - maven
+                            type: string
+                          spec:
+                            additionalProperties:
+                              type: string
+                            description: Provider-related configuration for the resource.
+                            type: object
+                        required:
+                          - name
+                          - provider
+                        type: object
+                      type: array
                   type: object
                 playersCount:
                   description: Count of players a Minecraft server can accept.

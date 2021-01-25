@@ -1,4 +1,5 @@
 use snafu::Snafu;
+use std::collections::HashMap;
 use std::fs::File;
 
 use crate::providers;
@@ -8,14 +9,12 @@ pub enum Error {
     #[snafu(display("Unknown resource provider {}", provider))]
     UnknownProvider { provider: String },
     #[snafu(display(
-        "Failed to deserialize resource provider {} spec: {} ({})",
+        "Failed to deserialize resource provider {} spec: {}",
         provider,
-        source,
-        spec
+        source
     ))]
     DeserializationFailed {
         provider: String,
-        spec: serde_json::Value,
         source: Box<dyn std::error::Error>,
     },
     #[snafu(display(
@@ -44,7 +43,7 @@ pub enum ResourceProvider {
 }
 
 impl ResourceProvider {
-    pub fn deserialize(provider: &str, spec: &serde_json::Value) -> Result<Self, Error> {
+    pub fn deserialize(provider: &str, spec: &HashMap<String, String>) -> Result<Self, Error> {
         let res = match provider {
             "url" => providers::url::UrlResourceProvider::deserialize(spec),
             _ => {
@@ -58,7 +57,6 @@ impl ResourceProvider {
             Ok(provider) => Ok(provider),
             Err(error) => Err(Error::DeserializationFailed {
                 provider: provider.to_owned(),
-                spec: spec.clone(),
                 source: Box::new(error),
             }),
         }

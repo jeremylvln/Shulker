@@ -46,10 +46,10 @@ fn validate_template(name: &str, spec: &MinecraftServerTemplateSpec) -> Result<(
     );
 
     ensure!(
-        spec.count.is_some(),
+        spec.replicas.is_some(),
         TemplateInvalid {
             template: name.to_owned(),
-            reason: "No count provided".to_owned()
+            reason: "No replicas provided".to_owned()
         }
     );
 
@@ -67,7 +67,7 @@ fn create_deployment_json(
     validate_template(&Meta::name(template), &composed_spec)?;
 
     let spec = serde_json::json!({
-        "replicas": composed_spec.count.as_ref().unwrap().min.unwrap_or(1),
+        "replicas": composed_spec.replicas.as_ref().unwrap().min.unwrap_or(1),
         "selector": {
             "matchLabels": {
                 "shulker.io/managed-by": "shulker",

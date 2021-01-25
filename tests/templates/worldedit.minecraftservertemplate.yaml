@@ -1,0 +1,11 @@
+apiVersion: shulker.io/v1beta1
+kind: MinecraftServerTemplate
+metadata:
+  name: mc-test-template-worldedit
+spec:
+  assets:
+    plugins:
+      - name: worldedit
+        provider: url
+        spec:
+          url: https://i.jeremylvln.fr/worldedit-bukkit-7.2.2-dist.jar

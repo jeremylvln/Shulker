@@ -5,4 +5,4 @@ metadata:
 spec:
   version:
     name: 1.16.5
-    channel: vanilla
+    channel: paper

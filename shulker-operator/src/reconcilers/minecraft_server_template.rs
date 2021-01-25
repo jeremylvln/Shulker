@@ -6,11 +6,13 @@ use kube::{
 use kube_runtime::controller::{Context, Controller, ReconcilerAction};
 use serde_json::json;
 use snafu::{ResultExt, Snafu};
+use std::sync::{Arc, RwLock};
 use tokio::time::Duration;
 use tracing::{debug, error, info, instrument};
 
 use crate::templates::compose::fold_template_spec;
 use shulker_crds::minecraft_server_template::*;
+use shulker_resource::storage::ResourceStorage;
 
 #[derive(Debug, Snafu)]
 pub enum Error {
@@ -30,6 +32,7 @@ pub enum Error {
 #[derive(Clone)]
 struct Data {
     client: Client,
+    resource_storage: Arc<RwLock<ResourceStorage>>,
 }
 
 #[instrument(skip(mct, ctx))]
@@ -50,6 +53,25 @@ async fn reconcile(
     let composed = fold_template_spec(client.clone(), &mct)
         .await
         .context(MinecraftServerTemplateAggregationFailed)?;
+
+    if let Some(assets) = composed.assets.as_ref() {
+        let mut resource_storage = ctx.get_ref().resource_storage.write().unwrap();
+
+        if let Some(maps) = assets.maps.as_ref() {
+            for map in maps {
+                resource_storage
+                    .push(&map.name, &map.provider, &map.spec)
+                    .await;
+            }
+        }
+        if let Some(plugins) = assets.plugins.as_ref() {
+            for plugin in plugins {
+                resource_storage
+                    .push(&plugin.name, &plugin.provider, &plugin.spec)
+                    .await;
+            }
+        }
+    }
 
     let new_status = serde_json::to_vec(&json!({
         "status": MinecraftServerTemplateStatus {
@@ -76,9 +98,13 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     }
 }
 
-pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
+pub fn drainer(
+    client: Client,
+    resource_storage: Arc<RwLock<ResourceStorage>>,
+) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),
+        resource_storage: resource_storage.clone(),
     });
     let resources: Api<MinecraftServerTemplate> = Api::all(client);
 

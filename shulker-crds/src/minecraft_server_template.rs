@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
+use crate::resource::ResourceSpec;
 use crate::template::{Template, TemplateSpec};
 use shulker_common::merge::merge_hash_map;
 
@@ -21,7 +22,8 @@ pub struct MinecraftServerTemplateSpec {
     pub inherit: Option<Vec<String>>,
     pub schedulable: Option<bool>,
     pub version: Option<MinecraftServerTemplateVersionSpec>,
-    pub count: Option<MinecraftServerTemplateCountSpec>,
+    pub replicas: Option<MinecraftServerTemplateReplicasSpec>,
+    pub assets: Option<MinecraftServerTemplateAssetsSpec>,
     pub players_count: Option<i32>,
     #[merge(strategy = merge_hash_map)]
     pub additional_properties: Option<HashMap<String, String>>,
@@ -36,9 +38,16 @@ pub struct MinecraftServerTemplateVersionSpec {
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
-pub struct MinecraftServerTemplateCountSpec {
+pub struct MinecraftServerTemplateReplicasSpec {
     pub min: Option<i32>,
     pub max: Option<i32>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, Merge, JsonSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct MinecraftServerTemplateAssetsSpec {
+    pub maps: Option<Vec<ResourceSpec>>,
+    pub plugins: Option<Vec<ResourceSpec>>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]

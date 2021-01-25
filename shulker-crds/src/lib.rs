@@ -3,6 +3,7 @@ use kube::{api::Api, client::Client, error::Error};
 
 pub mod minecraft_server;
 pub mod minecraft_server_template;
+pub mod resource;
 pub mod template;
 
 pub async fn assert_installed_crds(client: Client) -> Result<(), Error> {
