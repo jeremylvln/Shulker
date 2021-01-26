@@ -11,19 +11,39 @@ use tracing::{debug, error, info, instrument};
 
 use shulker_crds::minecraft_server::*;
 
+/// Enumeration of possible errors concerning the
+/// reconciliation of Deployment resources.
 #[derive(Debug, Snafu)]
 pub enum Error {
+    /// The Deployment resource is malformed (maybe
+    /// because it has been modified by someone else).
     #[snafu(display("Deployment {} is malformed: {}", deployment, reason))]
     DeploymentMalformed { deployment: String, reason: String },
+    /// Kubernetes's API rejected the deletion of an
+    /// existing Deployment.
     #[snafu(display("Failed to delete a deployment: {}", source))]
     DeploymentDeletionFailed { source: kube::Error },
 }
 
+/// Context structure provided when reconciling
+/// a resource.
 #[derive(Clone)]
 struct Data {
+    /// Kubernetes client.
     client: Client,
 }
 
+/// Deployment resource reconciler.
+/// 
+/// It only job is to ensure that the deployment
+/// is linked to a MinecraftServer resource. If
+/// the operator boots in an environment where
+/// orphan deployments are found, they will be
+/// deleted.
+/// 
+/// # Arguments
+/// - `deployment` - Deployment resource
+/// - `ctx` - Context
 #[instrument(skip(deployment, ctx))]
 async fn reconcile(deployment: Deployment, ctx: Context<Data>) -> Result<ReconcilerAction, Error> {
     let client = ctx.get_ref().client.clone();
@@ -65,6 +85,12 @@ async fn reconcile(deployment: Deployment, ctx: Context<Data>) -> Result<Reconci
     }
 }
 
+/// Error policy to call when a Deployment
+/// reconciliation fails.
+/// 
+/// # Arguments
+/// - `error` - Occured error
+/// - `_ctx` - Context
 fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     error!("reconcile failed for Deployment: {}", error);
     ReconcilerAction {
@@ -72,6 +98,11 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     }
 }
 
+/// Create a controller for Deployment
+/// resources.
+/// 
+/// # Arguments
+/// - `client` - Kubernetes client
 pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),

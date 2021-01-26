@@ -9,6 +9,18 @@ use serde::de::DeserializeOwned;
 
 use shulker_crds::template::{Template, TemplateSpec};
 
+/// Compose a template with its parents.
+/// 
+/// This helper will retrieve all the parents
+/// from the Kubernetes API client and use the
+/// `merge` create to fold the properties to the
+/// template given as parameter.
+/// 
+/// # Arguments
+/// - `client` - Kubernetes client
+/// - `templates` - Kubernetes API client for the
+/// according template resource
+/// - `template` - Template to fold the properties in.
 fn retreive_inherited_specs<
     'a,
     T: Template<S> + Meta + DeserializeOwned + Clone + Sync + Send,
@@ -53,6 +65,13 @@ fn retreive_inherited_specs<
     .boxed()
 }
 
+/// Fold the template given as parameter with
+/// the properties of its parents which the
+/// template could inherit properties from.
+/// 
+/// # Arguments
+/// - `client` - Kubernetes client
+/// - `template` - Template to fold the properties in.
 pub async fn fold_template_spec<
     T: Template<S> + Meta + DeserializeOwned + Clone + Sync + Send,
     S: TemplateSpec + Merge + Clone + Send,

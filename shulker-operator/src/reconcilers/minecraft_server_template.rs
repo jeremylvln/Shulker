@@ -14,27 +14,47 @@ use crate::templates::compose::fold_template_spec;
 use shulker_crds::minecraft_server_template::*;
 use shulker_resource::storage::ResourceStorage;
 
+/// Enumeration of possible errors concerning the
+/// reconciliation of MinecraftServerTemplate resources.
 #[derive(Debug, Snafu)]
 pub enum Error {
-    #[snafu(display("Failed to aggregate MinecraftServerTemplate: {}", source))]
-    MinecraftServerTemplateAggregationFailed {
+    /// Failed to fold a MinecraftServerTemplate
+    /// resource. 
+    #[snafu(display("Failed to fold MinecraftServerTemplate: {}", source))]
+    MinecraftServerTemplateFoldFailed {
         source: kube::Error,
     },
+    /// Kubernetes's API rejected the patch of an
+    /// existing MinecraftServerTemplate path.
     #[snafu(display("Failed to patch MinecraftServerTemplate: {}", source))]
     MinecraftServerTemplatePatchFailed {
         source: kube::Error,
     },
+    /// Something went wrong when serializing from or
+    /// deserializing to JSON.
     SerializationFailed {
         source: serde_json::Error,
     },
 }
 
+/// Context structure provided when reconciling
+/// a resource.
 #[derive(Clone)]
 struct Data {
+    /// Kubernetes client.
     client: Client,
+    /// Resource storage instance.
     resource_storage: Arc<RwLock<ResourceStorage>>,
 }
 
+/// MinecraftServerTemplate resource reconciler.
+/// 
+/// It will fold each templates and will register all
+/// the resources listed (and fetch them if needed).
+/// 
+/// # Arguments
+/// - `deployment` - MinecraftServerTemplate resource
+/// - `ctx` - Context
 #[instrument(skip(mct, ctx))]
 async fn reconcile(
     mct: MinecraftServerTemplate,
@@ -49,7 +69,7 @@ async fn reconcile(
 
     let composed = fold_template_spec(client.clone(), &mct)
         .await
-        .context(MinecraftServerTemplateAggregationFailed)?;
+        .context(MinecraftServerTemplateFoldFailed)?;
 
     if let Some(assets) = composed.assets.as_ref() {
         let mut rs = ctx.get_ref().resource_storage.write().await;
@@ -74,8 +94,6 @@ async fn reconcile(
 
     let new_status = json!({
         "status": MinecraftServerTemplateStatus {
-            instances: 0,
-            players: 0,
             compose_result: serde_json::to_string(&composed).context(SerializationFailed)?,
         }
     });
@@ -89,6 +107,12 @@ async fn reconcile(
     })
 }
 
+/// Error policy to call when a MinecraftServerTemplate
+/// reconciliation fails.
+/// 
+/// # Arguments
+/// - `error` - Occured error
+/// - `_ctx` - Context
 fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     error!("reconcile failed for MinecraftServerTemplate: {}", error);
     ReconcilerAction {
@@ -96,6 +120,11 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     }
 }
 
+/// Create a controller for MinecraftServerTemplate
+/// resources.
+/// 
+/// # Arguments
+/// - `client` - Kubernetes client
 pub fn drainer(
     client: Client,
     resource_storage: Arc<RwLock<ResourceStorage>>,

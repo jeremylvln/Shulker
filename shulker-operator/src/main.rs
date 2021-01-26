@@ -5,10 +5,18 @@ use std::sync::Arc;
 use tokio::sync::RwLock;
 use tracing::{info, warn};
 
+/// Contains the operator configuration.
 mod config;
+/// Kubernetes reconcilers.
 mod reconcilers;
+/// Template manipulation helpers.
 mod templates;
 
+/// Version of the operator.
+/// 
+/// Cargo automatically provide a `CARGO_PKG_VERSION`
+/// environment variable containing the version of the
+/// crate.
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[tokio::main]

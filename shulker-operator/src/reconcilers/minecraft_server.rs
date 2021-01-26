@@ -15,31 +15,53 @@ use shulker_instance::minecraft_server::deployment;
 
 use crate::templates::get_template;
 
+/// Enumeration of possible errors concerning the
+/// reconciliation of MinecraftServer resources.
 #[derive(Debug, Snafu)]
 pub enum Error {
+    /// The template linked to the MinecraftServer
+    /// resource does not exists.
     #[snafu(display("Template {} not found: {}", template, source))]
     MinecraftServerTemplateNotFound {
         template: String,
         source: kube::Error,
     },
+    /// Something went wrong when creating the
+    /// Deployment resource of this MinecraftServer
+    /// one.
     #[snafu(display("Failed to deploy MinecraftServer: {}", source))]
     MinecraftServerDeploymentFailed {
         source: shulker_instance::minecraft_server::deployment::Error,
     },
+    /// Kubernetes's API rejected the patch of an
+    /// existing MinecraftServer patch.
     #[snafu(display("Failed to patch MinecraftServer: {}", source))]
     MinecraftServerPatchFailed {
         source: kube::Error,
     },
+    /// Something went wrong when serializing from or
+    /// deserializing to JSON.
     SerializationFailed {
         source: serde_json::Error,
     },
 }
 
+/// Context structure provided when reconciling
+/// a resource.
 #[derive(Clone)]
 struct Data {
+    /// Kubernetes client.
     client: Client,
 }
 
+/// MinecraftServer resource reconciler.
+/// 
+/// It will create Deployment resources for each
+/// MinecraftServer discovered.
+/// 
+/// # Arguments
+/// - `deployment` - MinecraftServer resource
+/// - `ctx` - Context
 #[instrument(skip(mc, ctx))]
 async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<ReconcilerAction, Error> {
     let client = ctx.get_ref().client.clone();
@@ -92,6 +114,12 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
     })
 }
 
+/// Error policy to call when a MinecraftServer
+/// reconciliation fails.
+/// 
+/// # Arguments
+/// - `error` - Occured error
+/// - `_ctx` - Context
 fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     error!("reconcile failed for MinecraftServer: {}", error);
     ReconcilerAction {
@@ -99,6 +127,11 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
     }
 }
 
+/// Create a controller for MinecraftServer
+/// resources.
+/// 
+/// # Arguments
+/// - `client` - Kubernetes client
 pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),
