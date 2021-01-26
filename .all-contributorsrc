@@ -11,16 +11,12 @@
   "commitConvention": "angular",
   "contributors": [
     {
-      "login": "IamBlueSlime",
-      "name": "Jérémy Levilain",
-      "avatar_url": "https://avatars.githubusercontent.com/u/6763873?v=4",
-      "profile": "https://jeremylvln.fr/",
+      "login": "Thog",
+      "name": "Mary",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1760003?v=4",
+      "profile": "https://github.com/Thog",
       "contributions": [
-        "question",
-        "code",
-        "doc",
-        "infra",
-        "maintenance"
+        "ideas"
       ]
     }
   ],

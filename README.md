@@ -21,7 +21,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://jeremylvln.fr/"><img src="https://avatars.githubusercontent.com/u/6763873?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jérémy Levilain</b></sub></a><br /><a href="#question-IamBlueSlime" title="Answering Questions">💬</a> <a href="https://github.com/IamBlueSlime/Shulker/commits?author=IamBlueSlime" title="Code">💻</a> <a href="https://github.com/IamBlueSlime/Shulker/commits?author=IamBlueSlime" title="Documentation">📖</a> <a href="#infra-IamBlueSlime" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-IamBlueSlime" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/Thog"><img src="https://avatars.githubusercontent.com/u/1760003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mary</b></sub></a><br /><a href="#ideas-Thog" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
