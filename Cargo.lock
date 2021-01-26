@@ -307,15 +307,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ee2a4ec343196209d6594e19543ae87a39f96d5534d7174822a3ad825dd6ed7e"
 
 [[package]]
-name = "ahash"
-version = "0.3.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8fd72866655d1904d6b0997d0b07ba561047d070fbe29de039031c641b61217"
-dependencies = [
- "const-random",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "0.7.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -350,6 +341,7 @@ dependencies = [
  "futures-core",
  "memchr",
  "pin-project-lite 0.2.4",
+ "tokio 1.0.2",
 ]
 
 [[package]]
@@ -567,28 +559,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "const-random"
-version = "0.1.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f590d95d011aa80b063ffe3253422ed5aa462af4e9867d43ce8337562bac77c4"
-dependencies = [
- "const-random-macro",
- "proc-macro-hack",
-]
-
-[[package]]
-name = "const-random-macro"
-version = "0.1.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "615f6e27d000a2bffbc7f2f6a8669179378fa27ee4d0a509e985dfc0a7defb40"
-dependencies = [
- "getrandom 0.2.2",
- "lazy_static",
- "proc-macro-hack",
- "tiny-keccak",
-]
-
-[[package]]
 name = "const_fn"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -643,19 +613,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "crunchy"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a81dae078cea95a014a339291cec439d2f232ebe854a9d672b796c6afafa9b7"
-
-[[package]]
 name = "dashmap"
-version = "3.11.10"
+version = "4.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f260e2fc850179ef410018660006951c1b55b79e8087e87111a2c388994b9b5"
+checksum = "e77a43b28d0668df09411cb0bc9a8c2adc40f9a048afe863e05fd43251e8e39c"
 dependencies = [
- "ahash",
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "num_cpus",
 ]
 
@@ -1297,6 +1260,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "k8s-openapi"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bcc1f973542059e6d5a6d63de6a9539d0ec784f82b2327f3c1915d33200bc6a4"
+dependencies = [
+ "base64 0.13.0",
+ "bytes 1.0.1",
+ "chrono",
+ "serde",
+ "serde-value",
+ "serde_json",
+]
+
+[[package]]
 name = "kernel32-sys"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1322,7 +1299,7 @@ dependencies = [
  "futures-util",
  "http",
  "jsonpath_lib",
- "k8s-openapi",
+ "k8s-openapi 0.10.0",
  "kube-derive",
  "log",
  "openssl",
@@ -1335,6 +1312,37 @@ dependencies = [
  "thiserror",
  "time 0.2.24",
  "tokio 0.2.24",
+ "url",
+]
+
+[[package]]
+name = "kube"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65b653297fc54118e32fd198c3afea77481550ada03267c68e658714c716d72a"
+dependencies = [
+ "Inflector",
+ "base64 0.13.0",
+ "bytes 1.0.1",
+ "chrono",
+ "dirs-next",
+ "either",
+ "futures",
+ "futures-util",
+ "http",
+ "jsonpath_lib",
+ "k8s-openapi 0.11.0",
+ "log",
+ "openssl",
+ "pem",
+ "reqwest 0.11.0",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "static_assertions",
+ "thiserror",
+ "time 0.2.24",
+ "tokio 1.0.2",
  "url",
 ]
 
@@ -1353,20 +1361,21 @@ dependencies = [
 
 [[package]]
 name = "kube-runtime"
-version = "0.44.0"
+version = "0.48.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b01bed1a72a06d987a98d28b49e70c9e43f600720348a48d48291d94ba003f6"
+checksum = "4eff8e169f7ce8b9d76edcf7dc546403c09391ea74081a9ebc4388597fc8f333"
 dependencies = [
  "dashmap",
  "derivative",
  "futures",
- "k8s-openapi",
- "kube",
- "pin-project 0.4.27",
+ "k8s-openapi 0.11.0",
+ "kube 0.48.0",
+ "pin-project 1.0.4",
  "serde",
  "smallvec",
  "snafu",
- "tokio 0.2.24",
+ "tokio 1.0.2",
+ "tokio-util 0.6.2",
 ]
 
 [[package]]
@@ -2055,6 +2064,7 @@ version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fd281b1030aa675fb90aa994d07187645bb3c8fc756ca766e7c3070b439de9de"
 dependencies = [
+ "async-compression",
  "base64 0.13.0",
  "bytes 1.0.1",
  "encoding_rs",
@@ -2073,9 +2083,11 @@ dependencies = [
  "percent-encoding",
  "pin-project-lite 0.2.4",
  "serde",
+ "serde_json",
  "serde_urlencoded",
  "tokio 1.0.2",
  "tokio-native-tls",
+ "tokio-util 0.6.2",
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -2310,8 +2322,8 @@ name = "shulker-crds"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "k8s-openapi",
- "kube",
+ "k8s-openapi 0.10.0",
+ "kube 0.44.0",
  "kube-runtime",
  "merge",
  "schemars",
@@ -2325,8 +2337,8 @@ name = "shulker-instance"
 version = "0.1.0"
 dependencies = [
  "futures",
- "k8s-openapi",
- "kube",
+ "k8s-openapi 0.10.0",
+ "kube 0.44.0",
  "kube-runtime",
  "serde",
  "serde_json",
@@ -2346,8 +2358,8 @@ dependencies = [
  "chrono",
  "envconfig",
  "futures",
- "k8s-openapi",
- "kube",
+ "k8s-openapi 0.10.0",
+ "kube 0.44.0",
  "kube-runtime",
  "merge",
  "serde",
@@ -2618,15 +2630,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tiny-keccak"
-version = "2.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
-dependencies = [
- "crunchy",
-]
-
-[[package]]
 name = "tinyvec"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2674,7 +2677,10 @@ dependencies = [
  "libc",
  "memchr",
  "mio 0.7.7",
+ "once_cell",
  "pin-project-lite 0.2.4",
+ "signal-hook-registry",
+ "winapi 0.3.9",
 ]
 
 [[package]]
@@ -2745,6 +2751,7 @@ dependencies = [
  "futures-sink",
  "log",
  "pin-project-lite 0.2.4",
+ "slab",
  "tokio 1.0.2",
  "tokio-stream",
 ]
