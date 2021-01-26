@@ -1,0 +1,28 @@
+{
+  "projectName": "Shulker",
+  "projectOwner": "IamBlueSlime",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "IamBlueSlime",
+      "name": "Jérémy Levilain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6763873?v=4",
+      "profile": "https://jeremylvln.fr/",
+      "contributions": [
+        "question",
+        "code",
+        "doc",
+        "infra",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
