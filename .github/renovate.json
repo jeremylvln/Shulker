@@ -1,0 +1,6 @@
+{
+  "extends": ["config:base"],
+  "enabledManagers": ["github-actions", "cargo"],
+  "labels": ["dependencies"],
+  "stabilityDays": 3
+}
