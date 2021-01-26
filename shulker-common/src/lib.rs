@@ -25,10 +25,10 @@ const LOGO: [&str; 7] = [
 /// # Exemples
 ///
 /// ```
-/// // To draw the logo, a simple iterator is sufficient:
+/// // To draw the logo, a simple iterator is sufficient
 /// shulker_common::create_logo("My Component", "1.0.0")
-///     .into_iter()
-///     .map(|l| info!(l));
+///     .iter()
+///     .for_each(|l| println!("{}", &l));
 /// ```
 pub fn create_logo(component: &str, version: &str) -> Vec<String> {
     LOGO.iter()
