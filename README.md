@@ -1,3 +1,3 @@
-![Logo](.github/logo_thin.png)
+![Logo](.github/logo_thin.jpg)
 
 ---
