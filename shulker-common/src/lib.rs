@@ -3,7 +3,7 @@ pub mod merge;
 
 /// Base logo with component name and version
 /// placeholders.
-const LOGO: [&'static str; 7] = [
+const LOGO: [&str; 7] = [
     "    ########",
     "#####      ##",
     "##          ##     Shulker __component__",

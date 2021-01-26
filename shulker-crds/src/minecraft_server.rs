@@ -17,14 +17,14 @@ pub struct MinecraftServerSpec {
     pub template: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerStatus {
     pub conditions: Vec<MinecraftServerStatusCondition>,
     pub players: i32,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerStatusCondition {
     pub last_transition_time: DateTime<Utc>,

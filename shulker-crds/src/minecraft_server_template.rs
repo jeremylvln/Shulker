@@ -9,7 +9,7 @@ use crate::resource::ResourceSpec;
 use crate::template::{Template, TemplateSpec};
 use shulker_common::merge::merge_hash_map;
 
-#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, Merge, JsonSchema)]
+#[derive(CustomResource, Deserialize, Serialize, Clone, Debug, JsonSchema, Merge)]
 #[kube(
     group = "shulker.io",
     version = "v1beta1",
@@ -29,28 +29,28 @@ pub struct MinecraftServerTemplateSpec {
     pub additional_properties: Option<HashMap<String, String>>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateVersionSpec {
     pub name: String,
     pub channel: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateReplicasSpec {
     pub min: Option<i32>,
     pub max: Option<i32>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, Merge, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Merge)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateAssetsSpec {
     pub maps: Option<Vec<ResourceSpec>>,
     pub plugins: Option<Vec<ResourceSpec>>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerTemplateStatus {
     pub instances: i32,

@@ -44,10 +44,7 @@ async fn reconcile(
     let name = Meta::name(&mct);
     let ns = Meta::namespace(&mct).expect("MinecraftServerTemplate is namespaced");
 
-    debug!(
-        "reconcile MinecraftServerTemplate {}/{}",
-        ns, name
-    );
+    debug!("reconcile MinecraftServerTemplate {}/{}", ns, name);
     let mcs: Api<MinecraftServerTemplate> = Api::namespaced(client.clone(), &ns);
 
     let composed = fold_template_spec(client.clone(), &mct)
