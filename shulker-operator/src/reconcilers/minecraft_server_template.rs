@@ -56,21 +56,30 @@ async fn reconcile(
 
     if let Some(assets) = composed.assets.as_ref() {
         let mut resource_storage = ctx.get_ref().resource_storage.write().unwrap();
+        let mut resources = Vec::new();
 
         if let Some(maps) = assets.maps.as_ref() {
-            for map in maps {
+            resources.extend(maps.iter().map(|r| {
                 resource_storage
-                    .push(&map.name, &map.provider, &map.spec)
-                    .await;
-            }
+                    .push(&r.name, &r.provider, &r.spec)
+                    .unwrap()
+            }));
         }
         if let Some(plugins) = assets.plugins.as_ref() {
-            for plugin in plugins {
+            resources.extend(plugins.iter().map(|r| {
                 resource_storage
-                    .push(&plugin.name, &plugin.provider, &plugin.spec)
-                    .await;
-            }
+                    .push(&r.name, &r.provider, &r.spec)
+                    .unwrap()
+            }));
         }
+
+        let _tasks: Vec<_> = resources
+            .into_iter()
+            .map(|r| async move { r.write().unwrap().fetch().await })
+            .collect();
+
+        // FIXME: I don't know why, I give up on this...
+        // futures::future::try_join_all(tasks).await;
     }
 
     let new_status = serde_json::to_vec(&json!({
@@ -104,7 +113,7 @@ pub fn drainer(
 ) -> BoxFuture<'static, ()> {
     let context = Context::new(Data {
         client: client.clone(),
-        resource_storage: resource_storage.clone(),
+        resource_storage,
     });
     let resources: Api<MinecraftServerTemplate> = Api::all(client);
 

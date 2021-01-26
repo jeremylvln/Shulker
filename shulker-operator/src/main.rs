@@ -10,7 +10,7 @@ mod templates;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-#[tokio::main]
+#[actix_rt::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
@@ -27,18 +27,25 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let c = config::Config::init_from_env().unwrap();
     let resource_storage = Arc::new(RwLock::new(ResourceStorage::new(&c.cache_dir)));
 
+    info!("aaa");
+
     let client = kube::Client::try_default()
         .await
         .expect("Failed to create Kubernetes client");
+
+    info!("aaa");
 
     shulker_crds::assert_installed_crds(client.clone())
         .await
         .expect("Missing Shulker's Kubernetes CRDs");
 
+    info!("aaa");
+
     tokio::select! {
         _ = reconcilers::deployment::drainer(client.clone()) => warn!("Deployment controller drained"),
         _ = reconcilers::minecraft_server_template::drainer(client.clone(), resource_storage.clone()) => warn!("MinecraftServerTemplate controller drained"),
         _ = reconcilers::minecraft_server::drainer(client.clone()) => warn!("MinecraftServer controller drained"),
+        _ = shulker_resource::server::create_http_server(8081, resource_storage.clone()) => warn!("Resource storage web server exited"),
     }
 
     Ok(())
