@@ -1,4 +1,4 @@
-![Logo](.github/banner-thin.jpg)
+![Logo](.github/banner-thin.png)
 
 ![License](https://img.shields.io/github/license/IamBlueSlime/Shulker) ![GitHub Issues](https://img.shields.io/github/issues/IamBlueSlime/Shulker) ![GitHub Stars](https://img.shields.io/github/stars/IamBlueSlime/Shulker) ![CI](https://github.com/IamBlueSlime/Shulker/workflows/ci/badge.svg?branch=main)
 
