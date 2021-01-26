@@ -12,8 +12,12 @@ use shulker_crds::minecraft_server_template::{
     MinecraftServerTemplate, MinecraftServerTemplateSpec,
 };
 
+/// Enumeration of possible errors concerning the
+/// deployment of a MinecraftServer resource.
 #[derive(Debug, Snafu)]
 pub enum Error {
+    /// The template is invalid, aka. with either
+    /// missing or malformed properties.
     #[snafu(display(
         "Invalid template {} for MinecraftServer deployment: {}",
         template,
@@ -23,19 +27,35 @@ pub enum Error {
         template: String,
         reason: String,
     },
+    /// Kubernetes's API rejected the creation of the
+    /// Deployment.
     #[snafu(display("Failed to create a MinecraftServer deployment: {}", source))]
     DeploymentCreationFailed {
         source: kube::Error,
     },
+    /// Kubernetes's API rejected the patch of an
+    /// existing Deployment.
     #[snafu(display("Failed to patch a MinecraftServer deployment: {}", source))]
     DeploymentPatchFailed {
         source: kube::Error,
     },
+    /// Something went wrong when serializing from or
+    /// deserializing to JSON.
     SerializationFailed {
         source: serde_json::Error,
     },
 }
 
+/// Validate a MinecraftServerTemplate spec resource.
+/// 
+/// As a template could be partial, we must ensure that
+/// the root template linked to the MinecraftServer
+/// resource contains all the needed properties.
+/// 
+/// # Arguments
+/// 
+/// - `name` - Name of the template
+/// - `spec` - Template spec
 fn validate_template(name: &str, spec: &MinecraftServerTemplateSpec) -> Result<(), Error> {
     ensure!(
         spec.version.is_some(),
@@ -56,6 +76,15 @@ fn validate_template(name: &str, spec: &MinecraftServerTemplateSpec) -> Result<(
     Ok(())
 }
 
+/// Create a Deployment spec from a MinecraftServer
+/// spec.
+/// 
+/// # Arguments
+/// 
+/// - `minecraft_server_name` - Name of the MinecraftServer
+/// resource
+/// - `deployment_name` - Name of the Deployment
+/// - `template` - Template to use to compose the Deployment
 fn create_deployment(
     minecraft_server_name: &str,
     deployment_name: &str,
@@ -142,6 +171,18 @@ fn create_deployment(
     Ok((deployment, deployment_json))
 }
 
+/// Ensure that a Kubernetes Deployment exist and is
+/// synced with a MinecraftServer resource.
+/// @todo Rely on a MinecraftServer directly
+/// 
+/// # Arguments
+/// 
+/// - `client` - Kubernetes client
+/// - `minecraft_server_name` - Name of the MinecraftServer
+/// resource
+/// - `deployment_name` - Name of the Deployment
+/// - `ns` - Namespace to work on
+/// - `template` - Template to use to compose the Deployment
 pub async fn ensure_deployment(
     client: Client,
     minecraft_server_name: &str,
