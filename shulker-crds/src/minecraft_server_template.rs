@@ -11,10 +11,10 @@ use shulker_common::merge::merge_hash_map;
 
 /// Describe a MinecraftServerTemplate resource,
 /// aka. a MinecraftServer schema.
-/// 
+///
 /// A template could be partial, thus, a template could
 /// depends on zero or more templates, recursively.
-/// 
+///
 /// All the fields of the template should be mergeable.
 #[derive(CustomResource, Deserialize, Serialize, Clone, Debug, JsonSchema, Merge)]
 #[kube(
@@ -67,7 +67,7 @@ pub struct MinecraftServerTemplateReplicasSpec {
 
 /// Describe the assets to inject on the Minecraft
 /// server filesystem before starting it.
-/// 
+///
 /// All the fields of this structure is a vector
 /// of `ResourceSpec`s. The field only indicate the
 /// extraction directory.
@@ -83,7 +83,7 @@ pub struct MinecraftServerTemplateAssetsSpec {
 
 /// Struct describing the status of a MinecraftServerTemplate
 /// resource.
-/// 
+///
 /// Will be automatically patched by the operator.
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]

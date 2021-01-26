@@ -14,9 +14,9 @@ pub mod template;
 
 /// Asserts that the custom CRDs we are using are
 /// installed on the Kubernetes cluster.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `client` - Kubernetes client
 pub async fn assert_installed_crds(client: Client) -> Result<(), Error> {
     let crds: Api<CustomResourceDefinition> = Api::all(client.clone());

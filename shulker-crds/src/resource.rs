@@ -5,14 +5,14 @@ use std::collections::HashMap;
 
 /// Describe a Resource, aka. an external
 /// asset which should be retreived and cached
-/// (if applicable). 
-/// 
+/// (if applicable).
+///
 /// A resource is a pair of a name (as a resource
 /// could be shared in multiple places, a unique
 /// name helps the operator tu avoid proxy duplication
 /// for the same resource) and a provider (with its
 /// spec).
-/// 
+///
 /// The responsability of validating the provider's
 /// spec is leaved to the provider itself.
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]

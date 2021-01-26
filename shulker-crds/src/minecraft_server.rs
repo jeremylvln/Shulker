@@ -7,7 +7,7 @@ use chrono::{DateTime, Utc};
 /// Describe a MinecraftServer resource, aka.
 /// a bridge between a MinecraftServerTemplate
 /// and a Kubernetes Deployment.
-/// 
+///
 /// This means that the operator will, necessarily,
 /// create a Kubernetes Deployment for each
 /// MinecraftServer resource found.
@@ -27,7 +27,7 @@ pub struct MinecraftServerSpec {
 
 /// Struct describing the status of a MinecraftServer
 /// resource.
-/// 
+///
 /// Will be automatically patched by the operator.
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]

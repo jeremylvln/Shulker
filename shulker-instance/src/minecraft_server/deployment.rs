@@ -23,37 +23,28 @@ pub enum Error {
         template,
         reason
     ))]
-    TemplateInvalid {
-        template: String,
-        reason: String,
-    },
+    TemplateInvalid { template: String, reason: String },
     /// Kubernetes's API rejected the creation of the
     /// Deployment.
     #[snafu(display("Failed to create a MinecraftServer deployment: {}", source))]
-    DeploymentCreationFailed {
-        source: kube::Error,
-    },
+    DeploymentCreationFailed { source: kube::Error },
     /// Kubernetes's API rejected the patch of an
     /// existing Deployment.
     #[snafu(display("Failed to patch a MinecraftServer deployment: {}", source))]
-    DeploymentPatchFailed {
-        source: kube::Error,
-    },
+    DeploymentPatchFailed { source: kube::Error },
     /// Something went wrong when serializing from or
     /// deserializing to JSON.
-    SerializationFailed {
-        source: serde_json::Error,
-    },
+    SerializationFailed { source: serde_json::Error },
 }
 
 /// Validate a MinecraftServerTemplate spec resource.
-/// 
+///
 /// As a template could be partial, we must ensure that
 /// the root template linked to the MinecraftServer
 /// resource contains all the needed properties.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// - `name` - Name of the template
 /// - `spec` - Template spec
 fn validate_template(name: &str, spec: &MinecraftServerTemplateSpec) -> Result<(), Error> {
@@ -78,9 +69,9 @@ fn validate_template(name: &str, spec: &MinecraftServerTemplateSpec) -> Result<(
 
 /// Create a Deployment spec from a MinecraftServer
 /// spec.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// - `minecraft_server_name` - Name of the MinecraftServer
 /// resource
 /// - `deployment_name` - Name of the Deployment
@@ -174,9 +165,9 @@ fn create_deployment(
 /// Ensure that a Kubernetes Deployment exist and is
 /// synced with a MinecraftServer resource.
 /// @todo Rely on a MinecraftServer directly
-/// 
+///
 /// # Arguments
-/// 
+///
 /// - `client` - Kubernetes client
 /// - `minecraft_server_name` - Name of the MinecraftServer
 /// resource
