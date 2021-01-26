@@ -1,10 +1,10 @@
 ---
-name: 'Bug Report'
-about: "Something isn't working as expected."
+name: Bug Report
+about: Something isn't working as expected.
 title: ''
-labels:
-  - bug
-assignees: 'IamBlueSlime'
+labels: bug
+assignees: IamBlueSlime
+
 ---
 
 ## Bug Report

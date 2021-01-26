@@ -1,10 +1,10 @@
 ---
-name: 'Feature Request'
-about: 'This is something we may need.'
+name: Feature Request
+about: This is something we may need.
 title: ''
-labels:
-  - enhancement
-assignees: 'IamBlueSlime'
+labels: enhancement
+assignees: IamBlueSlime
+
 ---
 
 ## Feature Request
