@@ -1,7 +1,8 @@
 use snafu::{ResultExt, Snafu};
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
+use tokio::sync::RwLock;
 use tracing::debug;
 
 use crate::provider::{self, ResourceProvider};
@@ -15,30 +16,26 @@ pub enum Error {
 
 pub struct ResourceStorage {
     pub(crate) dir: PathBuf,
-    proxies: Vec<Arc<RwLock<ResourceProxy>>>,
+    proxies: HashMap<String, Arc<RwLock<ResourceProxy>>>,
 }
 
 impl ResourceStorage {
     pub fn new(dir: &str) -> Self {
         ResourceStorage {
             dir: PathBuf::from(dir),
-            proxies: Vec::new(),
+            proxies: HashMap::new(),
         }
     }
 
-    pub fn push(
+    pub async fn create_proxy(
         &mut self,
         name: &str,
         provider: &str,
         spec: &HashMap<String, String>,
     ) -> Result<Arc<RwLock<ResourceProxy>>, Error> {
-        let existing = self
-            .proxies
-            .iter()
-            .position(|p| p.read().unwrap().name == name);
-        if existing.is_some() {
+        if self.proxies.contains_key(name) {
             debug!("found existing proxy for resource \"{}\"", name);
-            Ok(self.proxies.get(existing.unwrap()).unwrap().clone())
+            Ok(self.proxies.get(name).unwrap().clone())
         } else {
             debug!("creating new proxy for resource \"{}\"", name);
             let proxy = Arc::new(RwLock::new(ResourceProxy::new(
@@ -46,7 +43,7 @@ impl ResourceStorage {
                 self.dir.clone(),
                 ResourceProvider::deserialize(provider, spec).context(ProviderError)?,
             )));
-            self.proxies.push(proxy.clone());
+            self.proxies.insert(name.to_owned(), proxy.clone());
             Ok(proxy)
         }
     }

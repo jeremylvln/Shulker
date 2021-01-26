@@ -1,13 +1,13 @@
 use futures::{future::BoxFuture, FutureExt, StreamExt};
 use kube::{
-    api::{Api, ListParams, Meta, PatchParams},
+    api::{Api, ListParams, Meta, Patch, PatchParams},
     client::Client,
 };
 use kube_runtime::controller::{Context, Controller, ReconcilerAction};
 use serde_json::json;
 use snafu::{ResultExt, Snafu};
-use std::sync::{Arc, RwLock};
-use tokio::time::Duration;
+use std::sync::Arc;
+use tokio::{sync::RwLock, time::Duration};
 use tracing::{debug, error, info, instrument};
 
 use crate::templates::compose::fold_template_spec;
@@ -45,8 +45,8 @@ async fn reconcile(
     let ns = Meta::namespace(&mct).expect("MinecraftServerTemplate is namespaced");
 
     debug!(
-        "reconcile MinecraftServerTemplate {}/{}: {:?}",
-        ns, name, mct
+        "reconcile MinecraftServerTemplate {}/{}",
+        ns, name
     );
     let mcs: Api<MinecraftServerTemplate> = Api::namespaced(client.clone(), &ns);
 
@@ -55,43 +55,35 @@ async fn reconcile(
         .context(MinecraftServerTemplateAggregationFailed)?;
 
     if let Some(assets) = composed.assets.as_ref() {
-        let mut resource_storage = ctx.get_ref().resource_storage.write().unwrap();
-        let mut resources = Vec::new();
+        let mut rs = ctx.get_ref().resource_storage.write().await;
 
+        let mut resources = Vec::new();
         if let Some(maps) = assets.maps.as_ref() {
-            resources.extend(maps.iter().map(|r| {
-                resource_storage
-                    .push(&r.name, &r.provider, &r.spec)
-                    .unwrap()
-            }));
+            resources.extend(maps.iter());
         }
         if let Some(plugins) = assets.plugins.as_ref() {
-            resources.extend(plugins.iter().map(|r| {
-                resource_storage
-                    .push(&r.name, &r.provider, &r.spec)
-                    .unwrap()
-            }));
+            resources.extend(plugins.iter());
         }
 
-        let _tasks: Vec<_> = resources
-            .into_iter()
-            .map(|r| async move { r.write().unwrap().fetch().await })
-            .collect();
-
-        // FIXME: I don't know why, I give up on this...
-        // futures::future::try_join_all(tasks).await;
+        // @todo Wait the resources in parallel
+        for resource in resources {
+            let proxy = rs
+                .create_proxy(&resource.name, &resource.provider, &resource.spec)
+                .await
+                .expect("aaa");
+            proxy.write().await.fetch().await.expect("bbb");
+        }
     }
 
-    let new_status = serde_json::to_vec(&json!({
+    let new_status = json!({
         "status": MinecraftServerTemplateStatus {
             instances: 0,
             players: 0,
             compose_result: serde_json::to_string(&composed).context(SerializationFailed)?,
         }
-    }))
-    .context(SerializationFailed)?;
+    });
 
-    mcs.patch_status(&name, &PatchParams::default(), new_status)
+    mcs.patch_status(&name, &PatchParams::default(), &Patch::Merge(&new_status))
         .await
         .context(MinecraftServerTemplatePatchFailed)?;
 

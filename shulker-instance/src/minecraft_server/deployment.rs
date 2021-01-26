@@ -1,6 +1,6 @@
 use k8s_openapi::api::apps::v1::Deployment;
 use kube::{
-    api::{Api, Meta, PatchParams, PostParams},
+    api::{Api, Meta, Patch, PatchParams, PostParams},
     client::Client,
 };
 use snafu::{ensure, ResultExt, Snafu};
@@ -27,7 +27,7 @@ pub enum Error {
     DeploymentCreationFailed {
         source: kube::Error,
     },
-    #[snafu(display("Failed to delete a MinecraftServer deployment: {}", source))]
+    #[snafu(display("Failed to patch a MinecraftServer deployment: {}", source))]
     DeploymentPatchFailed {
         source: kube::Error,
     },
@@ -56,7 +56,7 @@ fn validate_template(name: &str, spec: &MinecraftServerTemplateSpec) -> Result<(
     Ok(())
 }
 
-fn create_deployment_json(
+fn create_deployment(
     minecraft_server_name: &str,
     deployment_name: &str,
     template: &MinecraftServerTemplate,
@@ -150,7 +150,7 @@ pub async fn ensure_deployment(
     template: &MinecraftServerTemplate,
 ) -> Result<Deployment, Error> {
     let deployments: Api<Deployment> = Api::namespaced(client.clone(), ns);
-    let deployment = create_deployment_json(&minecraft_server_name, &deployment_name, template)?;
+    let deployment = create_deployment(&minecraft_server_name, &deployment_name, template)?;
 
     match deployments.get(deployment_name).await {
         Ok(_) => {
@@ -159,7 +159,7 @@ pub async fn ensure_deployment(
                 .patch(
                     deployment_name,
                     &PatchParams::default(),
-                    serde_json::to_vec(&deployment.1).context(SerializationFailed)?,
+                    &Patch::Merge(&deployment.1),
                 )
                 .await
                 .context(DeploymentPatchFailed);

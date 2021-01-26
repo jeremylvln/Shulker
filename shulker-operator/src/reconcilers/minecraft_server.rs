@@ -1,7 +1,7 @@
 use chrono::Utc;
 use futures::{future::BoxFuture, FutureExt, StreamExt};
 use kube::{
-    api::{Api, ListParams, Meta, PatchParams},
+    api::{Api, ListParams, Meta, Patch, PatchParams},
     client::Client,
 };
 use kube_runtime::controller::{Context, Controller, ReconcilerAction};
@@ -45,7 +45,7 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
     let client = ctx.get_ref().client.clone();
     let name = Meta::name(&mc);
     let ns = Meta::namespace(&mc).expect("MinecraftServer is namespaced");
-    debug!("reconcile MinecraftServer {}/{}: {:?}", ns, name, mc);
+    debug!("reconcile MinecraftServer {}/{}", ns, name);
     let mcs: Api<MinecraftServer> = Api::namespaced(client.clone(), &ns);
 
     let template = get_template(client.clone(), &mc.spec.template, &ns)
@@ -68,7 +68,7 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
         .await
         .context(MinecraftServerDeploymentFailed)?;
 
-    let new_status = serde_json::to_vec(&json!({
+    let new_status = json!({
         "status": MinecraftServerStatus {
             conditions: vec![
                 MinecraftServerStatusCondition {
@@ -81,10 +81,9 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
             ],
             players: 0
         }
-    }))
-    .context(SerializationFailed)?;
+    });
 
-    mcs.patch_status(&name, &PatchParams::default(), new_status)
+    mcs.patch_status(&name, &PatchParams::default(), &Patch::Merge(&new_status))
         .await
         .context(MinecraftServerPatchFailed)?;
 
