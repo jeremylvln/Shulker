@@ -21,7 +21,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Thog"><img src="https://avatars.githubusercontent.com/u/1760003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mary</b></sub></a><br /><a href="#ideas-Thog" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/Thog"><img src="https://avatars.githubusercontent.com/u/1760003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mary</b></sub></a><br /><a href="#ideas-Thog" title="Ideas, Planning, & Feedback">🤔</a> <a href="#mentoring-Thog" title="Mentoring">🧑‍🏫</a></td>
     <td align="center"><a href="https://github.com/PSNRigner"><img src="https://avatars.githubusercontent.com/u/9195148?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rigner</b></sub></a><br /><a href="#ideas-PSNRigner" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
