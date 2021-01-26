@@ -2,7 +2,7 @@
 name: Feature Request
 about: This is something we may need.
 title: ''
-labels: enhancement
+labels: 'type:enhancement :rocket:'
 assignees: IamBlueSlime
 
 ---

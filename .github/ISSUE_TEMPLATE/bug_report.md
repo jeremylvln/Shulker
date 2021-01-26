@@ -2,7 +2,7 @@
 name: Bug Report
 about: Something isn't working as expected.
 title: ''
-labels: bug
+labels: 'type:bug :bug:'
 assignees: IamBlueSlime
 
 ---
