@@ -13,7 +13,7 @@ mod reconcilers;
 mod templates;
 
 /// Version of the operator.
-/// 
+///
 /// Cargo automatically provide a `CARGO_PKG_VERSION`
 /// environment variable containing the version of the
 /// crate.

@@ -7,7 +7,7 @@ pub mod compose;
 
 /// Get a template from Kubernetes API
 /// identified by its namespace-name pair.
-/// 
+///
 /// # Arguments
 /// - `client` - Kubernertes client
 /// - `name` - Name of the template

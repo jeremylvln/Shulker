@@ -19,22 +19,16 @@ use shulker_resource::storage::ResourceStorage;
 #[derive(Debug, Snafu)]
 pub enum Error {
     /// Failed to fold a MinecraftServerTemplate
-    /// resource. 
+    /// resource.
     #[snafu(display("Failed to fold MinecraftServerTemplate: {}", source))]
-    MinecraftServerTemplateFoldFailed {
-        source: kube::Error,
-    },
+    MinecraftServerTemplateFoldFailed { source: kube::Error },
     /// Kubernetes's API rejected the patch of an
     /// existing MinecraftServerTemplate path.
     #[snafu(display("Failed to patch MinecraftServerTemplate: {}", source))]
-    MinecraftServerTemplatePatchFailed {
-        source: kube::Error,
-    },
+    MinecraftServerTemplatePatchFailed { source: kube::Error },
     /// Something went wrong when serializing from or
     /// deserializing to JSON.
-    SerializationFailed {
-        source: serde_json::Error,
-    },
+    SerializationFailed { source: serde_json::Error },
 }
 
 /// Context structure provided when reconciling
@@ -48,10 +42,10 @@ struct Data {
 }
 
 /// MinecraftServerTemplate resource reconciler.
-/// 
+///
 /// It will fold each templates and will register all
 /// the resources listed (and fetch them if needed).
-/// 
+///
 /// # Arguments
 /// - `deployment` - MinecraftServerTemplate resource
 /// - `ctx` - Context
@@ -109,7 +103,7 @@ async fn reconcile(
 
 /// Error policy to call when a MinecraftServerTemplate
 /// reconciliation fails.
-/// 
+///
 /// # Arguments
 /// - `error` - Occured error
 /// - `_ctx` - Context
@@ -122,7 +116,7 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
 
 /// Create a controller for MinecraftServerTemplate
 /// resources.
-/// 
+///
 /// # Arguments
 /// - `client` - Kubernetes client
 pub fn drainer(

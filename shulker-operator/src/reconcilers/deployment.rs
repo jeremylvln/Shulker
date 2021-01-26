@@ -34,13 +34,13 @@ struct Data {
 }
 
 /// Deployment resource reconciler.
-/// 
+///
 /// It only job is to ensure that the deployment
 /// is linked to a MinecraftServer resource. If
 /// the operator boots in an environment where
 /// orphan deployments are found, they will be
 /// deleted.
-/// 
+///
 /// # Arguments
 /// - `deployment` - Deployment resource
 /// - `ctx` - Context
@@ -87,7 +87,7 @@ async fn reconcile(deployment: Deployment, ctx: Context<Data>) -> Result<Reconci
 
 /// Error policy to call when a Deployment
 /// reconciliation fails.
-/// 
+///
 /// # Arguments
 /// - `error` - Occured error
 /// - `_ctx` - Context
@@ -100,7 +100,7 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
 
 /// Create a controller for Deployment
 /// resources.
-/// 
+///
 /// # Arguments
 /// - `client` - Kubernetes client
 pub fn drainer(client: Client) -> BoxFuture<'static, ()> {

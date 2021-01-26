@@ -36,14 +36,10 @@ pub enum Error {
     /// Kubernetes's API rejected the patch of an
     /// existing MinecraftServer patch.
     #[snafu(display("Failed to patch MinecraftServer: {}", source))]
-    MinecraftServerPatchFailed {
-        source: kube::Error,
-    },
+    MinecraftServerPatchFailed { source: kube::Error },
     /// Something went wrong when serializing from or
     /// deserializing to JSON.
-    SerializationFailed {
-        source: serde_json::Error,
-    },
+    SerializationFailed { source: serde_json::Error },
 }
 
 /// Context structure provided when reconciling
@@ -55,10 +51,10 @@ struct Data {
 }
 
 /// MinecraftServer resource reconciler.
-/// 
+///
 /// It will create Deployment resources for each
 /// MinecraftServer discovered.
-/// 
+///
 /// # Arguments
 /// - `deployment` - MinecraftServer resource
 /// - `ctx` - Context
@@ -116,7 +112,7 @@ async fn reconcile(mc: MinecraftServer, ctx: Context<Data>) -> Result<Reconciler
 
 /// Error policy to call when a MinecraftServer
 /// reconciliation fails.
-/// 
+///
 /// # Arguments
 /// - `error` - Occured error
 /// - `_ctx` - Context
@@ -129,7 +125,7 @@ fn error_policy(error: &Error, _ctx: Context<Data>) -> ReconcilerAction {
 
 /// Create a controller for MinecraftServer
 /// resources.
-/// 
+///
 /// # Arguments
 /// - `client` - Kubernetes client
 pub fn drainer(client: Client) -> BoxFuture<'static, ()> {
