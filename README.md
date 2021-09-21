@@ -1,18 +1,21 @@
-<p align="center"><a href="https://github.com/MansaGroup/mansa" target="blank"><img src="./.github/assets/logo.png" width="80" alt="Mansa's Logo" /></a></p>
+<p align="center"><a href="https://github.com/IamBlueSlime/Shulker" target="blank"><img src="./.github/assets/logo.png" width="80" alt="Shulker's Logo" /></a></p>
 <h1 align="center">Shulker</h1>
 <p align="center">Put Minecraft in a <i>box</i> :package:</p>
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<p align="center">
+</p>
 
-## Introduction
+## Description
 
-This repository contains all the **code** needed to run Mansa:
+TODO.
 
-- the services (frontend, backend or data-science apps)
-- the deployment files
-- the devops-oriented tools
+## Getting started
+
+TODO.
+
+## License
+
+Shulker is distributed under the [Apache License 2.0](LICENSE.txt).
 
 ## Contributors ✨
 
