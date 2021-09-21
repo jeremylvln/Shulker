@@ -1,0 +1,11 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: TemplateResource
+metadata:
+  name: plugin-worldedit
+spec:
+  source:
+    url: https://i.jeremylvln.fr/shulker/worldedit-bukkit-7.2.2-dist.jar
+  destination:
+    fileName: worldedit.jar
+    path: plugins
+    

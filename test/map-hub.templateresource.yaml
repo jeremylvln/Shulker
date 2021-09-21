@@ -1,0 +1,11 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: TemplateResource
+metadata:
+  name: map-hub
+spec:
+  source:
+    url: https://i.jeremylvln.fr/shulker/hub.tar.gz
+  destination:
+    fileName: hub.tar.gz
+    path: .
+    extract: true

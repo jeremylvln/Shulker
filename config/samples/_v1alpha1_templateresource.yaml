@@ -1,0 +1,7 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: TemplateResource
+metadata:
+  name: templateresource-sample
+spec:
+  # Add fields here
+  foo: bar

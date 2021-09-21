@@ -1,0 +1,24 @@
+# permissions for end users to edit templateresources.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: templateresource-editor-role
+rules:
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - templateresources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - templateresources/status
+  verbs:
+  - get

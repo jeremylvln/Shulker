@@ -1,0 +1,7 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServer
+metadata:
+  name: minecraftserver-sample
+spec:
+  # Add fields here
+  foo: bar
