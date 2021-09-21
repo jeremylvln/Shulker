@@ -3,7 +3,7 @@
 <p align="center">Put Minecraft in a <i>box</i> :package:</p>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Introduction
@@ -24,6 +24,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/Thog"><img src="https://avatars.githubusercontent.com/u/1760003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mary</b></sub></a><br /><a href="#ideas-Thog" title="Ideas, Planning, & Feedback">🤔</a> <a href="#mentoring-Thog" title="Mentoring">🧑‍🏫</a></td>
+    <td align="center"><a href="https://github.com/PSNRigner"><img src="https://avatars.githubusercontent.com/u/9195148?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rigner</b></sub></a><br /><a href="#ideas-PSNRigner" title="Ideas, Planning, & Feedback">🤔</a> <a href="#mentoring-PSNRigner" title="Mentoring">🧑‍🏫</a></td>
   </tr>
 </table>
 
