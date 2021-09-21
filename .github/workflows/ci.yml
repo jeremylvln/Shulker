@@ -1,0 +1,21 @@
+name: ci
+
+on: pull_request
+
+env:
+  TARGET_GOLANG_VERSION: '^1.16'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.TARGET_GOLANG_VERSION }}
+
+      - run: make test
