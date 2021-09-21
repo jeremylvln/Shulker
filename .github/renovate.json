@@ -1,0 +1,13 @@
+{
+  "extends": ["config:base"],
+  "automerge": true,
+  "dependencyDashboard": false,
+  "labels": ["type:dependencies :wrench:"],
+  "prCreation": "not-pending",
+  "reviewersFromCodeOwners": false,
+  "stabilityDays": 3,
+  "updateNotScheduled": false,
+  "vulnerabilityAlerts": {
+    "labels": ["priority:critical :fire:"]
+  }
+}
