@@ -1,0 +1,25 @@
+{
+  "projectName": "Shulker",
+  "projectOwner": "IamBlueSlime",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Thog",
+      "name": "Mary",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1760003?v=4",
+      "profile": "https://github.com/Thog",
+      "contributions": [
+        "ideas",
+        "mentoring"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
