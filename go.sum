@@ -1139,6 +1139,8 @@ sigs.k8s.io/controller-runtime v0.10.0 h1:HgyZmMpjUOrtkaFtCnfxsR1bGRuFoAczSNbn2M
 sigs.k8s.io/controller-runtime v0.10.0/go.mod h1:GCdh6kqV6IY4LK0JLwX0Zm6g233RtVGdb/f0+KSfprg=
 sigs.k8s.io/controller-runtime v0.10.1 h1:+eLHgY/VrJWnfg6iXUqhCUqNXgPH1NZeP9drNAAgWlg=
 sigs.k8s.io/controller-runtime v0.10.1/go.mod h1:CQp8eyUQZ/Q7PJvnIrB6/hgfTC1kBkGylwsLgOQi1WY=
+sigs.k8s.io/controller-runtime v0.10.2 h1:jW8qiY+yMnnPx6O9hu63tgcwaKzd1yLYui+mpvClOOc=
+sigs.k8s.io/controller-runtime v0.10.2/go.mod h1:CQp8eyUQZ/Q7PJvnIrB6/hgfTC1kBkGylwsLgOQi1WY=
 sigs.k8s.io/structured-merge-diff/v4 v4.0.2/go.mod h1:bJZC9H9iH24zzfZ/41RGcq60oK1F7G282QMXDPYydCw=
 sigs.k8s.io/structured-merge-diff/v4 v4.1.0 h1:C4r9BgJ98vrKnnVCjwCSXcWjWe0NKcUQkmzDXZXGwH8=
 sigs.k8s.io/structured-merge-diff/v4 v4.1.0/go.mod h1:bJZC9H9iH24zzfZ/41RGcq60oK1F7G282QMXDPYydCw=
