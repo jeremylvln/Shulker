@@ -3,7 +3,7 @@ module github.com/IamBlueSlime/Shulker
 go 1.16
 
 require (
-	github.com/go-logr/logr v0.4.0
+	github.com/go-logr/logr v1.2.2
 	github.com/onsi/ginkgo v1.16.4
 	github.com/onsi/gomega v1.16.0
 	k8s.io/api v0.22.4
