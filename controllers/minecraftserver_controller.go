@@ -73,7 +73,7 @@ func (r *MinecraftServerReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		Instance: minecraftServer,
 		Scheme:   r.Scheme,
 	}
-	builders := resourceBuilder.ResourceBuilders()
+	builders, dirtyBuilders := resourceBuilder.ResourceBuilders()
 
 	for _, builder := range builders {
 		resource, err := builder.Build()
@@ -118,6 +118,26 @@ func (r *MinecraftServerReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		// if err = r.annotateIfNeeded(ctx, logger, builder, operationResult, rabbitmqCluster); err != nil {
 		// 	return ctrl.Result{}, err
 		// }
+	}
+
+	for _, dirtyBuilder := range dirtyBuilders {
+		resource, err := dirtyBuilder.Build()
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+
+		existingResource := resource
+		apiError := r.Get(ctx, types.NamespacedName{
+			Namespace: resource.GetNamespace(),
+			Name:      resource.GetName(),
+		}, existingResource)
+
+		if apiError == nil {
+			apiError = r.Delete(ctx, existingResource)
+			return ctrl.Result{}, apiError
+		} else if !k8serrors.IsNotFound(apiError) {
+			return ctrl.Result{}, apiError
+		}
 	}
 
 	return ctrl.Result{}, nil

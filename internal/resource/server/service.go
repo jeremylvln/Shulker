@@ -39,7 +39,7 @@ func (b *MinecraftServerServiceBuilder) Update(object client.Object) error {
 		Name:       "minecraft",
 	}}
 
-	if b.Instance.Spec.Service.ExposesRconPort {
+	if b.Instance.Spec.Rcon.Enabled && b.Instance.Spec.Service.ExposesRconPort {
 		ports = append(ports, corev1.ServicePort{
 			Protocol:   corev1.ProtocolTCP,
 			Port:       25575,

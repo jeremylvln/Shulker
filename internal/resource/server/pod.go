@@ -79,14 +79,8 @@ func (b *MinecraftServerPodBuilder) Update(object client.Object) error {
 		Containers: []corev1.Container{{
 			Image: "itzg/minecraft-server:latest",
 			Name:  "minecraft-server",
-			Ports: []corev1.ContainerPort{{
-				ContainerPort: 25565,
-				Name:          "minecraft",
-			}, {
-				ContainerPort: 25575,
-				Name:          "rcon",
-			}},
-			Env: b.getPodEnv(),
+			Ports: b.getPodPorts(),
+			Env:   b.getPodEnv(),
 			LivenessProbe: &corev1.Probe{
 				ProbeHandler: corev1.ProbeHandler{
 					TCPSocket: &corev1.TCPSocketAction{
@@ -149,7 +143,8 @@ func (b *MinecraftServerPodBuilder) CanBeUpdated() bool {
 
 func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 	shouldEnforceWhitelist := len(b.Instance.Spec.WhitelistedPlayers) > 0
-	env := append([]corev1.EnvVar{
+
+	env := []corev1.EnvVar{
 		{
 			Name:  "SERVER_NAME",
 			Value: b.Instance.Name,
@@ -169,18 +164,6 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 		{
 			Name:  "SERVER_PORT",
 			Value: "25565",
-		},
-		{
-			Name:  "ENABLE_RCON",
-			Value: "true",
-		},
-		{
-			Name:  "RCON_PORT",
-			Value: "25575",
-		},
-		{
-			Name:  "RCON_PASSWORD",
-			Value: "hello", // TODO: change me
 		},
 		{
 			Name:  "MAX_PLAYERS",
@@ -218,9 +201,56 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 			Name:  "WORLD",
 			Value: "https://i.jeremylvln.fr/shulker/hub.tar.gz",
 		},
-	}, b.Instance.Spec.PodOverrides.Env...)
+	}
+
+	if b.Instance.Spec.Rcon.Enabled {
+		rconSecretName := b.getRconSecretName()
+		if b.Instance.Spec.Rcon.PasswordSecretName != "" {
+			rconSecretName = b.Instance.Spec.Rcon.PasswordSecretName
+		}
+
+		env = append(env, []corev1.EnvVar{
+			{
+				Name:  "ENABLE_RCON",
+				Value: strconv.FormatBool(b.Instance.Spec.Rcon.Enabled),
+			},
+			{
+				Name:  "RCON_PORT",
+				Value: "25575",
+			},
+			{
+				Name: "RCON_PASSWORD",
+				ValueFrom: &corev1.EnvVarSource{
+					SecretKeyRef: &corev1.SecretKeySelector{
+						LocalObjectReference: corev1.LocalObjectReference{
+							Name: rconSecretName,
+						},
+						Key: "password",
+					},
+				},
+			},
+		}...)
+	}
+
+	env = append(env, b.Instance.Spec.PodOverrides.Env...)
 
 	return env
+}
+
+func (b *MinecraftServerPodBuilder) getPodPorts() []corev1.ContainerPort {
+	ports := []corev1.ContainerPort{{
+		ContainerPort: 25565,
+		Name:          "minecraft",
+	}}
+
+	if b.Instance.Spec.Rcon.Enabled {
+		ports = append(ports, corev1.ContainerPort{
+			ContainerPort: 25575,
+			Name:          "rcon",
+		})
+	}
+
+	return ports
 }
 
 func getTypeFromVersionChannel(channel shulkermciov1alpha1.MinecraftServerVersionChannel) string {

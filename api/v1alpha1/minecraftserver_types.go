@@ -66,6 +66,10 @@ type MinecraftServerSpec struct {
 	//+kubebuilder:default={disableNether: false, disableEnd: false}
 	World *MinecraftServerWorldSpec `json:"world,omitempty"`
 
+	// Configuration of Minecraft Server's rcon.
+	//+kubebuilder:default={enabled: true}
+	Rcon *MinecraftServerRconSpec `json:"rcon,omitempty"`
+
 	// The desired state of the Kubernetes Service to create for the
 	// Minecraft Server.
 	//+kubebuilder:default={enabled: false}
@@ -133,6 +137,17 @@ type MinecraftServerWorldSpec struct {
 	// and the players to enter it.
 	//+kubebuilder:default=false
 	DisableEnd bool `json:"disableEnd,omitempty"`
+}
+
+type MinecraftServerRconSpec struct {
+	// Whether to enable rcon.
+	//+kubebuilder:default=true
+	Enabled bool `json:"enabled,omitempty"`
+
+	// Name of a Kubernetes Secret containing a `password` key to use
+	// as rcon password. If not provided, a Secret will be created
+	// dedicated to this Minecraft Server.
+	PasswordSecretName string `json:"passwordSecretName,omitempty"`
 }
 
 // Configuration attributes for the Service resource.

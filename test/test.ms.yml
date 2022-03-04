@@ -14,6 +14,8 @@ spec:
     url: https://i.jeremylvln.fr/shulker/hub.tar.gz
     disableNether: true
     disableEnd: true
+  rcon:
+    enabled: false
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

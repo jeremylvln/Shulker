@@ -1037,6 +1037,21 @@ spec:
                     format: int64
                     type: integer
                 type: object
+              rcon:
+                default:
+                  enabled: true
+                description: Configuration of Minecraft Server's rcon.
+                properties:
+                  enabled:
+                    default: true
+                    description: Whether to enable rcon.
+                    type: boolean
+                  passwordSecretName:
+                    description: Name of a Kubernetes Secret containing a `password`
+                      key to use as rcon password. If not provided, a Secret will
+                      be created dedicated to this Minecraft Server.
+                    type: string
+                type: object
               resources:
                 default:
                   limits:

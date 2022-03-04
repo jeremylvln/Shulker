@@ -19,17 +19,26 @@ type ResourceBuilder interface {
 	CanBeUpdated() bool
 }
 
-func (b *MinecraftServerResourceBuilder) ResourceBuilders() []ResourceBuilder {
+func (b *MinecraftServerResourceBuilder) ResourceBuilders() ([]ResourceBuilder, []ResourceBuilder) {
 	builders := []ResourceBuilder{
 		b.MinecraftServerPod(),
 		b.MinecraftServerConfigMap(),
 	}
+	dirtyBuilders := []ResourceBuilder{}
+
+	if b.Instance.Spec.Rcon.Enabled {
+		builders = append(builders, b.MinecraftServerRconSecret())
+	} else {
+		dirtyBuilders = append(dirtyBuilders, b.MinecraftServerRconSecret())
+	}
 
 	if b.Instance.Spec.Service.Enabled {
 		builders = append(builders, b.MinecraftServerService())
+	} else {
+		dirtyBuilders = append(dirtyBuilders, b.MinecraftServerService())
 	}
 
-	return builders
+	return builders, dirtyBuilders
 }
 
 func (b *MinecraftServerResourceBuilder) getPodName() string {
@@ -38,6 +47,10 @@ func (b *MinecraftServerResourceBuilder) getPodName() string {
 
 func (b *MinecraftServerResourceBuilder) getConfigMapName() string {
 	return fmt.Sprintf("minecraft-server-config-%s", b.Instance.Name)
+}
+
+func (b *MinecraftServerResourceBuilder) getRconSecretName() string {
+	return fmt.Sprintf("minecraft-server-rcon-secret-%s", b.Instance.Name)
 }
 
 func (b *MinecraftServerResourceBuilder) getServiceName() string {
