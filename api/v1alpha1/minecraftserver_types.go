@@ -47,6 +47,7 @@ type MinecraftServerSpec struct {
 	// this Minecraft Server to be part of a Minecraft Cluster.
 	ClusterRef *MinecraftClusterRef `json:"minecraftClusterRef"`
 
+	// Version the Minecraft Server has to run.
 	//+kubebuilder:validation:Required
 	Version MinecraftServerVersionSpec `json:"version"`
 
@@ -128,7 +129,7 @@ type MinecraftServerVersionSpec struct {
 	//+kubebuilder:default=Vanilla
 	Channel MinecraftServerVersionChannel `json:"channel,omitempty"`
 
-	// Name of the version to use with a leading "v". Example: v1.18.1.
+	// Name of the version to use.
 	//+kubebuilder:validation:Required
 	Name string `json:"name"`
 }

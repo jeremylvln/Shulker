@@ -47,6 +47,17 @@ rules:
   - update
   - watch
 - apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
   - shulkermc.io
   resources:
   - minecraftclusters
@@ -94,6 +105,32 @@ rules:
   - shulkermc.io
   resources:
   - minecraftservers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxydeployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxydeployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxydeployments/status
   verbs:
   - get
   - patch

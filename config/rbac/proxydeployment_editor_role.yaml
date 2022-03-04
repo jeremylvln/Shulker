@@ -1,0 +1,24 @@
+# permissions for end users to edit proxydeployments.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: proxydeployment-editor-role
+rules:
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxydeployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxydeployments/status
+  verbs:
+  - get

@@ -78,6 +78,15 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return ctrl.Result{}, err
 	}
 
+	proxyDeploymentList, err := r.listProxyDeployments(ctx, minecraftCluster)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	minecraftCluster.Status.Proxies = 0
+	for _, proxyDeployment := range proxyDeploymentList.Items {
+		minecraftCluster.Status.Proxies += proxyDeployment.Status.Replicas
+	}
+
 	serverList, err := r.listMinecraftServers(ctx, minecraftCluster)
 	if err != nil {
 		return ctrl.Result{}, err
@@ -93,12 +102,25 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		}
 	}
 
-	minecraftCluster.Status.Servers = len(serverPool)
+	minecraftCluster.Status.Servers = int32(len(serverPool))
 	minecraftCluster.Status.ServerPool = serverPool
 	minecraftCluster.Status.SetCondition(shulkermciov1alpha1.ClusterReadyCondition, metav1.ConditionTrue, "Ready", "Cluster is ready")
 
 	err = r.Status().Update(ctx, minecraftCluster)
 	return ctrl.Result{}, err
+}
+
+func (r *MinecraftClusterReconciler) listProxyDeployments(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) (*shulkermciov1alpha1.ProxyDeploymentList, error) {
+	list := shulkermciov1alpha1.ProxyDeploymentList{}
+	err := r.List(ctx, &list, client.InNamespace(minecraftCluster.Namespace), client.MatchingFields{
+		".spec.minecraftClusterRef.name": minecraftCluster.Name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &list, nil
 }
 
 func (r *MinecraftClusterReconciler) listMinecraftServers(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) (*shulkermciov1alpha1.MinecraftServerList, error) {

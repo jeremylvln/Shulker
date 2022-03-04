@@ -5,37 +5,34 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: minecraftservers.shulkermc.io
+  name: proxydeployments.shulkermc.io
 spec:
   group: shulkermc.io
   names:
     categories:
     - all
-    kind: MinecraftServer
-    listKind: MinecraftServerList
-    plural: minecraftservers
+    kind: ProxyDeployment
+    listKind: ProxyDeploymentList
+    plural: proxydeployments
     shortNames:
-    - sms
-    singular: minecraftserver
+    - spd
+    singular: proxydeployment
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.minecraftClusterRef.name
-      name: Cluster Name
-      type: string
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: boolean
-    - jsonPath: .status.address
-      name: Address
-      type: boolean
+    - jsonPath: .status.availableReplicas
+      name: Available Replicas
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MinecraftServer is the Schema for the MinecraftServer API.
+        description: ProxyDeployment is the Schema for the ProxyDeployment API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,9 +47,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: Defines the defired state of a MinecraftServer. Most, to
-              not say all, fields configurable in a Minecraft Server can be configured
-              in this CRD.
+            description: ProxyDeploymentSpec defines the desired state of ProxyDeployment
             properties:
               affinity:
                 description: Affinity scheduling rules to be applied on created Pods.
@@ -879,38 +874,22 @@ spec:
                         type: array
                     type: object
                 type: object
-              maxPlayers:
-                default: 20
-                description: Number of maximum players that can connect to the Minecraft
-                  Server.
-                format: int64
-                type: integer
               minecraftClusterRef:
                 description: Reference to a Minecraft Cluster. Adding this will enroll
-                  this Minecraft Server to be part of a Minecraft Cluster.
+                  this Proxy Deployment to be part of a Minecraft Cluster.
                 properties:
                   name:
                     description: Name of the Minecraft Cluster.
                     type: string
                 type: object
-              motd:
-                default: A Minecraft Server on Shulker
-                description: Message to display when the players query the status
-                  of the Minecraft Server.
-                type: string
-              operators:
-                description: List of players to be operators on the Minecraft Server.
-                items:
-                  type: string
-                type: array
               podOverrides:
                 default:
                   livenessProbe:
-                    initialDelaySeconds: 60
+                    initialDelaySeconds: 15
                   readinessProbe:
-                    initialDelaySeconds: 60
-                  terminationGracePeriodSeconds: 60
-                description: Overrides configuration for the Minecraft Server pod.
+                    initialDelaySeconds: 15
+                  terminationGracePeriodSeconds: 3600
+                description: Overrides configuration for the Proxy Deployment pod.
                 properties:
                   env:
                     description: Additional environment variables to add to the Minecraft
@@ -1054,31 +1033,20 @@ spec:
                     format: int64
                     type: integer
                 type: object
-              rcon:
-                default:
-                  enabled: true
-                description: Configuration of Minecraft Server's rcon.
-                properties:
-                  enabled:
-                    default: true
-                    description: Whether to enable rcon.
-                    type: boolean
-                  passwordSecretName:
-                    description: Name of a Kubernetes Secret containing a `password`
-                      key to use as rcon password. If not provided, a Secret will
-                      be created dedicated to this Minecraft Server.
-                    type: string
-                type: object
+              replicas:
+                description: Number of replicas the Proxy Deployment should have.
+                format: int32
+                type: integer
               resources:
                 default:
                   limits:
                     cpu: 2000m
-                    memory: 4Gi
+                    memory: 2Gi
                   requests:
                     cpu: 1000m
-                    memory: 2Gi
+                    memory: 1Gi
                 description: The desired compute resource requirements of Pods in
-                  the Minecraft Server.
+                  the Proxy Deployment.
                 properties:
                   limits:
                     additionalProperties:
@@ -1103,14 +1071,12 @@ spec:
                       to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
-              serverIcon:
-                description: Server icon image in base64 format.
-                type: string
               service:
                 default:
-                  enabled: false
+                  enabled: true
+                  type: LoadBalancer
                 description: The desired state of the Kubernetes Service to create
-                  for the Minecraft Server.
+                  for the Proxy Deployment.
                 properties:
                   annotations:
                     additionalProperties:
@@ -1119,12 +1085,8 @@ spec:
                     type: object
                   enabled:
                     default: false
-                    description: Whether to create a Service for the Minecraft Server.
+                    description: Whether to create a Service for the Proxy Deployment.
                       Defaults to false.
-                    type: boolean
-                  exposesRconPort:
-                    default: false
-                    description: Wether to expose the rcon port or not to the Service.
                     type: boolean
                   type:
                     default: ClusterIP
@@ -1137,29 +1099,15 @@ spec:
                     type: string
                 type: object
               version:
-                description: Version the Minecraft Server has to run.
+                description: Version the Proxy Deployment has to run.
                 properties:
                   channel:
-                    default: Vanilla
-                    description: Channel of the version to use. Defaults to Vanilla
-                      meaning that the server will run Mojang's official dedicated
-                      server.
+                    default: BungeeCord
+                    description: Channel of the version to use. Defaults to BungeeCord.
                     enum:
-                    - Vanilla
-                    - Forge
-                    - Fabric
-                    - Spigot
-                    - Paper
-                    - Airplane
-                    - Pufferfish
-                    - Purpur
-                    - Magma
-                    - Mohist
-                    - Catserver
-                    - Canyon
-                    - SpongeVanilla
-                    - Limbo
-                    - Crucible
+                    - BungeeCord
+                    - Waterfall
+                    - Velocity
                     type: string
                   name:
                     description: Name of the version to use.
@@ -1167,44 +1115,19 @@ spec:
                 required:
                 - name
                 type: object
-              whitelistedPlayers:
-                description: List of players to be whitelisted on the Minecraft Server.
-                items:
-                  type: string
-                type: array
-              world:
-                default:
-                  disableEnd: false
-                  disableNether: false
-                description: URL to a downloadable world archive.
-                properties:
-                  disableEnd:
-                    default: false
-                    description: Whether to allow the Minecraft Server to generate
-                      a End world and the players to enter it.
-                    type: boolean
-                  disableNether:
-                    default: false
-                    description: Whether to allow the Minecraft Server to generate
-                      a Nether world and the players to enter it.
-                    type: boolean
-                  url:
-                    description: URL to a downloable world.
-                    type: string
-                type: object
             required:
             - minecraftClusterRef
-            - version
             type: object
           status:
-            description: MinecraftServerStatus defines the observed state of MinecraftServer
+            description: ProxyDeploymentStatus defines the observed state of ProxyDeployment
             properties:
-              address:
-                description: Address of the Minecraft Server pod.
-                type: string
+              availableReplicas:
+                description: Number of available replicas in Proxy Deployment.
+                format: int32
+                type: integer
               conditions:
                 description: Conditions represent the latest available observations
-                  of a MinecraftServer object.
+                  of a ProxyDeployment object.
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
@@ -1272,8 +1195,14 @@ spec:
                   - type
                   type: object
                 type: array
+              replicas:
+                description: Number of total replicas in Proxy Deployment.
+                format: int32
+                type: integer
             required:
+            - availableReplicas
             - conditions
+            - replicas
             type: object
         type: object
     served: true

@@ -1,18 +1,43 @@
 apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftCluster
 metadata:
-  name: testmc
+  name: test
+spec: {}
+
+---
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyDeployment
+metadata:
+  name: main
 spec:
-  shortName: testmc
+  minecraftClusterRef:
+    name: test
+  version:
+    channel: Waterfall
+    name: latest
+  replicas: 1
+  service:
+    enabled: true
+    type: NodePort
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          preference:
+            matchExpressions:
+              - key: cloud.google.com/gke-preemptible
+                operator: In
+                values:
+                  - 'true'
 
 ---
 apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServer
 metadata:
-  name: test
+  name: hub
 spec:
   minecraftClusterRef:
-    name: testmc
+    name: test
   version:
     channel: Spigot
     name: 1.18.1
@@ -26,9 +51,6 @@ spec:
     disableEnd: true
   rcon:
     enabled: true
-  service:
-    enabled: false
-    type: ClusterIP
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

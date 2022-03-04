@@ -198,8 +198,8 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 			Value: fmt.Sprintf("%dM", b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)-1000),
 		},
 		{
-			Name:  "WORLD",
-			Value: "https://i.jeremylvln.fr/shulker/hub.tar.gz",
+			Name:  "ONLINE_MODE",
+			Value: strconv.FormatBool(b.Instance.Spec.ClusterRef == nil),
 		},
 	}
 
@@ -230,6 +230,13 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 				},
 			},
 		}...)
+	}
+
+	if b.Instance.Spec.World != nil {
+		env = append(env, corev1.EnvVar{
+			Name:  "WORLD",
+			Value: b.Instance.Spec.World.Url,
+		})
 	}
 
 	env = append(env, b.Instance.Spec.PodOverrides.Env...)

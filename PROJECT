@@ -20,4 +20,12 @@ resources:
   kind: MinecraftCluster
   path: shulkermc.io/m/v2/api/v1alpha1
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: shulkermc.io
+  kind: ProxyDeployment
+  path: shulkermc.io/m/v2/api/v1alpha1
+  version: v1alpha1
 version: "3"

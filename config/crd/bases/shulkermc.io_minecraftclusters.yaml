@@ -23,6 +23,9 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: boolean
+    - jsonPath: .status.proxies
+      name: Proxies
+      type: number
     - jsonPath: .status.servers
       name: Servers
       type: number
@@ -50,12 +53,6 @@ spec:
             description: Defines the defired state of a MinecraftCluster. Most, to
               not say all, fields configurable in a Minecraft Cluster can be configured
               in this CRD.
-            properties:
-              shortName:
-                description: Short name to use internally to refer to this Minecraft
-                  Cluster. Objects referring to this Minecraft Cluster will include
-                  this short name as prefix in their own names.
-                type: string
             type: object
           status:
             description: MinecraftClusterStatus defines the observed state of MinecraftCluster
@@ -130,6 +127,10 @@ spec:
                   - type
                   type: object
                 type: array
+              proxies:
+                description: Number of proxies.
+                format: int32
+                type: integer
               serverPool:
                 description: Pool of Minecraft Servers linked to this Minecraft Cluster.
                 items:
@@ -144,9 +145,11 @@ spec:
                 type: array
               servers:
                 description: Number of servers inside the server pool.
+                format: int32
                 type: integer
             required:
             - conditions
+            - proxies
             - serverPool
             - servers
             type: object

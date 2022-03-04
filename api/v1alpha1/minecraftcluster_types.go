@@ -24,6 +24,7 @@ import (
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.conditions[?(@.type==\"Ready\")].status"
+//+kubebuilder:printcolumn:name="Proxies",type="number",JSONPath=".status.proxies"
 //+kubebuilder:printcolumn:name="Servers",type="number",JSONPath=".status.servers"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 //+kubebuilder:resource:shortName={"smc"},categories=all
@@ -41,11 +42,6 @@ type MinecraftCluster struct {
 // say all, fields configurable in a Minecraft Cluster can be
 // configured in this CRD.
 type MinecraftClusterSpec struct {
-	// Short name to use internally to refer to this Minecraft Cluster.
-	// Objects referring to this Minecraft Cluster will include this
-	// short name as prefix in their own names.
-	//+kubebuilder:validation:Required
-	ShortName string `json:"shortName,omitempty"`
 }
 
 type MinecraftClusterStatusCondition string
@@ -61,12 +57,13 @@ type MinecraftClusterStatus struct {
 	//+kubebuilder:validation:Required
 	Conditions []metav1.Condition `json:"conditions"`
 
+	// Number of proxies.
+	Proxies int32 `json:"proxies"`
+
 	// Number of servers inside the server pool.
-	//+kubebuilder:validation:Required
-	Servers int `json:"servers"`
+	Servers int32 `json:"servers"`
 
 	// Pool of Minecraft Servers linked to this Minecraft Cluster.
-	//+kubebuilder:validation:Required
 	ServerPool []MinecraftClusterStatusServerEntry `json:"serverPool"`
 }
 
