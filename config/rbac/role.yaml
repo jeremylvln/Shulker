@@ -49,6 +49,32 @@ rules:
 - apiGroups:
   - shulkermc.io
   resources:
+  - minecraftclusters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - minecraftclusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - minecraftclusters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - shulkermc.io
+  resources:
   - minecraftservers
   verbs:
   - create

@@ -15,11 +15,20 @@ spec:
     listKind: MinecraftServerList
     plural: minecraftservers
     shortNames:
-    - smc
+    - sms
     singular: minecraftserver
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
+    - jsonPath: .spec.minecraftClusterRef.name
+      name: Cluster Name
+      type: string
+    - jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: boolean
+    - jsonPath: .status.address
+      name: Address
+      type: boolean
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -876,6 +885,14 @@ spec:
                   Server.
                 format: int64
                 type: integer
+              minecraftClusterRef:
+                description: Reference to a Minecraft Cluster. Adding this will enroll
+                  this Minecraft Server to be part of a Minecraft Cluster.
+                properties:
+                  name:
+                    description: Name of the Minecraft Cluster.
+                    type: string
+                type: object
               motd:
                 default: A Minecraft Server on Shulker
                 description: Message to display when the players query the status
@@ -1179,11 +1196,15 @@ spec:
                     type: string
                 type: object
             required:
+            - minecraftClusterRef
             - version
             type: object
           status:
             description: MinecraftServerStatus defines the observed state of MinecraftServer
             properties:
+              address:
+                description: Address of the Minecraft Server pod.
+                type: string
               conditions:
                 description: Conditions represent the latest available observations
                   of a MinecraftServer object.

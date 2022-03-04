@@ -1,8 +1,18 @@
 apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftCluster
+metadata:
+  name: testmc
+spec:
+  shortName: testmc
+
+---
+apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServer
 metadata:
   name: test
 spec:
+  minecraftClusterRef:
+    name: testmc
   version:
     channel: Spigot
     name: 1.18.1
@@ -15,7 +25,10 @@ spec:
     disableNether: true
     disableEnd: true
   rcon:
+    enabled: true
+  service:
     enabled: false
+    type: ClusterIP
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

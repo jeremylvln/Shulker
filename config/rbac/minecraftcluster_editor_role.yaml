@@ -1,0 +1,24 @@
+# permissions for end users to edit minecraftclusters.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: minecraftcluster-editor-role
+rules:
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - minecraftclusters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - minecraftclusters/status
+  verbs:
+  - get

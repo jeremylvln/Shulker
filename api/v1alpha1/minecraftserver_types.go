@@ -18,13 +18,18 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
+	meta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:printcolumn:name="Cluster Name",type="string",JSONPath=".spec.minecraftClusterRef.name"
+//+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.conditions[?(@.type==\"Ready\")].status"
+//+kubebuilder:printcolumn:name="Address",type="boolean",JSONPath=".status.address"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
-//+kubebuilder:resource:shortName={"smc"},categories=all
+//+kubebuilder:resource:shortName={"sms"},categories=all
+
 // MinecraftServer is the Schema for the MinecraftServer API.
 type MinecraftServer struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -38,6 +43,10 @@ type MinecraftServer struct {
 // say all, fields configurable in a Minecraft Server can be
 // configured in this CRD.
 type MinecraftServerSpec struct {
+	// Reference to a Minecraft Cluster. Adding this will enroll
+	// this Minecraft Server to be part of a Minecraft Cluster.
+	ClusterRef *MinecraftClusterRef `json:"minecraftClusterRef"`
+
 	//+kubebuilder:validation:Required
 	Version MinecraftServerVersionSpec `json:"version"`
 
@@ -88,7 +97,7 @@ type MinecraftServerSpec struct {
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Vanilla;Forge;Fabric;Spigot;Paper;Airplane;Pufferfish;Purpur;Magma;Mohist;Catserver;Canyon;SpongeVanilla;Limbo;Crucible
+//+kubebuilder:validation:Enum=Vanilla;Forge;Fabric;Spigot;Paper;Airplane;Pufferfish;Purpur;Magma;Mohist;Catserver;Canyon;SpongeVanilla;Limbo;Crucible
 type MinecraftServerVersionChannel string
 
 const (
@@ -126,6 +135,7 @@ type MinecraftServerVersionSpec struct {
 
 type MinecraftServerWorldSpec struct {
 	// URL to a downloable world.
+	//+kubebuilder:validation:Required
 	Url string `json:"url,omitempty"`
 
 	// Whether to allow the Minecraft Server to generate a Nether world
@@ -196,11 +206,32 @@ type MinecraftServerPodProbeSpec struct {
 	InitialDelaySeconds int32 `json:"initialDelaySeconds,omitempty"`
 }
 
+//+kubebuilder:validation:Enum=Ready;Addressable
+type MinecraftServerStatusCondition string
+
+const (
+	ServerReadyCondition       MinecraftServerStatusCondition = "Ready"
+	ServerAddressableCondition MinecraftServerStatusCondition = "Addressable"
+)
+
 // MinecraftServerStatus defines the observed state of MinecraftServer
 type MinecraftServerStatus struct {
 	// Conditions represent the latest available observations of a
 	// MinecraftServer object.
+	//+kubebuilder:validation:Required
 	Conditions []metav1.Condition `json:"conditions"`
+
+	// Address of the Minecraft Server pod.
+	Address string `json:"address,omitempty"`
+}
+
+func (s *MinecraftServerStatus) SetCondition(condition MinecraftServerStatusCondition, status metav1.ConditionStatus, reason string, message string) {
+	meta.SetStatusCondition(&s.Conditions, metav1.Condition{
+		Type:    string(condition),
+		Status:  status,
+		Reason:  reason,
+		Message: message,
+	})
 }
 
 //+kubebuilder:object:root=true

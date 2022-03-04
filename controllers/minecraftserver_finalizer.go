@@ -26,12 +26,11 @@ import (
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
 )
 
-const deletionFinalizer = "deletion.finalizers.minecraftservers.shulkermc.io"
+const serverDeletionFinalizer = "deletion.finalizers.minecraftservers.shulkermc.io"
 
-// addFinalizerIfNeeded adds a deletion finalizer if the RabbitmqCluster does not have one yet and is not marked for deletion
 func (r *MinecraftServerReconciler) addFinalizerIfNeeded(ctx context.Context, minecraftServer *shulkermciov1alpha1.MinecraftServer) error {
-	if minecraftServer.ObjectMeta.DeletionTimestamp.IsZero() && !controllerutil.ContainsFinalizer(minecraftServer, deletionFinalizer) {
-		controllerutil.AddFinalizer(minecraftServer, deletionFinalizer)
+	if minecraftServer.ObjectMeta.DeletionTimestamp.IsZero() && !controllerutil.ContainsFinalizer(minecraftServer, serverDeletionFinalizer) {
+		controllerutil.AddFinalizer(minecraftServer, serverDeletionFinalizer)
 
 		if err := r.Client.Update(ctx, minecraftServer); err != nil {
 			return err
@@ -42,7 +41,7 @@ func (r *MinecraftServerReconciler) addFinalizerIfNeeded(ctx context.Context, mi
 }
 
 func (r *MinecraftServerReconciler) removeFinalizer(ctx context.Context, minecraftServer *shulkermciov1alpha1.MinecraftServer) error {
-	controllerutil.RemoveFinalizer(minecraftServer, deletionFinalizer)
+	controllerutil.RemoveFinalizer(minecraftServer, serverDeletionFinalizer)
 
 	if err := r.Client.Update(ctx, minecraftServer); err != nil {
 		return err
@@ -52,7 +51,7 @@ func (r *MinecraftServerReconciler) removeFinalizer(ctx context.Context, minecra
 }
 
 func (r *MinecraftServerReconciler) prepareForDeletion(ctx context.Context, minecraftServer *shulkermciov1alpha1.MinecraftServer) error {
-	if controllerutil.ContainsFinalizer(minecraftServer, deletionFinalizer) {
+	if controllerutil.ContainsFinalizer(minecraftServer, serverDeletionFinalizer) {
 		if err := clientretry.RetryOnConflict(clientretry.DefaultRetry, func() error {
 			// Custom logic here
 			return nil

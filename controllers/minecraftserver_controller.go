@@ -21,12 +21,11 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	clientretry "k8s.io/client-go/util/retry"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
@@ -75,72 +74,31 @@ func (r *MinecraftServerReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	}
 	builders, dirtyBuilders := resourceBuilder.ResourceBuilders()
 
-	for _, builder := range builders {
-		resource, err := builder.Build()
-		if err != nil {
-			return ctrl.Result{}, err
-		}
-
-		// var operationResult controllerutil.OperationResult
-		err = clientretry.RetryOnConflict(clientretry.DefaultRetry, func() error {
-			var apiError error
-
-			if builder.CanBeUpdated() {
-				// operationResult, apiError = controllerutil.CreateOrUpdate(ctx, r.Client, resource, func() error {
-				_, apiError = controllerutil.CreateOrUpdate(ctx, r.Client, resource, func() error {
-					return builder.Update(resource)
-				})
-			} else {
-				existingResource := resource
-				apiError = r.Get(ctx, types.NamespacedName{
-					Namespace: resource.GetNamespace(),
-					Name:      resource.GetName(),
-				}, existingResource)
-
-				if k8serrors.IsNotFound(apiError) {
-					apiError = builder.Update(resource)
-					if apiError != nil {
-						return apiError
-					}
-
-					return r.Create(ctx, resource)
-				}
-			}
-
-			return apiError
-		})
-
-		if err != nil {
-			// r.setReconcileSuccess(ctx, rabbitmqCluster, corev1.ConditionFalse, "Error", err.Error())
-			return ctrl.Result{}, err
-		}
-
-		// if err = r.annotateIfNeeded(ctx, logger, builder, operationResult, rabbitmqCluster); err != nil {
-		// 	return ctrl.Result{}, err
-		// }
+	err = ReconcileWithResourceBuilders(r.Client, ctx, builders, dirtyBuilders)
+	if err != nil {
+		return ctrl.Result{}, err
 	}
 
-	for _, dirtyBuilder := range dirtyBuilders {
-		resource, err := dirtyBuilder.Build()
-		if err != nil {
-			return ctrl.Result{}, err
-		}
-
-		existingResource := resource
-		apiError := r.Get(ctx, types.NamespacedName{
-			Namespace: resource.GetNamespace(),
-			Name:      resource.GetName(),
-		}, existingResource)
-
-		if apiError == nil {
-			apiError = r.Delete(ctx, existingResource)
-			return ctrl.Result{}, apiError
-		} else if !k8serrors.IsNotFound(apiError) {
-			return ctrl.Result{}, apiError
-		}
+	pod := corev1.Pod{}
+	err = r.Get(ctx, client.ObjectKey{
+		Namespace: minecraftServer.Namespace,
+		Name:      resourceBuilder.GetPodName(),
+	}, &pod)
+	if err != nil {
+		return ctrl.Result{}, err
 	}
 
-	return ctrl.Result{}, nil
+	if pod.Status.PodIP != "" {
+		minecraftServer.Status.Address = pod.Status.PodIP
+		minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerAddressableCondition, metav1.ConditionTrue, "PodIPAssigned", "IP assigned to Pod")
+	} else {
+		minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerAddressableCondition, metav1.ConditionFalse, "NoPodIPYet", "Pod does not have an IP yet")
+	}
+
+	// TODO: Better
+	minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerReadyCondition, metav1.ConditionTrue, "Ready", "Server is ready")
+
+	return ctrl.Result{}, r.Status().Update(ctx, minecraftServer)
 }
 
 func (r *MinecraftServerReconciler) getMinecraftServer(ctx context.Context, namespacedName types.NamespacedName) (*shulkermciov1alpha1.MinecraftServer, error) {
@@ -150,6 +108,20 @@ func (r *MinecraftServerReconciler) getMinecraftServer(ctx context.Context, name
 }
 
 func (r *MinecraftServerReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	err := mgr.GetFieldIndexer().IndexField(context.Background(), &shulkermciov1alpha1.MinecraftServer{}, ".spec.minecraftClusterRef.name", func(object client.Object) []string {
+		minecraftServer := object.(*shulkermciov1alpha1.MinecraftServer)
+
+		if minecraftServer.Spec.ClusterRef == nil {
+			return nil
+		}
+
+		return []string{minecraftServer.Spec.ClusterRef.Name}
+	})
+
+	if err != nil {
+		return err
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&shulkermciov1alpha1.MinecraftServer{}).
 		Owns(&corev1.Pod{}).

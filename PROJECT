@@ -12,4 +12,12 @@ resources:
   kind: MinecraftServer
   path: shulkermc.io/m/v2/api/v1alpha1
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: shulkermc.io
+  kind: MinecraftCluster
+  path: shulkermc.io/m/v2/api/v1alpha1
+  version: v1alpha1
 version: "3"

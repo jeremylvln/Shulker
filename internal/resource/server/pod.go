@@ -29,7 +29,7 @@ func (b *MinecraftServerResourceBuilder) MinecraftServerPod() *MinecraftServerPo
 func (b *MinecraftServerPodBuilder) Build() (client.Object, error) {
 	return &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      b.getPodName(),
+			Name:      b.GetPodName(),
 			Namespace: b.Instance.Namespace,
 			Labels:    b.getLabels(),
 		},
@@ -182,7 +182,7 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 			Value: strings.Join(b.Instance.Spec.WhitelistedPlayers, ","),
 		},
 		{
-			Name:  "ENFORCE_WHITELIST",
+			Name:  "ENABLE_WHITELIST",
 			Value: strconv.FormatBool(shouldEnforceWhitelist),
 		},
 		{
