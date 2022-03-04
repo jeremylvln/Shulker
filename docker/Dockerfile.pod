@@ -1,7 +1,0 @@
-FROM openjdk:16
-
-WORKDIR /work
-
-COPY entrypoint.pod.sh ./entrypoint.sh
-
-CMD [ "sh", "./entrypoint.sh" ]

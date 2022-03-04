@@ -8,4 +8,4 @@ webhook:
   port: 9443
 leaderElection:
   leaderElect: true
-  resourceName: 087b83f2.shulkermc.io
+  resourceName: e5135490.shulkermc.io

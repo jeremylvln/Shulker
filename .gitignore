@@ -23,6 +23,3 @@ testbin/*
 *.swp
 *.swo
 *~
-
-.DS_Store
-/store/

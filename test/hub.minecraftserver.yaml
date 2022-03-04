@@ -1,9 +1,0 @@
-apiVersion: shulkermc.io/v1alpha1
-kind: MinecraftServer
-metadata:
-  name: hub
-spec:
-  templateRef: hub
-  service:
-    enabled: true
-    type: NodePort

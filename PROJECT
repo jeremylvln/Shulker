@@ -1,12 +1,8 @@
 domain: shulkermc.io
 layout:
 - go.kubebuilder.io/v3
-multigroup: true
-plugins:
-  manifests.sdk.operatorframework.io/v2: {}
-  scorecard.sdk.operatorframework.io/v2: {}
 projectName: shulker
-repo: github.com/IamBlueSlime/Shulker
+repo: shulkermc.io/m/v2
 resources:
 - api:
     crdVersion: v1
@@ -14,22 +10,6 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftServer
-  path: github.com/IamBlueSlime/Shulker/apis/v1alpha1
-  version: v1alpha1
-- api:
-    crdVersion: v1
-    namespaced: true
-  controller: true
-  domain: shulkermc.io
-  kind: TemplateResource
-  path: github.com/IamBlueSlime/Shulker/apis/v1alpha1
-  version: v1alpha1
-- api:
-    crdVersion: v1
-    namespaced: true
-  controller: true
-  domain: shulkermc.io
-  kind: Template
-  path: github.com/IamBlueSlime/Shulker/apis/v1alpha1
+  path: shulkermc.io/m/v2/api/v1alpha1
   version: v1alpha1
 version: "3"
