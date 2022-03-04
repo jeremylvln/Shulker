@@ -3,7 +3,7 @@ name: ci
 on: pull_request
 
 env:
-  TARGET_GOLANG_VERSION: '^1.16'
+  TARGET_GOLANG_VERSION: '1.17'
 
 jobs:
   test:
@@ -18,4 +18,5 @@ jobs:
         with:
           go-version: ${{ env.TARGET_GOLANG_VERSION }}
 
-      - run: make test
+      - name: Run tests
+        run: make test

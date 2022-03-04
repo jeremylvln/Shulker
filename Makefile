@@ -1,4 +1,3 @@
-
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.23
 
@@ -59,31 +58,21 @@ test: manifests generate fmt vet envtest ## Run tests.
 
 ##@ Build
 
-.PHONY: build
-build: build-operator build-probe
+.PHONY: build ## Build all components
+build: build-operator
 
-.PHONY: run
+.PHONY: run ## Run the operator locally
 run: run-operator
 
 ##@ Operator
 
 .PHONY: build-operator
-build-operator: generate fmt vet
+build-operator: generate fmt vet ## Build the operator
 	go build -o bin/shulker-operator ./cmd/shulker-operator/main.go
 
 .PHONY: run-operator
-run-operator: manifests generate fmt vet
+run-operator: manifests generate fmt vet ## Run the operator locally
 	go run ./cmd/shulker-operator/main.go
-
-##@ Operator
-
-.PHONY: build-probe
-build-probe: generate fmt vet
-	go build -o bin/shulker-probe ./cmd/shulker-probe/main.go
-
-.PHONY: run-probe
-run-probe: manifests generate fmt vet
-	go run ./cmd/shulker-probe/main.go
 
 ##@ Deployment
 
