@@ -247,6 +247,10 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 			Value: fmt.Sprintf("%dM", b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)-1000),
 		},
 		{
+			Name:  "JVM_OPTS",
+			Value: "--add-opens java.base/java.time=ALL-UNNAMED",
+		},
+		{
 			Name:  "SHULKER_CLUSTER_NAMESPACE",
 			Value: b.Cluster.Namespace,
 		},

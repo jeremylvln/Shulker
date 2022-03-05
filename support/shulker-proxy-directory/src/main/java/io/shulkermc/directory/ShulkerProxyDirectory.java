@@ -81,10 +81,10 @@ public class ShulkerProxyDirectory extends Plugin {
                                     this.shulkerClusterName,
                                     null
                             ),
-                            new TypeToken<Watch.Response<V1alpha1MinecraftCluster>>(){}.getType());
+                            new TypeToken<Watch.Response<V1alpha1MinecraftClusterStatus>>(){}.getType());
 
                     for (var event : watch) {
-                        if (!event.type.equals("MODIFIED")) continue;
+                        if (event.type == null || !event.type.equals("MODIFIED")) continue;
                         Object object = event.object;
                         V1alpha1MinecraftClusterStatus status = ShulkerProxyDirectory.responseToStatusObject(object);
                         this.updateServerDirectory(status.getServerPool());
@@ -123,7 +123,7 @@ public class ShulkerProxyDirectory extends Plugin {
         }
     }
 
-    private void updateServerDirectory(List<V1alpha1MinecraftClusterStatusServerPool> serverPool) {
+    private synchronized void updateServerDirectory(List<V1alpha1MinecraftClusterStatusServerPool> serverPool) {
         Map<String, ServerInfo> proxyServers = this.proxyServer.getServers();
         this.getLogger().info("Updating server directory");
 
