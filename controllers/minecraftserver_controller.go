@@ -136,6 +136,7 @@ func (r *MinecraftServerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&shulkermciov1alpha1.MinecraftServer{}).
 		Owns(&corev1.Pod{}).
 		Owns(&corev1.ConfigMap{}).
+		Owns(&corev1.Secret{}).
 		Owns(&corev1.Service{}).
 		Complete(r)
 }
