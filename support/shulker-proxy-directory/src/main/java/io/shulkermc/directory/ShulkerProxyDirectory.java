@@ -7,7 +7,6 @@ import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.CustomObjectsApi;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.Watch;
-import io.shulkermc.models.V1alpha1MinecraftCluster;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatus;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatusServerPool;
 import net.md_5.bungee.api.ProxyServer;
@@ -23,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ShulkerProxyDirectory extends Plugin {
     private final ProxyServer proxyServer;
 
+    private String shulkerClusterNamespace;
     private String shulkerClusterName;
     private Thread reconcilerThread;
     private final AtomicBoolean reconcilerContinue = new AtomicBoolean(true);
@@ -33,13 +33,21 @@ public class ShulkerProxyDirectory extends Plugin {
 
     @Override
     public void onEnable() {
-        this.shulkerClusterName = System.getenv("SHULKER_CLUSTER_NAME");
+        this.shulkerClusterNamespace = System.getenv("SHULKER_CLUSTER_NAMESPACE");
+        if (this.shulkerClusterNamespace == null) {
+            this.getLogger().warning("No SHULKER_CLUSTER_NAMESPACE found in environment. Halting.");
+            this.proxyServer.stop();
+            return;
+        }
 
+        this.shulkerClusterName = System.getenv("SHULKER_CLUSTER_NAME");
         if (this.shulkerClusterName == null) {
             this.getLogger().warning("No SHULKER_CLUSTER_NAME found in environment. Halting.");
             this.proxyServer.stop();
             return;
         }
+
+        this.getLogger().info(String.format("Shulker cluster name is \"%s\"", this.shulkerClusterName));
 
         ApiClient kubernetesClient;
         try {
@@ -59,22 +67,22 @@ public class ShulkerProxyDirectory extends Plugin {
             while (this.reconcilerContinue.get()) {
                 try {
                     this.getLogger().info("Reconciling cluster status");
-                    Watch<V1alpha1MinecraftCluster> watch = Watch.createWatch(
+                    Watch<V1alpha1MinecraftClusterStatus> watch = Watch.createWatch(
                             kubernetesClient,
-                            customObjectsApi.getClusterCustomObjectCall(
+                            customObjectsApi.getNamespacedCustomObjectStatusCall(
                                     "shulkermc.io",
                                     "v1alpha1",
+                                    this.shulkerClusterNamespace,
                                     "minecraftclusters",
                                     this.shulkerClusterName,
                                     null
                             ),
-                            new TypeToken<Watch.Response<V1alpha1MinecraftCluster>>(){}.getType());
+                            new TypeToken<Watch.Response<V1alpha1MinecraftClusterStatus>>(){}.getType());
 
                     for (var event : watch) {
                         if (!event.type.equals("MODIFIED")) continue;
-                        V1alpha1MinecraftCluster cluster = event.object;
-                        if (cluster.getStatus() == null) continue;
-                        this.updateServerDirectory(cluster.getStatus().getServerPool());
+                        V1alpha1MinecraftClusterStatus status = event.object;
+                        this.updateServerDirectory(status.getServerPool());
                     }
                 } catch (ApiException ex) {
                     this.getLogger().severe("Failed to watch cluster status");
@@ -89,8 +97,8 @@ public class ShulkerProxyDirectory extends Plugin {
         this.reconcilerThread.start();
 
         try {
-            V1alpha1MinecraftClusterStatus status = (V1alpha1MinecraftClusterStatus) customObjectsApi.getClusterCustomObjectStatus(
-                    "shulkermc.io", "v1alpha1", "minecraftclusters", this.shulkerClusterName);
+            V1alpha1MinecraftClusterStatus status = (V1alpha1MinecraftClusterStatus) customObjectsApi.getNamespacedCustomObjectStatus(
+                    "shulkermc.io", "v1alpha1", this.shulkerClusterNamespace, "minecraftclusters", this.shulkerClusterName);
             this.updateServerDirectory(status.getServerPool());
         } catch (ApiException ex) {
             this.getLogger().severe("Failed to synchronize server directory");

@@ -32,10 +32,10 @@ func (b *MinecraftClusterRoleBuilder) Update(object client.Object) error {
 
 	role.Rules = []rbacv1.PolicyRule{
 		{
-			APIGroups:     []string{"shulkermc.io"},
-			Resources:     []string{"minecraftclusters", "minecraftclusters/status"},
-			Verbs:         []string{"get", "watch"},
-			ResourceNames: []string{b.Instance.Name},
+			APIGroups: []string{"shulkermc.io"},
+			Resources: []string{"minecraftclusters", "minecraftclusters/status"},
+			Verbs:     []string{"*"},
+			// ResourceNames: []string{b.Instance.Name},
 		},
 	}
 
