@@ -1,0 +1,22 @@
+configure(subprojects.findAll {
+    !['support'].contains(it.name)
+}) {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+
+    group = 'io.shulkermc'
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.13'
+    }
+}

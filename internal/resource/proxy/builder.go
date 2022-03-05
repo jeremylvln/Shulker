@@ -16,6 +16,7 @@ type ProxyDeploymentResourceBuilder struct {
 func (b *ProxyDeploymentResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder, []common.ResourceBuilder) {
 	builders := []common.ResourceBuilder{
 		b.ProxyDeploymentDeployment(),
+		b.ProxyDeploymentConfigMap(),
 		b.ProxyDeploymentService(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
@@ -33,6 +34,10 @@ func (b *ProxyDeploymentResourceBuilder) getResourcePrefix() string {
 
 func (b *ProxyDeploymentResourceBuilder) GetDeploymentName() string {
 	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
+}
+
+func (b *ProxyDeploymentResourceBuilder) getConfigMapName() string {
+	return fmt.Sprintf("%s-proxy-config-%s", b.getResourcePrefix(), b.Instance.Name)
 }
 
 func (b *ProxyDeploymentResourceBuilder) getServiceName() string {

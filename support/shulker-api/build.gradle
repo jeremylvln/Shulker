@@ -1,0 +1,23 @@
+archivesBaseName = "ShulkerApi"
+version = '0.0.1'
+
+repositories {
+    maven {
+        name = 'bungeecord-repo'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+dependencies {
+    implementation project(':support:shulker-crds')
+    compileOnly group: 'net.md-5', name: 'bungeecord-api', version: '1.18-R0.1-SNAPSHOT'
+    implementation group: 'io.kubernetes', name: 'client-java', version: '10.0.0'
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

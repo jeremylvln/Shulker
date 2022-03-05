@@ -566,6 +566,11 @@ func (in *ProxyDeploymentSpec) DeepCopyInto(out *ProxyDeploymentSpec) {
 		**out = **in
 	}
 	out.Version = in.Version
+	if in.MaxPlayers != nil {
+		in, out := &in.MaxPlayers, &out.MaxPlayers
+		*out = new(int64)
+		**out = **in
+	}
 	if in.Service != nil {
 		in, out := &in.Service, &out.Service
 		*out = new(ProxyDeploymentServiceSpec)
@@ -573,7 +578,7 @@ func (in *ProxyDeploymentSpec) DeepCopyInto(out *ProxyDeploymentSpec) {
 	}
 	if in.PodOverrides != nil {
 		in, out := &in.PodOverrides, &out.PodOverrides
-		*out = new(MinecraftServerPodOverridesSpec)
+		*out = new(ProxyDeploymentPodOverridesSpec)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Resources != nil {

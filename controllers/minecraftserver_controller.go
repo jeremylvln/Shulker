@@ -98,7 +98,12 @@ func (r *MinecraftServerReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerReadyCondition, metav1.ConditionFalse, "Unknown", "Pod status is unknown")
 	for _, condition := range pod.Status.Conditions {
 		if condition.Type == corev1.PodReady {
-			minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerReadyCondition, metav1.ConditionStatus(condition.Status), condition.Reason, condition.Message)
+			if condition.Status == corev1.ConditionTrue {
+				minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerReadyCondition, metav1.ConditionTrue, "PodReady", condition.Message)
+			} else {
+				minecraftServer.Status.SetCondition(shulkermciov1alpha1.ServerReadyCondition, metav1.ConditionFalse, "PodNotReady", condition.Message)
+			}
+
 			break
 		}
 	}

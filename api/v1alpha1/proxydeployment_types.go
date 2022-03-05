@@ -52,6 +52,19 @@ type ProxyDeploymentSpec struct {
 	//+kubebuilder:validation:Required
 	Replicas int32 `json:"replicas,omitempty"`
 
+	// Number of maximum players that can connect to the
+	// Proxy Deployment.
+	//+kubebuilder:default=100
+	MaxPlayers *int64 `json:"maxPlayers,omitempty"`
+
+	// Message to display when the players query the status
+	// of the Proxy Deployment.
+	//+kubebuilder:default="A Minecraft Cluster on Shulker"
+	Motd string `json:"motd,omitempty"`
+
+	// Server icon image in base64 format.
+	ServerIcon string `json:"serverIcon,omitempty"`
+
 	// The desired state of the Kubernetes Service to create for the
 	// Proxy Deployment.
 	//+kubebuilder:default={enabled: true, type: "LoadBalancer"}
@@ -59,7 +72,7 @@ type ProxyDeploymentSpec struct {
 
 	// Overrides configuration for the Proxy Deployment pod.
 	//+kubebuilder:default={livenessProbe: {initialDelaySeconds: 15}, readinessProbe: {initialDelaySeconds: 15}, terminationGracePeriodSeconds: 3600}
-	PodOverrides *MinecraftServerPodOverridesSpec `json:"podOverrides,omitempty"`
+	PodOverrides *ProxyDeploymentPodOverridesSpec `json:"podOverrides,omitempty"`
 
 	// The desired compute resource requirements of Pods in the Proxy
 	// Deployment.

@@ -1,0 +1,3 @@
+rootProject.name = 'Shulker'
+
+apply from: 'support/settings.gradle'

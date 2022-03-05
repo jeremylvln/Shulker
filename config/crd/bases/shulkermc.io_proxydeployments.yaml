@@ -874,6 +874,12 @@ spec:
                         type: array
                     type: object
                 type: object
+              maxPlayers:
+                default: 100
+                description: Number of maximum players that can connect to the Proxy
+                  Deployment.
+                format: int64
+                type: integer
               minecraftClusterRef:
                 description: Reference to a Minecraft Cluster. Adding this will enroll
                   this Proxy Deployment to be part of a Minecraft Cluster.
@@ -882,6 +888,11 @@ spec:
                     description: Name of the Minecraft Cluster.
                     type: string
                 type: object
+              motd:
+                default: A Minecraft Cluster on Shulker
+                description: Message to display when the players query the status
+                  of the Proxy Deployment.
+                type: string
               podOverrides:
                 default:
                   livenessProbe:
@@ -892,8 +903,8 @@ spec:
                 description: Overrides configuration for the Proxy Deployment pod.
                 properties:
                   env:
-                    description: Additional environment variables to add to the Minecraft
-                      Server.
+                    description: Additional environment variables to add to the Proxy
+                      Deployment.
                     items:
                       description: EnvVar represents an environment variable present
                         in a Container.
@@ -1003,31 +1014,31 @@ spec:
                       type: object
                     type: array
                   livenessProbe:
-                    description: Overrides for the liveness probe of the Minecraft
-                      Server.
+                    description: Overrides for the liveness probe of the Proxy Deployment.
                     properties:
                       initialDelaySeconds:
-                        default: 60
+                        default: 15
                         description: Number of seconds before starting to perform
                           the probe. Depending on the server configuration, one can
-                          take more time than another to be ready. Defaults to 1 minute.
+                          take more time than another to be ready. Defaults to 15
+                          seconds.
                         format: int32
                         type: integer
                     type: object
                   readinessProbe:
-                    description: Overrides for the readiness probe of the Minecraft
-                      Server.
+                    description: Overrides for the readiness probe of the Proxy Deployment.
                     properties:
                       initialDelaySeconds:
-                        default: 60
+                        default: 15
                         description: Number of seconds before starting to perform
                           the probe. Depending on the server configuration, one can
-                          take more time than another to be ready. Defaults to 1 minute.
+                          take more time than another to be ready. Defaults to 15
+                          seconds.
                         format: int32
                         type: integer
                     type: object
                   terminationGracePeriodSeconds:
-                    default: 60
+                    default: 3600
                     description: Number of seconds before force killing the pod after
                       a graceful termination request. Defaults to 1 minute.
                     format: int64
@@ -1071,6 +1082,9 @@ spec:
                       to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
+              serverIcon:
+                description: Server icon image in base64 format.
+                type: string
               service:
                 default:
                   enabled: true

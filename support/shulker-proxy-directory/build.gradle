@@ -1,0 +1,14 @@
+archivesBaseName = "ShulkerProxyDirectory"
+version = '0.0.1'
+
+dependencies {
+    implementation project(':support:shulker-api')
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

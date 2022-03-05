@@ -6,6 +6,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
+	k8sresource "k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
@@ -13,6 +14,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
+const proxyConfigDir = "/config"
 const proxyServerDir = "/server"
 
 type ProxyDeploymentDeploymentBuilder struct {
@@ -47,6 +49,42 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 				Labels: b.getLabels(),
 			},
 			Spec: corev1.PodSpec{
+				InitContainers: []corev1.Container{{
+					Image:   "busybox:stable",
+					Name:    "init-proxy-fs",
+					Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", proxyConfigDir)},
+					Env: []corev1.EnvVar{
+						{
+							Name:  "SHULKER_CONFIG_DIR",
+							Value: proxyConfigDir,
+						},
+						{
+							Name:  "SHULKER_DATA_DIR",
+							Value: proxyServerDir,
+						},
+					},
+					Resources: corev1.ResourceRequirements{
+						Limits: corev1.ResourceList{
+							"cpu":    k8sresource.MustParse("500m"),
+							"memory": k8sresource.MustParse("128Mi"),
+						},
+						Requests: corev1.ResourceList{
+							"cpu":    k8sresource.MustParse("10m"),
+							"memory": k8sresource.MustParse("512Ki"),
+						},
+					},
+					VolumeMounts: []corev1.VolumeMount{
+						{
+							Name:      "proxy-server-dir",
+							MountPath: proxyServerDir,
+						},
+						{
+							Name:      "proxy-config-dir",
+							MountPath: proxyConfigDir,
+							ReadOnly:  true,
+						},
+					},
+				}},
 				Containers: []corev1.Container{{
 					Image: "itzg/bungeecord:latest",
 					Name:  "proxy",
@@ -88,6 +126,16 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 						Name: "proxy-server-dir",
 						VolumeSource: corev1.VolumeSource{
 							EmptyDir: &corev1.EmptyDirVolumeSource{},
+						},
+					},
+					{
+						Name: "proxy-config-dir",
+						VolumeSource: corev1.VolumeSource{
+							ConfigMap: &corev1.ConfigMapVolumeSource{
+								LocalObjectReference: corev1.LocalObjectReference{
+									Name: b.getConfigMapName(),
+								},
+							},
 						},
 					},
 				},

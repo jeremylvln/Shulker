@@ -1,0 +1,8 @@
+archivesBaseName = "ShulkerCrds"
+version = '0.0.1'
+
+task generateCrds(type: Exec) {
+    commandLine 'bash ./generate-crds.sh'
+}
+
+// jar.dependsOn(generateCrds)
