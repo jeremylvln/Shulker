@@ -4,6 +4,7 @@ configure(subprojects.findAll {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
+    id 'signing'
 
     group = 'io.shulkermc'
 
@@ -20,16 +21,78 @@ configure(subprojects.findAll {
         testImplementation 'junit:junit:4.13'
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = it.name
+                from components.java
+
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+
+                pom {
+                    name = it.name
+                    // description = 'A concise description of my library'
+                    url = "https://github.com/IamBlueSlime/Shulker"
+
+                    /*licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }*/
+
+                    developers {
+                        developer {
+                            id = 'iamblueslime'
+                            name = 'Jérémy Levilain'
+                            email = 'jeremy@jeremylvln.fr'
+                        }
+                    }
+
+                    scm {
+                        connection = 'scm:git:git://github.com/IamBlueSlime/Shulker.git'
+                        developerConnection = 'scm:git:ssh://github.com/IamBlueSlime/Shulker.git'
+                        url = "https://github.com/IamBlueSlime/Shulker"
+                    }
+                }
+            }
+        }
+
         repositories {
             maven {
                 name = "GitHubPackages"
-                url = "https://maven.pkg.github.com/IamBlueSlime/${it.name}"
+                url = "https://maven.pkg.github.com/IamBlueSlime/Shulker"
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")
                 }
             }
+        }
+    }
+
+    signing {
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+
+        sign publishing.publications.mavenJava
+    }
+
+    javadoc {
+        if(JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
         }
     }
 }

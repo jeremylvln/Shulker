@@ -48,6 +48,13 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Import signing GPG key
+        id: gpg-signing-key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
 
@@ -57,3 +64,5 @@ jobs:
           arguments: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ steps.gpg-signing-key.outputs.keyid }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}

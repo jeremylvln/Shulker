@@ -15,6 +15,8 @@ dependencies {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
