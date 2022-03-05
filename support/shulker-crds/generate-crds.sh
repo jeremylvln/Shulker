@@ -1,9 +1,6 @@
 #!/bin/bash
 
 CRDS_IN=../../config/crd/bases
-CRDS_OUT=./src/main/java
-
-mkdir -p $CRDS_OUT
 CRDS=$(find $CRDS_IN -type f -name "*.yaml")
 
 function generateCrd() {
@@ -13,7 +10,7 @@ function generateCrd() {
   docker run \
     --rm \
     -v "$(realpath $CRD_PATH)":"/tmp/${CRD_FILE_NAME}" \
-    -v "$(realpath $CRDS_OUT)":"/tmp/out" \
+    -v "$(pwd)":"$(pwd)" \
     -v /var/run/docker.sock:/var/run/docker.sock \
     --network host \
     docker.pkg.github.com/kubernetes-client/java/crd-model-gen:v1.0.6 \
@@ -21,9 +18,11 @@ function generateCrd() {
     -u /tmp/${CRD_FILE_NAME} \
     -n io.shulkermc \
     -p io.shulkermc \
-    -o "/tmp/out"
+    -o "$(pwd)"
 }
 
 for crd in $CRDS; do
   generateCrd $crd
 done
+
+rm -Rf src/main/java/gen
