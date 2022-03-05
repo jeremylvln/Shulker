@@ -3,33 +3,37 @@ package io.shulkermc.directory;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import io.kubernetes.client.informer.ResourceEventHandler;
+import io.kubernetes.client.informer.SharedIndexInformer;
+import io.kubernetes.client.informer.SharedInformerFactory;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.JSON;
 import io.kubernetes.client.openapi.apis.CustomObjectsApi;
+import io.kubernetes.client.util.CallGeneratorParams;
 import io.kubernetes.client.util.ClientBuilder;
-import io.kubernetes.client.util.Watch;
 import io.shulkermc.models.V1alpha1MinecraftCluster;
+import io.shulkermc.models.V1alpha1MinecraftClusterList;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatus;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatusServerPool;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
+import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.TimeUnit;
 
 public class ShulkerProxyDirectory extends Plugin {
     private final ProxyServer proxyServer;
 
     private String shulkerClusterNamespace;
     private String shulkerClusterName;
-    private Thread reconcilerThread;
-    private final AtomicBoolean reconcilerContinue = new AtomicBoolean(true);
+    private SharedInformerFactory informerFactory;
 
     public ShulkerProxyDirectory() {
         this.proxyServer = ProxyServer.getInstance();
@@ -56,6 +60,8 @@ public class ShulkerProxyDirectory extends Plugin {
         ApiClient kubernetesClient;
         try {
             kubernetesClient = ClientBuilder.cluster().build();
+            OkHttpClient httpClient = kubernetesClient.getHttpClient().newBuilder().readTimeout(0, TimeUnit.SECONDS).build();
+            kubernetesClient.setHttpClient(httpClient);
             Configuration.setDefaultApiClient(kubernetesClient);
         } catch (IOException ex) {
             this.getLogger().severe("Failed to create Kubernetes client");
@@ -66,40 +72,48 @@ public class ShulkerProxyDirectory extends Plugin {
         }
 
         CustomObjectsApi customObjectsApi = new CustomObjectsApi(kubernetesClient);
+        this.informerFactory = new SharedInformerFactory();
 
-        this.reconcilerThread = new Thread(() -> {
-            while (this.reconcilerContinue.get()) {
-                try {
-                    this.getLogger().info("Reconciling cluster status");
-                    Watch<Object> watch = Watch.createWatch(
-                            kubernetesClient,
-                            customObjectsApi.getNamespacedCustomObjectStatusCall(
-                                    "shulkermc.io",
-                                    "v1alpha1",
-                                    this.shulkerClusterNamespace,
-                                    "minecraftclusters",
-                                    this.shulkerClusterName,
-                                    null
-                            ),
-                            new TypeToken<Watch.Response<V1alpha1MinecraftClusterStatus>>(){}.getType());
+        SharedIndexInformer<V1alpha1MinecraftCluster> clusterInformer =
+                this.informerFactory.sharedIndexInformerFor(
+                        (CallGeneratorParams params) -> customObjectsApi.listNamespacedCustomObjectCall(
+                                "shulkermc.io",
+                                "v1alpha1",
+                                this.shulkerClusterNamespace,
+                                "minecraftclusters",
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                params.resourceVersion,
+                                params.timeoutSeconds,
+                                params.watch,
+                                null),
+                        V1alpha1MinecraftCluster.class,
+                        V1alpha1MinecraftClusterList.class);
 
-                    for (var event : watch) {
-                        if (event.type == null || !event.type.equals("MODIFIED")) continue;
-                        Object object = event.object;
-                        V1alpha1MinecraftClusterStatus status = ShulkerProxyDirectory.responseToStatusObject(object);
-                        this.updateServerDirectory(status.getServerPool());
+        clusterInformer.addEventHandler(
+                new ResourceEventHandler<>() {
+                    @Override
+                    public void onAdd(V1alpha1MinecraftCluster cluster) {}
+
+                    @Override
+                    public void onUpdate(V1alpha1MinecraftCluster oldCluster, V1alpha1MinecraftCluster newCluster) {
+                        if (newCluster.getMetadata() == null || newCluster.getMetadata().getName() == null) return;
+                        if (!newCluster.getMetadata().getName().equals(ShulkerProxyDirectory.this.shulkerClusterName)) return;
+
+                        V1alpha1MinecraftClusterStatus status = newCluster.getStatus();
+                        if (status == null) return;
+
+                        ShulkerProxyDirectory.this.updateServerDirectory(status.getServerPool());
                     }
-                } catch (Exception ex) {
-                    this.getLogger().severe("Failed to watch cluster status");
-                    ex.printStackTrace();
 
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException ignored) {}
-                }
-            }
-        }, "ShulkerClusterReconciler");
-        this.reconcilerThread.start();
+                    @Override
+                    public void onDelete(V1alpha1MinecraftCluster cluster, boolean deletedFinalStateUnknown) {}
+                });
+
+        this.informerFactory.startAllRegisteredInformers();
 
         try {
             V1alpha1MinecraftClusterStatus status = ShulkerProxyDirectory.responseToStatusObject(customObjectsApi.getNamespacedCustomObjectStatus(
@@ -113,13 +127,8 @@ public class ShulkerProxyDirectory extends Plugin {
 
     @Override
     public void onDisable() {
-        if (this.reconcilerThread != null) {
-            try {
-                this.reconcilerContinue.set(false);
-                this.getLogger().info("Waiting for reconciler thread to finish");
-                this.reconcilerThread.wait();
-            } catch (InterruptedException ignored) {
-            }
+        if (this.informerFactory != null) {
+            this.informerFactory.stopAllRegisteredInformers();
         }
     }
 
