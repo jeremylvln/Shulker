@@ -247,8 +247,12 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 			Value: fmt.Sprintf("%dM", b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)-1000),
 		},
 		{
+			Name:  "SHULKER_CLUSTER_NAMESPACE",
+			Value: b.Cluster.Namespace,
+		},
+		{
 			Name:  "SHULKER_CLUSTER_NAME",
-			Value: b.Instance.Spec.ClusterRef.Name,
+			Value: b.Cluster.Name,
 		},
 	}
 
