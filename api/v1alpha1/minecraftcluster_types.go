@@ -42,6 +42,10 @@ type MinecraftCluster struct {
 // say all, fields configurable in a Minecraft Cluster can be
 // configured in this CRD.
 type MinecraftClusterSpec struct {
+	// Name of the Kubernetes Secret contaning the Maven secret to
+	// use. It must contains a `username` and `password` fields.
+	//+kubebuilder:validation:Required
+	MavenSecretName string `json:"mavenSecretName,omitempty"`
 }
 
 type MinecraftClusterStatusCondition string

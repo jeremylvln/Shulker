@@ -49,42 +49,62 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 				Labels: b.getLabels(),
 			},
 			Spec: corev1.PodSpec{
-				InitContainers: []corev1.Container{{
-					Image:   "busybox:stable",
-					Name:    "init-proxy-fs",
-					Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", proxyConfigDir)},
-					Env: []corev1.EnvVar{
-						{
-							Name:  "SHULKER_CONFIG_DIR",
-							Value: proxyConfigDir,
+				InitContainers: []corev1.Container{
+					{
+						Image:   "busybox:stable",
+						Name:    "init-proxy-fs",
+						Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", proxyConfigDir)},
+						Env:     b.getDeploymentInitFsEnv(),
+						Resources: corev1.ResourceRequirements{
+							Limits: corev1.ResourceList{
+								"cpu":    k8sresource.MustParse("500m"),
+								"memory": k8sresource.MustParse("128Mi"),
+							},
+							Requests: corev1.ResourceList{
+								"cpu":    k8sresource.MustParse("10m"),
+								"memory": k8sresource.MustParse("512Ki"),
+							},
 						},
-						{
-							Name:  "SHULKER_DATA_DIR",
-							Value: proxyServerDir,
-						},
-					},
-					Resources: corev1.ResourceRequirements{
-						Limits: corev1.ResourceList{
-							"cpu":    k8sresource.MustParse("500m"),
-							"memory": k8sresource.MustParse("128Mi"),
-						},
-						Requests: corev1.ResourceList{
-							"cpu":    k8sresource.MustParse("10m"),
-							"memory": k8sresource.MustParse("512Ki"),
-						},
-					},
-					VolumeMounts: []corev1.VolumeMount{
-						{
-							Name:      "proxy-server-dir",
-							MountPath: proxyServerDir,
-						},
-						{
-							Name:      "proxy-config-dir",
-							MountPath: proxyConfigDir,
-							ReadOnly:  true,
+						VolumeMounts: []corev1.VolumeMount{
+							{
+								Name:      "proxy-server-dir",
+								MountPath: proxyServerDir,
+							},
+							{
+								Name:      "proxy-config-dir",
+								MountPath: proxyConfigDir,
+								ReadOnly:  true,
+							},
 						},
 					},
-				}},
+					{
+						Image:   "curlimages/curl:latest",
+						Name:    "init-proxy-plugins",
+						Command: []string{"ash", fmt.Sprintf("%s/init-plugins.sh", proxyConfigDir)},
+						Env:     b.getDeploymentInitPluginsEnv(),
+						Resources: corev1.ResourceRequirements{
+							Limits: corev1.ResourceList{
+								"cpu":    k8sresource.MustParse("500m"),
+								"memory": k8sresource.MustParse("128Mi"),
+							},
+							Requests: corev1.ResourceList{
+								"cpu":    k8sresource.MustParse("10m"),
+								"memory": k8sresource.MustParse("512Ki"),
+							},
+						},
+						VolumeMounts: []corev1.VolumeMount{
+							{
+								Name:      "proxy-server-dir",
+								MountPath: proxyServerDir,
+							},
+							{
+								Name:      "proxy-config-dir",
+								MountPath: proxyConfigDir,
+								ReadOnly:  true,
+							},
+						},
+					},
+				},
 				Containers: []corev1.Container{{
 					Image: "itzg/bungeecord:latest",
 					Name:  "proxy",
@@ -155,6 +175,58 @@ func (b *ProxyDeploymentDeploymentBuilder) CanBeUpdated() bool {
 	return true
 }
 
+func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitFsEnv() []corev1.EnvVar {
+	env := []corev1.EnvVar{
+		{
+			Name:  "SHULKER_CONFIG_DIR",
+			Value: proxyConfigDir,
+		},
+		{
+			Name:  "SHULKER_DATA_DIR",
+			Value: proxyServerDir,
+		},
+	}
+
+	return env
+}
+
+func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitPluginsEnv() []corev1.EnvVar {
+	env := []corev1.EnvVar{
+		{
+			Name:  "SHULKER_DATA_DIR",
+			Value: proxyServerDir,
+		},
+		{
+			Name: "SHULKER_MAVEN_USERNAME",
+			ValueFrom: &corev1.EnvVarSource{
+				SecretKeyRef: &corev1.SecretKeySelector{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: b.Cluster.Spec.MavenSecretName,
+					},
+					Key: "username",
+				},
+			},
+		},
+		{
+			Name: "SHULKER_MAVEN_PASSWORD",
+			ValueFrom: &corev1.EnvVarSource{
+				SecretKeyRef: &corev1.SecretKeySelector{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: b.Cluster.Spec.MavenSecretName,
+					},
+					Key: "password",
+				},
+			},
+		},
+		{
+			Name:  "SHULKER_PROXY_DIRECTORY_VERSION",
+			Value: "0.0.1",
+		},
+	}
+
+	return env
+}
+
 func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 	env := []corev1.EnvVar{
 		{
@@ -173,13 +245,10 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 			Name:  "MAX_MEMORY",
 			Value: fmt.Sprintf("%dM", b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)-1000),
 		},
-	}
-
-	if b.Instance.Spec.ClusterRef != nil {
-		env = append(env, corev1.EnvVar{
+		{
 			Name:  "SHULKER_CLUSTER_NAME",
 			Value: b.Instance.Spec.ClusterRef.Name,
-		})
+		},
 	}
 
 	env = append(env, b.Instance.Spec.PodOverrides.Env...)

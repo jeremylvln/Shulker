@@ -10,6 +10,7 @@ import (
 
 type ProxyDeploymentResourceBuilder struct {
 	Instance *shulkermciov1alpha1.ProxyDeployment
+	Cluster  *shulkermciov1alpha1.MinecraftCluster
 	Scheme   *runtime.Scheme
 }
 
@@ -25,11 +26,7 @@ func (b *ProxyDeploymentResourceBuilder) ResourceBuilders() ([]common.ResourceBu
 }
 
 func (b *ProxyDeploymentResourceBuilder) getResourcePrefix() string {
-	if b.Instance.Spec.ClusterRef != nil {
-		return b.Instance.Spec.ClusterRef.Name
-	} else {
-		return "minecraft"
-	}
+	return b.Instance.Spec.ClusterRef.Name
 }
 
 func (b *ProxyDeploymentResourceBuilder) GetDeploymentName() string {
@@ -46,15 +43,12 @@ func (b *ProxyDeploymentResourceBuilder) getServiceName() string {
 
 func (b *ProxyDeploymentResourceBuilder) getLabels() map[string]string {
 	labels := map[string]string{
-		"app.kubernetes.io/name":          b.Instance.Name,
-		"app.kubernetes.io/component":     "proxy",
-		"app.kubernetes.io/part-of":       "shulker",
-		"app.kubernetes.io/created-by":    "shulker",
-		"proxydeployment.shulker.io/name": b.Instance.Name,
-	}
-
-	if b.Instance.Spec.ClusterRef != nil {
-		labels["proxydeployment.shulker.io/cluster-name"] = b.Instance.Spec.ClusterRef.Name
+		"app.kubernetes.io/name":                  b.Instance.Name,
+		"app.kubernetes.io/component":             "proxy",
+		"app.kubernetes.io/part-of":               "shulker",
+		"app.kubernetes.io/created-by":            "shulker",
+		"proxydeployment.shulker.io/name":         b.Instance.Name,
+		"proxydeployment.shulker.io/cluster-name": b.Instance.Spec.ClusterRef.Name,
 	}
 
 	return labels

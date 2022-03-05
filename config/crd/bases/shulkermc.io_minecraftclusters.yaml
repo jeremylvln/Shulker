@@ -53,6 +53,11 @@ spec:
             description: Defines the defired state of a MinecraftCluster. Most, to
               not say all, fields configurable in a Minecraft Cluster can be configured
               in this CRD.
+            properties:
+              mavenSecretName:
+                description: Name of the Kubernetes Secret contaning the Maven secret
+                  to use. It must contains a `username` and `password` fields.
+                type: string
             type: object
           status:
             description: MinecraftClusterStatus defines the observed state of MinecraftCluster

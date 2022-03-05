@@ -67,8 +67,18 @@ func (r *ProxyDeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return ctrl.Result{}, err
 	}
 
+	minecraftCluster := &shulkermciov1alpha1.MinecraftCluster{}
+	err = r.Get(ctx, types.NamespacedName{
+		Namespace: proxyDeployment.Namespace,
+		Name:      proxyDeployment.Spec.ClusterRef.Name,
+	}, minecraftCluster)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
 	resourceBuilder := resource.ProxyDeploymentResourceBuilder{
 		Instance: proxyDeployment,
+		Cluster:  minecraftCluster,
 		Scheme:   r.Scheme,
 	}
 	builders, dirtyBuilders := resourceBuilder.ResourceBuilders()
@@ -116,11 +126,6 @@ func (r *ProxyDeploymentReconciler) getProxyDeployment(ctx context.Context, name
 func (r *ProxyDeploymentReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	err := mgr.GetFieldIndexer().IndexField(context.Background(), &shulkermciov1alpha1.ProxyDeployment{}, ".spec.minecraftClusterRef.name", func(object client.Object) []string {
 		proxyDeployment := object.(*shulkermciov1alpha1.ProxyDeployment)
-
-		if proxyDeployment.Spec.ClusterRef == nil {
-			return nil
-		}
-
 		return []string{proxyDeployment.Spec.ClusterRef.Name}
 	})
 

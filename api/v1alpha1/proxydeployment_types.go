@@ -42,7 +42,8 @@ type ProxyDeployment struct {
 type ProxyDeploymentSpec struct {
 	// Reference to a Minecraft Cluster. Adding this will enroll
 	// this Proxy Deployment to be part of a Minecraft Cluster.
-	ClusterRef *MinecraftClusterRef `json:"minecraftClusterRef"`
+	//+kubebuilder:validation:Required
+	ClusterRef MinecraftClusterRef `json:"minecraftClusterRef"`
 
 	// Version the Proxy Deployment has to run.
 	//+kubebuilder:validation:Required

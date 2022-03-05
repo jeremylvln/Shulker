@@ -20,10 +20,9 @@ func (b *MinecraftClusterResourceBuilder) ResourceBuilders() ([]common.ResourceB
 
 // func (b *MinecraftClusterResourceBuilder) getLabels() map[string]string {
 // 	return map[string]string{
-// 		"app.kubernetes.io/name":           b.Instance.Name,
-// 		"app.kubernetes.io/component":      "minecraft-cluster",
-// 		"app.kubernetes.io/part-of":        "shulker",
-// 		"app.kubernetes.io/created-by":     "shulker",
-// 		"minecraftcluster.shulker.io/name": b.Instance.Name,
+// 		"app.kubernetes.io/name":       b.Instance.Name,
+// 		"app.kubernetes.io/component":  "minecraft-cluster",
+// 		"app.kubernetes.io/part-of":    "shulker",
+// 		"app.kubernetes.io/created-by": "shulker",
 // 	}
 // }

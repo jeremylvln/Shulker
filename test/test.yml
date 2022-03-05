@@ -2,7 +2,26 @@ apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftCluster
 metadata:
   name: test
-spec: {}
+spec:
+  mavenSecretName: ss-maven-secret
+
+---
+kind: SealedSecret
+apiVersion: bitnami.com/v1alpha1
+metadata:
+  name: ss-maven-secret
+  namespace: shulker-test
+  creationTimestamp: null
+spec:
+  template:
+    metadata:
+      name: ss-maven-secret
+      namespace: shulker-test
+      creationTimestamp: null
+    data: null
+  encryptedData:
+    password: AgCBHHwHYKL4DOmCi4S3Y2V5CZw4B84AuNYdAlLhfDp9Iwk3OuC5kYcNkrnkog7rhUlsLdTCh4tlaQfhVOaywaghqe6L/VWRDcNgU2YKYT8Q+stm5rpdg5l+JbR5fBxiKhnPtsDn5WPo6SHW2v3QSfu+EEW7YCBbuSRfNjbJnbeXb+gO4/W1cTuMblftBW34xK+a6WSk1fAs3b3ku4SpHXn1+pbIgcWbBgpRb7c6WblKvGDF/3H6ehjiu3gNVq9dUIwEP0CvgZOBO6AueKZ0BsRgOnKytFfUUzQe6o+yVROJryWQg7WW0nFr/D4ykCsniOIweee4iS5viOkBavzk85BpvrX67YyUtUT1ioW6/PmoQA/a5ZwXxAaidAKMAdJ7DaWds5vkaRk2f05al3skNPWwNKX2QtyvCuZBj20Aunth+PbySlnChBVamrFjueKxeoeRx5xfTP6IrBQoY4SGQxUmL6Zqz8nqspfAw+k/4pt6zjnBjSnvUkoYmhYyWb2oMKZVQiYRc0XvyTWVG6LL2gF2wLHlhmJAxdQkk42Qx/JFNXKAunUHRberb4azFiPKhvWMHSqWOLV1ovD8UBG4PsQGOxc2ejkn7qT3Sl8XpWDTUqFjH+RondgR4MIW4QFp+NlaQCy76jRSuDAkJgKek0VU21WZe80DRnI6Q4c/Q+6mK88LB8QQFqJlbfH0h611RHOnd6BiHuuqpmVVKf3q9pAypW6piPTgyswbOr2+S4KnyWJf3yF8FLNT
+    username: AgCLdKeNwh/qp4OMzfHG/lroNUnXp0YUcsxi3mokp8Ue/50PElkOLeIuFN4sNFmE5N/buIyW8clQtcSyuluzpCNrhthA4xuBQ6NnS5Olaben9ZwkYdmQis6R0sdZv3JSAuj+9gKlfhcDNRCzKpbVF3gLHU7ztWJLTckA6Po1MLHHCNuUqcSOwQ50R4Gl+xHSfycTufdRLKR5fo83l/QFMhBt7VoC/urYWbDGg55e231xD9MY0h0l5n55XFbmZ9/EDTqZXLRCvwQDUiAJ1uLVWhDmsufavw7sO2DMNaPYv+LFcwbermDFCjfK6ykgXXueiMip1TftfEcnudfzB6FUgKQzJxoXERXa3lQCAsqGc4qfEWHcp3sAmJSfbnW7jU4+ptFH+H2ySk87eH6TVnguCMvcPKm+WHy248rgSllNjFUWEtlkG7CRsLzDFAkg4fF0CCpfenKZV9zlkuPhjnnuq0Kmg+yqKAzmwnf0zg5oOQdygspfo0T8qSlanJsYkd+PehbnPiplO5oY/nAcG+SH95Okm4XSp8mr1wV3j44JBcPtojWOiclzSE3cQ0RmeLgUzGehpKw9A/lfm61hqE6M4hcFBtPb5NkwGY4xckjF1JmzIh8P28e/N6o3WDu5x8NOqtC5yiwpXJbaSAQ/lqGk3MGI0x5JGoXHygxZskue/EipBncShc/kKVFB9ECbd6nS6dUyPy9r/cNP4qwFjh8=
 
 ---
 apiVersion: shulkermc.io/v1alpha1

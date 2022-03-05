@@ -40,6 +40,12 @@ cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/;
 if [ -e "$SHULKER_CONFIG_DIR/server-icon.png" ]; then cat $SHULKER_CONFIG_DIR/server-icon.png | base64 -d > $SHULKER_DATA_DIR/server-icon.png; fi
 	`, "\n ")
 
+	configMapData["init-plugins.sh"] = strings.Trim(`
+mkdir -p $SHULKER_DATA_DIR/plugins
+function plugin { curl -L -o "$SHULKER_DATA_DIR/plugins/$2-$3.jar" -u "${SHULKER_MAVEN_USERNAME}:${SHULKER_MAVEN_PASSWORD}" https://maven.pkg.github.com/IamBlueSlime/Shulker/$1/$2/$3/$2-$3.jar; }
+if [ ! -z "$SHULKER_PROXY_DIRECTORY_VERSION" ]; then plugin io.shulkermc shulker-proxy-directory "$SHULKER_PROXY_DIRECTORY_VERSION"; fi
+	`, "\n ")
+
 	if b.Instance.Spec.ServerIcon != "" {
 		configMapData["server-icon.png"] = b.Instance.Spec.ServerIcon
 	} else {
