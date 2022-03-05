@@ -63,7 +63,7 @@ jobs:
         with:
           arguments: |
             publish
-            -PsigningKey=${{ steps.gpg-signing-key.outputs.keyid }}
-            -PsigningPassword=${{ secrets.GPG_PASSPHRASE }}
+            -Psigning.gnupg.keyName=${{ steps.gpg-signing-key.outputs.keyid }}
+            -Psigning.gnupg.passphrase=${{ secrets.GPG_PASSPHRASE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
