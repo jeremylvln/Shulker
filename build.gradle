@@ -1,15 +1,13 @@
-configure(subprojects.findAll {
-    !['support'].contains(it.name)
-}) {
+subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
     group = 'io.shulkermc'
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
     compileJava.options.encoding = 'UTF-8'
 
     repositories {
@@ -29,7 +27,7 @@ configure(subprojects.findAll {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = it.name
+                artifactId = project.name
                 from components.java
 
                 versionMapping {
@@ -42,7 +40,7 @@ configure(subprojects.findAll {
                 }
 
                 pom {
-                    name = it.name
+                    name = project.name
                     // description = 'A concise description of my library'
                     url = "https://github.com/IamBlueSlime/Shulker"
 

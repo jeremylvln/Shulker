@@ -1,3 +1,4 @@
 rootProject.name = 'Shulker'
 
-apply from: 'support/settings.gradle'
+include ':support:shulker-crds'
+include ':support:shulker-proxy-directory'

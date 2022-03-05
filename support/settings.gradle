@@ -1,2 +1,0 @@
-include ':support:shulker-crds'
-include ':support:shulker-proxy-directory'
