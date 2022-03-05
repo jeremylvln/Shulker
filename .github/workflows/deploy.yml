@@ -61,8 +61,9 @@ jobs:
       - name: Publish packages
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: publish
+          arguments: |
+            publish
+            -PsigningKey=${{ steps.gpg-signing-key.outputs.keyid }}
+            -PsigningPassword=${{ secrets.GPG_PASSPHRASE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ steps.gpg-signing-key.outputs.keyid }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
