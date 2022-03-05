@@ -139,6 +139,7 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 						},
 					},
 				}},
+				ServiceAccountName:            b.getServiceAccountName(),
 				TerminationGracePeriodSeconds: b.Instance.Spec.PodOverrides.TerminationGracePeriodSeconds,
 				Affinity:                      b.Instance.Spec.Affinity,
 				Volumes: []corev1.Volume{

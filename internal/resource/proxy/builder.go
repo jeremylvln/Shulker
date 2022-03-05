@@ -19,6 +19,8 @@ func (b *ProxyDeploymentResourceBuilder) ResourceBuilders() ([]common.ResourceBu
 		b.ProxyDeploymentDeployment(),
 		b.ProxyDeploymentConfigMap(),
 		b.ProxyDeploymentService(),
+		b.ProxyDeploymentServiceAccount(),
+		b.ProxyDeploymentRoleBinding(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
@@ -38,6 +40,14 @@ func (b *ProxyDeploymentResourceBuilder) getConfigMapName() string {
 }
 
 func (b *ProxyDeploymentResourceBuilder) getServiceName() string {
+	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
+}
+
+func (b *ProxyDeploymentResourceBuilder) getServiceAccountName() string {
+	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
+}
+
+func (b *ProxyDeploymentResourceBuilder) getRoleBindingName() string {
 	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
 }
 

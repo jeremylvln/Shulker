@@ -1,16 +1,13 @@
 package io.shulkermc.directory;
 
-import io.kubernetes.client.informer.ResourceEventHandler;
-import io.kubernetes.client.informer.SharedIndexInformer;
-import io.kubernetes.client.informer.SharedInformerFactory;
+import com.google.common.reflect.TypeToken;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.CustomObjectsApi;
-import io.kubernetes.client.util.CallGeneratorParams;
 import io.kubernetes.client.util.ClientBuilder;
+import io.kubernetes.client.util.Watch;
 import io.shulkermc.models.V1alpha1MinecraftCluster;
-import io.shulkermc.models.V1alpha1MinecraftClusterList;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatus;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatusServerPool;
 import net.md_5.bungee.api.ProxyServer;
@@ -21,13 +18,14 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ShulkerProxyDirectory extends Plugin {
     private final ProxyServer proxyServer;
 
     private String shulkerClusterName;
-    private CustomObjectsApi kubernetesObjectApi;
-    private SharedInformerFactory kubernetesInformerFactory;
+    private Thread reconcilerThread;
+    private final AtomicBoolean reconcilerContinue = new AtomicBoolean(true);
 
     public ShulkerProxyDirectory() {
         this.proxyServer = ProxyServer.getInstance();
@@ -55,30 +53,53 @@ public class ShulkerProxyDirectory extends Plugin {
             return;
         }
 
-        this.kubernetesObjectApi = new CustomObjectsApi(kubernetesClient);
-        this.kubernetesInformerFactory = new SharedInformerFactory();
+        CustomObjectsApi customObjectsApi = new CustomObjectsApi(kubernetesClient);
 
-        this.createInformer();
+        this.reconcilerThread = new Thread(() -> {
+            while (this.reconcilerContinue.get()) {
+                try {
+                    this.getLogger().info("Reconciling cluster status");
+                    Watch<V1alpha1MinecraftClusterStatus> watch = Watch.createWatch(
+                            kubernetesClient,
+                            customObjectsApi.getClusterCustomObjectStatusCall(
+                                    "shulkermc.io",
+                                    "v1alpha1",
+                                    "minecraftclusters",
+                                    this.shulkerClusterName,
+                                    null
+                            ),
+                            new TypeToken<Watch.Response<V1alpha1MinecraftClusterStatus>>(){}.getType());
+
+                    for (var event : watch) {
+                        if (!event.type.equals("MODIFIED")) continue;
+                        V1alpha1MinecraftClusterStatus status = event.object;
+                        this.updateServerDirectory(status.getServerPool());
+                    }
+                } catch (ApiException ex) {
+                    this.getLogger().severe("Failed to watch cluster status");
+                    ex.printStackTrace();
+                }
+            }
+        }, "ShulkerClusterReconciler");
+        this.reconcilerThread.start();
 
         try {
-            this.syncServerDirectory();
+            V1alpha1MinecraftClusterStatus status = (V1alpha1MinecraftClusterStatus) customObjectsApi.getClusterCustomObjectStatus(
+                    "shulkermc.io", "v1alpha1", "minecraftclusters", this.shulkerClusterName);
+            this.updateServerDirectory(status.getServerPool());
         } catch (ApiException ex) {
             this.getLogger().severe("Failed to synchronize server directory");
             ex.printStackTrace();
         }
-
-        this.kubernetesInformerFactory.startAllRegisteredInformers();
     }
 
     @Override
     public void onDisable() {
-        this.kubernetesInformerFactory.stopAllRegisteredInformers();
-    }
-
-    private void syncServerDirectory() throws ApiException {
-        V1alpha1MinecraftClusterStatus status = (V1alpha1MinecraftClusterStatus) this.kubernetesObjectApi.getClusterCustomObjectStatus(
-                "shulkermc.io", "v1alpha1", "minecraftclusters", this.shulkerClusterName);
-        this.updateServerDirectory(status.getServerPool());
+        try {
+            this.reconcilerContinue.set(false);
+            this.getLogger().info("Waiting for reconciler thread to finish");
+            this.reconcilerThread.wait();
+        } catch (InterruptedException ignored) {}
     }
 
     private void updateServerDirectory(List<V1alpha1MinecraftClusterStatusServerPool> serverPool) {
@@ -100,45 +121,5 @@ public class ShulkerProxyDirectory extends Plugin {
                 .filter((serverName) -> !serverPoolNames.contains(serverName))
                 .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
                 .forEach(proxyServers::remove);
-    }
-
-    private void createInformer() {
-        SharedIndexInformer<V1alpha1MinecraftCluster> minecraftClusterInformer =
-                this.kubernetesInformerFactory.sharedIndexInformerFor(
-                        (CallGeneratorParams params) -> this.kubernetesObjectApi.listClusterCustomObjectCall(
-                                "shulkermc.io",
-                                "v1alpha1",
-                                "minecraftclusters",
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                params.resourceVersion,
-                                params.timeoutSeconds,
-                                params.watch,
-                                null),
-                        V1alpha1MinecraftCluster.class,
-                        V1alpha1MinecraftClusterList.class);
-
-        minecraftClusterInformer.addEventHandler(new ResourceEventHandler<>() {
-            @Override
-            public void onAdd(V1alpha1MinecraftCluster obj) {}
-
-            @Override
-            public void onUpdate(V1alpha1MinecraftCluster oldObj, V1alpha1MinecraftCluster newObj) {
-                if (oldObj.getMetadata() == null
-                        || oldObj.getMetadata().getName() == null
-                        || !oldObj.getMetadata().getName().equals(ShulkerProxyDirectory.this.shulkerClusterName)) return;
-
-                V1alpha1MinecraftClusterStatus clusterStatus = newObj.getStatus();
-                if (clusterStatus == null) return;
-
-                ShulkerProxyDirectory.this.updateServerDirectory(clusterStatus.getServerPool());
-            }
-
-            @Override
-            public void onDelete(V1alpha1MinecraftCluster obj, boolean deletedFinalStateUnknown) {}
-        });
     }
 }
