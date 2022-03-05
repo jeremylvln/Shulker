@@ -59,25 +59,30 @@ public class ShulkerProxyDirectory extends Plugin {
             while (this.reconcilerContinue.get()) {
                 try {
                     this.getLogger().info("Reconciling cluster status");
-                    Watch<V1alpha1MinecraftClusterStatus> watch = Watch.createWatch(
+                    Watch<V1alpha1MinecraftCluster> watch = Watch.createWatch(
                             kubernetesClient,
-                            customObjectsApi.getClusterCustomObjectStatusCall(
+                            customObjectsApi.getClusterCustomObjectCall(
                                     "shulkermc.io",
                                     "v1alpha1",
                                     "minecraftclusters",
                                     this.shulkerClusterName,
                                     null
                             ),
-                            new TypeToken<Watch.Response<V1alpha1MinecraftClusterStatus>>(){}.getType());
+                            new TypeToken<Watch.Response<V1alpha1MinecraftCluster>>(){}.getType());
 
                     for (var event : watch) {
                         if (!event.type.equals("MODIFIED")) continue;
-                        V1alpha1MinecraftClusterStatus status = event.object;
-                        this.updateServerDirectory(status.getServerPool());
+                        V1alpha1MinecraftCluster cluster = event.object;
+                        if (cluster.getStatus() == null) continue;
+                        this.updateServerDirectory(cluster.getStatus().getServerPool());
                     }
                 } catch (ApiException ex) {
                     this.getLogger().severe("Failed to watch cluster status");
                     ex.printStackTrace();
+
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ignored) {}
                 }
             }
         }, "ShulkerClusterReconciler");
@@ -104,6 +109,7 @@ public class ShulkerProxyDirectory extends Plugin {
 
     private void updateServerDirectory(List<V1alpha1MinecraftClusterStatusServerPool> serverPool) {
         Map<String, ServerInfo> proxyServers = this.proxyServer.getServers();
+        this.getLogger().info("Updating server directory");
 
         List<String> serverPoolNames = serverPool.parallelStream()
                 .map(V1alpha1MinecraftClusterStatusServerPool::getName).toList();

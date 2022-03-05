@@ -24,21 +24,21 @@ func (b *ProxyDeploymentRoleBindingBuilder) Build() (client.Object, error) {
 			Namespace: b.Instance.Namespace,
 			Labels:    b.getLabels(),
 		},
+		RoleRef: rbacv1.RoleRef{
+			APIGroup: "rbac.authorization.k8s.io",
+			Kind:     "Role",
+			Name:     fmt.Sprintf("%s-cluster-status-watch", b.Cluster.Name),
+		},
 	}, nil
 }
 
 func (b *ProxyDeploymentRoleBindingBuilder) Update(object client.Object) error {
 	roleBinding := object.(*rbacv1.RoleBinding)
 
-	roleBinding.RoleRef = rbacv1.RoleRef{
-		APIGroup: "rbac.authorization.k8s.io",
-		Kind:     "Role",
-		Name:     fmt.Sprintf("%s-cluster-status-watch", b.Cluster.Name),
-	}
-
 	roleBinding.Subjects = []rbacv1.Subject{{
-		Kind: "ServiceAccount",
-		Name: b.getServiceAccountName(),
+		Kind:      "ServiceAccount",
+		Name:      b.getServiceAccountName(),
+		Namespace: b.Instance.Namespace,
 	}}
 
 	if err := controllerutil.SetControllerReference(b.Instance, roleBinding, b.Scheme); err != nil {
