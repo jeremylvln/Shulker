@@ -1,14 +1,15 @@
 package io.shulkermc.directory;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
+import io.kubernetes.client.openapi.JSON;
 import io.kubernetes.client.openapi.apis.CustomObjectsApi;
 import io.kubernetes.client.util.ClientBuilder;
-import io.kubernetes.client.util.ModelMapper;
 import io.kubernetes.client.util.Watch;
-import io.kubernetes.client.util.generic.GenericKubernetesApi;
 import io.shulkermc.models.V1alpha1MinecraftCluster;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatus;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatusServerPool;
@@ -50,7 +51,7 @@ public class ShulkerProxyDirectory extends Plugin {
             return;
         }
 
-        this.getLogger().info(String.format("Shulker cluster name is \"%s\"", this.shulkerClusterName));
+        this.getLogger().info(String.format("Shulker cluster is \"%s/%s\"", this.shulkerClusterNamespace, this.shulkerClusterName));
 
         ApiClient kubernetesClient;
         try {
@@ -70,9 +71,9 @@ public class ShulkerProxyDirectory extends Plugin {
             while (this.reconcilerContinue.get()) {
                 try {
                     this.getLogger().info("Reconciling cluster status");
-                    Watch<V1alpha1MinecraftCluster> watch = Watch.createWatch(
+                    Watch<Object> watch = Watch.createWatch(
                             kubernetesClient,
-                            customObjectsApi.getNamespacedCustomObjectCall(
+                            customObjectsApi.getNamespacedCustomObjectStatusCall(
                                     "shulkermc.io",
                                     "v1alpha1",
                                     this.shulkerClusterNamespace,
@@ -84,9 +85,9 @@ public class ShulkerProxyDirectory extends Plugin {
 
                     for (var event : watch) {
                         if (!event.type.equals("MODIFIED")) continue;
-                        V1alpha1MinecraftCluster cluster = event.object;
-                        if (cluster.getStatus() != null) continue;
-                        this.updateServerDirectory(cluster.getStatus().getServerPool());
+                        Object object = event.object;
+                        V1alpha1MinecraftClusterStatus status = ShulkerProxyDirectory.responseToStatusObject(object);
+                        this.updateServerDirectory(status.getServerPool());
                     }
                 } catch (Exception ex) {
                     this.getLogger().severe("Failed to watch cluster status");
@@ -101,12 +102,9 @@ public class ShulkerProxyDirectory extends Plugin {
         this.reconcilerThread.start();
 
         try {
-            V1alpha1MinecraftCluster cluster = (V1alpha1MinecraftCluster) customObjectsApi.getNamespacedCustomObject(
-                    "shulkermc.io", "v1alpha1", this.shulkerClusterNamespace, "minecraftclusters", this.shulkerClusterName);
-
-            if (cluster.getStatus() != null) {
-                this.updateServerDirectory(cluster.getStatus().getServerPool());
-            }
+            V1alpha1MinecraftClusterStatus status = ShulkerProxyDirectory.responseToStatusObject(customObjectsApi.getNamespacedCustomObjectStatus(
+                    "shulkermc.io", "v1alpha1", this.shulkerClusterNamespace, "minecraftclusters", this.shulkerClusterName));
+             this.updateServerDirectory(status.getServerPool());
         } catch (ApiException ex) {
             this.getLogger().severe("Failed to synchronize server directory");
             ex.printStackTrace();
@@ -147,7 +145,10 @@ public class ShulkerProxyDirectory extends Plugin {
                 .forEach(proxyServers::remove);
     }
 
-    static {
-        ModelMapper.addModelMap("shulkermc.io", "v1alpha1", "MinecraftCluster", "minecraftclusters", V1alpha1MinecraftCluster.class);
+    private static V1alpha1MinecraftClusterStatus responseToStatusObject(Object o) {
+        if (o == null) return null;
+        Gson gson = new JSON().getGson();
+        JsonElement jsonElement = gson.toJsonTree(o);
+        return gson.fromJson(jsonElement, V1alpha1MinecraftClusterStatus.class);
     }
 }
