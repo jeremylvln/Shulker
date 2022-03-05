@@ -175,6 +175,13 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 		},
 	}
 
+	if b.Instance.Spec.ClusterRef != nil {
+		env = append(env, corev1.EnvVar{
+			Name:  "SHULKER_CLUSTER_NAME",
+			Value: b.Instance.Spec.ClusterRef.Name,
+		})
+	}
+
 	env = append(env, b.Instance.Spec.PodOverrides.Env...)
 
 	return env

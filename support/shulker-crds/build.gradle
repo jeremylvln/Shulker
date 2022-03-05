@@ -1,6 +1,10 @@
 archivesBaseName = "ShulkerCrds"
 version = '0.0.1'
 
+dependencies {
+    compileOnly group: 'io.kubernetes', name: 'client-java', version: '10.0.0'
+}
+
 task generateCrds(type: Exec) {
     commandLine 'bash ./generate-crds.sh'
 }
