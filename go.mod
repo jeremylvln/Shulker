@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/Tnze/go-mc v1.17.1
-	github.com/google/uuid v1.1.2
+	github.com/google/uuid v1.3.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
