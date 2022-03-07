@@ -2,12 +2,13 @@
   "extends": ["config:base"],
   "automerge": true,
   "dependencyDashboard": false,
+  "enabledManagers": ["github-actions", "gomod", "gradle"],
   "labels": ["type:dependencies :wrench:"],
   "prCreation": "not-pending",
   "reviewersFromCodeOwners": false,
   "stabilityDays": 3,
   "updateNotScheduled": false,
   "vulnerabilityAlerts": {
-    "labels": ["priority:critical :fire:"]
+    "labels": ["type:dependencies :wrench:", "priority:critical :fire:"]
   }
 }

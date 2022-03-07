@@ -1,5 +1,3 @@
 # https://github.com/zeke/semantic-pull-requests
 
-commitsOnly: true
-allowMergeCommits: true
-allowRevertCommits: true
+titleOnly: true
