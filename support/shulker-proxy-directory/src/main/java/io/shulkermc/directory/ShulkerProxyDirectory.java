@@ -91,7 +91,8 @@ public class ShulkerProxyDirectory extends Plugin {
                                 params.watch,
                                 null),
                         V1alpha1MinecraftCluster.class,
-                        V1alpha1MinecraftClusterList.class);
+                        V1alpha1MinecraftClusterList.class
+                );
 
         clusterInformer.addEventHandler(
                 new ResourceEventHandler<>() {

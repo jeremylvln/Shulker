@@ -23,7 +23,7 @@ func (b *MinecraftClusterResourceBuilder) ResourceBuilders() ([]common.ResourceB
 }
 
 func (b *MinecraftClusterResourceBuilder) getRoleName() string {
-	return fmt.Sprintf("%s-cluster-status-watch", b.Instance.Name)
+	return fmt.Sprintf("%s-cluster-watch", b.Instance.Name)
 }
 
 func (b *MinecraftClusterResourceBuilder) getLabels() map[string]string {

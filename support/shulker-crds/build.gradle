@@ -2,6 +2,6 @@ archivesBaseName = "ShulkerCrds"
 version = '0.0.1'
 
 dependencies {
-    compileOnly group: 'io.kubernetes', name: 'client-java', version: '10.0.2'
+    compileOnly group: 'io.kubernetes', name: 'client-java', version: '14.0.1'
 }
 
