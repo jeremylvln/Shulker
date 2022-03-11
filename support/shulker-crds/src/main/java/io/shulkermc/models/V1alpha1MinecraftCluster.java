@@ -21,6 +21,7 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
+import io.shulkermc.models.V1alpha1MinecraftClusterSpec;
 import io.shulkermc.models.V1alpha1MinecraftClusterStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,7 +31,7 @@ import java.io.IOException;
  * MinecraftCluster is the Schema for the MinecraftCluster API
  */
 @ApiModel(description = "MinecraftCluster is the Schema for the MinecraftCluster API")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:49:50.494Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:16:21.509Z[Etc/UTC]")
 public class V1alpha1MinecraftCluster implements io.kubernetes.client.common.KubernetesObject {
   public static final String SERIALIZED_NAME_API_VERSION = "apiVersion";
   @SerializedName(SERIALIZED_NAME_API_VERSION)
@@ -46,7 +47,7 @@ public class V1alpha1MinecraftCluster implements io.kubernetes.client.common.Kub
 
   public static final String SERIALIZED_NAME_SPEC = "spec";
   @SerializedName(SERIALIZED_NAME_SPEC)
-  private Object spec;
+  private V1alpha1MinecraftClusterSpec spec;
 
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
@@ -122,25 +123,25 @@ public class V1alpha1MinecraftCluster implements io.kubernetes.client.common.Kub
   }
 
 
-  public V1alpha1MinecraftCluster spec(Object spec) {
+  public V1alpha1MinecraftCluster spec(V1alpha1MinecraftClusterSpec spec) {
     
     this.spec = spec;
     return this;
   }
 
    /**
-   * Defines the defired state of a MinecraftCluster. Most, to not say all, fields configurable in a Minecraft Cluster can be configured in this CRD.
+   * Get spec
    * @return spec
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Defines the defired state of a MinecraftCluster. Most, to not say all, fields configurable in a Minecraft Cluster can be configured in this CRD.")
+  @ApiModelProperty(value = "")
 
-  public Object getSpec() {
+  public V1alpha1MinecraftClusterSpec getSpec() {
     return spec;
   }
 
 
-  public void setSpec(Object spec) {
+  public void setSpec(V1alpha1MinecraftClusterSpec spec) {
     this.spec = spec;
   }
 

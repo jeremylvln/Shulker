@@ -32,7 +32,7 @@ import java.util.List;
  * MinecraftServerList is a list of MinecraftServer
  */
 @ApiModel(description = "MinecraftServerList is a list of MinecraftServer")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerList implements io.kubernetes.client.common.KubernetesListObject {
   public static final String SERIALIZED_NAME_API_VERSION = "apiVersion";
   @SerializedName(SERIALIZED_NAME_API_VERSION)

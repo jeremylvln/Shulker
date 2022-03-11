@@ -29,7 +29,7 @@ import java.io.IOException;
  * An empty preferred scheduling term matches all objects with implicit weight 0 (i.e. it&#39;s a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).
  */
 @ApiModel(description = "An empty preferred scheduling term matches all objects with implicit weight 0 (i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution {
   public static final String SERIALIZED_NAME_PREFERENCE = "preference";
   @SerializedName(SERIALIZED_NAME_PREFERENCE)

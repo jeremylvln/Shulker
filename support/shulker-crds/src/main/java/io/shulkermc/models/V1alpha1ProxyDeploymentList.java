@@ -32,7 +32,7 @@ import java.util.List;
  * ProxyDeploymentList is a list of ProxyDeployment
  */
 @ApiModel(description = "ProxyDeploymentList is a list of ProxyDeployment")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:55.272Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:15:23.550Z[Etc/UTC]")
 public class V1alpha1ProxyDeploymentList implements io.kubernetes.client.common.KubernetesListObject {
   public static final String SERIALIZED_NAME_API_VERSION = "apiVersion";
   @SerializedName(SERIALIZED_NAME_API_VERSION)

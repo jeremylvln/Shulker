@@ -32,7 +32,7 @@ import java.io.IOException;
  * Source for the environment variable&#39;s value. Cannot be used if value is not empty.
  */
 @ApiModel(description = "Source for the environment variable's value. Cannot be used if value is not empty.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecPodOverridesValueFrom {
   public static final String SERIALIZED_NAME_CONFIG_MAP_KEY_REF = "configMapKeyRef";
   @SerializedName(SERIALIZED_NAME_CONFIG_MAP_KEY_REF)

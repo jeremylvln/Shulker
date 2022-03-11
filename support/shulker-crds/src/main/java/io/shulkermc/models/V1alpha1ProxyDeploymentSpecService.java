@@ -31,7 +31,7 @@ import java.util.Map;
  * The desired state of the Kubernetes Service to create for the Proxy Deployment.
  */
 @ApiModel(description = "The desired state of the Kubernetes Service to create for the Proxy Deployment.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:55.272Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:15:23.550Z[Etc/UTC]")
 public class V1alpha1ProxyDeploymentSpecService {
   public static final String SERIALIZED_NAME_ANNOTATIONS = "annotations";
   @SerializedName(SERIALIZED_NAME_ANNOTATIONS)

@@ -28,7 +28,7 @@ import java.io.IOException;
  * Version the Minecraft Server has to run.
  */
 @ApiModel(description = "Version the Minecraft Server has to run.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecVersion {
   /**
    * Channel of the version to use. Defaults to Vanilla meaning that the server will run Mojang&#39;s official dedicated server.

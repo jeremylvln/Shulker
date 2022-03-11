@@ -29,7 +29,7 @@ import java.io.IOException;
  * EnvVar represents an environment variable present in a Container.
  */
 @ApiModel(description = "EnvVar represents an environment variable present in a Container.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecPodOverridesEnv {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)

@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * V1alpha1MinecraftClusterStatusServerPool
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:49:50.494Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:16:21.509Z[Etc/UTC]")
 public class V1alpha1MinecraftClusterStatusServerPool {
   public static final String SERIALIZED_NAME_ADDRESS = "address";
   @SerializedName(SERIALIZED_NAME_ADDRESS)

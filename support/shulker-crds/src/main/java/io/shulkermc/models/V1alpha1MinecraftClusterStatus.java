@@ -32,7 +32,7 @@ import java.util.List;
  * MinecraftClusterStatus defines the observed state of MinecraftCluster
  */
 @ApiModel(description = "MinecraftClusterStatus defines the observed state of MinecraftCluster")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:49:50.494Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:16:21.509Z[Etc/UTC]")
 public class V1alpha1MinecraftClusterStatus {
   public static final String SERIALIZED_NAME_CONDITIONS = "conditions";
   @SerializedName(SERIALIZED_NAME_CONDITIONS)

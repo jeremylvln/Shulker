@@ -29,7 +29,7 @@ import java.io.IOException;
  * The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)
  */
 @ApiModel(description = "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecAffinityPodAffinityPreferredDuringSchedulingIgnoredDuringExecution {
   public static final String SERIALIZED_NAME_POD_AFFINITY_TERM = "podAffinityTerm";
   @SerializedName(SERIALIZED_NAME_POD_AFFINITY_TERM)

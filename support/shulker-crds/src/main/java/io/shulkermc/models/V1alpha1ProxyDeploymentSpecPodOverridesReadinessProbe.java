@@ -28,7 +28,7 @@ import java.io.IOException;
  * Overrides for the readiness probe of the Proxy Deployment.
  */
 @ApiModel(description = "Overrides for the readiness probe of the Proxy Deployment.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:55.272Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:15:23.550Z[Etc/UTC]")
 public class V1alpha1ProxyDeploymentSpecPodOverridesReadinessProbe {
   public static final String SERIALIZED_NAME_INITIAL_DELAY_SECONDS = "initialDelaySeconds";
   @SerializedName(SERIALIZED_NAME_INITIAL_DELAY_SECONDS)

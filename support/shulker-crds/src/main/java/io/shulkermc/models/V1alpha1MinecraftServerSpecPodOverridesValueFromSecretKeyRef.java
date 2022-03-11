@@ -28,7 +28,7 @@ import java.io.IOException;
  * Selects a key of a secret in the pod&#39;s namespace
  */
 @ApiModel(description = "Selects a key of a secret in the pod's namespace")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecPodOverridesValueFromSecretKeyRef {
   public static final String SERIALIZED_NAME_KEY = "key";
   @SerializedName(SERIALIZED_NAME_KEY)

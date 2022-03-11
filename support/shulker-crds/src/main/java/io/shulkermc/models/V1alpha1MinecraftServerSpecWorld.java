@@ -28,7 +28,7 @@ import java.io.IOException;
  * URL to a downloadable world archive.
  */
 @ApiModel(description = "URL to a downloadable world archive.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:00.143Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:13:51.331Z[Etc/UTC]")
 public class V1alpha1MinecraftServerSpecWorld {
   public static final String SERIALIZED_NAME_DISABLE_END = "disableEnd";
   @SerializedName(SERIALIZED_NAME_DISABLE_END)

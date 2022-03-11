@@ -28,7 +28,7 @@ import java.io.IOException;
  * Version the Proxy Deployment has to run.
  */
 @ApiModel(description = "Version the Proxy Deployment has to run.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-05T15:48:55.272Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-03-11T15:15:23.550Z[Etc/UTC]")
 public class V1alpha1ProxyDeploymentSpecVersion {
   /**
    * Channel of the version to use. Defaults to BungeeCord.
