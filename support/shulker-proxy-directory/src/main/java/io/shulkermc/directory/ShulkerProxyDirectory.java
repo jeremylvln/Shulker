@@ -3,7 +3,7 @@ package io.shulkermc.directory;
 import io.fabric8.kubernetes.client.*;
 import io.shulkermc.models.MinecraftCluster;
 import io.shulkermc.models.MinecraftClusterList;
-import io.shulkermc.models.MinecraftClusterPool;
+import io.shulkermc.models.MinecraftClusterStatus;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -15,44 +15,41 @@ import java.util.Map;
 public class ShulkerProxyDirectory extends Plugin {
     private final ProxyServer proxyServer;
 
-    private String shulkerClusterNamespace;
-    private String shulkerClusterName;
-
     public ShulkerProxyDirectory() {
         this.proxyServer = ProxyServer.getInstance();
     }
 
     @Override
     public void onEnable() {
-        this.shulkerClusterNamespace = System.getenv("SHULKER_CLUSTER_NAMESPACE");
-        if (this.shulkerClusterNamespace == null) {
+        String shulkerClusterNamespace = System.getenv("SHULKER_CLUSTER_NAMESPACE");
+        if (shulkerClusterNamespace == null) {
             this.getLogger().warning("No SHULKER_CLUSTER_NAMESPACE found in environment. Halting.");
             this.proxyServer.stop();
             return;
         }
 
-        this.shulkerClusterName = System.getenv("SHULKER_CLUSTER_NAME");
-        if (this.shulkerClusterName == null) {
+        String shulkerClusterName = System.getenv("SHULKER_CLUSTER_NAME");
+        if (shulkerClusterName == null) {
             this.getLogger().warning("No SHULKER_CLUSTER_NAME found in environment. Halting.");
             this.proxyServer.stop();
             return;
         }
 
-        this.getLogger().info(String.format("Shulker cluster is \"%s/%s\"", this.shulkerClusterNamespace, this.shulkerClusterName));
+        this.getLogger().info(String.format("Shulker cluster is \"%s/%s\"", shulkerClusterNamespace, shulkerClusterName));
 
         KubernetesClient kubernetesClient = new DefaultKubernetesClient();
         var minecraftClusterClient = kubernetesClient.customResources(MinecraftCluster.class, MinecraftClusterList.class);
-        var minecraftClusterTarget = minecraftClusterClient.inNamespace(this.shulkerClusterNamespace).withName(this.shulkerClusterName);
+        var minecraftClusterTarget = minecraftClusterClient.inNamespace(shulkerClusterNamespace).withName(shulkerClusterName);
 
         minecraftClusterTarget.watch(new Watcher<>() {
             @Override
             public void eventReceived(Action action, MinecraftCluster cluster) {
                 if (action != Action.MODIFIED) return;
 
-                MinecraftClusterPool pool = cluster.getPool();
-                if (pool == null) return;
+                MinecraftClusterStatus status = cluster.getStatus();
+                if (status == null) return;
 
-                ShulkerProxyDirectory.this.updateServerDirectory(pool);
+                ShulkerProxyDirectory.this.updateServerDirectory(status.getServerPool());
             }
 
             @Override
@@ -62,21 +59,21 @@ public class ShulkerProxyDirectory extends Plugin {
         });
 
         try {
-            this.updateServerDirectory(minecraftClusterTarget.get().getPool());
+            this.updateServerDirectory(minecraftClusterTarget.get().getStatus().getServerPool());
         } catch (KubernetesClientException ex) {
             this.getLogger().severe("Failed to synchronize server directory");
             ex.printStackTrace();
         }
     }
 
-    private synchronized void updateServerDirectory(MinecraftClusterPool pool) {
+    private synchronized void updateServerDirectory(List<MinecraftClusterStatus.ServerPoolEntry> serverPool) {
         Map<String, ServerInfo> proxyServers = this.proxyServer.getServers();
         this.getLogger().info("Updating server directory");
 
-        List<String> serverPoolNames = pool.getServers().parallelStream()
-                .map(MinecraftClusterPool.ServerEntry::getName).toList();
+        List<String> serverPoolNames = serverPool.parallelStream()
+                .map(MinecraftClusterStatus.ServerPoolEntry::getName).toList();
 
-        pool.getServers().parallelStream()
+        serverPool.parallelStream()
                 .filter((server) -> server != null && server.getName() != null && server.getAddress() != null)
                 .map((server) -> {
                     InetSocketAddress socketAddress = new InetSocketAddress(server.getAddress(), 25565);

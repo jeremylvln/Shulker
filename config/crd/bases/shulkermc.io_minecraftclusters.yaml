@@ -49,23 +49,6 @@ spec:
             type: string
           metadata:
             type: object
-          pool:
-            description: MinecraftClusterPool contains the list of components linked
-              to a MinecraftCluster
-            properties:
-              servers:
-                description: List of servers linked to this Minecraft Cluster.
-                items:
-                  properties:
-                    address:
-                      description: IP of the Minecraft Server.
-                      type: string
-                    name:
-                      description: Name of the Minecraft Server.
-                      type: string
-                  type: object
-                type: array
-            type: object
           spec:
             description: Defines the defired state of a MinecraftCluster. Most, to
               not say all, fields configurable in a Minecraft Cluster can be configured
@@ -153,6 +136,17 @@ spec:
                 description: Number of proxies.
                 format: int32
                 type: integer
+              serverPool:
+                items:
+                  properties:
+                    address:
+                      description: IP of the Minecraft Server.
+                      type: string
+                    name:
+                      description: Name of the Minecraft Server.
+                      type: string
+                  type: object
+                type: array
               servers:
                 description: Number of servers inside the server pool.
                 format: int32

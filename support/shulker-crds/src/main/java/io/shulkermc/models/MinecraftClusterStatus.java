@@ -7,6 +7,7 @@ public class MinecraftClusterStatus {
     private List<Condition> conditions;
     private int proxies;
     private int servers;
+    private List<ServerPoolEntry> serverPool;
 
     public void setConditions(List<Condition> conditions) {
         this.conditions = conditions;
@@ -20,6 +21,10 @@ public class MinecraftClusterStatus {
         this.servers = servers;
     }
 
+    public void setServerPool(List<ServerPoolEntry> serverPool) {
+        this.serverPool = serverPool;
+    }
+
     public List<Condition> getConditions() {
         return this.conditions;
     }
@@ -30,6 +35,10 @@ public class MinecraftClusterStatus {
 
     public int getServers() {
         return this.servers;
+    }
+
+    public List<ServerPoolEntry> getServerPool() {
+        return this.serverPool;
     }
 
     public static class Condition {
@@ -86,6 +95,27 @@ public class MinecraftClusterStatus {
 
         public String getMessage() {
             return this.message;
+        }
+    }
+
+    public static class ServerPoolEntry {
+        private String name;
+        private String address;
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public String getAddress() {
+            return this.address;
         }
     }
 }

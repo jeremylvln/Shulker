@@ -78,14 +78,6 @@ rules:
 - apiGroups:
   - shulkermc.io
   resources:
-  - minecraftclusters/pool
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - shulkermc.io
-  resources:
   - minecraftclusters/status
   verbs:
   - get
