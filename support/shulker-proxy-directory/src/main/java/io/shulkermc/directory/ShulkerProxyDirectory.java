@@ -9,6 +9,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.net.InetSocketAddress;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -68,13 +69,14 @@ public class ShulkerProxyDirectory extends Plugin {
 
     private synchronized void updateServerDirectory(List<MinecraftClusterStatus.ServerPoolEntry> serverPool) {
         Map<String, ServerInfo> proxyServers = this.proxyServer.getServers();
+
         this.getLogger().info("Updating server directory");
 
         List<String> serverPoolNames = serverPool.parallelStream()
                 .map(MinecraftClusterStatus.ServerPoolEntry::getName).toList();
 
         serverPool.stream()
-                .filter((server) -> server != null && server.getName() != null && server.getAddress() != null)
+                .filter((server) -> server != null && server.getName() != null && server.getAddress() != null && !proxyServers.containsKey(server.getName()))
                 .map((server) -> {
                     InetSocketAddress socketAddress = new InetSocketAddress(server.getAddress(), 25565);
                     return this.proxyServer.constructServerInfo(server.getName(), socketAddress, null, false);
@@ -82,7 +84,7 @@ public class ShulkerProxyDirectory extends Plugin {
                 .peek((serverInfo) -> this.getLogger().info(String.format("Adding server %s (%s) to directory", serverInfo.getName(), serverInfo.getSocketAddress())))
                 .forEach((serverInfo) -> proxyServers.put(serverInfo.getName(), serverInfo));
 
-        proxyServers.keySet().stream()
+        new HashSet<>(proxyServers.keySet()).stream()
                 .filter((serverName) -> !serverPoolNames.contains(serverName))
                 .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
                 .forEach(proxyServers::remove);

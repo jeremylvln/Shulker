@@ -67,7 +67,7 @@ type MinecraftClusterStatus struct {
 	// Number of servers inside the server pool.
 	Servers int32 `json:"servers"`
 
-	ServerPool []MinecraftClusterStatusServerPoolEntry `json:"serverPool,omitempty"`
+	ServerPool []MinecraftClusterStatusServerPoolEntry `json:"serverPool"`
 }
 
 type MinecraftClusterStatusServerPoolEntry struct {

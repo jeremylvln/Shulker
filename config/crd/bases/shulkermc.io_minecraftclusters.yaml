@@ -154,6 +154,7 @@ spec:
             required:
             - conditions
             - proxies
+            - serverPool
             - servers
             type: object
         type: object

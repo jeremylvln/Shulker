@@ -27,8 +27,13 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
 	resource "shulkermc.io/m/v2/internal/resource/cluster"
@@ -85,7 +90,9 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	}
 	minecraftCluster.Status.Proxies = 0
 	for _, proxyDeployment := range proxyDeploymentList.Items {
-		minecraftCluster.Status.Proxies += proxyDeployment.Status.Replicas
+		if meta.IsStatusConditionTrue(proxyDeployment.Status.Conditions, string(shulkermciov1alpha1.ProxyDeploymentReadyCondition)) {
+			minecraftCluster.Status.Proxies += proxyDeployment.Status.Replicas
+		}
 	}
 
 	serverList, err := r.listMinecraftServers(ctx, minecraftCluster)
@@ -95,7 +102,7 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 	serverPool := []shulkermciov1alpha1.MinecraftClusterStatusServerPoolEntry{}
 	for _, server := range serverList.Items {
-		if meta.IsStatusConditionTrue(server.Status.Conditions, string(shulkermciov1alpha1.ServerAddressableCondition)) {
+		if meta.IsStatusConditionTrue(server.Status.Conditions, string(shulkermciov1alpha1.ServerReadyCondition)) {
 			serverPool = append(serverPool, shulkermciov1alpha1.MinecraftClusterStatusServerPoolEntry{
 				Name:    server.Name,
 				Address: server.Status.Address,
@@ -143,10 +150,46 @@ func (r *MinecraftClusterReconciler) getMinecraftCluster(ctx context.Context, na
 	return minecraftClusterInstance, err
 }
 
+func (r *MinecraftClusterReconciler) findMinecraftClusterForProxyDeployment(object client.Object) []reconcile.Request {
+	proxyDeployment := object.(*shulkermciov1alpha1.ProxyDeployment)
+
+	return []reconcile.Request{{
+		NamespacedName: types.NamespacedName{
+			Namespace: proxyDeployment.GetNamespace(),
+			Name:      proxyDeployment.Spec.ClusterRef.Name,
+		},
+	}}
+}
+
+func (r *MinecraftClusterReconciler) findMinecraftClusterForMinecraftServer(object client.Object) []reconcile.Request {
+	minecraftServer := object.(*shulkermciov1alpha1.MinecraftServer)
+
+	if minecraftServer.Spec.ClusterRef == nil {
+		return []reconcile.Request{}
+	}
+
+	return []reconcile.Request{{
+		NamespacedName: types.NamespacedName{
+			Namespace: minecraftServer.GetNamespace(),
+			Name:      minecraftServer.Spec.ClusterRef.Name,
+		},
+	}}
+}
+
 func (r *MinecraftClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&shulkermciov1alpha1.MinecraftCluster{}).
 		Owns(&corev1.Service{}).
 		Owns(&rbacv1.Role{}).
+		Watches(
+			&source.Kind{Type: &shulkermciov1alpha1.ProxyDeployment{}},
+			handler.EnqueueRequestsFromMapFunc(r.findMinecraftClusterForProxyDeployment),
+			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
+		).
+		Watches(
+			&source.Kind{Type: &shulkermciov1alpha1.MinecraftServer{}},
+			handler.EnqueueRequestsFromMapFunc(r.findMinecraftClusterForMinecraftServer),
+			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
+		).
 		Complete(r)
 }

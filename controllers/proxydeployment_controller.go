@@ -110,7 +110,11 @@ func (r *ProxyDeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 			}
 		}
 
-		proxyDeployment.Status.SetCondition(shulkermciov1alpha1.ProxyDeploymentReadyCondition, metav1.ConditionTrue, "Ready", "Proxy is ready")
+		if proxyDeployment.Status.AvailableReplicas > 0 {
+			proxyDeployment.Status.SetCondition(shulkermciov1alpha1.ProxyDeploymentReadyCondition, metav1.ConditionTrue, "Ready", "Proxy is ready")
+		} else {
+			proxyDeployment.Status.SetCondition(shulkermciov1alpha1.ProxyDeploymentReadyCondition, metav1.ConditionFalse, "NotReady", "Proxy is not ready")
+		}
 	} else {
 		proxyDeployment.Status.SetCondition(shulkermciov1alpha1.ProxyDeploymentReadyCondition, metav1.ConditionFalse, "NotReady", "Proxy is not ready")
 	}
