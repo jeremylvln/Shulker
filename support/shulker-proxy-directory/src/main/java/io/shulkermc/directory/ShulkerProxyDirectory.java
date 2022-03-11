@@ -73,7 +73,7 @@ public class ShulkerProxyDirectory extends Plugin {
         List<String> serverPoolNames = serverPool.parallelStream()
                 .map(MinecraftClusterStatus.ServerPoolEntry::getName).toList();
 
-        serverPool.parallelStream()
+        serverPool.stream()
                 .filter((server) -> server != null && server.getName() != null && server.getAddress() != null)
                 .map((server) -> {
                     InetSocketAddress socketAddress = new InetSocketAddress(server.getAddress(), 25565);
