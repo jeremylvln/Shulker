@@ -43,6 +43,7 @@ type MinecraftClusterReconciler struct {
 //+kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update
 //+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftclusters,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftclusters/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftclusters/pool,verbs=get;update;patch
 //+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftclusters/finalizers,verbs=update
 //+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftservers,verbs=get;list;watch
 
@@ -93,10 +94,10 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return ctrl.Result{}, err
 	}
 
-	serverPool := []shulkermciov1alpha1.MinecraftClusterStatusServerEntry{}
+	serverPool := []shulkermciov1alpha1.MinecraftClusterPoolServerEntry{}
 	for _, server := range serverList.Items {
 		if meta.IsStatusConditionTrue(server.Status.Conditions, string(shulkermciov1alpha1.ServerAddressableCondition)) {
-			serverPool = append(serverPool, shulkermciov1alpha1.MinecraftClusterStatusServerEntry{
+			serverPool = append(serverPool, shulkermciov1alpha1.MinecraftClusterPoolServerEntry{
 				Name:    server.Name,
 				Address: server.Status.Address,
 			})
@@ -104,8 +105,9 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	}
 
 	minecraftCluster.Status.Servers = int32(len(serverPool))
-	minecraftCluster.Status.ServerPool = serverPool
 	minecraftCluster.Status.SetCondition(shulkermciov1alpha1.ClusterReadyCondition, metav1.ConditionTrue, "Ready", "Cluster is ready")
+
+	minecraftCluster.Pool.Servers = serverPool
 
 	err = r.Status().Update(ctx, minecraftCluster)
 	return ctrl.Result{}, err

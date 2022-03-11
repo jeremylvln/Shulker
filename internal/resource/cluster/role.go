@@ -38,7 +38,7 @@ func (b *MinecraftClusterRoleBuilder) Update(object client.Object) error {
 		},
 		{
 			APIGroups:     []string{"shulkermc.io"},
-			Resources:     []string{"minecraftclusters", "minecraftclusters/status"},
+			Resources:     []string{"minecraftclusters", "minecraftclusters/status", "minecraftclusters/pool"},
 			Verbs:         []string{"get", "watch"},
 			ResourceNames: []string{b.Instance.Name},
 		},

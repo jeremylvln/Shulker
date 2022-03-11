@@ -23,6 +23,7 @@ import (
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:subresource:pool
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.conditions[?(@.type==\"Ready\")].status"
 //+kubebuilder:printcolumn:name="Proxies",type="number",JSONPath=".status.proxies"
 //+kubebuilder:printcolumn:name="Servers",type="number",JSONPath=".status.servers"
@@ -36,6 +37,7 @@ type MinecraftCluster struct {
 
 	Spec   MinecraftClusterSpec   `json:"spec,omitempty"`
 	Status MinecraftClusterStatus `json:"status,omitempty"`
+	Pool   MinecraftClusterPool   `json:"pool,omitempty"`
 }
 
 // Defines the defired state of a MinecraftCluster. Most, to not
@@ -66,12 +68,16 @@ type MinecraftClusterStatus struct {
 
 	// Number of servers inside the server pool.
 	Servers int32 `json:"servers"`
-
-	// Pool of Minecraft Servers linked to this Minecraft Cluster.
-	ServerPool []MinecraftClusterStatusServerEntry `json:"serverPool"`
 }
 
-type MinecraftClusterStatusServerEntry struct {
+// MinecraftClusterPool contains the list of components linked to a
+// MinecraftCluster
+type MinecraftClusterPool struct {
+	// List of servers linked to this Minecraft Cluster.
+	Servers []MinecraftClusterPoolServerEntry `json:"servers,omitempty"`
+}
+
+type MinecraftClusterPoolServerEntry struct {
 	// Name of the Minecraft Server.
 	//+kubebuilder:validation:Required
 	Name string `json:"name,omitempty"`
