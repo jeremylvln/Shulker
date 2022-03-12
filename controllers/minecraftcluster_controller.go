@@ -103,7 +103,7 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	for _, server := range serverList.Items {
 		if meta.IsStatusConditionTrue(server.Status.Conditions, string(shulkermciov1alpha1.ServerReadyCondition)) {
 			tags := []string{}
-			if server.Spec.Tags == nil {
+			if server.Spec.Tags != nil {
 				tags = server.Spec.Tags
 			}
 

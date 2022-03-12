@@ -32,7 +32,7 @@ public class ServerConnectListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerConnect(ServerConnectEvent event) {
-        if (event.getTarget().getName().equals("lobby")) {
+        if (!event.getTarget().getName().equals("lobby")) {
             return;
         }
 
