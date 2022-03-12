@@ -86,7 +86,7 @@ public class ShulkerProxyDirectory extends Plugin {
                 .map(MinecraftClusterStatus.ServerPoolEntry::getName).toList();
 
         new HashSet<>(proxyServers.keySet()).stream()
-                .filter((serverName) -> !serverPoolNames.contains(serverName))
+                .filter((serverName) -> !serverName.equals("lobby") && !serverPoolNames.contains(serverName))
                 .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
                 .forEach(proxyServers::remove);
 

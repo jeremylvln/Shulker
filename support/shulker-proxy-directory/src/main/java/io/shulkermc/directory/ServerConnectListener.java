@@ -32,6 +32,7 @@ public class ServerConnectListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerConnect(ServerConnectEvent event) {
+        this.plugin.getLogger().info(event.getTarget().getName());
         if (!event.getTarget().getName().equals("lobby")) {
             return;
         }

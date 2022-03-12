@@ -77,20 +77,23 @@ type configYml struct {
 }
 
 type configListenerYml struct {
-	Host       string   `yaml:"host"`
-	QueryPort  int16    `yaml:"query_port"`
-	Motd       string   `yaml:"motd"`
-	MaxPlayers int64    `yaml:"max_players"`
-	Priorities []string `yaml:"priorities"`
+	Host               string   `yaml:"host"`
+	QueryPort          int16    `yaml:"query_port"`
+	Motd               string   `yaml:"motd"`
+	MaxPlayers         int64    `yaml:"max_players"`
+	ForceDefaultServer bool     `yaml:"force_default_server"`
+	Priorities         []string `yaml:"priorities"`
 }
 
 func (b *ProxyDeploymentConfigMapBuilder) getConfigYmlFile() (string, error) {
 	configYml := configYml{
 		Listeners: []configListenerYml{{
-			Host:       "0.0.0.0:25577",
-			QueryPort:  int16(25577),
-			Motd:       b.Instance.Spec.Motd,
-			MaxPlayers: *b.Instance.Spec.MaxPlayers,
+			Host:               "0.0.0.0:25577",
+			QueryPort:          int16(25577),
+			Motd:               b.Instance.Spec.Motd,
+			MaxPlayers:         *b.Instance.Spec.MaxPlayers,
+			ForceDefaultServer: true,
+			Priorities:         []string{"lobby"},
 		}},
 		Groups: map[string]interface{}{},
 	}
