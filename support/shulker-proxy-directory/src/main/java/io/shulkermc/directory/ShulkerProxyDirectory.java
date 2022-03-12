@@ -85,6 +85,11 @@ public class ShulkerProxyDirectory extends Plugin {
         List<String> serverPoolNames = serverPool.parallelStream()
                 .map(MinecraftClusterStatus.ServerPoolEntry::getName).toList();
 
+        new HashSet<>(proxyServers.keySet()).stream()
+                .filter((serverName) -> !serverPoolNames.contains(serverName))
+                .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
+                .forEach(proxyServers::remove);
+
         serverPool.stream()
                 .filter((server) -> server != null && server.getName() != null && server.getAddress() != null && !proxyServers.containsKey(server.getName()))
                 .map((server) -> {
@@ -93,11 +98,6 @@ public class ShulkerProxyDirectory extends Plugin {
                 })
                 .peek((serverInfo) -> this.getLogger().info(String.format("Adding server %s (%s) to directory", serverInfo.getName(), serverInfo.getSocketAddress())))
                 .forEach((serverInfo) -> proxyServers.put(serverInfo.getName(), serverInfo));
-
-        new HashSet<>(proxyServers.keySet()).stream()
-                .filter((serverName) -> !serverPoolNames.contains(serverName))
-                .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
-                .forEach(proxyServers::remove);
 
         this.serverPool = serverPool.parallelStream()
                 .collect(Collectors.toMap(MinecraftClusterStatus.ServerPoolEntry::getName, (serverEntry) -> serverEntry));

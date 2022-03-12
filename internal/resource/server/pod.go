@@ -192,7 +192,6 @@ func (b *MinecraftServerPodBuilder) getInitContainers() []corev1.Container {
 
 func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 	shouldEnforceWhitelist := len(b.Instance.Spec.WhitelistedPlayers) > 0
-	maxMemory := b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)
 
 	env := []corev1.EnvVar{
 		{

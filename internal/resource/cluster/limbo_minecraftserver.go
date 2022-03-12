@@ -47,6 +47,14 @@ func (b *MinecraftClusterLimboMinecraftServerBuilder) Update(object client.Objec
 		World: &shulkermciov1alpha1.MinecraftServerWorldSpec{
 			SchematicUrl: "https://i.jeremylvln.fr/shulker/limbo.schematic",
 		},
+		PodOverrides: &shulkermciov1alpha1.MinecraftServerPodOverridesSpec{
+			LivenessProbe: &shulkermciov1alpha1.MinecraftServerPodProbeSpec{
+				InitialDelaySeconds: 10,
+			},
+			ReadinessProbe: &shulkermciov1alpha1.MinecraftServerPodProbeSpec{
+				InitialDelaySeconds: 10,
+			},
+		},
 		Resources: &corev1.ResourceRequirements{
 			Requests: corev1.ResourceList{
 				"cpu":    *resource.NewScaledQuantity(250, resource.Milli),
