@@ -24,7 +24,9 @@ import (
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:subresource:scale:specpath=.spec.replicas,statuspath=.status.replicas,selectorpath=.status.selector
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.conditions[?(@.type==\"Ready\")].status"
+//+kubebuilder:printcolumn:name="Replicas",type="date",JSONPath=".status.replicas"
 //+kubebuilder:printcolumn:name="Available Replicas",type="date",JSONPath=".status.availableReplicas"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 //+kubebuilder:resource:shortName={"spd"},categories=all
@@ -169,6 +171,12 @@ type ProxyDeploymentStatus struct {
 
 	// Number of available replicas in Proxy Deployment.
 	AvailableReplicas int32 `json:"availableReplicas"`
+
+	// Number of unavailable replicas in Proxy Deployment.
+	UnavailableReplicas int32 `json:"unavailableReplicas"`
+
+	// Pod label selector.
+	Selector string `json:"selector"`
 }
 
 func (s *ProxyDeploymentStatus) SetCondition(condition ProxyDeploymentStatusCondition, status metav1.ConditionStatus, reason string, message string) {

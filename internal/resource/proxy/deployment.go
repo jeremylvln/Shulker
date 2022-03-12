@@ -41,9 +41,7 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 
 	deployment.Spec = appsv1.DeploymentSpec{
 		Replicas: &b.Instance.Spec.Replicas,
-		Selector: &metav1.LabelSelector{
-			MatchLabels: b.getLabels(),
-		},
+		Selector: b.GetPodSelector(),
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				Labels: b.getLabels(),

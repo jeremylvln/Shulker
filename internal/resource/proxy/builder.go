@@ -3,6 +3,7 @@ package resource
 import (
 	"fmt"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
 	common "shulkermc.io/m/v2/internal/resource"
@@ -49,6 +50,12 @@ func (b *ProxyDeploymentResourceBuilder) getServiceAccountName() string {
 
 func (b *ProxyDeploymentResourceBuilder) getRoleBindingName() string {
 	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
+}
+
+func (b *ProxyDeploymentResourceBuilder) GetPodSelector() *metav1.LabelSelector {
+	return &metav1.LabelSelector{
+		MatchLabels: b.getLabels(),
+	}
 }
 
 func (b *ProxyDeploymentResourceBuilder) getLabels() map[string]string {

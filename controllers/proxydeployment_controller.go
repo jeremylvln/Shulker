@@ -99,8 +99,15 @@ func (r *ProxyDeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	}
 
 	if err == nil {
+		selector, err := metav1.LabelSelectorAsSelector(resourceBuilder.GetPodSelector())
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+
 		proxyDeployment.Status.Replicas = int32(deployment.Status.Replicas)
 		proxyDeployment.Status.AvailableReplicas = int32(deployment.Status.AvailableReplicas)
+		proxyDeployment.Status.UnavailableReplicas = int32(deployment.Status.UnavailableReplicas)
+		proxyDeployment.Status.Selector = selector.String()
 
 		for _, condition := range deployment.Status.Conditions {
 			if condition.Type == appsv1.DeploymentAvailable {
