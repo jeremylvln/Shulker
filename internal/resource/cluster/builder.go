@@ -16,10 +16,15 @@ type MinecraftClusterResourceBuilder struct {
 func (b *MinecraftClusterResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder, []common.ResourceBuilder) {
 	builders := []common.ResourceBuilder{
 		b.MinecraftClusterRole(),
+		b.MinecraftClusterLimboMinecraftServer(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
 	return builders, dirtyBuilders
+}
+
+func (b *MinecraftClusterResourceBuilder) getLimboMinecraftServerName() string {
+	return "limbo"
 }
 
 func (b *MinecraftClusterResourceBuilder) getRoleName() string {

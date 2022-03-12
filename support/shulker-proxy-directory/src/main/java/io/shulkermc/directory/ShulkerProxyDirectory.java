@@ -7,17 +7,21 @@ import io.shulkermc.models.MinecraftClusterStatus;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ShulkerProxyDirectory extends Plugin {
     private final ProxyServer proxyServer;
+    private Map<String, MinecraftClusterStatus.ServerPoolEntry> serverPool;
+    private Map<String, List<String>> serversPerTag;
 
     public ShulkerProxyDirectory() {
         this.proxyServer = ProxyServer.getInstance();
+        this.serverPool = new HashMap<>();
+        this.serversPerTag = new HashMap<>();
     }
 
     @Override
@@ -65,6 +69,12 @@ public class ShulkerProxyDirectory extends Plugin {
             this.getLogger().severe("Failed to synchronize server directory");
             ex.printStackTrace();
         }
+
+        this.proxyServer.getPluginManager().registerListener(this, new ServerConnectListener(this));
+    }
+
+    public Optional<List<String>> getServersByTag(String tag) {
+        return Optional.ofNullable(this.serversPerTag.get(tag));
     }
 
     private synchronized void updateServerDirectory(List<MinecraftClusterStatus.ServerPoolEntry> serverPool) {
@@ -88,5 +98,17 @@ public class ShulkerProxyDirectory extends Plugin {
                 .filter((serverName) -> !serverPoolNames.contains(serverName))
                 .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
                 .forEach(proxyServers::remove);
+
+        this.serverPool = serverPool.parallelStream()
+                .collect(Collectors.toMap(MinecraftClusterStatus.ServerPoolEntry::getName, (serverEntry) -> serverEntry));
+
+        Map<String, List<String>> serversPerTag = new HashMap<>();
+        serverPool.parallelStream()
+                .flatMap((serverEntry) -> serverEntry.getTags().stream().map((tag) -> Pair.of(tag, serverEntry)))
+                .forEach((pair) -> {
+                    serversPerTag.putIfAbsent(pair.getKey(), new ArrayList<>());
+                    serversPerTag.get(pair.getKey()).add(pair.getValue().getName());
+                });
+        this.serversPerTag = serversPerTag;
     }
 }

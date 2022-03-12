@@ -101,6 +101,7 @@ public class MinecraftClusterStatus {
     public static class ServerPoolEntry {
         private String name;
         private String address;
+        private List<String> tags;
 
         public void setName(String name) {
             this.name = name;
@@ -110,12 +111,20 @@ public class MinecraftClusterStatus {
             this.address = address;
         }
 
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
+
         public String getName() {
             return this.name;
         }
 
         public String getAddress() {
             return this.address;
+        }
+
+        public List<String> getTags() {
+            return this.tags;
         }
     }
 }

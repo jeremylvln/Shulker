@@ -877,6 +877,30 @@ spec:
                         type: array
                     type: object
                 type: object
+              disruptionBudget:
+                default:
+                  enabled: true
+                  minAvailable: 1
+                description: Number of pods to configure in the Pod Disruption Budget
+                  of the Proxy Deployment.
+                properties:
+                  enabled:
+                    default: true
+                    description: Whether to enable the creation of a Pod Disruption
+                      Budget object for the Proxy Deployment. Defaults to true.
+                    type: boolean
+                  maxUnavailable:
+                    description: Maximum amount of pods that can be unailable at the
+                      same time.
+                    format: int32
+                    type: integer
+                  minAvailable:
+                    default: 1
+                    description: Minimal amount of pods needed to be available at
+                      any time.
+                    format: int32
+                    type: integer
+                type: object
               maxPlayers:
                 default: 100
                 description: Number of maximum players that can connect to the Proxy

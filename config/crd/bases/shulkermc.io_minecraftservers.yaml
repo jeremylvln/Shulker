@@ -883,7 +883,6 @@ spec:
                 default: 20
                 description: Number of maximum players that can connect to the Minecraft
                   Server.
-                format: int64
                 type: integer
               minecraftClusterRef:
                 description: Reference to a Minecraft Cluster. Adding this will enroll
@@ -1136,6 +1135,11 @@ spec:
                     - NodePort
                     type: string
                 type: object
+              tags:
+                description: List of tags identifying this Minecraft Server.
+                items:
+                  type: string
+                type: array
               version:
                 description: Version the Minecraft Server has to run.
                 properties:
@@ -1188,6 +1192,10 @@ spec:
                     description: Whether to allow the Minecraft Server to generate
                       a Nether world and the players to enter it.
                     type: boolean
+                  schematicUrl:
+                    description: URL to a downloable schematic to use when running
+                      a Limbo server.
+                    type: string
                   url:
                     description: URL to a downloable world.
                     type: string

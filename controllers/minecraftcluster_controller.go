@@ -19,7 +19,6 @@ package controllers
 import (
 	"context"
 
-	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	meta "k8s.io/apimachinery/pkg/api/meta"
@@ -103,9 +102,15 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	serverPool := []shulkermciov1alpha1.MinecraftClusterStatusServerPoolEntry{}
 	for _, server := range serverList.Items {
 		if meta.IsStatusConditionTrue(server.Status.Conditions, string(shulkermciov1alpha1.ServerReadyCondition)) {
+			tags := []string{}
+			if server.Spec.Tags == nil {
+				tags = server.Spec.Tags
+			}
+
 			serverPool = append(serverPool, shulkermciov1alpha1.MinecraftClusterStatusServerPoolEntry{
 				Name:    server.Name,
 				Address: server.Status.Address,
+				Tags:    tags,
 			})
 		}
 	}
@@ -179,7 +184,7 @@ func (r *MinecraftClusterReconciler) findMinecraftClusterForMinecraftServer(obje
 func (r *MinecraftClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&shulkermciov1alpha1.MinecraftCluster{}).
-		Owns(&corev1.Service{}).
+		Owns(&shulkermciov1alpha1.MinecraftServer{}).
 		Owns(&rbacv1.Role{}).
 		Watches(
 			&source.Kind{Type: &shulkermciov1alpha1.ProxyDeployment{}},

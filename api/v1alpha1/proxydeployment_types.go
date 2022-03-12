@@ -84,6 +84,11 @@ type ProxyDeploymentSpec struct {
 
 	// Affinity scheduling rules to be applied on created Pods.
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
+
+	// Number of pods to configure in the Pod Disruption Budget of
+	// the Proxy Deployment.
+	//+kubebuilder:default={enabled: true, minAvailable: 1}
+	DisruptionBudget *ProxyDeploymentDisruptionBudgetSpec `json:"disruptionBudget,omitempty"`
 }
 
 //+kubebuilder:validation:Enum=BungeeCord;Waterfall;Velocity
@@ -149,6 +154,21 @@ type ProxyDeploymentPodProbeSpec struct {
 	// be ready. Defaults to 15 seconds.
 	//+kubebuilder:default=15
 	InitialDelaySeconds int32 `json:"initialDelaySeconds,omitempty"`
+}
+
+type ProxyDeploymentDisruptionBudgetSpec struct {
+	// Whether to enable the creation of a Pod Disruption Budget
+	// object for the Proxy Deployment. Defaults to true.
+	//+kubebuilder:default=true
+	Enabled bool `json:"enabled,omitempty"`
+
+	// Minimal amount of pods needed to be available at any time.
+	//+kubebuilder:default=1
+	MinAvailable *int32 `json:"minAvailable,omitempty"`
+
+	// Maximum amount of pods that can be unailable at the same
+	// time.
+	MaxUnavailable *int32 `json:"maxUnavailable,omitempty"`
 }
 
 type ProxyDeploymentStatusCondition string

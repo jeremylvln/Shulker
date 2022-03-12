@@ -73,11 +73,15 @@ type MinecraftClusterStatus struct {
 type MinecraftClusterStatusServerPoolEntry struct {
 	// Name of the Minecraft Server.
 	//+kubebuilder:validation:Required
-	Name string `json:"name,omitempty"`
+	Name string `json:"name"`
 
 	// IP of the Minecraft Server.
 	//+kubebuilder:validation:Required
-	Address string `json:"address,omitempty"`
+	Address string `json:"address"`
+
+	// List of tags of the Minecraft Server.
+	//+kubebuilder:default={}
+	Tags []string `json:"tags"`
 }
 
 func (s *MinecraftClusterStatus) SetCondition(condition MinecraftClusterStatusCondition, status metav1.ConditionStatus, reason string, message string) {

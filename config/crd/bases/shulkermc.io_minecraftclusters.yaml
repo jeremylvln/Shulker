@@ -145,6 +145,15 @@ spec:
                     name:
                       description: Name of the Minecraft Server.
                       type: string
+                    tags:
+                      description: List of tags of the Minecraft Server.
+                      items:
+                        type: string
+                      type: array
+                  required:
+                  - address
+                  - name
+                  - tags
                   type: object
                 type: array
               servers:

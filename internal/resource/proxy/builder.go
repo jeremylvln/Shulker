@@ -25,6 +25,12 @@ func (b *ProxyDeploymentResourceBuilder) ResourceBuilders() ([]common.ResourceBu
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
+	if b.Instance.Spec.DisruptionBudget.Enabled {
+		builders = append(builders, b.ProxyDeploymentPodDisruptionBudget())
+	} else {
+		dirtyBuilders = append(dirtyBuilders, b.ProxyDeploymentPodDisruptionBudget())
+	}
+
 	return builders, dirtyBuilders
 }
 
@@ -49,6 +55,10 @@ func (b *ProxyDeploymentResourceBuilder) getServiceAccountName() string {
 }
 
 func (b *ProxyDeploymentResourceBuilder) getRoleBindingName() string {
+	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
+}
+
+func (b *ProxyDeploymentResourceBuilder) getPodDisruptionBudgetName() string {
 	return fmt.Sprintf("%s-proxy-%s", b.getResourcePrefix(), b.Instance.Name)
 }
 

@@ -40,42 +40,7 @@ func (b *MinecraftServerPodBuilder) Update(object client.Object) error {
 	pod := object.(*corev1.Pod)
 
 	pod.Spec = corev1.PodSpec{
-		InitContainers: []corev1.Container{{
-			Image:   "busybox:stable",
-			Name:    "init-server-fs",
-			Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", serverConfigDir)},
-			Env: []corev1.EnvVar{
-				{
-					Name:  "SHULKER_CONFIG_DIR",
-					Value: serverConfigDir,
-				},
-				{
-					Name:  "SHULKER_DATA_DIR",
-					Value: serverDataDir,
-				},
-			},
-			Resources: corev1.ResourceRequirements{
-				Limits: corev1.ResourceList{
-					"cpu":    k8sresource.MustParse("500m"),
-					"memory": k8sresource.MustParse("128Mi"),
-				},
-				Requests: corev1.ResourceList{
-					"cpu":    k8sresource.MustParse("10m"),
-					"memory": k8sresource.MustParse("512Ki"),
-				},
-			},
-			VolumeMounts: []corev1.VolumeMount{
-				{
-					Name:      "minecraft-data-dir",
-					MountPath: serverDataDir,
-				},
-				{
-					Name:      "minecraft-config-dir",
-					MountPath: serverConfigDir,
-					ReadOnly:  true,
-				},
-			},
-		}},
+		InitContainers: b.getInitContainers(),
 		Containers: []corev1.Container{{
 			Image: "itzg/minecraft-server:latest",
 			Name:  "minecraft-server",
@@ -141,8 +106,93 @@ func (b *MinecraftServerPodBuilder) CanBeUpdated() bool {
 	return false
 }
 
+func (b *MinecraftServerPodBuilder) getInitContainers() []corev1.Container {
+	containers := []corev1.Container{{
+		Image:   "busybox:stable",
+		Name:    "init-server-fs",
+		Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", serverConfigDir)},
+		Env: []corev1.EnvVar{
+			{
+				Name:  "SHULKER_CONFIG_DIR",
+				Value: serverConfigDir,
+			},
+			{
+				Name:  "SHULKER_DATA_DIR",
+				Value: serverDataDir,
+			},
+		},
+		Resources: corev1.ResourceRequirements{
+			Limits: corev1.ResourceList{
+				"cpu":    k8sresource.MustParse("500m"),
+				"memory": k8sresource.MustParse("128Mi"),
+			},
+			Requests: corev1.ResourceList{
+				"cpu":    k8sresource.MustParse("10m"),
+				"memory": k8sresource.MustParse("512Ki"),
+			},
+		},
+		VolumeMounts: []corev1.VolumeMount{
+			{
+				Name:      "minecraft-data-dir",
+				MountPath: serverDataDir,
+			},
+			{
+				Name:      "minecraft-config-dir",
+				MountPath: serverConfigDir,
+				ReadOnly:  true,
+			},
+		},
+	}}
+
+	if b.Instance.Spec.World != nil && b.Instance.Spec.World.SchematicUrl != "" {
+		containers = append(containers, corev1.Container{
+			Image:   "curlimages/curl:latest",
+			Name:    "init-limbo-schematic",
+			Command: []string{"ash", fmt.Sprintf("%s/init-limbo-schematic.sh", serverConfigDir)},
+			Env: []corev1.EnvVar{
+				{
+					Name:  "SHULKER_CONFIG_DIR",
+					Value: serverConfigDir,
+				},
+				{
+					Name:  "SHULKER_DATA_DIR",
+					Value: serverDataDir,
+				},
+				{
+					Name:  "SHULKER_LIMBO_SCHEMATIC_URL",
+					Value: b.Instance.Spec.World.SchematicUrl,
+				},
+			},
+			Resources: corev1.ResourceRequirements{
+				Limits: corev1.ResourceList{
+					"cpu":    k8sresource.MustParse("500m"),
+					"memory": k8sresource.MustParse("128Mi"),
+				},
+				Requests: corev1.ResourceList{
+					"cpu":    k8sresource.MustParse("10m"),
+					"memory": k8sresource.MustParse("512Ki"),
+				},
+			},
+			VolumeMounts: []corev1.VolumeMount{
+				{
+					Name:      "minecraft-data-dir",
+					MountPath: serverDataDir,
+				},
+				{
+					Name:      "minecraft-config-dir",
+					MountPath: serverConfigDir,
+					ReadOnly:  true,
+				},
+			},
+		})
+	}
+
+	return containers
+}
+
 func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 	shouldEnforceWhitelist := len(b.Instance.Spec.WhitelistedPlayers) > 0
+	maxMemory := b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)
 
 	env := []corev1.EnvVar{
 		{
@@ -195,7 +245,7 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 		},
 		{
 			Name:  "MAX_MEMORY",
-			Value: fmt.Sprintf("%dM", b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)-1000),
+			Value: fmt.Sprintf("%dM", b.Instance.Spec.Resources.Limits.Memory().ScaledValue(resource.Mega)-256),
 		},
 		{
 			Name:  "ONLINE_MODE",
@@ -233,10 +283,19 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 	}
 
 	if b.Instance.Spec.World != nil {
-		env = append(env, corev1.EnvVar{
-			Name:  "WORLD",
-			Value: b.Instance.Spec.World.Url,
-		})
+		if b.Instance.Spec.World.Url != "" {
+			env = append(env, corev1.EnvVar{
+				Name:  "WORLD",
+				Value: b.Instance.Spec.World.Url,
+			})
+		}
+
+		if b.Instance.Spec.World.SchematicUrl != "" {
+			env = append(env, corev1.EnvVar{
+				Name:  "LIMBO_SCHEMA_FILENAME",
+				Value: "limbo.schematic",
+			})
+		}
 	}
 
 	env = append(env, b.Instance.Spec.PodOverrides.Env...)

@@ -47,6 +47,9 @@ type MinecraftServerSpec struct {
 	// this Minecraft Server to be part of a Minecraft Cluster.
 	ClusterRef *MinecraftClusterRef `json:"minecraftClusterRef"`
 
+	// List of tags identifying this Minecraft Server.
+	Tags []string `json:"tags,omitempty"`
+
 	// Version the Minecraft Server has to run.
 	//+kubebuilder:validation:Required
 	Version MinecraftServerVersionSpec `json:"version"`
@@ -54,7 +57,7 @@ type MinecraftServerSpec struct {
 	// Number of maximum players that can connect to the
 	// Minecraft Server.
 	//+kubebuilder:default=20
-	MaxPlayers *int64 `json:"maxPlayers,omitempty"`
+	MaxPlayers *int16 `json:"maxPlayers,omitempty"`
 
 	// Message to display when the players query the status
 	// of the Minecraft Server.
@@ -136,8 +139,11 @@ type MinecraftServerVersionSpec struct {
 
 type MinecraftServerWorldSpec struct {
 	// URL to a downloable world.
-	//+kubebuilder:validation:Required
 	Url string `json:"url,omitempty"`
+
+	// URL to a downloable schematic to use when running a Limbo
+	// server.
+	SchematicUrl string `json:"schematicUrl,omitempty"`
 
 	// Whether to allow the Minecraft Server to generate a Nether world
 	// and the players to enter it.

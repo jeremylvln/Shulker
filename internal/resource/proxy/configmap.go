@@ -72,21 +72,20 @@ func (b *ProxyDeploymentConfigMapBuilder) CanBeUpdated() bool {
 }
 
 type configYml struct {
-	// Servers   map[string]interface{} `yaml:"servers"`
 	Listeners []configListenerYml    `yaml:"listeners"`
 	Groups    map[string]interface{} `yaml:"groups"`
 }
 
 type configListenerYml struct {
-	Host       string `yaml:"host"`
-	QueryPort  int16  `yaml:"query_port"`
-	Motd       string `yaml:"motd"`
-	MaxPlayers int64  `yaml:"max_players"`
+	Host       string   `yaml:"host"`
+	QueryPort  int16    `yaml:"query_port"`
+	Motd       string   `yaml:"motd"`
+	MaxPlayers int64    `yaml:"max_players"`
+	Priorities []string `yaml:"priorities"`
 }
 
 func (b *ProxyDeploymentConfigMapBuilder) getConfigYmlFile() (string, error) {
 	configYml := configYml{
-		// Servers: map[string]interface{}{},
 		Listeners: []configListenerYml{{
 			Host:       "0.0.0.0:25577",
 			QueryPort:  int16(25577),

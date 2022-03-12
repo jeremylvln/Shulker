@@ -38,7 +38,14 @@ func (b *MinecraftServerConfigMapBuilder) Update(object client.Object) error {
 	configMapData["init-fs.sh"] = strings.Trim(`
 cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/;
 if [ -e "$SHULKER_CONFIG_DIR/server-icon.png" ]; then cat $SHULKER_CONFIG_DIR/server-icon.png | base64 -d > $SHULKER_DATA_DIR/server-icon.png; fi
+if [ ! -z "$SHULKER_LIMBO_SCHEMATIC_URL" ]; then wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL; fi
 	`, "\n ")
+
+	if b.Instance.Spec.World != nil && b.Instance.Spec.World.SchematicUrl != "" {
+		configMapData["init-limbo-schematic.sh"] = strings.Trim(`
+wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL
+	`, "\n ")
+	}
 
 	if b.Instance.Spec.ServerIcon != "" {
 		configMapData["server-icon.png"] = b.Instance.Spec.ServerIcon
