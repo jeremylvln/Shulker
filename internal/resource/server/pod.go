@@ -162,6 +162,10 @@ func (b *MinecraftServerPodBuilder) getInitContainers() []corev1.Container {
 					Name:  "SHULKER_LIMBO_SCHEMATIC_URL",
 					Value: b.Instance.Spec.World.SchematicUrl,
 				},
+				{
+					Name:  "SHULKER_LIMBO_WORLD_SPAWN",
+					Value: b.Instance.Spec.World.SchematicWorldSpawn,
+				},
 			},
 			Resources: corev1.ResourceRequirements{
 				Limits: corev1.ResourceList{
@@ -250,6 +254,10 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 			Name:  "ONLINE_MODE",
 			Value: strconv.FormatBool(b.Instance.Spec.ClusterRef == nil),
 		},
+		{
+			Name:  "OVERRIDE_SERVER_PROPERTIES",
+			Value: "true",
+		},
 	}
 
 	if b.Instance.Spec.Rcon.Enabled {
@@ -290,10 +298,16 @@ func (b *MinecraftServerPodBuilder) getPodEnv() []corev1.EnvVar {
 		}
 
 		if b.Instance.Spec.World.SchematicUrl != "" {
-			env = append(env, corev1.EnvVar{
-				Name:  "LIMBO_SCHEMA_FILENAME",
-				Value: "limbo.schematic",
-			})
+			env = append(env, []corev1.EnvVar{
+				{
+					Name:  "LIMBO_SCHEMA_FILENAME",
+					Value: "limbo.schematic",
+				},
+				{
+					Name:  "LEVEL",
+					Value: "world;limbo.schematic",
+				},
+			}...)
 		}
 	}
 

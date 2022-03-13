@@ -1196,6 +1196,10 @@ spec:
                     description: URL to a downloable schematic to use when running
                       a Limbo server.
                     type: string
+                  schematicWorldSpawn:
+                    description: World spawn coordinates of the schematic world when
+                      running a Limbo server.
+                    type: string
                   url:
                     description: URL to a downloable world.
                     type: string

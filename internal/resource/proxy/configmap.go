@@ -72,30 +72,32 @@ func (b *ProxyDeploymentConfigMapBuilder) CanBeUpdated() bool {
 }
 
 type configYml struct {
-	Listeners []configListenerYml    `yaml:"listeners"`
-	Groups    map[string]interface{} `yaml:"groups"`
+	Listeners               []configListenerYml    `yaml:"listeners"`
+	Groups                  map[string]interface{} `yaml:"groups"`
+	IpForward               bool                   `yaml:"ip_forward"`
+	PreventProxyConnections bool                   `yaml:"prevent_proxy_connections"`
 }
 
 type configListenerYml struct {
-	Host               string   `yaml:"host"`
-	QueryPort          int16    `yaml:"query_port"`
-	Motd               string   `yaml:"motd"`
-	MaxPlayers         int64    `yaml:"max_players"`
-	ForceDefaultServer bool     `yaml:"force_default_server"`
-	Priorities         []string `yaml:"priorities"`
+	Host       string   `yaml:"host"`
+	QueryPort  int16    `yaml:"query_port"`
+	Motd       string   `yaml:"motd"`
+	MaxPlayers int64    `yaml:"max_players"`
+	Priorities []string `yaml:"priorities"`
 }
 
 func (b *ProxyDeploymentConfigMapBuilder) getConfigYmlFile() (string, error) {
 	configYml := configYml{
 		Listeners: []configListenerYml{{
-			Host:               "0.0.0.0:25577",
-			QueryPort:          int16(25577),
-			Motd:               b.Instance.Spec.Motd,
-			MaxPlayers:         *b.Instance.Spec.MaxPlayers,
-			ForceDefaultServer: true,
-			Priorities:         []string{"lobby"},
+			Host:       "0.0.0.0:25577",
+			QueryPort:  int16(25577),
+			Motd:       b.Instance.Spec.Motd,
+			MaxPlayers: *b.Instance.Spec.MaxPlayers,
+			Priorities: []string{"lobby"},
 		}},
-		Groups: map[string]interface{}{},
+		Groups:                  map[string]interface{}{},
+		IpForward:               true,
+		PreventProxyConnections: true,
 	}
 
 	out, err := yaml.Marshal(&configYml)

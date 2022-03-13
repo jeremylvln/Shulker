@@ -32,7 +32,7 @@ func (b *MinecraftClusterLimboMinecraftServerBuilder) Build() (client.Object, er
 func (b *MinecraftClusterLimboMinecraftServerBuilder) Update(object client.Object) error {
 	minecraftServer := object.(*shulkermciov1alpha1.MinecraftServer)
 
-	maxPlayers := int16(300)
+	maxPlayers := int16(-1)
 
 	minecraftServer.Spec = shulkermciov1alpha1.MinecraftServerSpec{
 		ClusterRef: &shulkermciov1alpha1.MinecraftClusterRef{
@@ -45,7 +45,8 @@ func (b *MinecraftClusterLimboMinecraftServerBuilder) Update(object client.Objec
 		},
 		MaxPlayers: &maxPlayers,
 		World: &shulkermciov1alpha1.MinecraftServerWorldSpec{
-			SchematicUrl: "https://i.jeremylvln.fr/shulker/limbo.schematic",
+			SchematicUrl:        "https://i.jeremylvln.fr/shulker/limbo.schematic",
+			SchematicWorldSpawn: "13.5;3;8.5;0;0",
 		},
 		PodOverrides: &shulkermciov1alpha1.MinecraftServerPodOverridesSpec{
 			LivenessProbe: &shulkermciov1alpha1.MinecraftServerPodProbeSpec{

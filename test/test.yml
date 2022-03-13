@@ -59,39 +59,7 @@ spec:
     name: test
   version:
     channel: Spigot
-    name: 1.18.1
-  operators:
-    - IamBlueSlime
-  whitelistedPlayers:
-    - IamBlueSlime
-  world:
-    url: https://i.jeremylvln.fr/shulker/hub.tar.gz
-    disableNether: true
-    disableEnd: true
-  rcon:
-    enabled: true
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 10
-          preference:
-            matchExpressions:
-              - key: cloud.google.com/gke-preemptible
-                operator: In
-                values:
-                  - 'true'
-
----
-apiVersion: shulkermc.io/v1alpha1
-kind: MinecraftServer
-metadata:
-  name: hub-2
-spec:
-  minecraftClusterRef:
-    name: test
-  version:
-    channel: Spigot
-    name: 1.18.1
+    name: 1.18.2
   operators:
     - IamBlueSlime
   whitelistedPlayers:

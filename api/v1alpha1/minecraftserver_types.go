@@ -145,6 +145,10 @@ type MinecraftServerWorldSpec struct {
 	// server.
 	SchematicUrl string `json:"schematicUrl,omitempty"`
 
+	// World spawn coordinates of the schematic world when running
+	// a Limbo server.
+	SchematicWorldSpawn string `json:"schematicWorldSpawn,omitempty"`
+
 	// Whether to allow the Minecraft Server to generate a Nether world
 	// and the players to enter it.
 	//+kubebuilder:default=false

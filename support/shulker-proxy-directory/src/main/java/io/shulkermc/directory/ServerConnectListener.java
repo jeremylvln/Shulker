@@ -14,12 +14,12 @@ import java.util.Optional;
 
 public class ServerConnectListener implements Listener {
     private static final BaseComponent[] MSG_NO_LIMBO_FOUND = new ComponentBuilder()
+            .append("◆ Shulker ◆\n")
             .color(ChatColor.LIGHT_PURPLE)
             .bold(true)
-            .append("-[ Shulker ]-\n")
+            .append("No limbo server found, please check your cluster configuration.")
             .color(ChatColor.RED)
             .bold(false)
-            .append("No limbo server found, please check your cluster\nconfiguration.")
             .create();
 
     private final ShulkerProxyDirectory plugin;
@@ -32,7 +32,6 @@ public class ServerConnectListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerConnect(ServerConnectEvent event) {
-        this.plugin.getLogger().info(event.getTarget().getName());
         if (!event.getTarget().getName().equals("lobby")) {
             return;
         }

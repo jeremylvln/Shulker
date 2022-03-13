@@ -43,7 +43,13 @@ if [ ! -z "$SHULKER_LIMBO_SCHEMATIC_URL" ]; then wget -O $SHULKER_DATA_DIR/limbo
 
 	if b.Instance.Spec.World != nil && b.Instance.Spec.World.SchematicUrl != "" {
 		configMapData["init-limbo-schematic.sh"] = strings.Trim(`
-wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL
+wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL;
+echo "bungeecord=true" >> $SHULKER_DATA_DIR/server.properties
+echo "default-gamemode=adventure" >> $SHULKER_DATA_DIR/server.properties
+echo "world-spawn=world;${SHULKER_LIMBO_WORLD_SPAWN}" >> $SHULKER_DATA_DIR/server.properties
+echo "level-dimension=minecraft:the_end" >> $SHULKER_DATA_DIR/server.properties
+echo "allow-chat=false" >> $SHULKER_DATA_DIR/server.properties
+echo "handshake-verbose=false" >> $SHULKER_DATA_DIR/server.properties
 	`, "\n ")
 	}
 
@@ -58,6 +64,12 @@ wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL
 		return err
 	}
 	configMapData["bukkit.yml"] = bukkitYml
+
+	spigotYml, err := b.getSpigotYmlFile()
+	if err != nil {
+		return err
+	}
+	configMapData["spigot.yml"] = spigotYml
 
 	configMap.Data = configMapData
 
@@ -88,6 +100,47 @@ func (b *MinecraftServerConfigMapBuilder) getBukkitYmlFile() (string, error) {
 	}
 
 	out, err := yaml.Marshal(&bukkitYml)
+	if err != nil {
+		return "", err
+	}
+
+	return string(out), nil
+}
+
+type spigotYml struct {
+	Settings     spigotSettingsYml `yaml:"settings"`
+	Advancements spigotSaveableYml `yaml:"advancements"`
+	Players      spigotSaveableYml `yaml:"players"`
+	Stats        spigotSaveableYml `yaml:"stats"`
+}
+
+type spigotSettingsYml struct {
+	BungeeCord     bool `yaml:"bungeecord"`
+	RestartOnCrash bool `yaml:"restart-on-crash"`
+}
+
+type spigotSaveableYml struct {
+	DisableSaving bool `yaml:"disable-saving"`
+}
+
+func (b *MinecraftServerConfigMapBuilder) getSpigotYmlFile() (string, error) {
+	spigotYml := spigotYml{
+		Settings: spigotSettingsYml{
+			BungeeCord:     true,
+			RestartOnCrash: false,
+		},
+		Advancements: spigotSaveableYml{
+			DisableSaving: true,
+		},
+		Players: spigotSaveableYml{
+			DisableSaving: true,
+		},
+		Stats: spigotSaveableYml{
+			DisableSaving: true,
+		},
+	}
+
+	out, err := yaml.Marshal(&spigotYml)
 	if err != nil {
 		return "", err
 	}
