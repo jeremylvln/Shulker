@@ -91,7 +91,7 @@ public class ShulkerProxyDirectory extends Plugin {
 
         Map<String, List<String>> serversPerTag = new HashMap<>();
         reducedSubsets.entrySet().parallelStream()
-                .filter((entry) -> entry.getKey().contains("-limbo-"))
+                .filter((entry) -> entry.getKey().startsWith("limbo-"))
                 .forEach((entry) -> {
                     serversPerTag.putIfAbsent("limbo", new ArrayList<>());
                     serversPerTag.get("limbo").add(entry.getKey());

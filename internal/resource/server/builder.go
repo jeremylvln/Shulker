@@ -55,7 +55,7 @@ func (b *MinecraftServerDeploymentResourceBuilder) GetPodSelector() *metav1.Labe
 }
 
 func (b *MinecraftServerDeploymentResourceBuilder) getLabels() map[string]string {
-	labels := map[string]string{
+	return map[string]string{
 		"app.kubernetes.io/name":                      b.Instance.Name,
 		"app.kubernetes.io/component":                 "minecraft-server",
 		"app.kubernetes.io/part-of":                   b.Instance.Spec.ClusterRef.Name,
@@ -63,10 +63,4 @@ func (b *MinecraftServerDeploymentResourceBuilder) getLabels() map[string]string
 		"minecraftcluster.shulkermc.io/name":          b.Instance.Spec.ClusterRef.Name,
 		"minecraftserverdeployment.shulkermc.io/name": b.Instance.Name,
 	}
-
-	for _, tag := range b.Instance.Spec.Tags {
-		labels[fmt.Sprintf("minecraftserverdeployment.shulkermc.io/tag-%s", tag)] = "true"
-	}
-
-	return labels
 }
