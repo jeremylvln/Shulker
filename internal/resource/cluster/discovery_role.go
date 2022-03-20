@@ -40,7 +40,7 @@ func (b *MinecraftClusterDiscoveryRoleBuilder) Update(object client.Object) erro
 			APIGroups:     []string{""},
 			Resources:     []string{"services", "endpoints"},
 			Verbs:         []string{"get", "watch"},
-			ResourceNames: []string{b.getProxyDiscoveryServiceName(), b.getServerDiscoveryServiceName()},
+			ResourceNames: []string{b.getProxyDiscoveryServiceName(), b.getServerDiscoveryServiceName(), b.getServerLobbyDiscoveryServiceName()},
 		},
 	}
 
