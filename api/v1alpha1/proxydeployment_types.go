@@ -68,12 +68,15 @@ type ProxyDeploymentSpec struct {
 	// Server icon image in base64 format.
 	ServerIcon string `json:"serverIcon,omitempty"`
 
+	// A list of download URLs for plugins.
+	Plugins []string `json:"plugins,omitempty"`
+
 	// The desired state of the Kubernetes Service to create for the
 	// Proxy Deployment.
 	//+kubebuilder:default={enabled: true, type: "LoadBalancer"}
 	Service *ProxyDeploymentServiceSpec `json:"service,omitempty"`
 
-	// Overrides configuration for the Proxy Deployment pod.
+	// Overrides configuration for the Proxy Deployment pods.
 	//+kubebuilder:default={livenessProbe: {initialDelaySeconds: 15}, readinessProbe: {initialDelaySeconds: 15}, terminationGracePeriodSeconds: 3600}
 	PodOverrides *ProxyDeploymentPodOverridesSpec `json:"podOverrides,omitempty"`
 

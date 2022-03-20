@@ -70,12 +70,12 @@ func (b *ProxyDeploymentResourceBuilder) GetPodSelector() *metav1.LabelSelector 
 
 func (b *ProxyDeploymentResourceBuilder) getLabels() map[string]string {
 	labels := map[string]string{
-		"app.kubernetes.io/name":                  b.Instance.Name,
-		"app.kubernetes.io/component":             "proxy",
-		"app.kubernetes.io/part-of":               "shulker",
-		"app.kubernetes.io/created-by":            "shulker",
-		"proxydeployment.shulker.io/name":         b.Instance.Name,
-		"proxydeployment.shulker.io/cluster-name": b.Instance.Spec.ClusterRef.Name,
+		"app.kubernetes.io/name":             b.Instance.Name,
+		"app.kubernetes.io/component":        "proxy",
+		"app.kubernetes.io/part-of":          b.Instance.Spec.ClusterRef.Name,
+		"app.kubernetes.io/created-by":       "shulker-operator",
+		"minecraftcluster.shulkermc.io/name": b.Instance.Spec.ClusterRef.Name,
+		"proxydeployment.shulkermc.io/name":  b.Instance.Name,
 	}
 
 	return labels

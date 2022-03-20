@@ -8,37 +8,6 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - configmaps
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - services
   verbs:
   - create
@@ -86,7 +55,7 @@ rules:
 - apiGroups:
   - shulkermc.io
   resources:
-  - minecraftservers
+  - minecraftserverdeployments
   verbs:
   - create
   - delete
@@ -98,17 +67,25 @@ rules:
 - apiGroups:
   - shulkermc.io
   resources:
-  - minecraftservers/finalizers
+  - minecraftserverdeployments/finalizers
   verbs:
   - update
 - apiGroups:
   - shulkermc.io
   resources:
-  - minecraftservers/status
+  - minecraftserverdeployments/status
   verbs:
   - get
   - patch
   - update
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - minecraftservers
+  verbs:
+  - get
+  - list
+  - watch
 - apiGroups:
   - shulkermc.io
   resources:

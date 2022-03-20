@@ -3,20 +3,23 @@ package resource
 import (
 	"fmt"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
 	common "shulkermc.io/m/v2/internal/resource"
 )
 
-type MinecraftServerResourceBuilder struct {
-	Instance *shulkermciov1alpha1.MinecraftServer
+type MinecraftServerDeploymentResourceBuilder struct {
+	Instance *shulkermciov1alpha1.MinecraftServerDeployment
+	Cluster  *shulkermciov1alpha1.MinecraftCluster
 	Scheme   *runtime.Scheme
 }
 
-func (b *MinecraftServerResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder, []common.ResourceBuilder) {
+func (b *MinecraftServerDeploymentResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder, []common.ResourceBuilder) {
 	builders := []common.ResourceBuilder{
-		b.MinecraftServerPod(),
-		b.MinecraftServerConfigMap(),
+		b.MinecraftServerDeploymentDeployment(),
+		b.MinecraftServerDeploymentConfigMap(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
@@ -26,50 +29,43 @@ func (b *MinecraftServerResourceBuilder) ResourceBuilders() ([]common.ResourceBu
 		dirtyBuilders = append(dirtyBuilders, b.MinecraftServerRconSecret())
 	}
 
-	if b.Instance.Spec.Service.Enabled {
-		builders = append(builders, b.MinecraftServerService())
-	} else {
-		dirtyBuilders = append(dirtyBuilders, b.MinecraftServerService())
-	}
-
 	return builders, dirtyBuilders
 }
 
-func (b *MinecraftServerResourceBuilder) getResourcePrefix() string {
-	if b.Instance.Spec.ClusterRef != nil {
-		return b.Instance.Spec.ClusterRef.Name
-	} else {
-		return "minecraft"
-	}
+func (b *MinecraftServerDeploymentResourceBuilder) getResourcePrefix() string {
+	return b.Instance.Spec.ClusterRef.Name
 }
 
-func (b *MinecraftServerResourceBuilder) GetPodName() string {
+func (b *MinecraftServerDeploymentResourceBuilder) GetDeploymentName() string {
 	return fmt.Sprintf("%s-server-%s", b.getResourcePrefix(), b.Instance.Name)
 }
 
-func (b *MinecraftServerResourceBuilder) getConfigMapName() string {
+func (b *MinecraftServerDeploymentResourceBuilder) getConfigMapName() string {
 	return fmt.Sprintf("%s-server-config-%s", b.getResourcePrefix(), b.Instance.Name)
 }
 
-func (b *MinecraftServerResourceBuilder) getRconSecretName() string {
+func (b *MinecraftServerDeploymentResourceBuilder) getRconSecretName() string {
 	return fmt.Sprintf("%s-server-rcon-secret-%s", b.getResourcePrefix(), b.Instance.Name)
 }
 
-func (b *MinecraftServerResourceBuilder) getServiceName() string {
-	return fmt.Sprintf("%s-server-%s", b.getResourcePrefix(), b.Instance.Name)
+func (b *MinecraftServerDeploymentResourceBuilder) GetPodSelector() *metav1.LabelSelector {
+	return &metav1.LabelSelector{
+		MatchLabels: b.getLabels(),
+	}
 }
 
-func (b *MinecraftServerResourceBuilder) getLabels() map[string]string {
+func (b *MinecraftServerDeploymentResourceBuilder) getLabels() map[string]string {
 	labels := map[string]string{
-		"app.kubernetes.io/name":          b.Instance.Name,
-		"app.kubernetes.io/component":     "minecraft-server",
-		"app.kubernetes.io/part-of":       "shulker",
-		"app.kubernetes.io/created-by":    "shulker",
-		"minecraftserver.shulker.io/name": b.Instance.Name,
+		"app.kubernetes.io/name":                      b.Instance.Name,
+		"app.kubernetes.io/component":                 "minecraft-server",
+		"app.kubernetes.io/part-of":                   b.Instance.Spec.ClusterRef.Name,
+		"app.kubernetes.io/created-by":                "shulker-operator",
+		"minecraftcluster.shulkermc.io/name":          b.Instance.Spec.ClusterRef.Name,
+		"minecraftserverdeployment.shulkermc.io/name": b.Instance.Name,
 	}
 
-	if b.Instance.Spec.ClusterRef != nil {
-		labels["minecraftserver.shulker.io/cluster-name"] = b.Instance.Spec.ClusterRef.Name
+	for _, tag := range b.Instance.Spec.Tags {
+		labels[fmt.Sprintf("minecraftserverdeployment.shulkermc.io/tag-%s", tag)] = "true"
 	}
 
 	return labels

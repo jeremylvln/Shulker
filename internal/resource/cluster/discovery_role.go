@@ -9,38 +9,38 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-type MinecraftClusterRoleBuilder struct {
+type MinecraftClusterDiscoveryRoleBuilder struct {
 	*MinecraftClusterResourceBuilder
 }
 
-func (b *MinecraftClusterResourceBuilder) MinecraftClusterRole() *MinecraftClusterRoleBuilder {
-	return &MinecraftClusterRoleBuilder{b}
+func (b *MinecraftClusterResourceBuilder) MinecraftClusterDiscoveryRole() *MinecraftClusterDiscoveryRoleBuilder {
+	return &MinecraftClusterDiscoveryRoleBuilder{b}
 }
 
-func (b *MinecraftClusterRoleBuilder) Build() (client.Object, error) {
+func (b *MinecraftClusterDiscoveryRoleBuilder) Build() (client.Object, error) {
 	return &rbacv1.Role{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      b.getRoleName(),
+			Name:      b.getDiscoveryRoleName(),
 			Namespace: b.Instance.Namespace,
 			Labels:    b.getLabels(),
 		},
 	}, nil
 }
 
-func (b *MinecraftClusterRoleBuilder) Update(object client.Object) error {
+func (b *MinecraftClusterDiscoveryRoleBuilder) Update(object client.Object) error {
 	role := object.(*rbacv1.Role)
 
 	role.Rules = []rbacv1.PolicyRule{
 		{
-			APIGroups: []string{"shulkermc.io"},
-			Resources: []string{"minecraftclusters"},
+			APIGroups: []string{""},
+			Resources: []string{"services", "endpoints"},
 			Verbs:     []string{"list"},
 		},
 		{
-			APIGroups:     []string{"shulkermc.io"},
-			Resources:     []string{"minecraftclusters", "minecraftclusters/status", "minecraftclusters/pool"},
+			APIGroups:     []string{""},
+			Resources:     []string{"services", "endpoints"},
 			Verbs:         []string{"get", "watch"},
-			ResourceNames: []string{b.Instance.Name},
+			ResourceNames: []string{b.getProxyDiscoveryServiceName(), b.getServerDiscoveryServiceName()},
 		},
 	}
 
@@ -51,6 +51,6 @@ func (b *MinecraftClusterRoleBuilder) Update(object client.Object) error {
 	return nil
 }
 
-func (b *MinecraftClusterRoleBuilder) CanBeUpdated() bool {
+func (b *MinecraftClusterDiscoveryRoleBuilder) CanBeUpdated() bool {
 	return true
 }

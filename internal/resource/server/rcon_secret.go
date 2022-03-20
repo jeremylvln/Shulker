@@ -10,15 +10,15 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-type MinecraftServerRconSecretBuilder struct {
-	*MinecraftServerResourceBuilder
+type MinecraftServerDeploymentRconSecretBuilder struct {
+	*MinecraftServerDeploymentResourceBuilder
 }
 
-func (b *MinecraftServerResourceBuilder) MinecraftServerRconSecret() *MinecraftServerRconSecretBuilder {
-	return &MinecraftServerRconSecretBuilder{b}
+func (b *MinecraftServerDeploymentResourceBuilder) MinecraftServerRconSecret() *MinecraftServerDeploymentRconSecretBuilder {
+	return &MinecraftServerDeploymentRconSecretBuilder{b}
 }
 
-func (b *MinecraftServerRconSecretBuilder) Build() (client.Object, error) {
+func (b *MinecraftServerDeploymentRconSecretBuilder) Build() (client.Object, error) {
 	return &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      b.getRconSecretName(),
@@ -32,7 +32,7 @@ func (b *MinecraftServerRconSecretBuilder) Build() (client.Object, error) {
 	}, nil
 }
 
-func (b *MinecraftServerRconSecretBuilder) Update(object client.Object) error {
+func (b *MinecraftServerDeploymentRconSecretBuilder) Update(object client.Object) error {
 	secret := object.(*corev1.Secret)
 
 	if err := controllerutil.SetControllerReference(b.Instance, secret, b.Scheme); err != nil {
@@ -42,7 +42,7 @@ func (b *MinecraftServerRconSecretBuilder) Update(object client.Object) error {
 	return nil
 }
 
-func (b *MinecraftServerRconSecretBuilder) CanBeUpdated() bool {
+func (b *MinecraftServerDeploymentRconSecretBuilder) CanBeUpdated() bool {
 	return true
 }
 

@@ -27,7 +27,7 @@ func (b *ProxyDeploymentRoleBindingBuilder) Build() (client.Object, error) {
 		RoleRef: rbacv1.RoleRef{
 			APIGroup: "rbac.authorization.k8s.io",
 			Kind:     "Role",
-			Name:     fmt.Sprintf("%s-cluster-watch", b.Cluster.Name),
+			Name:     fmt.Sprintf("%s-discovery", b.Cluster.Name),
 		},
 	}, nil
 }

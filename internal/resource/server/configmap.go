@@ -13,15 +13,15 @@ import (
 
 const defaultServerIcon = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEUAAABSNGCrhKqXaZdsSGtDJlCEUomPY4/////HT7OpAAAACXRSTlMA//////////83ApvUAAAAh0lEQVRYhe3Qyw6AIAxEURTQ//9jmYQmE1IeWwbvytD2LAzhb9JFnQTw0U0tIxsD3lGkUmmIbA7wYRwEJJdUgac0A7qIEDBCEqUKYMlDkpMqgENG8MZHb00ZQBgYYoAdYmZvqoA94tsOsNzOVAHUA3hZHfCW2uVc6x4fACwlABiy9MOEgaP6APk1HDGFXeaaAAAAAElFTkSuQmCC"
 
-type MinecraftServerConfigMapBuilder struct {
-	*MinecraftServerResourceBuilder
+type MinecraftServerDeploymentConfigMapBuilder struct {
+	*MinecraftServerDeploymentResourceBuilder
 }
 
-func (b *MinecraftServerResourceBuilder) MinecraftServerConfigMap() *MinecraftServerConfigMapBuilder {
-	return &MinecraftServerConfigMapBuilder{b}
+func (b *MinecraftServerDeploymentResourceBuilder) MinecraftServerDeploymentConfigMap() *MinecraftServerDeploymentConfigMapBuilder {
+	return &MinecraftServerDeploymentConfigMapBuilder{b}
 }
 
-func (b *MinecraftServerConfigMapBuilder) Build() (client.Object, error) {
+func (b *MinecraftServerDeploymentConfigMapBuilder) Build() (client.Object, error) {
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      b.getConfigMapName(),
@@ -31,7 +31,7 @@ func (b *MinecraftServerConfigMapBuilder) Build() (client.Object, error) {
 	}, nil
 }
 
-func (b *MinecraftServerConfigMapBuilder) Update(object client.Object) error {
+func (b *MinecraftServerDeploymentConfigMapBuilder) Update(object client.Object) error {
 	configMap := object.(*corev1.ConfigMap)
 	configMapData := make(map[string]string)
 
@@ -40,6 +40,12 @@ cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/;
 if [ -e "$SHULKER_CONFIG_DIR/server-icon.png" ]; then cat $SHULKER_CONFIG_DIR/server-icon.png | base64 -d > $SHULKER_DATA_DIR/server-icon.png; fi
 if [ ! -z "$SHULKER_LIMBO_SCHEMATIC_URL" ]; then wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL; fi
 	`, "\n ")
+
+	configMapData["init-plugins.sh"] = strings.Trim(`
+mkdir -p $SHULKER_DATA_DIR/plugins
+plugins=$(echo "$SHULKER_PLUGINS_URL" | tr ';' ' ')
+for plugin in $plugins; do cd $SHULKER_DATA_DIR/plugins && curl -L -O $plugin; done
+		`, "\n ")
 
 	if b.Instance.Spec.World != nil && b.Instance.Spec.World.SchematicUrl != "" {
 		configMapData["init-limbo-schematic.sh"] = strings.Trim(`
@@ -80,7 +86,7 @@ echo "handshake-verbose=false" >> $SHULKER_DATA_DIR/server.properties
 	return nil
 }
 
-func (b *MinecraftServerConfigMapBuilder) CanBeUpdated() bool {
+func (b *MinecraftServerDeploymentConfigMapBuilder) CanBeUpdated() bool {
 	return true
 }
 
@@ -92,7 +98,7 @@ type bukkitYmlSettings struct {
 	AllowEnd bool `yaml:"allow-end"`
 }
 
-func (b *MinecraftServerConfigMapBuilder) getBukkitYmlFile() (string, error) {
+func (b *MinecraftServerDeploymentConfigMapBuilder) getBukkitYmlFile() (string, error) {
 	bukkitYml := bukkitYml{
 		Settings: bukkitYmlSettings{
 			AllowEnd: !b.Instance.Spec.World.DisableEnd,
@@ -123,7 +129,7 @@ type spigotSaveableYml struct {
 	DisableSaving bool `yaml:"disable-saving"`
 }
 
-func (b *MinecraftServerConfigMapBuilder) getSpigotYmlFile() (string, error) {
+func (b *MinecraftServerDeploymentConfigMapBuilder) getSpigotYmlFile() (string, error) {
 	spigotYml := spigotYml{
 		Settings: spigotSettingsYml{
 			BungeeCord:     true,

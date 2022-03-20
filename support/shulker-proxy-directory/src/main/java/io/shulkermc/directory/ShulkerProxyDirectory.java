@@ -1,9 +1,8 @@
 package io.shulkermc.directory;
 
+import io.fabric8.kubernetes.api.model.EndpointSubset;
+import io.fabric8.kubernetes.api.model.Endpoints;
 import io.fabric8.kubernetes.client.*;
-import io.shulkermc.models.MinecraftCluster;
-import io.shulkermc.models.MinecraftClusterList;
-import io.shulkermc.models.MinecraftClusterStatus;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -15,12 +14,10 @@ import java.util.stream.Collectors;
 
 public class ShulkerProxyDirectory extends Plugin {
     private final ProxyServer proxyServer;
-    private Map<String, MinecraftClusterStatus.ServerPoolEntry> serverPool;
     private Map<String, List<String>> serversPerTag;
 
     public ShulkerProxyDirectory() {
         this.proxyServer = ProxyServer.getInstance();
-        this.serverPool = new HashMap<>();
         this.serversPerTag = new HashMap<>();
     }
 
@@ -43,18 +40,28 @@ public class ShulkerProxyDirectory extends Plugin {
         this.getLogger().info(String.format("Shulker cluster is \"%s/%s\"", shulkerClusterNamespace, shulkerClusterName));
 
         KubernetesClient kubernetesClient = new DefaultKubernetesClient();
-        var minecraftClusterClient = kubernetesClient.customResources(MinecraftCluster.class, MinecraftClusterList.class);
-        var minecraftClusterTarget = minecraftClusterClient.inNamespace(shulkerClusterNamespace).withName(shulkerClusterName);
+        var endpointsClient = kubernetesClient.endpoints().inNamespace(shulkerClusterNamespace);
+        var endpointsServerTarget = endpointsClient.withName(String.format("%s-server-discovery", shulkerClusterName));
+        var endpointsLobbyTarget = endpointsClient.withName(String.format("%s-server-lobby-discovery", shulkerClusterName));
 
-        minecraftClusterTarget.watch(new Watcher<>() {
+        endpointsServerTarget.watch(new Watcher<>() {
             @Override
-            public void eventReceived(Action action, MinecraftCluster cluster) {
+            public void eventReceived(Action action, Endpoints endpoints) {
                 if (action != Action.MODIFIED) return;
+                ShulkerProxyDirectory.this.updateServerDirectory(endpoints.getSubsets());
+            }
 
-                MinecraftClusterStatus status = cluster.getStatus();
-                if (status == null) return;
+            @Override
+            public void onClose(WatcherException cause) {
+                cause.asClientException().printStackTrace();
+            }
+        });
 
-                ShulkerProxyDirectory.this.updateServerDirectory(status.getServerPool());
+        endpointsLobbyTarget.watch(new Watcher<>() {
+            @Override
+            public void eventReceived(Action action, Endpoints endpoints) {
+                if (action != Action.MODIFIED) return;
+                ShulkerProxyDirectory.this.updateLobbyDirectory(endpoints.getSubsets());
             }
 
             @Override
@@ -64,7 +71,8 @@ public class ShulkerProxyDirectory extends Plugin {
         });
 
         try {
-            this.updateServerDirectory(minecraftClusterTarget.get().getStatus().getServerPool());
+            this.updateServerDirectory(endpointsServerTarget.get().getSubsets());
+            this.updateLobbyDirectory(endpointsLobbyTarget.get().getSubsets());
         } catch (KubernetesClientException ex) {
             this.getLogger().severe("Failed to synchronize server directory");
             ex.printStackTrace();
@@ -77,38 +85,46 @@ public class ShulkerProxyDirectory extends Plugin {
         return Optional.ofNullable(this.serversPerTag.get(tag));
     }
 
-    private synchronized void updateServerDirectory(List<MinecraftClusterStatus.ServerPoolEntry> serverPool) {
-        Map<String, ServerInfo> proxyServers = this.proxyServer.getServers();
-
+    private void updateServerDirectory(List<EndpointSubset> subsets) {
         this.getLogger().info("Updating server directory");
 
-        List<String> serverPoolNames = serverPool.parallelStream()
-                .map(MinecraftClusterStatus.ServerPoolEntry::getName).toList();
+        Map<String, String> reducedSubsets = reduceEndpointSubsetsToServerMap(subsets);
+        Map<String, ServerInfo> proxyServers = this.proxyServer.getServers();
 
         new HashSet<>(proxyServers.keySet()).stream()
-                .filter((serverName) -> !serverName.equals("lobby") && !serverPoolNames.contains(serverName))
+                .filter((serverName) -> !serverName.equals("lobby") && !reducedSubsets.containsKey(serverName))
                 .peek((serverName) -> this.getLogger().info(String.format("Removing server %s from directory", serverName)))
                 .forEach(proxyServers::remove);
 
-        serverPool.stream()
-                .filter((server) -> server != null && server.getName() != null && server.getAddress() != null && !proxyServers.containsKey(server.getName()))
-                .map((server) -> {
-                    InetSocketAddress socketAddress = new InetSocketAddress(server.getAddress(), 25565);
-                    return this.proxyServer.constructServerInfo(server.getName(), socketAddress, null, false);
+        reducedSubsets.entrySet().stream()
+                .map((entry) -> {
+                    InetSocketAddress socketAddress = new InetSocketAddress(entry.getValue(), 25565);
+                    return this.proxyServer.constructServerInfo(entry.getKey(), socketAddress, null, false);
                 })
                 .peek((serverInfo) -> this.getLogger().info(String.format("Adding server %s (%s) to directory", serverInfo.getName(), serverInfo.getSocketAddress())))
                 .forEach((serverInfo) -> proxyServers.put(serverInfo.getName(), serverInfo));
+    }
 
-        this.serverPool = serverPool.parallelStream()
-                .collect(Collectors.toMap(MinecraftClusterStatus.ServerPoolEntry::getName, (serverEntry) -> serverEntry));
-
+    private void updateLobbyDirectory(List<EndpointSubset> subsets) {
+        Map<String, String> reducedSubsets = reduceEndpointSubsetsToServerMap(subsets);
         Map<String, List<String>> serversPerTag = new HashMap<>();
-        serverPool.parallelStream()
-                .flatMap((serverEntry) -> serverEntry.getTags().stream().map((tag) -> Pair.of(tag, serverEntry)))
-                .forEach((pair) -> {
-                    serversPerTag.putIfAbsent(pair.getKey(), new ArrayList<>());
-                    serversPerTag.get(pair.getKey()).add(pair.getValue().getName());
+
+        reducedSubsets.entrySet().parallelStream()
+                .forEach((entry) -> {
+                    serversPerTag.putIfAbsent("lobby", new ArrayList<>());
+                    serversPerTag.get("lobby").add(entry.getKey());
                 });
+
         this.serversPerTag = serversPerTag;
+    }
+
+    private static Map<String, String> reduceEndpointSubsetsToServerMap(List<EndpointSubset> subsets) {
+        return subsets.parallelStream()
+                .flatMap(subset -> subset.getAddresses().parallelStream().map((address) -> Pair.of(address.getTargetRef().getName(), address.getIp())))
+                .map((pair) -> {
+                    String[] parts = pair.getLeft().split("-");
+                    return Pair.of(String.format("%s-%s-%s", parts[2], parts[3], parts[4]), pair.getRight());
+                })
+                .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
     }
 }

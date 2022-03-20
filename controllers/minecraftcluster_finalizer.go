@@ -26,11 +26,11 @@ import (
 	shulkermciov1alpha1 "shulkermc.io/m/v2/api/v1alpha1"
 )
 
-const clusterDeletionFinalizer = "deletion.finalizers.minecraftclusters.shulkermc.io"
+const minecraftClusterDeletionFinalizer = "deletion.finalizers.minecraftclusters.shulkermc.io"
 
 func (r *MinecraftClusterReconciler) addFinalizerIfNeeded(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) error {
-	if minecraftCluster.ObjectMeta.DeletionTimestamp.IsZero() && !controllerutil.ContainsFinalizer(minecraftCluster, clusterDeletionFinalizer) {
-		controllerutil.AddFinalizer(minecraftCluster, clusterDeletionFinalizer)
+	if minecraftCluster.ObjectMeta.DeletionTimestamp.IsZero() && !controllerutil.ContainsFinalizer(minecraftCluster, minecraftClusterDeletionFinalizer) {
+		controllerutil.AddFinalizer(minecraftCluster, minecraftClusterDeletionFinalizer)
 
 		if err := r.Client.Update(ctx, minecraftCluster); err != nil {
 			return err
@@ -41,7 +41,7 @@ func (r *MinecraftClusterReconciler) addFinalizerIfNeeded(ctx context.Context, m
 }
 
 func (r *MinecraftClusterReconciler) removeFinalizer(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) error {
-	controllerutil.RemoveFinalizer(minecraftCluster, clusterDeletionFinalizer)
+	controllerutil.RemoveFinalizer(minecraftCluster, minecraftClusterDeletionFinalizer)
 
 	if err := r.Client.Update(ctx, minecraftCluster); err != nil {
 		return err
@@ -51,7 +51,7 @@ func (r *MinecraftClusterReconciler) removeFinalizer(ctx context.Context, minecr
 }
 
 func (r *MinecraftClusterReconciler) prepareForDeletion(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) error {
-	if controllerutil.ContainsFinalizer(minecraftCluster, clusterDeletionFinalizer) {
+	if controllerutil.ContainsFinalizer(minecraftCluster, minecraftClusterDeletionFinalizer) {
 		if err := clientretry.RetryOnConflict(clientretry.DefaultRetry, func() error {
 			// Custom logic here
 			return nil

@@ -24,35 +24,38 @@ import (
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:printcolumn:name="Cluster Name",type="string",JSONPath=".spec.minecraftClusterRef.name"
+//+kubebuilder:subresource:scale:specpath=.spec.replicas,statuspath=.status.replicas,selectorpath=.status.selector
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.conditions[?(@.type==\"Ready\")].status"
-//+kubebuilder:printcolumn:name="Address",type="boolean",JSONPath=".status.address"
+//+kubebuilder:printcolumn:name="Replicas",type="date",JSONPath=".status.replicas"
+//+kubebuilder:printcolumn:name="Available Replicas",type="date",JSONPath=".status.availableReplicas"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
-//+kubebuilder:resource:shortName={"sms"},categories=all
+//+kubebuilder:resource:shortName={"smsd"},categories=all
 
-// MinecraftServer is the Schema for the MinecraftServer API.
-type MinecraftServer struct {
+// MinecraftServerDeployment is the Schema for the MinecraftServerDeployment API
+type MinecraftServerDeployment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   MinecraftServerSpec   `json:"spec,omitempty"`
-	Status MinecraftServerStatus `json:"status,omitempty"`
+	Spec   MinecraftServerDeploymentSpec   `json:"spec,omitempty"`
+	Status MinecraftServerDeploymentStatus `json:"status,omitempty"`
 }
 
-// Defines the defired state of a MinecraftServer. Most, to not
-// say all, fields configurable in a Minecraft Server can be
-// configured in this CRD.
-type MinecraftServerSpec struct {
+// MinecraftServerDeploymentSpec defines the desired state of MinecraftServerDeployment
+type MinecraftServerDeploymentSpec struct {
 	// Reference to a Minecraft Cluster. Adding this will enroll
-	// this Minecraft Server to be part of a Minecraft Cluster.
-	ClusterRef *MinecraftClusterRef `json:"minecraftClusterRef"`
+	// this Proxy Deployment to be part of a Minecraft Cluster.
+	//+kubebuilder:validation:Required
+	ClusterRef MinecraftClusterRef `json:"minecraftClusterRef"`
 
 	// List of tags identifying this Minecraft Server.
 	Tags []string `json:"tags,omitempty"`
 
-	// Version the Minecraft Server has to run.
+	// Number of replicas to create.
+	Replicas int32 `json:"replicas"`
+
+	// Version the Minecraft Server Deployment has to run.
 	//+kubebuilder:validation:Required
-	Version MinecraftServerVersionSpec `json:"version"`
+	Version MinecraftServerDeploymentVersionSpec `json:"version"`
 
 	// Number of maximum players that can connect to the
 	// Minecraft Server.
@@ -67,30 +70,20 @@ type MinecraftServerSpec struct {
 	// Server icon image in base64 format.
 	ServerIcon string `json:"serverIcon,omitempty"`
 
-	// List of players to be operators on the Minecraft
-	// Server.
-	Operators []string `json:"operators,omitempty"`
-
-	// List of players to be whitelisted on the Minecraft
-	// Server.
-	WhitelistedPlayers []string `json:"whitelistedPlayers,omitempty"`
+	// A list of download URLs for plugins.
+	Plugins []string `json:"plugins,omitempty"`
 
 	// URL to a downloadable world archive.
 	//+kubebuilder:default={disableNether: false, disableEnd: false}
-	World *MinecraftServerWorldSpec `json:"world,omitempty"`
+	World *MinecraftServerDeploymentWorldSpec `json:"world,omitempty"`
 
-	// Configuration of Minecraft Server's rcon.
+	// Configuration of Minecraft Server Deployment's rcon.
 	//+kubebuilder:default={enabled: true}
-	Rcon *MinecraftServerRconSpec `json:"rcon,omitempty"`
+	Rcon *MinecraftServerDeploymentRconSpec `json:"rcon,omitempty"`
 
-	// The desired state of the Kubernetes Service to create for the
-	// Minecraft Server.
-	//+kubebuilder:default={enabled: false}
-	Service *MinecraftServerServiceSpec `json:"service,omitempty"`
-
-	// Overrides configuration for the Minecraft Server pod.
+	// Overrides configuration for the Minecraft Server pods.
 	//+kubebuilder:default={livenessProbe: {initialDelaySeconds: 60}, readinessProbe: {initialDelaySeconds: 60}, terminationGracePeriodSeconds: 60}
-	PodOverrides *MinecraftServerPodOverridesSpec `json:"podOverrides,omitempty"`
+	PodOverrides *MinecraftServerDeploymentPodOverridesSpec `json:"podOverrides,omitempty"`
 
 	// The desired compute resource requirements of Pods in the Minecraft
 	// Server.
@@ -102,42 +95,42 @@ type MinecraftServerSpec struct {
 }
 
 //+kubebuilder:validation:Enum=Vanilla;Forge;Fabric;Spigot;Paper;Airplane;Pufferfish;Purpur;Magma;Mohist;Catserver;Canyon;SpongeVanilla;Limbo;Crucible
-type MinecraftServerVersionChannel string
+type MinecraftServerDeploymentVersionChannel string
 
 const (
-	MinecraftServerVersionVanilla       MinecraftServerVersionChannel = "Vanilla"
-	MinecraftServerVersionForge         MinecraftServerVersionChannel = "Forge"
-	MinecraftServerVersionFabric        MinecraftServerVersionChannel = "Fabric"
-	MinecraftServerVersionSpigot        MinecraftServerVersionChannel = "Spigot"
-	MinecraftServerVersionPaper         MinecraftServerVersionChannel = "Paper"
-	MinecraftServerVersionAirplace      MinecraftServerVersionChannel = "Airplane"
-	MinecraftServerVersionPufferfish    MinecraftServerVersionChannel = "Pufferfish"
-	MinecraftServerVersionPurpur        MinecraftServerVersionChannel = "Purpur"
-	MinecraftServerVersionMagma         MinecraftServerVersionChannel = "Magma"
-	MinecraftServerVersionMohist        MinecraftServerVersionChannel = "Mohist"
-	MinecraftServerVersionCatserver     MinecraftServerVersionChannel = "Catserver"
-	MinecraftServerVersionCanyon        MinecraftServerVersionChannel = "Canyon"
-	MinecraftServerVersionSpongeVanilla MinecraftServerVersionChannel = "SpongeVanilla"
-	MinecraftServerVersionLimbo         MinecraftServerVersionChannel = "Limbo"
-	MinecraftServerVersionCrucible      MinecraftServerVersionChannel = "Crucible"
+	MinecraftServerDeploymentVersionVanilla       MinecraftServerDeploymentVersionChannel = "Vanilla"
+	MinecraftServerDeploymentVersionForge         MinecraftServerDeploymentVersionChannel = "Forge"
+	MinecraftServerDeploymentVersionFabric        MinecraftServerDeploymentVersionChannel = "Fabric"
+	MinecraftServerDeploymentVersionSpigot        MinecraftServerDeploymentVersionChannel = "Spigot"
+	MinecraftServerDeploymentVersionPaper         MinecraftServerDeploymentVersionChannel = "Paper"
+	MinecraftServerDeploymentVersionAirplace      MinecraftServerDeploymentVersionChannel = "Airplane"
+	MinecraftServerDeploymentVersionPufferfish    MinecraftServerDeploymentVersionChannel = "Pufferfish"
+	MinecraftServerDeploymentVersionPurpur        MinecraftServerDeploymentVersionChannel = "Purpur"
+	MinecraftServerDeploymentVersionMagma         MinecraftServerDeploymentVersionChannel = "Magma"
+	MinecraftServerDeploymentVersionMohist        MinecraftServerDeploymentVersionChannel = "Mohist"
+	MinecraftServerDeploymentVersionCatserver     MinecraftServerDeploymentVersionChannel = "Catserver"
+	MinecraftServerDeploymentVersionCanyon        MinecraftServerDeploymentVersionChannel = "Canyon"
+	MinecraftServerDeploymentVersionSpongeVanilla MinecraftServerDeploymentVersionChannel = "SpongeVanilla"
+	MinecraftServerDeploymentVersionLimbo         MinecraftServerDeploymentVersionChannel = "Limbo"
+	MinecraftServerDeploymentVersionCrucible      MinecraftServerDeploymentVersionChannel = "Crucible"
 )
 
 // Defines the version of Minecraft to run on the server.
 // The version can come from a channel which allows the user
 // to run a version different from Mojang's Vanilla.
-type MinecraftServerVersionSpec struct {
+type MinecraftServerDeploymentVersionSpec struct {
 	// Channel of the version to use. Defaults to Vanilla meaning
 	// that the server will run Mojang's official dedicated server.
 	//+optional
 	//+kubebuilder:default=Vanilla
-	Channel MinecraftServerVersionChannel `json:"channel,omitempty"`
+	Channel MinecraftServerDeploymentVersionChannel `json:"channel,omitempty"`
 
 	// Name of the version to use.
 	//+kubebuilder:validation:Required
 	Name string `json:"name"`
 }
 
-type MinecraftServerWorldSpec struct {
+type MinecraftServerDeploymentWorldSpec struct {
 	// URL to a downloable world.
 	Url string `json:"url,omitempty"`
 
@@ -160,7 +153,7 @@ type MinecraftServerWorldSpec struct {
 	DisableEnd bool `json:"disableEnd,omitempty"`
 }
 
-type MinecraftServerRconSpec struct {
+type MinecraftServerDeploymentRconSpec struct {
 	// Whether to enable rcon.
 	//+kubebuilder:default=true
 	Enabled bool `json:"enabled,omitempty"`
@@ -171,37 +164,19 @@ type MinecraftServerRconSpec struct {
 	PasswordSecretName string `json:"passwordSecretName,omitempty"`
 }
 
-// Configuration attributes for the Service resource.
-type MinecraftServerServiceSpec struct {
-	// Whether to create a Service for the Minecraft Server. Defaults
-	// to false.
-	//+kubebuilder:default=false
-	Enabled bool `json:"enabled,omitempty"`
+type MinecraftServerDeploymentPodOverridesSpec struct {
+	// Additional labels to add to the Minecraft Server.
+	Labels map[string]string `json:"labels,omitempty"`
 
-	// Type of Service to create. Must be one of: ClusterIP, LoadBalancer, NodePort.
-	// More info: https://pkg.go.dev/k8s.io/api/core/v1#ServiceType
-	//+kubebuilder:validation:Enum=ClusterIP;LoadBalancer;NodePort
-	//+kubebuilder:default="ClusterIP"
-	Type corev1.ServiceType `json:"type,omitempty"`
-
-	// Annotations to add to the Service.
-	Annotations map[string]string `json:"annotations,omitempty"`
-
-	// Wether to expose the rcon port or not to the Service.
-	//+kubebuilder:default=false
-	ExposesRconPort bool `json:"exposesRconPort,omitempty"`
-}
-
-type MinecraftServerPodOverridesSpec struct {
 	// Additional environment variables to add to the Minecraft
 	// Server.
 	Env []corev1.EnvVar `json:"env,omitempty"`
 
 	// Overrides for the liveness probe of the Minecraft Server.
-	LivenessProbe *MinecraftServerPodProbeSpec `json:"livenessProbe,omitempty"`
+	LivenessProbe *MinecraftServerDeploymentPodProbeSpec `json:"livenessProbe,omitempty"`
 
 	// Overrides for the readiness probe of the Minecraft Server.
-	ReadinessProbe *MinecraftServerPodProbeSpec `json:"readinessProbe,omitempty"`
+	ReadinessProbe *MinecraftServerDeploymentPodProbeSpec `json:"readinessProbe,omitempty"`
 
 	// Number of seconds before force killing the pod after a graceful
 	// termination request. Defaults to 1 minute.
@@ -209,7 +184,7 @@ type MinecraftServerPodOverridesSpec struct {
 	TerminationGracePeriodSeconds *int64 `json:"terminationGracePeriodSeconds,omitempty"`
 }
 
-type MinecraftServerPodProbeSpec struct {
+type MinecraftServerDeploymentPodProbeSpec struct {
 	// Number of seconds before starting to perform the probe. Depending
 	// on the server configuration, one can take more time than another to
 	// be ready. Defaults to 1 minute.
@@ -217,26 +192,35 @@ type MinecraftServerPodProbeSpec struct {
 	InitialDelaySeconds int32 `json:"initialDelaySeconds,omitempty"`
 }
 
-//+kubebuilder:validation:Enum=Ready;Addressable
-type MinecraftServerStatusCondition string
+type MinecraftServerDeploymentStatusCondition string
 
 const (
-	ServerReadyCondition       MinecraftServerStatusCondition = "Ready"
-	ServerAddressableCondition MinecraftServerStatusCondition = "Addressable"
+	MinecraftServerDeploymentReadyCondition       MinecraftServerDeploymentStatusCondition = "Ready"
+	MinecraftServerDeploymentAvailableCondition   MinecraftServerDeploymentStatusCondition = "Available"
+	MinecraftServerDeploymentProgressingCondition MinecraftServerDeploymentStatusCondition = "Progressing"
 )
 
-// MinecraftServerStatus defines the observed state of MinecraftServer
-type MinecraftServerStatus struct {
+// MinecraftServerDeploymentStatus defines the observed state of MinecraftServerDeployment
+type MinecraftServerDeploymentStatus struct {
 	// Conditions represent the latest available observations of a
-	// MinecraftServer object.
+	// MinecraftServerDeployment object.
 	//+kubebuilder:validation:Required
 	Conditions []metav1.Condition `json:"conditions"`
 
-	// Address of the Minecraft Server pod.
-	Address string `json:"address,omitempty"`
+	// Number of total replicas in Proxy Deployment.
+	Replicas int32 `json:"replicas"`
+
+	// Number of available replicas in Proxy Deployment.
+	AvailableReplicas int32 `json:"availableReplicas"`
+
+	// Number of unavailable replicas in Proxy Deployment.
+	UnavailableReplicas int32 `json:"unavailableReplicas"`
+
+	// Pod label selector.
+	Selector string `json:"selector"`
 }
 
-func (s *MinecraftServerStatus) SetCondition(condition MinecraftServerStatusCondition, status metav1.ConditionStatus, reason string, message string) {
+func (s *MinecraftServerDeploymentStatus) SetCondition(condition MinecraftServerDeploymentStatusCondition, status metav1.ConditionStatus, reason string, message string) {
 	meta.SetStatusCondition(&s.Conditions, metav1.Condition{
 		Type:    string(condition),
 		Status:  status,
@@ -247,13 +231,13 @@ func (s *MinecraftServerStatus) SetCondition(condition MinecraftServerStatusCond
 
 //+kubebuilder:object:root=true
 
-// MinecraftServerList contains a list of MinecraftServer
-type MinecraftServerList struct {
+// MinecraftServerDeploymentList contains a list of MinecraftServerDeployment
+type MinecraftServerDeploymentList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []MinecraftServer `json:"items"`
+	Items           []MinecraftServerDeployment `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&MinecraftServer{}, &MinecraftServerList{})
+	SchemeBuilder.Register(&MinecraftServerDeployment{}, &MinecraftServerDeploymentList{})
 }

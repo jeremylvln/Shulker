@@ -920,6 +920,11 @@ spec:
                 description: Message to display when the players query the status
                   of the Proxy Deployment.
                 type: string
+              plugins:
+                description: A list of download URLs for plugins.
+                items:
+                  type: string
+                type: array
               podOverrides:
                 default:
                   livenessProbe:
@@ -927,7 +932,7 @@ spec:
                   readinessProbe:
                     initialDelaySeconds: 15
                   terminationGracePeriodSeconds: 3600
-                description: Overrides configuration for the Proxy Deployment pod.
+                description: Overrides configuration for the Proxy Deployment pods.
                 properties:
                   env:
                     description: Additional environment variables to add to the Proxy

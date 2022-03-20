@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -42,10 +43,37 @@ type MinecraftCluster struct {
 // say all, fields configurable in a Minecraft Cluster can be
 // configured in this CRD.
 type MinecraftClusterSpec struct {
-	// Name of the Kubernetes Secret contaning the Maven secret to
-	// use. It must contains a `username` and `password` fields.
+	// Configuration of the Limbo Minecraft Server Deployment
+	// of this Minecraft Cluster.
+	//+kubebuilder:default={enabled: true, replicas: 1}
+	LimboSpec MinecraftClusterLimboSpec `json:"limboSpec"`
+}
+
+type MinecraftClusterLimboSpec struct {
+	// Whether to create a Limbo deployment for this
+	// Minecraft Cluster.
+	//+kubebuilder:default=true
+	Enabled bool `json:"enabled"`
+
+	// Number of Limbo servers to run.
+	//+kubebuilder:default=1
+	Replicas int `json:"replicas"`
+
+	// URL of the schematic the Limbo should serve.
 	//+kubebuilder:validation:Required
-	MavenSecretName string `json:"mavenSecretName,omitempty"`
+	SchematicUrl string `json:"schematicUrl,omitempty"`
+
+	// The position the player should spawn on.
+	//+kubebuilder:validation:Required
+	SpawnPosition string `json:"spawnPosition,omitempty"`
+
+	// The desired compute resource requirements of Pods in the Minecraft
+	// Server.
+	//+kubebuilder:default={limits: {cpu: "500m", memory: "512Mi"}, requests: {cpu: "128m", memory: "128Mi"}}
+	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
+
+	// Affinity scheduling rules to be applied on created Pods.
+	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 }
 
 type MinecraftClusterStatusCondition string
@@ -66,22 +94,6 @@ type MinecraftClusterStatus struct {
 
 	// Number of servers inside the server pool.
 	Servers int32 `json:"servers"`
-
-	ServerPool []MinecraftClusterStatusServerPoolEntry `json:"serverPool"`
-}
-
-type MinecraftClusterStatusServerPoolEntry struct {
-	// Name of the Minecraft Server.
-	//+kubebuilder:validation:Required
-	Name string `json:"name"`
-
-	// IP of the Minecraft Server.
-	//+kubebuilder:validation:Required
-	Address string `json:"address"`
-
-	// List of tags of the Minecraft Server.
-	//+kubebuilder:default={}
-	Tags []string `json:"tags"`
 }
 
 func (s *MinecraftClusterStatus) SetCondition(condition MinecraftClusterStatusCondition, status metav1.ConditionStatus, reason string, message string) {

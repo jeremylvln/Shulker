@@ -2,6 +2,7 @@ package resource
 
 import (
 	"fmt"
+	"strings"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -47,62 +48,7 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 				Labels: b.getLabels(),
 			},
 			Spec: corev1.PodSpec{
-				InitContainers: []corev1.Container{
-					{
-						Image:   "busybox:stable",
-						Name:    "init-proxy-fs",
-						Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", proxyConfigDir)},
-						Env:     b.getDeploymentInitFsEnv(),
-						Resources: corev1.ResourceRequirements{
-							Limits: corev1.ResourceList{
-								"cpu":    k8sresource.MustParse("500m"),
-								"memory": k8sresource.MustParse("128Mi"),
-							},
-							Requests: corev1.ResourceList{
-								"cpu":    k8sresource.MustParse("10m"),
-								"memory": k8sresource.MustParse("512Ki"),
-							},
-						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								Name:      "proxy-server-dir",
-								MountPath: proxyServerDir,
-							},
-							{
-								Name:      "proxy-config-dir",
-								MountPath: proxyConfigDir,
-								ReadOnly:  true,
-							},
-						},
-					},
-					{
-						Image:   "curlimages/curl:latest",
-						Name:    "init-proxy-plugins",
-						Command: []string{"ash", fmt.Sprintf("%s/init-plugins.sh", proxyConfigDir)},
-						Env:     b.getDeploymentInitPluginsEnv(),
-						Resources: corev1.ResourceRequirements{
-							Limits: corev1.ResourceList{
-								"cpu":    k8sresource.MustParse("500m"),
-								"memory": k8sresource.MustParse("128Mi"),
-							},
-							Requests: corev1.ResourceList{
-								"cpu":    k8sresource.MustParse("10m"),
-								"memory": k8sresource.MustParse("512Ki"),
-							},
-						},
-						VolumeMounts: []corev1.VolumeMount{
-							{
-								Name:      "proxy-server-dir",
-								MountPath: proxyServerDir,
-							},
-							{
-								Name:      "proxy-config-dir",
-								MountPath: proxyConfigDir,
-								ReadOnly:  true,
-							},
-						},
-					},
-				},
+				InitContainers: b.getInitContainers(),
 				Containers: []corev1.Container{{
 					Image: "itzg/bungeecord:latest",
 					Name:  "proxy",
@@ -174,6 +120,70 @@ func (b *ProxyDeploymentDeploymentBuilder) CanBeUpdated() bool {
 	return true
 }
 
+func (b *ProxyDeploymentDeploymentBuilder) getInitContainers() []corev1.Container {
+	containers := []corev1.Container{
+		{
+			Image:   "busybox:stable",
+			Name:    "init-proxy-fs",
+			Command: []string{"ash", fmt.Sprintf("%s/init-fs.sh", proxyConfigDir)},
+			Env:     b.getDeploymentInitFsEnv(),
+			Resources: corev1.ResourceRequirements{
+				Limits: corev1.ResourceList{
+					"cpu":    k8sresource.MustParse("500m"),
+					"memory": k8sresource.MustParse("128Mi"),
+				},
+				Requests: corev1.ResourceList{
+					"cpu":    k8sresource.MustParse("10m"),
+					"memory": k8sresource.MustParse("512Ki"),
+				},
+			},
+			VolumeMounts: []corev1.VolumeMount{
+				{
+					Name:      "proxy-server-dir",
+					MountPath: proxyServerDir,
+				},
+				{
+					Name:      "proxy-config-dir",
+					MountPath: proxyConfigDir,
+					ReadOnly:  true,
+				},
+			},
+		},
+	}
+
+	if len(b.getPluginsList()) > 0 {
+		containers = append(containers, corev1.Container{
+			Image:   "curlimages/curl:latest",
+			Name:    "init-proxy-plugins",
+			Command: []string{"ash", fmt.Sprintf("%s/init-plugins.sh", proxyConfigDir)},
+			Env:     b.getDeploymentInitPluginsEnv(),
+			Resources: corev1.ResourceRequirements{
+				Limits: corev1.ResourceList{
+					"cpu":    k8sresource.MustParse("500m"),
+					"memory": k8sresource.MustParse("128Mi"),
+				},
+				Requests: corev1.ResourceList{
+					"cpu":    k8sresource.MustParse("10m"),
+					"memory": k8sresource.MustParse("512Ki"),
+				},
+			},
+			VolumeMounts: []corev1.VolumeMount{
+				{
+					Name:      "proxy-server-dir",
+					MountPath: proxyServerDir,
+				},
+				{
+					Name:      "proxy-config-dir",
+					MountPath: proxyConfigDir,
+					ReadOnly:  true,
+				},
+			},
+		})
+	}
+
+	return containers
+}
+
 func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitFsEnv() []corev1.EnvVar {
 	env := []corev1.EnvVar{
 		{
@@ -190,40 +200,16 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitFsEnv() []corev1.Env
 }
 
 func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitPluginsEnv() []corev1.EnvVar {
-	env := []corev1.EnvVar{
+	return []corev1.EnvVar{
 		{
 			Name:  "SHULKER_DATA_DIR",
 			Value: proxyServerDir,
 		},
 		{
-			Name: "SHULKER_MAVEN_USERNAME",
-			ValueFrom: &corev1.EnvVarSource{
-				SecretKeyRef: &corev1.SecretKeySelector{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: b.Cluster.Spec.MavenSecretName,
-					},
-					Key: "username",
-				},
-			},
-		},
-		{
-			Name: "SHULKER_MAVEN_PASSWORD",
-			ValueFrom: &corev1.EnvVarSource{
-				SecretKeyRef: &corev1.SecretKeySelector{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: b.Cluster.Spec.MavenSecretName,
-					},
-					Key: "password",
-				},
-			},
-		},
-		{
-			Name:  "SHULKER_PROXY_DIRECTORY_VERSION",
-			Value: "0.0.1",
+			Name:  "SHULKER_PLUGINS_URL",
+			Value: strings.Join(b.getPluginsList(), ";"),
 		},
 	}
-
-	return env
 }
 
 func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
@@ -261,6 +247,10 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 	env = append(env, b.Instance.Spec.PodOverrides.Env...)
 
 	return env
+}
+
+func (b *ProxyDeploymentDeploymentBuilder) getPluginsList() []string {
+	return append(b.Instance.Spec.Plugins, "https://i.jeremylvln.fr/shulker/ShulkerProxyDirectory-0.0.1.jar")
 }
 
 func getTypeFromVersionChannel(channel shulkermciov1alpha1.ProxyDeploymentVersionChannel) string {

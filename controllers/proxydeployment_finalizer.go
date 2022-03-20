@@ -29,8 +29,8 @@ import (
 const proxyDeploymentDeletionFinalizer = "deletion.finalizers.proxydeployments.shulkermc.io"
 
 func (r *ProxyDeploymentReconciler) addFinalizerIfNeeded(ctx context.Context, proxyDeployment *shulkermciov1alpha1.ProxyDeployment) error {
-	if proxyDeployment.ObjectMeta.DeletionTimestamp.IsZero() && !controllerutil.ContainsFinalizer(proxyDeployment, serverDeletionFinalizer) {
-		controllerutil.AddFinalizer(proxyDeployment, serverDeletionFinalizer)
+	if proxyDeployment.ObjectMeta.DeletionTimestamp.IsZero() && !controllerutil.ContainsFinalizer(proxyDeployment, proxyDeploymentDeletionFinalizer) {
+		controllerutil.AddFinalizer(proxyDeployment, proxyDeploymentDeletionFinalizer)
 
 		if err := r.Client.Update(ctx, proxyDeployment); err != nil {
 			return err
@@ -41,7 +41,7 @@ func (r *ProxyDeploymentReconciler) addFinalizerIfNeeded(ctx context.Context, pr
 }
 
 func (r *ProxyDeploymentReconciler) removeFinalizer(ctx context.Context, proxyDeployment *shulkermciov1alpha1.ProxyDeployment) error {
-	controllerutil.RemoveFinalizer(proxyDeployment, serverDeletionFinalizer)
+	controllerutil.RemoveFinalizer(proxyDeployment, proxyDeploymentDeletionFinalizer)
 
 	if err := r.Client.Update(ctx, proxyDeployment); err != nil {
 		return err
@@ -51,7 +51,7 @@ func (r *ProxyDeploymentReconciler) removeFinalizer(ctx context.Context, proxyDe
 }
 
 func (r *ProxyDeploymentReconciler) prepareForDeletion(ctx context.Context, proxyDeployment *shulkermciov1alpha1.ProxyDeployment) error {
-	if controllerutil.ContainsFinalizer(proxyDeployment, serverDeletionFinalizer) {
+	if controllerutil.ContainsFinalizer(proxyDeployment, proxyDeploymentDeletionFinalizer) {
 		if err := clientretry.RetryOnConflict(clientretry.DefaultRetry, func() error {
 			// Custom logic here
 			return nil

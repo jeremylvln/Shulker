@@ -5,37 +5,38 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: minecraftservers.shulkermc.io
+  name: minecraftserverdeployments.shulkermc.io
 spec:
   group: shulkermc.io
   names:
     categories:
     - all
-    kind: MinecraftServer
-    listKind: MinecraftServerList
-    plural: minecraftservers
+    kind: MinecraftServerDeployment
+    listKind: MinecraftServerDeploymentList
+    plural: minecraftserverdeployments
     shortNames:
-    - sms
-    singular: minecraftserver
+    - smsd
+    singular: minecraftserverdeployment
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.minecraftClusterRef.name
-      name: Cluster Name
-      type: string
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
       type: boolean
-    - jsonPath: .status.address
-      name: Address
-      type: boolean
+    - jsonPath: .status.replicas
+      name: Replicas
+      type: date
+    - jsonPath: .status.availableReplicas
+      name: Available Replicas
+      type: date
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MinecraftServer is the Schema for the MinecraftServer API.
+        description: MinecraftServerDeployment is the Schema for the MinecraftServerDeployment
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,9 +51,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: Defines the defired state of a MinecraftServer. Most, to
-              not say all, fields configurable in a Minecraft Server can be configured
-              in this CRD.
+            description: MinecraftServerDeploymentSpec defines the desired state of
+              MinecraftServerDeployment
             properties:
               affinity:
                 description: Affinity scheduling rules to be applied on created Pods.
@@ -886,7 +886,7 @@ spec:
                 type: integer
               minecraftClusterRef:
                 description: Reference to a Minecraft Cluster. Adding this will enroll
-                  this Minecraft Server to be part of a Minecraft Cluster.
+                  this Proxy Deployment to be part of a Minecraft Cluster.
                 properties:
                   name:
                     description: Name of the Minecraft Cluster.
@@ -897,8 +897,8 @@ spec:
                 description: Message to display when the players query the status
                   of the Minecraft Server.
                 type: string
-              operators:
-                description: List of players to be operators on the Minecraft Server.
+              plugins:
+                description: A list of download URLs for plugins.
                 items:
                   type: string
                 type: array
@@ -909,7 +909,7 @@ spec:
                   readinessProbe:
                     initialDelaySeconds: 60
                   terminationGracePeriodSeconds: 60
-                description: Overrides configuration for the Minecraft Server pod.
+                description: Overrides configuration for the Minecraft Server pods.
                 properties:
                   env:
                     description: Additional environment variables to add to the Minecraft
@@ -1022,6 +1022,11 @@ spec:
                       - name
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: Additional labels to add to the Minecraft Server.
+                    type: object
                   livenessProbe:
                     description: Overrides for the liveness probe of the Minecraft
                       Server.
@@ -1056,7 +1061,7 @@ spec:
               rcon:
                 default:
                   enabled: true
-                description: Configuration of Minecraft Server's rcon.
+                description: Configuration of Minecraft Server Deployment's rcon.
                 properties:
                   enabled:
                     default: true
@@ -1068,6 +1073,10 @@ spec:
                       be created dedicated to this Minecraft Server.
                     type: string
                 type: object
+              replicas:
+                description: Number of replicas to create.
+                format: int32
+                type: integer
               resources:
                 default:
                   limits:
@@ -1105,43 +1114,13 @@ spec:
               serverIcon:
                 description: Server icon image in base64 format.
                 type: string
-              service:
-                default:
-                  enabled: false
-                description: The desired state of the Kubernetes Service to create
-                  for the Minecraft Server.
-                properties:
-                  annotations:
-                    additionalProperties:
-                      type: string
-                    description: Annotations to add to the Service.
-                    type: object
-                  enabled:
-                    default: false
-                    description: Whether to create a Service for the Minecraft Server.
-                      Defaults to false.
-                    type: boolean
-                  exposesRconPort:
-                    default: false
-                    description: Wether to expose the rcon port or not to the Service.
-                    type: boolean
-                  type:
-                    default: ClusterIP
-                    description: 'Type of Service to create. Must be one of: ClusterIP,
-                      LoadBalancer, NodePort. More info: https://pkg.go.dev/k8s.io/api/core/v1#ServiceType'
-                    enum:
-                    - ClusterIP
-                    - LoadBalancer
-                    - NodePort
-                    type: string
-                type: object
               tags:
                 description: List of tags identifying this Minecraft Server.
                 items:
                   type: string
                 type: array
               version:
-                description: Version the Minecraft Server has to run.
+                description: Version the Minecraft Server Deployment has to run.
                 properties:
                   channel:
                     default: Vanilla
@@ -1171,11 +1150,6 @@ spec:
                 required:
                 - name
                 type: object
-              whitelistedPlayers:
-                description: List of players to be whitelisted on the Minecraft Server.
-                items:
-                  type: string
-                type: array
               world:
                 default:
                   disableEnd: false
@@ -1206,17 +1180,20 @@ spec:
                 type: object
             required:
             - minecraftClusterRef
+            - replicas
             - version
             type: object
           status:
-            description: MinecraftServerStatus defines the observed state of MinecraftServer
+            description: MinecraftServerDeploymentStatus defines the observed state
+              of MinecraftServerDeployment
             properties:
-              address:
-                description: Address of the Minecraft Server pod.
-                type: string
+              availableReplicas:
+                description: Number of available replicas in Proxy Deployment.
+                format: int32
+                type: integer
               conditions:
                 description: Conditions represent the latest available observations
-                  of a MinecraftServer object.
+                  of a MinecraftServerDeployment object.
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
@@ -1284,13 +1261,32 @@ spec:
                   - type
                   type: object
                 type: array
+              replicas:
+                description: Number of total replicas in Proxy Deployment.
+                format: int32
+                type: integer
+              selector:
+                description: Pod label selector.
+                type: string
+              unavailableReplicas:
+                description: Number of unavailable replicas in Proxy Deployment.
+                format: int32
+                type: integer
             required:
+            - availableReplicas
             - conditions
+            - replicas
+            - selector
+            - unavailableReplicas
             type: object
         type: object
     served: true
     storage: true
     subresources:
+      scale:
+        labelSelectorPath: .status.selector
+        specReplicasPath: .spec.replicas
+        statusReplicasPath: .status.replicas
       status: {}
 status:
   acceptedNames:

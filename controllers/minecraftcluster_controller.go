@@ -94,29 +94,17 @@ func (r *MinecraftClusterReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		}
 	}
 
-	serverList, err := r.listMinecraftServers(ctx, minecraftCluster)
+	minecraftServerDeploymentList, err := r.listMinecraftServerDeployments(ctx, minecraftCluster)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-
-	serverPool := []shulkermciov1alpha1.MinecraftClusterStatusServerPoolEntry{}
-	for _, server := range serverList.Items {
-		if meta.IsStatusConditionTrue(server.Status.Conditions, string(shulkermciov1alpha1.ServerReadyCondition)) {
-			tags := []string{}
-			if server.Spec.Tags != nil {
-				tags = server.Spec.Tags
-			}
-
-			serverPool = append(serverPool, shulkermciov1alpha1.MinecraftClusterStatusServerPoolEntry{
-				Name:    server.Name,
-				Address: server.Status.Address,
-				Tags:    tags,
-			})
+	minecraftCluster.Status.Servers = 0
+	for _, minecraftServerDeployment := range minecraftServerDeploymentList.Items {
+		if meta.IsStatusConditionTrue(minecraftServerDeployment.Status.Conditions, string(shulkermciov1alpha1.MinecraftServerDeploymentReadyCondition)) {
+			minecraftCluster.Status.Servers += minecraftServerDeployment.Status.Replicas
 		}
 	}
 
-	minecraftCluster.Status.Servers = int32(len(serverPool))
-	minecraftCluster.Status.ServerPool = serverPool
 	minecraftCluster.Status.SetCondition(shulkermciov1alpha1.ClusterReadyCondition, metav1.ConditionTrue, "Ready", "Cluster is ready")
 
 	err = r.Status().Update(ctx, minecraftCluster)
@@ -136,8 +124,8 @@ func (r *MinecraftClusterReconciler) listProxyDeployments(ctx context.Context, m
 	return &list, nil
 }
 
-func (r *MinecraftClusterReconciler) listMinecraftServers(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) (*shulkermciov1alpha1.MinecraftServerList, error) {
-	list := shulkermciov1alpha1.MinecraftServerList{}
+func (r *MinecraftClusterReconciler) listMinecraftServerDeployments(ctx context.Context, minecraftCluster *shulkermciov1alpha1.MinecraftCluster) (*shulkermciov1alpha1.MinecraftServerDeploymentList, error) {
+	list := shulkermciov1alpha1.MinecraftServerDeploymentList{}
 	err := r.List(ctx, &list, client.InNamespace(minecraftCluster.Namespace), client.MatchingFields{
 		".spec.minecraftClusterRef.name": minecraftCluster.Name,
 	})
@@ -166,17 +154,13 @@ func (r *MinecraftClusterReconciler) findMinecraftClusterForProxyDeployment(obje
 	}}
 }
 
-func (r *MinecraftClusterReconciler) findMinecraftClusterForMinecraftServer(object client.Object) []reconcile.Request {
-	minecraftServer := object.(*shulkermciov1alpha1.MinecraftServer)
-
-	if minecraftServer.Spec.ClusterRef == nil {
-		return []reconcile.Request{}
-	}
+func (r *MinecraftClusterReconciler) findMinecraftClusterForMinecraftServerDeployment(object client.Object) []reconcile.Request {
+	minecraftServerDeployment := object.(*shulkermciov1alpha1.MinecraftServerDeployment)
 
 	return []reconcile.Request{{
 		NamespacedName: types.NamespacedName{
-			Namespace: minecraftServer.GetNamespace(),
-			Name:      minecraftServer.Spec.ClusterRef.Name,
+			Namespace: minecraftServerDeployment.GetNamespace(),
+			Name:      minecraftServerDeployment.Spec.ClusterRef.Name,
 		},
 	}}
 }
@@ -184,7 +168,7 @@ func (r *MinecraftClusterReconciler) findMinecraftClusterForMinecraftServer(obje
 func (r *MinecraftClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&shulkermciov1alpha1.MinecraftCluster{}).
-		Owns(&shulkermciov1alpha1.MinecraftServer{}).
+		Owns(&shulkermciov1alpha1.MinecraftServerDeployment{}).
 		Owns(&rbacv1.Role{}).
 		Watches(
 			&source.Kind{Type: &shulkermciov1alpha1.ProxyDeployment{}},
@@ -192,8 +176,8 @@ func (r *MinecraftClusterReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
 		).
 		Watches(
-			&source.Kind{Type: &shulkermciov1alpha1.MinecraftServer{}},
-			handler.EnqueueRequestsFromMapFunc(r.findMinecraftClusterForMinecraftServer),
+			&source.Kind{Type: &shulkermciov1alpha1.MinecraftServerDeployment{}},
+			handler.EnqueueRequestsFromMapFunc(r.findMinecraftClusterForMinecraftServerDeployment),
 			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
 		).
 		Complete(r)
