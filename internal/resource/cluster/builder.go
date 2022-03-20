@@ -18,7 +18,6 @@ func (b *MinecraftClusterResourceBuilder) ResourceBuilders() ([]common.ResourceB
 	builders := []common.ResourceBuilder{
 		b.MinecraftClusterProxyDiscoveryService(),
 		b.MinecraftClusterServerDiscoveryService(),
-		b.MinecraftClusterServerLobbyDiscoveryService(),
 		b.MinecraftClusterDiscoveryRole(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
@@ -42,10 +41,6 @@ func (b *MinecraftClusterResourceBuilder) getProxyDiscoveryServiceName() string 
 
 func (b *MinecraftClusterResourceBuilder) getServerDiscoveryServiceName() string {
 	return fmt.Sprintf("%s-server-discovery", b.getResourcePrefix())
-}
-
-func (b *MinecraftClusterResourceBuilder) getServerLobbyDiscoveryServiceName() string {
-	return fmt.Sprintf("%s-server-lobby-discovery", b.getResourcePrefix())
 }
 
 func (b *MinecraftClusterResourceBuilder) getLimboMinecraftServerDeploymentName() string {

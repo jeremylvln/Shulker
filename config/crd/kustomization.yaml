@@ -2,7 +2,6 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/shulkermc.io_minecraftservers.yaml
 - bases/shulkermc.io_minecraftclusters.yaml
 - bases/shulkermc.io_proxydeployments.yaml
 - bases/shulkermc.io_minecraftserverdeployments.yaml
@@ -11,7 +10,6 @@ resources:
 patchesStrategicMerge:
 # [WEBHOOK] To enable webhook, uncomment all the sections with [WEBHOOK] prefix.
 # patches here are for enabling the conversion webhook for each CRD
-#- patches/webhook_in_minecraftservers.yaml
 #- patches/webhook_in_minecraftclusters.yaml
 #- patches/webhook_in_proxydeployments.yaml
 #- patches/webhook_in_minecraftserverdeployments.yaml
@@ -19,7 +17,6 @@ patchesStrategicMerge:
 
 # [CERTMANAGER] To enable cert-manager, uncomment all the sections with [CERTMANAGER] prefix.
 # patches here are for enabling the CA injection for each CRD
-#- patches/cainjection_in_minecraftservers.yaml
 #- patches/cainjection_in_minecraftclusters.yaml
 #- patches/cainjection_in_proxydeployments.yaml
 #- patches/cainjection_in_minecraftserverdeployments.yaml

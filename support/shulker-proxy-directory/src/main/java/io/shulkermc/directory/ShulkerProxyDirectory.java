@@ -42,7 +42,6 @@ public class ShulkerProxyDirectory extends Plugin {
         KubernetesClient kubernetesClient = new DefaultKubernetesClient();
         var endpointsClient = kubernetesClient.endpoints().inNamespace(shulkerClusterNamespace);
         var endpointsServerTarget = endpointsClient.withName(String.format("%s-server-discovery", shulkerClusterName));
-        var endpointsLobbyTarget = endpointsClient.withName(String.format("%s-server-lobby-discovery", shulkerClusterName));
 
         endpointsServerTarget.watch(new Watcher<>() {
             @Override
@@ -57,22 +56,8 @@ public class ShulkerProxyDirectory extends Plugin {
             }
         });
 
-        endpointsLobbyTarget.watch(new Watcher<>() {
-            @Override
-            public void eventReceived(Action action, Endpoints endpoints) {
-                if (action != Action.MODIFIED) return;
-                ShulkerProxyDirectory.this.updateLobbyDirectory(endpoints.getSubsets());
-            }
-
-            @Override
-            public void onClose(WatcherException cause) {
-                cause.asClientException().printStackTrace();
-            }
-        });
-
         try {
             this.updateServerDirectory(endpointsServerTarget.get().getSubsets());
-            this.updateLobbyDirectory(endpointsLobbyTarget.get().getSubsets());
         } catch (KubernetesClientException ex) {
             this.getLogger().severe("Failed to synchronize server directory");
             ex.printStackTrace();
@@ -103,18 +88,14 @@ public class ShulkerProxyDirectory extends Plugin {
                 })
                 .peek((serverInfo) -> this.getLogger().info(String.format("Adding server %s (%s) to directory", serverInfo.getName(), serverInfo.getSocketAddress())))
                 .forEach((serverInfo) -> proxyServers.put(serverInfo.getName(), serverInfo));
-    }
 
-    private void updateLobbyDirectory(List<EndpointSubset> subsets) {
-        Map<String, String> reducedSubsets = reduceEndpointSubsetsToServerMap(subsets);
         Map<String, List<String>> serversPerTag = new HashMap<>();
-
         reducedSubsets.entrySet().parallelStream()
+                .filter((entry) -> entry.getKey().contains("-limbo-"))
                 .forEach((entry) -> {
-                    serversPerTag.putIfAbsent("lobby", new ArrayList<>());
-                    serversPerTag.get("lobby").add(entry.getKey());
+                    serversPerTag.putIfAbsent("limbo", new ArrayList<>());
+                    serversPerTag.get("limbo").add(entry.getKey());
                 });
-
         this.serversPerTag = serversPerTag;
     }
 
