@@ -36,14 +36,17 @@ func (b *ProxyDeploymentConfigMapBuilder) Update(object client.Object) error {
 	configMapData := make(map[string]string)
 
 	configMapData["init-fs.sh"] = strings.Trim(`
-cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/;
+set -x
+cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/
 if [ -e "$SHULKER_CONFIG_DIR/server-icon.png" ]; then cat $SHULKER_CONFIG_DIR/server-icon.png | base64 -d > $SHULKER_DATA_DIR/server-icon.png; fi
 	`, "\n ")
 
 	configMapData["init-plugins.sh"] = strings.Trim(`
+set -x
 mkdir -p $SHULKER_DATA_DIR/plugins
 plugins=$(echo "$SHULKER_PLUGINS_URL" | tr ';' ' ')
 for plugin in $plugins; do cd $SHULKER_DATA_DIR/plugins && curl -L -O $plugin; done
+if [ ! -z "$SHULKER_REDIS_SYNC_ENABLED" ]; then mkdir -p $SHULKER_DATA_DIR/plugins/RedisBungee && cp $SHULKER_CONFIG_DIR/redisbungee-config.yml $SHULKER_DATA_DIR/plugins/RedisBungee/config.yml; fi
 	`, "\n ")
 
 	if b.Instance.Spec.ServerIcon != "" {
@@ -57,6 +60,14 @@ for plugin in $plugins; do cd $SHULKER_DATA_DIR/plugins && curl -L -O $plugin; d
 		return err
 	}
 	configMapData["config.yml"] = configYml
+
+	if b.Cluster.Spec.RedisSync.Enabled {
+		redisBungeeConfigYml, err := b.getRedisBungeeConfigYmlFile()
+		if err != nil {
+			return err
+		}
+		configMapData["redisbungee-config.yml"] = redisBungeeConfigYml
+	}
 
 	configMap.Data = configMapData
 
@@ -79,21 +90,23 @@ type configYml struct {
 }
 
 type configListenerYml struct {
-	Host       string   `yaml:"host"`
-	QueryPort  int16    `yaml:"query_port"`
-	Motd       string   `yaml:"motd"`
-	MaxPlayers int64    `yaml:"max_players"`
-	Priorities []string `yaml:"priorities"`
+	Host               string   `yaml:"host"`
+	QueryPort          int16    `yaml:"query_port"`
+	Motd               string   `yaml:"motd"`
+	MaxPlayers         int64    `yaml:"max_players"`
+	Priorities         []string `yaml:"priorities"`
+	ForceDefaultServer bool     `yaml:"force_default_server"`
 }
 
 func (b *ProxyDeploymentConfigMapBuilder) getConfigYmlFile() (string, error) {
 	configYml := configYml{
 		Listeners: []configListenerYml{{
-			Host:       "0.0.0.0:25577",
-			QueryPort:  int16(25577),
-			Motd:       b.Instance.Spec.Motd,
-			MaxPlayers: *b.Instance.Spec.MaxPlayers,
-			Priorities: []string{"lobby"},
+			Host:               "0.0.0.0:25577",
+			QueryPort:          int16(25577),
+			Motd:               b.Instance.Spec.Motd,
+			MaxPlayers:         *b.Instance.Spec.MaxPlayers,
+			Priorities:         []string{"lobby"},
+			ForceDefaultServer: true,
 		}},
 		Groups:                  map[string]interface{}{},
 		IpForward:               true,
@@ -101,6 +114,29 @@ func (b *ProxyDeploymentConfigMapBuilder) getConfigYmlFile() (string, error) {
 	}
 
 	out, err := yaml.Marshal(&configYml)
+	if err != nil {
+		return "", err
+	}
+
+	return string(out), nil
+}
+
+type redisBungeeConfigYml struct {
+	RedisServer   string `yaml:"redis-server"`
+	RedisPort     string `yaml:"redis-port"`
+	RedisPassword string `yaml:"redis-password"`
+	ServerId      string `yaml:"server-id"`
+}
+
+func (b *ProxyDeploymentConfigMapBuilder) getRedisBungeeConfigYmlFile() (string, error) {
+	redisBungeeConfigYml := redisBungeeConfigYml{
+		RedisServer:   "${CFG_REDISBUNGEE_REDIS_HOST}",
+		RedisPort:     "${CFG_REDISBUNGEE_REDIS_PORT}",
+		RedisPassword: "${CFG_REDISBUNGEE_REDIS_PASSWORD}",
+		ServerId:      "${CFG_SERVER_ID}",
+	}
+
+	out, err := yaml.Marshal(&redisBungeeConfigYml)
 	if err != nil {
 		return "", err
 	}

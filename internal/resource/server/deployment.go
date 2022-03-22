@@ -73,7 +73,8 @@ func (b *MinecraftServerDeploymentDeploymentBuilder) Update(object client.Object
 						InitialDelaySeconds: b.Instance.Spec.PodOverrides.ReadinessProbe.InitialDelaySeconds,
 						PeriodSeconds:       10,
 					},
-					Resources: *b.Instance.Spec.Resources,
+					Resources:       *b.Instance.Spec.Resources,
+					SecurityContext: b.getSecurityContext(),
 					VolumeMounts: []corev1.VolumeMount{
 						{
 							Name:      "minecraft-data-dir",
@@ -134,6 +135,7 @@ func (b *MinecraftServerDeploymentDeploymentBuilder) getInitContainers() []corev
 				"memory": k8sresource.MustParse("512Ki"),
 			},
 		},
+		SecurityContext: b.getSecurityContext(),
 		VolumeMounts: []corev1.VolumeMount{
 			{
 				Name:      "minecraft-data-dir",
@@ -163,6 +165,7 @@ func (b *MinecraftServerDeploymentDeploymentBuilder) getInitContainers() []corev
 					"memory": k8sresource.MustParse("512Ki"),
 				},
 			},
+			SecurityContext: b.getSecurityContext(),
 			VolumeMounts: []corev1.VolumeMount{
 				{
 					Name:      "minecraft-data-dir",
@@ -210,6 +213,7 @@ func (b *MinecraftServerDeploymentDeploymentBuilder) getInitContainers() []corev
 					"memory": k8sresource.MustParse("512Ki"),
 				},
 			},
+			SecurityContext: b.getSecurityContext(),
 			VolumeMounts: []corev1.VolumeMount{
 				{
 					Name:      "minecraft-data-dir",
@@ -258,8 +262,12 @@ func (b *MinecraftServerDeploymentDeploymentBuilder) getDeploymentInitPluginsEnv
 func (b *MinecraftServerDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 	env := []corev1.EnvVar{
 		{
-			Name:  "SERVER_NAME",
-			Value: b.Instance.Name,
+			Name: "SERVER_ID",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.name",
+				},
+			},
 		},
 		{
 			Name:  "TYPE",
@@ -377,6 +385,23 @@ func (b *MinecraftServerDeploymentDeploymentBuilder) getDeploymentPorts() []core
 	}
 
 	return ports
+}
+
+func (b *MinecraftServerDeploymentDeploymentBuilder) getSecurityContext() *corev1.SecurityContext {
+	securityEscalation := false
+	readOnlyFs := false // FIXME: true
+	runAsNonRoot := true
+	userUid := int64(1000)
+
+	return &corev1.SecurityContext{
+		AllowPrivilegeEscalation: &securityEscalation,
+		ReadOnlyRootFilesystem:   &readOnlyFs,
+		RunAsNonRoot:             &runAsNonRoot,
+		RunAsUser:                &userUid,
+		Capabilities: &corev1.Capabilities{
+			Drop: []corev1.Capability{"ALL"},
+		},
+	}
 }
 
 func getTypeFromVersionChannel(channel shulkermciov1alpha1.MinecraftServerDeploymentVersionChannel) string {

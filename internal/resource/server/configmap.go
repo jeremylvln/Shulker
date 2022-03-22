@@ -36,12 +36,20 @@ func (b *MinecraftServerDeploymentConfigMapBuilder) Update(object client.Object)
 	configMapData := make(map[string]string)
 
 	configMapData["init-fs.sh"] = strings.Trim(`
-cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/;
+set -x
+cp -H -r $SHULKER_CONFIG_DIR/* $SHULKER_DATA_DIR/
 if [ -e "$SHULKER_CONFIG_DIR/server-icon.png" ]; then cat $SHULKER_CONFIG_DIR/server-icon.png | base64 -d > $SHULKER_DATA_DIR/server-icon.png; fi
 if [ ! -z "$SHULKER_LIMBO_SCHEMATIC_URL" ]; then wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL; fi
+files_with_folder=$(cd $SHULKER_CONFIG_DIR && find -L . -type f -name '*___*' | tr '\n' ' ')
+for file in $files_with_folder; do
+	escaped=$(echo $file | sed 's/___/\//g')
+	mkdir -p "$SHULKER_DATA_DIR/$(dirname $escaped)"
+	cp $SHULKER_CONFIG_DIR/$file $SHULKER_DATA_DIR/$escaped
+done
 	`, "\n ")
 
 	configMapData["init-plugins.sh"] = strings.Trim(`
+set -x
 mkdir -p $SHULKER_DATA_DIR/plugins
 plugins=$(echo "$SHULKER_PLUGINS_URL" | tr ';' ' ')
 for plugin in $plugins; do cd $SHULKER_DATA_DIR/plugins && curl -L -O $plugin; done
@@ -49,7 +57,8 @@ for plugin in $plugins; do cd $SHULKER_DATA_DIR/plugins && curl -L -O $plugin; d
 
 	if b.Instance.Spec.World != nil && b.Instance.Spec.World.SchematicUrl != "" {
 		configMapData["init-limbo-schematic.sh"] = strings.Trim(`
-wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL;
+set -x
+wget -O $SHULKER_DATA_DIR/limbo.schematic $SHULKER_LIMBO_SCHEMATIC_URL
 echo "bungeecord=true" >> $SHULKER_DATA_DIR/server.properties
 echo "default-gamemode=adventure" >> $SHULKER_DATA_DIR/server.properties
 echo "world-spawn=world;${SHULKER_LIMBO_WORLD_SPAWN}" >> $SHULKER_DATA_DIR/server.properties
@@ -63,6 +72,12 @@ echo "handshake-verbose=false" >> $SHULKER_DATA_DIR/server.properties
 		configMapData["server-icon.png"] = b.Instance.Spec.ServerIcon
 	} else {
 		configMapData["server-icon.png"] = defaultServerIcon
+	}
+
+	if b.Instance.Spec.ExtraFiles != nil {
+		for path, value := range *b.Instance.Spec.ExtraFiles {
+			configMapData[strings.ReplaceAll(path, "/", "___")] = value
+		}
 	}
 
 	bukkitYml, err := b.getBukkitYmlFile()

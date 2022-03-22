@@ -980,8 +980,36 @@ spec:
                 - enabled
                 - replicas
                 type: object
+              redisSync:
+                default:
+                  enabled: false
+                description: Configuration of the proxy synchronization layer using
+                  Redis and RedisBungee.
+                properties:
+                  database:
+                    default: 0
+                    description: Number of the Redis database to use.
+                    type: integer
+                  enabled:
+                    default: false
+                    description: Whether to enable Redis synchronization for the proxies
+                      using RedisBungee.
+                    type: boolean
+                  secretName:
+                    description: Name of the Kubernetes secret containing the Redis
+                      credentials to use. Must contains a `username` and a `password`
+                      keys.
+                    type: string
+                  serviceName:
+                    description: Name of the Kubernetes service allowing connections
+                      for the proxies.
+                    type: string
+                required:
+                - enabled
+                type: object
             required:
             - limboSpec
+            - redisSync
             type: object
           status:
             description: MinecraftClusterStatus defines the observed state of MinecraftCluster

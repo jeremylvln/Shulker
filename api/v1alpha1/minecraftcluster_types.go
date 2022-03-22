@@ -47,6 +47,11 @@ type MinecraftClusterSpec struct {
 	// of this Minecraft Cluster.
 	//+kubebuilder:default={enabled: true, replicas: 1}
 	LimboSpec MinecraftClusterLimboSpec `json:"limboSpec"`
+
+	// Configuration of the proxy synchronization layer using
+	// Redis and RedisBungee.
+	//+kubebuilder:default={enabled: false}
+	RedisSync MinecraftClusterRedisSyncSpec `json:"redisSync"`
 }
 
 type MinecraftClusterLimboSpec struct {
@@ -74,6 +79,28 @@ type MinecraftClusterLimboSpec struct {
 
 	// Affinity scheduling rules to be applied on created Pods.
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
+}
+
+type MinecraftClusterRedisSyncSpec struct {
+	// Whether to enable Redis synchronization for the proxies
+	// using RedisBungee.
+	//+kubebuilder:default=false
+	Enabled bool `json:"enabled"`
+
+	// Name of the Kubernetes service allowing connections
+	// for the proxies.
+	//+kubebuilder:validation:Required
+	ServiceName string `json:"serviceName,omitempty"`
+
+	// Name of the Kubernetes secret containing the Redis
+	// credentials to use. Must contains a `username` and a
+	// `password` keys.
+	//+kubebuilder:validation:Required
+	SecretName string `json:"secretName,omitempty"`
+
+	// Number of the Redis database to use.
+	//+kubebuilder:default=0
+	Database int `json:"database,omitempty"`
 }
 
 type MinecraftClusterStatusCondition string

@@ -879,6 +879,12 @@ spec:
                         type: array
                     type: object
                 type: object
+              extraFiles:
+                additionalProperties:
+                  type: string
+                description: Map of extra files to create when bootstraping the Minecraft
+                  Server Deployment's pod.
+                type: object
               maxPlayers:
                 default: 20
                 description: Number of maximum players that can connect to the Minecraft
@@ -1028,6 +1034,8 @@ spec:
                     description: Additional labels to add to the Minecraft Server.
                     type: object
                   livenessProbe:
+                    default:
+                      initialDelaySeconds: 60
                     description: Overrides for the liveness probe of the Minecraft
                       Server.
                     properties:
@@ -1040,6 +1048,8 @@ spec:
                         type: integer
                     type: object
                   readinessProbe:
+                    default:
+                      initialDelaySeconds: 60
                     description: Overrides for the readiness probe of the Minecraft
                       Server.
                     properties:

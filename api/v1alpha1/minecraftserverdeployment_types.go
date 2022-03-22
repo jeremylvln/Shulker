@@ -81,6 +81,10 @@ type MinecraftServerDeploymentSpec struct {
 	//+kubebuilder:default={enabled: true}
 	Rcon *MinecraftServerDeploymentRconSpec `json:"rcon,omitempty"`
 
+	// Map of extra files to create when bootstraping the
+	// Minecraft Server Deployment's pod.
+	ExtraFiles *map[string]string `json:"extraFiles,omitempty"`
+
 	// Overrides configuration for the Minecraft Server pods.
 	//+kubebuilder:default={livenessProbe: {initialDelaySeconds: 60}, readinessProbe: {initialDelaySeconds: 60}, terminationGracePeriodSeconds: 60}
 	PodOverrides *MinecraftServerDeploymentPodOverridesSpec `json:"podOverrides,omitempty"`
@@ -173,9 +177,11 @@ type MinecraftServerDeploymentPodOverridesSpec struct {
 	Env []corev1.EnvVar `json:"env,omitempty"`
 
 	// Overrides for the liveness probe of the Minecraft Server.
+	//+kubebuilder:default={initialDelaySeconds: 60}
 	LivenessProbe *MinecraftServerDeploymentPodProbeSpec `json:"livenessProbe,omitempty"`
 
 	// Overrides for the readiness probe of the Minecraft Server.
+	//+kubebuilder:default={initialDelaySeconds: 60}
 	ReadinessProbe *MinecraftServerDeploymentPodProbeSpec `json:"readinessProbe,omitempty"`
 
 	// Number of seconds before force killing the pod after a graceful

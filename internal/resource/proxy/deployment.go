@@ -75,7 +75,8 @@ func (b *ProxyDeploymentDeploymentBuilder) Update(object client.Object) error {
 						InitialDelaySeconds: b.Instance.Spec.PodOverrides.ReadinessProbe.InitialDelaySeconds,
 						PeriodSeconds:       10,
 					},
-					Resources: *b.Instance.Spec.Resources,
+					Resources:       *b.Instance.Spec.Resources,
+					SecurityContext: b.getSecurityContext(),
 					VolumeMounts: []corev1.VolumeMount{
 						{
 							Name:      "proxy-server-dir",
@@ -137,6 +138,7 @@ func (b *ProxyDeploymentDeploymentBuilder) getInitContainers() []corev1.Containe
 					"memory": k8sresource.MustParse("512Ki"),
 				},
 			},
+			SecurityContext: b.getSecurityContext(),
 			VolumeMounts: []corev1.VolumeMount{
 				{
 					Name:      "proxy-server-dir",
@@ -167,6 +169,7 @@ func (b *ProxyDeploymentDeploymentBuilder) getInitContainers() []corev1.Containe
 					"memory": k8sresource.MustParse("512Ki"),
 				},
 			},
+			SecurityContext: b.getSecurityContext(),
 			VolumeMounts: []corev1.VolumeMount{
 				{
 					Name:      "proxy-server-dir",
@@ -200,7 +203,11 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitFsEnv() []corev1.Env
 }
 
 func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitPluginsEnv() []corev1.EnvVar {
-	return []corev1.EnvVar{
+	env := []corev1.EnvVar{
+		{
+			Name:  "SHULKER_CONFIG_DIR",
+			Value: proxyConfigDir,
+		},
 		{
 			Name:  "SHULKER_DATA_DIR",
 			Value: proxyServerDir,
@@ -210,10 +217,29 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentInitPluginsEnv() []corev
 			Value: strings.Join(b.getPluginsList(), ";"),
 		},
 	}
+
+	if b.Cluster.Spec.RedisSync.Enabled {
+		env = append(env, []corev1.EnvVar{
+			{
+				Name:  "SHULKER_REDIS_SYNC_ENABLED",
+				Value: "true",
+			},
+		}...)
+	}
+
+	return env
 }
 
 func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 	env := []corev1.EnvVar{
+		{
+			Name: "SERVER_ID",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.name",
+				},
+			},
+		},
 		{
 			Name:  "TYPE",
 			Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
@@ -235,6 +261,14 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 			Value: "--add-opens java.base/java.time=ALL-UNNAMED",
 		},
 		{
+			Name:  "REPLACE_ENV_VARIABLES",
+			Value: "TRUE",
+		},
+		{
+			Name:  "REPLACE_ENV_VARIABLE_PREFIX",
+			Value: "CFG_",
+		},
+		{
 			Name:  "SHULKER_CLUSTER_NAMESPACE",
 			Value: b.Cluster.Namespace,
 		},
@@ -242,6 +276,53 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 			Name:  "SHULKER_CLUSTER_NAME",
 			Value: b.Cluster.Name,
 		},
+		{
+			Name: "CFG_SERVER_ID",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.name",
+				},
+			},
+		},
+	}
+
+	if b.Cluster.Spec.RedisSync.Enabled {
+		env = append(env, []corev1.EnvVar{
+			{
+				Name:  "CFG_REDISBUNGEE_REDIS_HOST",
+				Value: b.Cluster.Spec.RedisSync.ServiceName,
+			},
+			{
+				Name:  "CFG_REDISBUNGEE_REDIS_PORT",
+				Value: "6379",
+			},
+			{
+				Name: "CFG_REDISBUNGEE_REDIS_USERNAME",
+				ValueFrom: &corev1.EnvVarSource{
+					SecretKeyRef: &corev1.SecretKeySelector{
+						LocalObjectReference: corev1.LocalObjectReference{
+							Name: b.Cluster.Spec.RedisSync.SecretName,
+						},
+						Key: "username",
+					},
+				},
+			},
+			{
+				Name: "CFG_REDISBUNGEE_REDIS_PASSWORD",
+				ValueFrom: &corev1.EnvVarSource{
+					SecretKeyRef: &corev1.SecretKeySelector{
+						LocalObjectReference: corev1.LocalObjectReference{
+							Name: b.Cluster.Spec.RedisSync.SecretName,
+						},
+						Key: "password",
+					},
+				},
+			},
+			{
+				Name:  "CFG_REDISBUNGEE_REDIS_DATABASE",
+				Value: fmt.Sprintf("%d", b.Cluster.Spec.RedisSync.Database),
+			},
+		}...)
 	}
 
 	env = append(env, b.Instance.Spec.PodOverrides.Env...)
@@ -250,7 +331,30 @@ func (b *ProxyDeploymentDeploymentBuilder) getDeploymentEnv() []corev1.EnvVar {
 }
 
 func (b *ProxyDeploymentDeploymentBuilder) getPluginsList() []string {
-	return append(b.Instance.Spec.Plugins, "https://i.jeremylvln.fr/shulker/ShulkerProxyDirectory-0.0.1.jar")
+	plugins := append(b.Instance.Spec.Plugins, "https://i.jeremylvln.fr/shulker/ShulkerProxyDirectory-0.0.1.jar")
+
+	if b.Cluster.Spec.RedisSync.Enabled {
+		plugins = append(plugins, "https://i.jeremylvln.fr/shulker/RedisBungee-0.5.jar")
+	}
+
+	return plugins
+}
+
+func (b *ProxyDeploymentDeploymentBuilder) getSecurityContext() *corev1.SecurityContext {
+	securityEscalation := false
+	readOnlyFs := false // FIXME: true
+	runAsNonRoot := true
+	userUid := int64(1000)
+
+	return &corev1.SecurityContext{
+		AllowPrivilegeEscalation: &securityEscalation,
+		ReadOnlyRootFilesystem:   &readOnlyFs,
+		RunAsNonRoot:             &runAsNonRoot,
+		RunAsUser:                &userUid,
+		Capabilities: &corev1.Capabilities{
+			Drop: []corev1.Capability{"ALL"},
+		},
+	}
 }
 
 func getTypeFromVersionChannel(channel shulkermciov1alpha1.ProxyDeploymentVersionChannel) string {
