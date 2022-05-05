@@ -29,7 +29,7 @@ jobs:
 
       - name: Prepare Docker metadata
         id: docker-metadata
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ghcr.io/iamblueslime/shulker-operator
           tags: |
