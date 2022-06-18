@@ -3,7 +3,7 @@ module shulkermc.io/m/v2
 go 1.17
 
 require (
-	github.com/Tnze/go-mc v1.17.1
+	github.com/Tnze/go-mc v1.18.2
 	github.com/google/uuid v1.3.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
