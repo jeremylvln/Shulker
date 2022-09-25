@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     compileOnly group: 'net.md-5', name: 'bungeecord-api', version: '1.18-R0.1-SNAPSHOT'
-    implementation group: 'io.fabric8', name: 'kubernetes-client', version: '5.12.1'
+    implementation group: 'io.fabric8', name: 'kubernetes-client', version: '5.12.3'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 }
 
