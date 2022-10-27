@@ -1,0 +1,29 @@
+archivesBaseName = "ShulkerProxyAgent-BungeeCord"
+version = '0.0.1'
+
+repositories {
+    maven {
+        name = 'md5'
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+dependencies {
+    implementation project(':support:shulker-proxy-agent-common')
+
+    compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
+    implementation "net.kyori:adventure-platform-bungeecord:4.1.2"
+}
+
+jar {
+    dependsOn(':support:shulker-proxy-agent-common:jar')
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+}

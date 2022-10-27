@@ -1,0 +1,18 @@
+{
+  "root": "libs/crds",
+  "sourceRoot": "libs/crds/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "go fmt ./...",
+          "go vet ./..."
+        ],
+        "cwd": "libs/crds"
+      }
+    }
+  },
+  "tags": ["lang:go"]
+}

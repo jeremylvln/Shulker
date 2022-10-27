@@ -1,80 +1,44 @@
-# Global
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-## Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-bin
-testbin/*
+# Compiled output
+dist/
+tmp/
 
-# Go
+# Node.js dependencies
+node_modules/
+scripts/.tools/
 
-## Test binary, build with `go test -c`
-*.test
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-## Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# Misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-## Kubernetes Generated files - skip generated files, except for vendored files
-!vendor/**/zz_generated.*
-
-# Java & Gradle
-
-# Ignore Gradle project-specific cache directory/  …born/.gitignore
-.gradle
-
-# Ignore Gradle build output directory
-build
-**/build/
-!src/**/build/
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
-
-### JetBrains template
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
-
-# Generated files
-.idea/**/contentModel.xml
-
-# Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
+# System Files
+.DS_Store
+Thumbs.db
 
 # Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
-
-# Gradle and Maven with auto-import
-# When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
-# auto-import.
-.idea/artifacts
-.idea/compiler.xml
-.idea/jarRepositories.xml
-.idea/modules.xml
-.idea/*.iml
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradletasknamecache

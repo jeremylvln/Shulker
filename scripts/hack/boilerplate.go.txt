@@ -1,0 +1,4 @@
+/*
+Copyright (c) Jérémy Levilain
+SPDX-License-Identifier: GPL-3.0-or-later
+*/

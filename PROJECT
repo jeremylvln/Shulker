@@ -2,7 +2,7 @@ domain: shulkermc.io
 layout:
 - go.kubebuilder.io/v3
 projectName: shulker
-repo: shulkermc.io/m/v2
+repo: github.com/iamblueslime/shulker
 resources:
 - api:
     crdVersion: v1
@@ -10,7 +10,15 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftCluster
-  path: shulkermc.io/m/v2/api/v1alpha1
+  path: github.com/iamblueslime/shulker/libs/crds/v1alpha1
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: shulkermc.io
+  kind: Proxy
+  path: github.com/iamblueslime/shulker/libs/crds/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -18,7 +26,15 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: ProxyDeployment
-  path: shulkermc.io/m/v2/api/v1alpha1
+  path: github.com/iamblueslime/shulker/libs/crds/v1alpha1
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: shulkermc.io
+  kind: MinecraftServer
+  path: github.com/iamblueslime/shulker/libs/crds/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -26,6 +42,6 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftServerDeployment
-  path: shulkermc.io/m/v2/api/v1alpha1
+  path: github.com/iamblueslime/shulker/libs/crds/v1alpha1
   version: v1alpha1
 version: "3"

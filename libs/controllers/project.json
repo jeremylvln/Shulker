@@ -1,0 +1,19 @@
+{
+  "root": "libs/controllers",
+  "sourceRoot": "libs/controllers/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "go fmt ./...",
+          "go vet ./..."
+        ],
+        "cwd": "libs/controllers"
+      }
+    }
+  },
+  "tags": ["lang:go"],
+  "implicitDependencies": ["libs-crds"]
+}

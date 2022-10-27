@@ -1,6 +1,0 @@
-apiVersion: shulkermc.io/v1alpha1
-kind: MinecraftServer
-metadata:
-  name: minecraftserver-sample
-spec:
-  # TODO(user): Add fields here

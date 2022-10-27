@@ -1,0 +1,12 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: Proxy
+metadata:
+  labels:
+    app.kubernetes.io/name: proxy
+    app.kubernetes.io/instance: proxy-sample
+    app.kubernetes.io/part-of: shulker
+    app.kuberentes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: shulker
+  name: proxy-sample
+spec:
+  # TODO(user): Add fields here

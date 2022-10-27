@@ -1,0 +1,27 @@
+{
+  "root": "support/shulker-proxy-api",
+  "sourceRoot": "support/shulker-proxy-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["dist/support/shulker-proxy-api"],
+      "options": {
+        "command": "gradle :support:shulker-proxy-api:build"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :support:shulker-proxy-api:test"
+      }
+    },
+    "publish-maven": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :support:shulker-proxy-api:publish"
+      }
+    }
+  },
+  "tags": ["lang:java"]
+}

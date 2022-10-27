@@ -1,0 +1,22 @@
+archivesBaseName = "ShulkerProxyAPI"
+version = '0.0.1'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+}
+
+javadoc {
+    options.addBooleanOption('html5', true)
+}

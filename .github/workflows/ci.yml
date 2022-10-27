@@ -3,7 +3,9 @@ name: ci
 on: pull_request
 
 env:
-  TARGET_GOLANG_VERSION: '1.17'
+  TARGET_NODE_VERSION: '16'
+  TARGET_GOLANG_VERSION: '1.19'
+  TARGET_JAVA_VERSION: '17'
 
 jobs:
   test:
@@ -13,10 +15,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+
       - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.TARGET_GOLANG_VERSION }}
 
+      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: ${{ env.TARGET_JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
       - name: Run tests
-        run: make test
+        uses: mansagroup/nrwl-nx-action@v3
+        with:
+          targets: test
+          parallel: 3

@@ -1,0 +1,22 @@
+{
+  "name": "shulker",
+  "version": "0.0.0",
+  "license": "GPL",
+  "private": true,
+  "scripts": {
+    "build": "nx run-many --target=build --all",
+    "postinstall": "npm run tools:install",
+    "tools:install": "bash scripts/download_tools.sh",
+    "crd:install": "kustomize build config/crd | kubectl apply -f -",
+    "crd:uninstall": "kustomize build config/crd | kubectl delete -f -",
+    "config:gen": "bash scripts/generate_config.sh"
+  },
+  "devDependencies": {
+    "nx": "15.0.0",
+    "prettier": "2.6.2"
+  },
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ]
+}

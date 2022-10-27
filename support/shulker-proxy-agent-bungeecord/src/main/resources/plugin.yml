@@ -1,0 +1,4 @@
+name: ShulkerProxyAgent
+main: io.shulkermc.proxyagent.ShulkerProxyAgent
+version: 0.0.1
+author: Jérémy Levilain <jeremy@jeremylvln.fr>

@@ -1,6 +1,0 @@
-apiVersion: shulkermc.io/v1alpha1
-kind: MinecraftServerDeployment
-metadata:
-  name: minecraftserverdeployment-sample
-spec:
-  # TODO(user): Add fields here

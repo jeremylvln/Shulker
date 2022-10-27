@@ -1,0 +1,29 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyDeployment
+metadata:
+  name: proxy
+spec:
+  clusterRef:
+    name: my-cluster
+  replicas: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config:
+        maxPlayers: 100
+      podOverrides:
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 1
+                preference:
+                  matchExpressions:
+                    - key: cloud.google.com/gke-preemptible
+                      operator: In
+                      values:
+                        - 'true'

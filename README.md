@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/IamBlueSlime/Shulker" target="blank"><img src="./.github/assets/logo.png" width="80" alt="Shulker's Logo" /></a></p>
+<p align="center"><a href="https://github.com/IamBlueSlime/shulker" target="blank"><img src="./.github/assets/logo.png" width="80" alt="Shulker's Logo" /></a></p>
 <h1 align="center">Shulker</h1>
 <p align="center">Put Minecraft in a <i>box</i> :package:</p>
 

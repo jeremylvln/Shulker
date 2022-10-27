@@ -1,0 +1,24 @@
+version = '0.0.1'
+
+dependencies {
+    api project(':support:shulker-proxy-api')
+
+    compileOnly 'net.kyori:adventure-api:4.11.0'
+
+    compileOnly 'io.fabric8:kubernetes-client-api:6.2.0'
+    runtimeOnly 'io.fabric8:kubernetes-client:6.2.0'
+    implementation 'io.fabric8:kubernetes-httpclient-okhttp:6.2.0'
+}
+
+jar {
+    dependsOn(':support:shulker-proxy-api:jar')
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+}

@@ -1,3 +1,5 @@
-rootProject.name = 'Shulker'
-
-include ':support:shulker-proxy-directory'
+rootProject.name = "shulker"
+include ':support:shulker-proxy-api'
+include ':support:shulker-proxy-agent-common'
+include ':support:shulker-proxy-agent-bungeecord'
+include ':support:shulker-proxy-agent-velocity'

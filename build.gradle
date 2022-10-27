@@ -1,13 +1,20 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.7.20" apply false
+}
+
 configure(subprojects.findAll {
     !['support'].contains(it.name)
 }) {
     apply plugin: 'java'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'idea'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
     group = 'io.shulkermc'
+
+    it.buildDir = "$rootDir/dist/support/$it.name"
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     compileJava.options.encoding = 'UTF-8'
@@ -19,11 +26,6 @@ configure(subprojects.findAll {
 
     dependencies {
         testImplementation 'junit:junit:4.13.2'
-    }
-
-    java {
-        withJavadocJar()
-        withSourcesJar()
     }
 
     publishing {
@@ -44,7 +46,7 @@ configure(subprojects.findAll {
                 pom {
                     name = project.name
                     // description = 'A concise description of my library'
-                    url = "https://github.com/IamBlueSlime/Shulker"
+                    url = "https://github.com/IamBlueSlime/shulker"
 
                     /*licenses {
                         license {
@@ -62,9 +64,9 @@ configure(subprojects.findAll {
                     }
 
                     scm {
-                        connection = 'scm:git:git://github.com/IamBlueSlime/Shulker.git'
-                        developerConnection = 'scm:git:ssh://github.com/IamBlueSlime/Shulker.git'
-                        url = "https://github.com/IamBlueSlime/Shulker"
+                        connection = 'scm:git:git://github.com/IamBlueSlime/shulker.git'
+                        developerConnection = 'scm:git:ssh://github.com/IamBlueSlime/shulker.git'
+                        url = "https://github.com/IamBlueSlime/shulker"
                     }
                 }
             }
@@ -72,11 +74,11 @@ configure(subprojects.findAll {
 
         repositories {
             maven {
-                name = "GitHubPackages"
-                url = "https://maven.pkg.github.com/IamBlueSlime/Shulker"
+                name = "Shulker"
+                url = "https://maven.jeremylvln.fr/artifactory/shulker"
                 credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                    username = project.findProperty("artifactory.username") ?: System.getenv("ARTIFACTORY_USERNAME")
+                    password = project.findProperty("artifactory.password") ?: System.getenv("ARTIFACTORY_PASSWORD")
                 }
             }
         }
@@ -85,11 +87,5 @@ configure(subprojects.findAll {
     signing {
         useGpgCmd()
         sign publishing.publications.mavenJava
-    }
-
-    javadoc {
-        if(JavaVersion.current().isJava9Compatible()) {
-            options.addBooleanOption('html5', true)
-        }
     }
 }

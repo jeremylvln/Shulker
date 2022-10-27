@@ -1,0 +1,6 @@
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "file:///Users/jeremy/personal/Shulker/.github/workflows/deploy.yml",
+    "https://json.schemastore.org/bungee-plugin.json": "file:///Users/jeremy/personal/Shulker/apps/shulker-proxy-agent/src/main/resources/plugin.yml"
+  }
+}

@@ -8,20 +8,9 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - services
+  - pods
   verbs:
   - create
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - create
-  - delete
   - get
   - list
   - update
@@ -41,20 +30,6 @@ rules:
 - apiGroups:
   - shulkermc.io
   resources:
-  - minecraftclusters/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - shulkermc.io
-  resources:
-  - minecraftclusters/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - shulkermc.io
-  resources:
   - minecraftserverdeployments
   verbs:
   - create
@@ -64,12 +39,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - shulkermc.io
-  resources:
-  - minecraftserverdeployments/finalizers
-  verbs:
-  - update
 - apiGroups:
   - shulkermc.io
   resources:
@@ -83,9 +52,41 @@ rules:
   resources:
   - minecraftservers
   verbs:
+  - create
+  - delete
   - get
   - list
+  - patch
+  - update
   - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - minecraftservers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxies
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - shulkermc.io
+  resources:
+  - proxies/status
+  verbs:
+  - get
+  - patch
+  - update
 - apiGroups:
   - shulkermc.io
   resources:
@@ -98,12 +99,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - shulkermc.io
-  resources:
-  - proxydeployments/finalizers
-  verbs:
-  - update
 - apiGroups:
   - shulkermc.io
   resources:

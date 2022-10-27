@@ -4,59 +4,84 @@ on:
   push:
     branches:
       - main
+      - rework
 
 permissions:
   contents: read
   packages: write
 
+env:
+  TARGET_NODE_VERSION: '16'
+  TARGET_JAVA_VERSION: '17'
+
 jobs:
-  deploy-operator:
+  publish-docker:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
       - name: Prepare Docker metadata
         id: docker-metadata
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/iamblueslime/shulker-operator
+          images: ghcr.io/iamblueslime/shulker_app
+          sep-tags: ";;;"
+          sep-labels: ";;;"
           tags: |
             type=ref,event=branch
             type=sha,format=long
             type=sha
             type=raw,value=latest
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: Publish images
+        uses: mansagroup/nrwl-nx-action@v3
         with:
-          push: true
-          tags: ${{ steps.docker-metadata.outputs.tags }}
-          labels: ${{ steps.docker-metadata.outputs.labels }}
+          targets: publish-docker
+          parallel: 2
+          args: -- "${{ steps.docker-metadata.outputs.tags }}" "${{ steps.docker-metadata.outputs.labels }}"
 
-  deploy-plugins:
+  publish-maven:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Setup Java
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+
+      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          distribution: adopt
+          java-version: ${{ env.TARGET_JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Import signing GPG key
         id: gpg-signing-key
@@ -65,15 +90,12 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+      - name: Install Node.js dependencies
+        run: npm ci
 
       - name: Publish packages
-        uses: gradle/gradle-build-action@v2
+        uses: mansagroup/nrwl-nx-action@v3
         with:
-          arguments: |
-            publish
-            -Psigning.gnupg.keyName=${{ steps.gpg-signing-key.outputs.keyid }}
-            -Psigning.gnupg.passphrase=${{ secrets.GPG_PASSPHRASE }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          targets: publish-maven
+          parallel: 3
+          args: -Psigning.gnupg.keyName=${{ steps.gpg-signing-key.outputs.keyid }} -Psigning.gnupg.passphrase=${{ secrets.GPG_PASSPHRASE }}
