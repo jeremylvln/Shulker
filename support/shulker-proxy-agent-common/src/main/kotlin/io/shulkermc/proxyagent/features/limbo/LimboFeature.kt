@@ -29,10 +29,10 @@ class LimboFeature(
 
             if (limboServers.hasNext()) {
                 val firstLimboServer = limboServers.next()
-                ServerPreConnectHookResult(Optional.of(firstLimboServer))
-            } else {
-                player.disconnect(MSG_NO_LIMBO_FOUND)
+                return ServerPreConnectHookResult(Optional.of(firstLimboServer))
             }
+
+            player.disconnect(MSG_NO_LIMBO_FOUND)
         }
 
         return ServerPreConnectHookResult(Optional.empty())

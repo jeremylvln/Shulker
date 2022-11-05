@@ -105,6 +105,47 @@ spec:
                             description: Number of maximum players that can connect
                               to the MinecraftServer.
                             type: integer
+                          plugins:
+                            description: List of references to plugins to download.
+                            items:
+                              properties:
+                                url:
+                                  description: Direct URL of the resource to download.
+                                  type: string
+                                urlFrom:
+                                  description: Source of the resource URL. Cannot
+                                    be used if value is not empty.
+                                  properties:
+                                    mavenRef:
+                                      description: Reference to a Maven artiact to
+                                        use as source.
+                                      properties:
+                                        artifactId:
+                                          description: Artifact ID of the Maven artifact
+                                            to download.
+                                          type: string
+                                        credentialsSecretName:
+                                          description: Name of the Kubernetes Secret
+                                            containing the repository credentials.
+                                            The secret must contains a username and
+                                            password keys.
+                                          type: string
+                                        groupId:
+                                          description: Group ID of the Maven artifact
+                                            to download.
+                                          type: string
+                                        repository:
+                                          description: URL to the Maven repository
+                                            to download the artifact from.
+                                          type: string
+                                        version:
+                                          description: Version of the Maven artifact
+                                            to download.
+                                          type: string
+                                      type: object
+                                  type: object
+                              type: object
+                            type: array
                           proxyForwardingMode:
                             default: Velocity
                             description: Type of forwarding the proxies are using
@@ -113,6 +154,46 @@ spec:
                             - BungeeCord
                             - Velocity
                             type: string
+                          world:
+                            description: Reference to a world to download and extract.
+                              Gzipped tarball only.
+                            properties:
+                              url:
+                                description: Direct URL of the resource to download.
+                                type: string
+                              urlFrom:
+                                description: Source of the resource URL. Cannot be
+                                  used if value is not empty.
+                                properties:
+                                  mavenRef:
+                                    description: Reference to a Maven artiact to use
+                                      as source.
+                                    properties:
+                                      artifactId:
+                                        description: Artifact ID of the Maven artifact
+                                          to download.
+                                        type: string
+                                      credentialsSecretName:
+                                        description: Name of the Kubernetes Secret
+                                          containing the repository credentials. The
+                                          secret must contains a username and password
+                                          keys.
+                                        type: string
+                                      groupId:
+                                        description: Group ID of the Maven artifact
+                                          to download.
+                                        type: string
+                                      repository:
+                                        description: URL to the Maven repository to
+                                          download the artifact from.
+                                        type: string
+                                      version:
+                                        description: Version of the Maven artifact
+                                          to download.
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
                         type: object
                       podOverrides:
                         description: Overrides for values to be injected in the created

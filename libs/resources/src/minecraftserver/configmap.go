@@ -64,17 +64,28 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.MinecraftServerCon
 		set -euo pipefail
 		set -o xtrace
 
-		cp "$SHULKER_CONFIG_DIR/server.properties" "$SERVER_CONFIG_DIR/server.properties"
+		cp "${SHULKER_CONFIG_DIR}/server.properties" "${SERVER_CONFIG_DIR}/server.properties"
 		if [ "${TYPE}" == "BUKKIT" ]; then
-			cp "$SHULKER_CONFIG_DIR/bukkit-config.yml" "$SERVER_CONFIG_DIR/bukkit.yml"
+			cp "${SHULKER_CONFIG_DIR}/bukkit-config.yml" "${SERVER_CONFIG_DIR}/bukkit.yml"
 		elif [ "${TYPE}" == "SPIGOT" ]; then
-			cp "$SHULKER_CONFIG_DIR/bukkit-config.yml" "$SERVER_CONFIG_DIR/bukkit.yml"
-			cp "$SHULKER_CONFIG_DIR/spigot-config.yml" "$SERVER_CONFIG_DIR/spigot.yml"
+			cp "${SHULKER_CONFIG_DIR}/bukkit-config.yml" "${SERVER_CONFIG_DIR}/bukkit.yml"
+			cp "${SHULKER_CONFIG_DIR}/spigot-config.yml" "${SERVER_CONFIG_DIR}/spigot.yml"
 		elif [ "${TYPE}" == "PAPER" ]; then
-			cp "$SHULKER_CONFIG_DIR/bukkit-config.yml" "$SERVER_CONFIG_DIR/bukkit.yml"
-			cp "$SHULKER_CONFIG_DIR/spigot-config.yml" "$SERVER_CONFIG_DIR/spigot.yml"
-			mkdir -p "$SERVER_CONFIG_DIR/config"
-			cp "$SHULKER_CONFIG_DIR/paper-global-config.yml" "$SERVER_CONFIG_DIR/config/paper-global.yml"
+			cp "${SHULKER_CONFIG_DIR}/bukkit-config.yml" "${SERVER_CONFIG_DIR}/bukkit.yml"
+			cp "${SHULKER_CONFIG_DIR}/spigot-config.yml" "${SERVER_CONFIG_DIR}/spigot.yml"
+			mkdir -p "${SERVER_CONFIG_DIR}/config"
+			cp "${SHULKER_CONFIG_DIR}/paper-global-config.yml" "${SERVER_CONFIG_DIR}/config/paper-global.yml"
+		fi
+
+		if [ "${SERVER_WORLD_URL}" != "" ]; then
+			(cd "${SERVER_CONFIG_DIR}" && wget "${SERVER_WORLD_URL}" -O - | tar -xzv)
+		fi
+
+		if [ "${SERVER_PLUGIN_URLS}" != "" ]; then
+			mkdir -p "${SERVER_CONFIG_DIR}/plugins"
+			for plugin_url in ${SERVER_PLUGIN_URLS//;/ }; do
+				(cd "${SERVER_CONFIG_DIR}/plugins" && wget "${plugin_url}")
+			done
 		fi
 	`)
 

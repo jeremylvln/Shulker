@@ -71,8 +71,17 @@ const (
 type MinecraftServerConfigurationSpec struct {
 	// Name of an optional ConfigMap already containing the server
 	// configuration.
-	//+optional
+	// +optional
 	ExistingConfigMapName string `json:"existingConfigMapName,omitempty"`
+
+	// Reference to a world to download and extract. Gzipped tarball
+	// only.
+	//+optional
+	World *ResourceRef `json:"world,omitempty"`
+
+	// List of references to plugins to download.
+	//+optional
+	Plugins []ResourceRef `json:"plugins,omitempty"`
 
 	// Number of maximum players that can connect to the MinecraftServer.
 	//+kubebuilder:default=20

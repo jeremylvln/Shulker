@@ -116,9 +116,8 @@ func (r *ProxyDeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 			proxy.Labels = labels
 			proxy.Spec = proxyDeployment.Spec.Template.Spec
 			proxy.Spec.ClusterRef = proxyDeployment.Spec.ClusterRef
-			proxy.Spec.Configuration = shulkermciov1alpha1.ProxyConfigurationSpec{
-				ExistingConfigMapName: resourceBuilder.GetConfigMapName(),
-			}
+			proxy.Spec.Configuration = proxyDeployment.Spec.Template.Spec.Configuration
+			proxy.Spec.Configuration.ExistingConfigMapName = resourceBuilder.GetConfigMapName()
 
 			if err := controllerutil.SetControllerReference(proxyDeployment, &proxy, r.Scheme); err != nil {
 				err = fmt.Errorf("failed setting controller reference for Proxy: %v", err)

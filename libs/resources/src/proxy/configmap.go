@@ -66,30 +66,34 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyConfiguration
 		set -euo pipefail
 		set -o xtrace
 
-		cp "$SHULKER_CONFIG_DIR/probe-readiness.sh" "$PROXY_DATA_DIR/probe-readiness.sh"
-		cat "$SHULKER_CONFIG_DIR/server-icon.png" | base64 -d > "$PROXY_DATA_DIR/server-icon.png"
+		cp "${SHULKER_CONFIG_DIR}/probe-readiness.sh" "${PROXY_DATA_DIR}/probe-readiness.sh"
+		cat "${SHULKER_CONFIG_DIR}/server-icon.png" | base64 -d > "${PROXY_DATA_DIR}/server-icon.png"
 	
 		if [ "${TYPE}" == "VELOCITY" ]; then
-			cp "$SHULKER_CONFIG_DIR/velocity-config.toml" "$PROXY_DATA_DIR/velocity.toml"
-			echo "dummy" > "$PROXY_DATA_DIR/forwarding.secret"
+			cp "${SHULKER_CONFIG_DIR}/velocity-config.toml" "${PROXY_DATA_DIR}/velocity.toml"
+			echo "dummy" > "${PROXY_DATA_DIR}/forwarding.secret"
 		else
-			cp "$SHULKER_CONFIG_DIR/bungeecord-config.yml" "$PROXY_DATA_DIR/config.yml"
+			cp "${SHULKER_CONFIG_DIR}/bungeecord-config.yml" "${PROXY_DATA_DIR}/config.yml"
 		fi
 	
 		mkdir -p "${PROXY_DATA_DIR}/plugins"
-		(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent-velocity/0.0.1/shulker-proxy-agent-velocity-0.0.1.jar)
+		if [ "${TYPE}" == "VELOCITY" ]; then
+			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent-velocity/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-velocity-${SHULKER_PROXY_AGENT_VERSION}.jar)
+		else
+			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent-bungeecord/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-bungeecord-${SHULKER_PROXY_AGENT_VERSION}.jar)
+		fi
 	`)
 
 	configMapData["probe-readiness.sh"] = trimScript(`
-	#!/bin/sh
-	set -euo pipefail
-	set -o xtrace
+		#!/bin/sh
+		set -euo pipefail
+		set -o xtrace
 
-	if [ -f "/tmp/drain-lock" ]; then
-		echo "Drain lock found" && exit 1
-	fi
+		if [ -f "/tmp/drain-lock" ]; then
+			echo "Drain lock found" && exit 1
+		fi
 
-	bash /health.sh
+		bash /health.sh
 	`)
 
 	if spec.ServerIcon != "" {

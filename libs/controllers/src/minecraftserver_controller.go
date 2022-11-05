@@ -57,6 +57,8 @@ func (r *MinecraftServerReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	resourceBuilder := resources.MinecraftServerResourceBuilder{
 		Instance: minecraftServer,
 		Scheme:   r.Scheme,
+		Client:   r.Client,
+		Ctx:      ctx,
 	}
 	builders, dirtyBuilders := resourceBuilder.ResourceBuilders()
 

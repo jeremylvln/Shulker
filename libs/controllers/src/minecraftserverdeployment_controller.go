@@ -113,9 +113,8 @@ func (r *MinecraftServerDeploymentReconciler) Reconcile(ctx context.Context, req
 			minecraftServer.Labels = labels
 			minecraftServer.Spec = minecraftServerDeployment.Spec.Template.Spec
 			minecraftServer.Spec.ClusterRef = minecraftServerDeployment.Spec.ClusterRef
-			minecraftServer.Spec.Configuration = shulkermciov1alpha1.MinecraftServerConfigurationSpec{
-				ExistingConfigMapName: resourceBuilder.GetConfigMapName(),
-			}
+			minecraftServer.Spec.Configuration = minecraftServerDeployment.Spec.Template.Spec.Configuration
+			minecraftServer.Spec.Configuration.ExistingConfigMapName = resourceBuilder.GetConfigMapName()
 
 			if err := controllerutil.SetControllerReference(minecraftServerDeployment, &minecraftServer, r.Scheme); err != nil {
 				err = fmt.Errorf("failed setting controller reference for MinecraftServer: %v", err)

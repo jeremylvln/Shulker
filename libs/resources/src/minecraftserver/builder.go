@@ -6,16 +6,20 @@ SPDX-License-Identifier: GPL-3.0-or-later
 package resources
 
 import (
+	"context"
 	"fmt"
 
 	shulkermciov1alpha1 "github.com/iamblueslime/shulker/libs/crds/v1alpha1"
 	common "github.com/iamblueslime/shulker/libs/resources/src"
 	"k8s.io/apimachinery/pkg/runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type MinecraftServerResourceBuilder struct {
 	Instance *shulkermciov1alpha1.MinecraftServer
 	Scheme   *runtime.Scheme
+	Client   client.Client
+	Ctx      context.Context
 }
 
 func (b *MinecraftServerResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder, []common.ResourceBuilder) {

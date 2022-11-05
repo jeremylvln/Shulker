@@ -1,4 +1,0 @@
-resources:
-- bases/cluster.yaml
-- bases/proxy.yaml
-- bases/minecraftserver-lobby.yaml

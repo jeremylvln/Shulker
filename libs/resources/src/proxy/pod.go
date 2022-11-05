@@ -61,6 +61,10 @@ func (b *ProxyResourcePodBuilder) Update(object client.Object) error {
 						Name:  "TYPE",
 						Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
 					},
+					{
+						Name:  "SHULKER_PROXY_AGENT_VERSION",
+						Value: "0.0.1",
+					},
 				},
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{

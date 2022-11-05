@@ -7,6 +7,7 @@ package resources
 
 import (
 	"fmt"
+	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,6 +15,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	shulkermciov1alpha1 "github.com/iamblueslime/shulker/libs/crds/v1alpha1"
+	resources "github.com/iamblueslime/shulker/libs/resources/src"
 )
 
 const minecraftServerShulkerConfigDir = "/mnt/shulker/config"
@@ -41,30 +43,18 @@ func (b *MinecraftServerResourcePodBuilder) Build() (client.Object, error) {
 func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 	pod := object.(*corev1.Pod)
 
+	initEnv, err := b.getInitEnv()
+	if err != nil {
+		return err
+	}
+
 	pod.Spec = corev1.PodSpec{
 		InitContainers: []corev1.Container{
 			{
-				Image:   "alpine:latest",
-				Name:    "init-fs",
-				Command: []string{"sh", fmt.Sprintf("%s/init-fs.sh", minecraftServerShulkerConfigDir)},
-				Env: []corev1.EnvVar{
-					{
-						Name:  "SHULKER_CONFIG_DIR",
-						Value: minecraftServerShulkerConfigDir,
-					},
-					{
-						Name:  "SERVER_CONFIG_DIR",
-						Value: minecraftServerConfigDir,
-					},
-					{
-						Name:  "SERVER_DATA_DIR",
-						Value: minecraftServerDataDir,
-					},
-					{
-						Name:  "TYPE",
-						Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
-					},
-				},
+				Image:           "alpine:latest",
+				Name:            "init-fs",
+				Command:         []string{"sh", fmt.Sprintf("%s/init-fs.sh", minecraftServerShulkerConfigDir)},
+				Env:             initEnv,
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{
 					{
@@ -197,6 +187,57 @@ func getTypeFromVersionChannel(channel shulkermciov1alpha1.MinecraftServerVersio
 
 func getVersionEnvFromVersionChannel(channel shulkermciov1alpha1.MinecraftServerVersionChannel) string {
 	return "VERSION"
+}
+
+func (b *MinecraftServerResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error) {
+	resourceRefResolver := resources.ResourceRefResolver{
+		Client:    b.Client,
+		Ctx:       b.Ctx,
+		Namespace: b.Instance.Namespace,
+	}
+
+	worldUrl, err := resourceRefResolver.ResolveUrl(b.Instance.Spec.Configuration.World)
+	if err != nil {
+		return []corev1.EnvVar{}, nil
+	}
+
+	var pluginUrls []string
+	for _, ref := range b.Instance.Spec.Configuration.Plugins {
+		pluginUrl, err := resourceRefResolver.ResolveUrl(&ref)
+		if err != nil {
+			return []corev1.EnvVar{}, nil
+		}
+		pluginUrls = append(pluginUrls, pluginUrl)
+	}
+
+	env := []corev1.EnvVar{
+		{
+			Name:  "SHULKER_CONFIG_DIR",
+			Value: minecraftServerShulkerConfigDir,
+		},
+		{
+			Name:  "SERVER_CONFIG_DIR",
+			Value: minecraftServerConfigDir,
+		},
+		{
+			Name:  "SERVER_DATA_DIR",
+			Value: minecraftServerDataDir,
+		},
+		{
+			Name:  "TYPE",
+			Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
+		},
+		{
+			Name:  "SERVER_WORLD_URL",
+			Value: worldUrl,
+		},
+		{
+			Name:  "SERVER_PLUGIN_URLS",
+			Value: strings.Join(pluginUrls, ";"),
+		},
+	}
+
+	return env, nil
 }
 
 func (b *MinecraftServerResourcePodBuilder) getEnv() []corev1.EnvVar {
