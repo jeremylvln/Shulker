@@ -57,6 +57,8 @@ func (r *ProxyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	resourceBuilder := resources.ProxyResourceBuilder{
 		Instance: proxy,
 		Scheme:   r.Scheme,
+		Client:   r.Client,
+		Ctx:      ctx,
 	}
 	builders, dirtyBuilders := resourceBuilder.ResourceBuilders()
 

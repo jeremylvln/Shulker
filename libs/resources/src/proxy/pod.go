@@ -7,6 +7,7 @@ package resources
 
 import (
 	"fmt"
+	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,6 +15,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	shulkermciov1alpha1 "github.com/iamblueslime/shulker/libs/crds/v1alpha1"
+	resources "github.com/iamblueslime/shulker/libs/resources/src"
 )
 
 const proxyShulkerConfigDir = "/mnt/shulker/config"
@@ -42,30 +44,18 @@ func (b *ProxyResourcePodBuilder) Build() (client.Object, error) {
 func (b *ProxyResourcePodBuilder) Update(object client.Object) error {
 	pod := object.(*corev1.Pod)
 
+	initEnv, err := b.getInitEnv()
+	if err != nil {
+		return err
+	}
+
 	pod.Spec = corev1.PodSpec{
 		InitContainers: []corev1.Container{
 			{
-				Image:   "alpine:latest",
-				Name:    "init-fs",
-				Command: []string{"sh", fmt.Sprintf("%s/init-fs.sh", proxyShulkerConfigDir)},
-				Env: []corev1.EnvVar{
-					{
-						Name:  "SHULKER_CONFIG_DIR",
-						Value: proxyShulkerConfigDir,
-					},
-					{
-						Name:  "PROXY_DATA_DIR",
-						Value: proxyDataDir,
-					},
-					{
-						Name:  "TYPE",
-						Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
-					},
-					{
-						Name:  "SHULKER_PROXY_AGENT_VERSION",
-						Value: "0.0.1",
-					},
-				},
+				Image:           "alpine:latest",
+				Name:            "init-fs",
+				Command:         []string{"sh", fmt.Sprintf("%s/init-fs.sh", proxyShulkerConfigDir)},
+				Env:             initEnv,
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{
 					{
@@ -213,6 +203,48 @@ func getVersionEnvFromVersionChannel(channel shulkermciov1alpha1.ProxyVersionCha
 	}
 
 	return ""
+}
+
+func (b *ProxyResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error) {
+	resourceRefResolver := resources.ResourceRefResolver{
+		Client:    b.Client,
+		Ctx:       b.Ctx,
+		Namespace: b.Instance.Namespace,
+	}
+
+	var pluginUrls []string
+	for _, ref := range b.Instance.Spec.Configuration.Plugins {
+		pluginUrl, err := resourceRefResolver.ResolveUrl(&ref)
+		if err != nil {
+			return []corev1.EnvVar{}, nil
+		}
+		pluginUrls = append(pluginUrls, pluginUrl)
+	}
+
+	env := []corev1.EnvVar{
+		{
+			Name:  "SHULKER_CONFIG_DIR",
+			Value: proxyShulkerConfigDir,
+		},
+		{
+			Name:  "PROXY_DATA_DIR",
+			Value: proxyDataDir,
+		},
+		{
+			Name:  "TYPE",
+			Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
+		},
+		{
+			Name:  "SHULKER_PROXY_AGENT_VERSION",
+			Value: "0.0.1",
+		},
+		{
+			Name:  "PROXY_PLUGIN_URLS",
+			Value: strings.Join(pluginUrls, ";"),
+		},
+	}
+
+	return env, nil
 }
 
 func (b *ProxyResourcePodBuilder) getEnv() []corev1.EnvVar {

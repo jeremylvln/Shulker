@@ -61,6 +61,10 @@ type ProxyConfigurationSpec struct {
 	//+optional
 	ExistingConfigMapName string `json:"existingConfigMapName,omitempty"`
 
+	// List of references to plugins to download.
+	//+optional
+	Plugins []ResourceRef `json:"plugins,omitempty"`
+
 	// Number of maximum players that can connect to the
 	// Proxy Deployment.
 	//+kubebuilder:default=100

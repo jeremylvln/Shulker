@@ -82,6 +82,12 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyConfiguration
 		else
 			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent-bungeecord/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-bungeecord-${SHULKER_PROXY_AGENT_VERSION}.jar)
 		fi
+
+		if [ "${PROXY_PLUGIN_URLS}" != "" ]; then
+			for plugin_url in ${PROXY_PLUGIN_URLS//;/ }; do
+				(cd "${PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
+			done
+		fi
 	`)
 
 	configMapData["probe-readiness.sh"] = trimScript(`
