@@ -88,6 +88,12 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyConfiguration
 				(cd "${PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
 			done
 		fi
+
+		if [ "${PROXY_PATCH_URLS}" != "" ]; then
+			for patch_url in ${PROXY_PATCH_URLS//;/ }; do
+				(cd "${PROXY_DATA_DIR}" && wget "${patch_url}" -O - | tar -xzv)
+			done
+		fi
 	`)
 
 	configMapData["probe-readiness.sh"] = trimScript(`

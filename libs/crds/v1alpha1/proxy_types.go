@@ -65,6 +65,11 @@ type ProxyConfigurationSpec struct {
 	//+optional
 	Plugins []ResourceRef `json:"plugins,omitempty"`
 
+	// List of optional references to patch archives to download
+	// and extract at the root of the proxy. Gzippied tarballs only.
+	//+optional
+	Patches []ResourceRef `json:"patches,omitempty"`
+
 	// Number of maximum players that can connect to the
 	// Proxy Deployment.
 	//+kubebuilder:default=100

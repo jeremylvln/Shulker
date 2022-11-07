@@ -210,6 +210,15 @@ func (b *MinecraftServerResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error
 		pluginUrls = append(pluginUrls, pluginUrl)
 	}
 
+	var patchesUrls []string
+	for _, ref := range b.Instance.Spec.Configuration.Patches {
+		patchUrl, err := resourceRefResolver.ResolveUrl(&ref)
+		if err != nil {
+			return []corev1.EnvVar{}, nil
+		}
+		patchesUrls = append(patchesUrls, patchUrl)
+	}
+
 	env := []corev1.EnvVar{
 		{
 			Name:  "SHULKER_CONFIG_DIR",
@@ -234,6 +243,10 @@ func (b *MinecraftServerResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error
 		{
 			Name:  "SERVER_PLUGIN_URLS",
 			Value: strings.Join(pluginUrls, ";"),
+		},
+		{
+			Name:  "SERVER_PATCH_URLS",
+			Value: strings.Join(patchesUrls, ";"),
 		},
 	}
 

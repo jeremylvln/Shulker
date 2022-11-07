@@ -162,6 +162,13 @@ func (in *MinecraftServerConfigurationSpec) DeepCopyInto(out *MinecraftServerCon
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Patches != nil {
+		in, out := &in.Patches, &out.Patches
+		*out = make([]ResourceRef, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
 	if in.MaxPlayers != nil {
 		in, out := &in.MaxPlayers, &out.MaxPlayers
 		*out = new(int16)
@@ -448,6 +455,13 @@ func (in *ProxyConfigurationSpec) DeepCopyInto(out *ProxyConfigurationSpec) {
 	*out = *in
 	if in.Plugins != nil {
 		in, out := &in.Plugins, &out.Plugins
+		*out = make([]ResourceRef, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.Patches != nil {
+		in, out := &in.Patches, &out.Patches
 		*out = make([]ResourceRef, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])

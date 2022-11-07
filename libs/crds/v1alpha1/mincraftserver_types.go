@@ -83,6 +83,11 @@ type MinecraftServerConfigurationSpec struct {
 	//+optional
 	Plugins []ResourceRef `json:"plugins,omitempty"`
 
+	// List of optional references to patch archives to download
+	// and extract at the root of the server. Gzippied tarballs only.
+	//+optional
+	Patches []ResourceRef `json:"patches,omitempty"`
+
 	// Number of maximum players that can connect to the MinecraftServer.
 	//+kubebuilder:default=20
 	MaxPlayers *int16 `json:"maxPlayers,omitempty"`

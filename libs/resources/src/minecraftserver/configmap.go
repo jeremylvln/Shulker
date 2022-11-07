@@ -87,6 +87,12 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.MinecraftServerCon
 				(cd "${SERVER_CONFIG_DIR}/plugins" && wget "${plugin_url}")
 			done
 		fi
+
+		if [ "${SERVER_PATCH_URLS}" != "" ]; then
+			for patch_url in ${SERVER_PATCH_URLS//;/ }; do
+				(cd "${SERVER_CONFIG_DIR}" && wget "${patch_url}" -O - | tar -xzv)
+			done
+		fi
 	`)
 
 	configMapData["server.properties"] = config.GetServerProperties(spec)
