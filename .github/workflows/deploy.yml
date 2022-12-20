@@ -46,7 +46,7 @@ jobs:
         id: docker-metadata
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/iamblueslime/PLACEHOLDER_APP
+          images: ghcr.io/iamblueslime/placeholder_app_name
           tags: |
             type=ref,event=branch
             type=sha,format=long
