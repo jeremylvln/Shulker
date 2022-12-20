@@ -101,3 +101,5 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_signing.gnupg.keyName: "${{ steps.gpg-signing-key.outputs.keyid }}"
           ORG_GRADLE_PROJECT_signing.gnupg.passphrase: "${{ secrets.GPG_PASSPHRASE }}"
+          ARTIFACTORY_USERNAME: "${{ secrets.ARTIFACTORY_USERNAME }}"
+          ARTIFACTORY_PASSWORD: "${{ secrets.ARTIFACTORY_PASSWORD }}"
