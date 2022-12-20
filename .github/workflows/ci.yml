@@ -25,11 +25,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.TARGET_NODE_VERSION }}
+          cache: npm
 
       - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.TARGET_GOLANG_VERSION }}
+          cache: true
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -61,11 +63,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.TARGET_NODE_VERSION }}
+          cache: npm
 
       - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.TARGET_GOLANG_VERSION }}
+          cache: true
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -97,11 +101,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.TARGET_NODE_VERSION }}
+          cache: npm
 
       - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.TARGET_GOLANG_VERSION }}
+          cache: true
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
