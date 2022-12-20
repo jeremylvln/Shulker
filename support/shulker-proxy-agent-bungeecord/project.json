@@ -7,7 +7,7 @@
       "executor": "nx:run-commands",
       "outputs": ["dist/support/shulker-proxy-agent-bungeecord"],
       "options": {
-        "command": "gradle :support:shulker-proxy-agent-bungeecord:build"
+        "command": "gradle :support:shulker-proxy-agent-bungeecord:build -x test"
       },
       "inputs": ["default", "java:dependencies"]
     },

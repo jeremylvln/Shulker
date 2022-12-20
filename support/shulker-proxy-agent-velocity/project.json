@@ -7,7 +7,7 @@
       "executor": "nx:run-commands",
       "outputs": ["dist/support/shulker-proxy-agent-velocity"],
       "options": {
-        "command": "gradle :support:shulker-proxy-agent-velocity:build"
+        "command": "gradle :support:shulker-proxy-agent-velocity:build -x test"
       },
       "inputs": ["default", "java:dependencies"]
     },

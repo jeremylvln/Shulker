@@ -7,7 +7,7 @@
       "executor": "nx:run-commands",
       "outputs": ["dist/support/shulker-proxy-api"],
       "options": {
-        "command": "gradle :support:shulker-proxy-api:build"
+        "command": "gradle :support:shulker-proxy-api:build -x test"
       },
       "inputs": ["default", "java:dependencies"]
     },
