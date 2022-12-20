@@ -10,12 +10,12 @@ while IFS= read -r tag; do
   tag_with_image="$(echo "${tag}" | sed "s/placeholder_app_name/${app}/g")"
   tags_params="${tags_params} --tag=\"${tag_with_image}\""
 done < "$tags_path"
-tags_params="$(echo "${tags_params}" | xargs)"
+tags_params="${tags_params:1}"
 
 while IFS= read -r label; do
   labels_params="${labels_params} --label=\"${label}\""
 done < "$labels_path"
-labels_params="$(echo "${labels_params}" | xargs)"
+labels_params="${labels_params:1}"
 
 docker buildx build \
   --file "apps/${app}/Dockerfile" \
