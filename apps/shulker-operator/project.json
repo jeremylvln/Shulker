@@ -10,6 +10,7 @@
         "command": "go build -o ../../dist/apps/shulker-operator/shulker-operator ./src/main.go",
         "cwd": "apps/shulker-operator"
       },
+      "inputs": ["default", "go:dependencies"],
       "dependsOn": ["^lint"]
     },
     "serve": {
@@ -18,6 +19,7 @@
         "command": "go run ./src/main.go",
         "cwd": "apps/shulker-operator"
       },
+      "inputs": ["default", "go:dependencies"],
       "dependsOn": ["^lint"]
     },
     "lint": {
@@ -28,7 +30,8 @@
           "go vet ./..."
         ],
         "cwd": "apps/shulker-operator"
-      }
+      },
+      "inputs": ["default", "go:dependencies"]
     },
     "publish-docker": {
       "executor": "nx:run-commands",
