@@ -1,17 +1,19 @@
 #!/bin/bash
 
 app="$1"
-tags="$2"
-labels="$3"
+tags_path="$2"
+labels_path="$3"
 
-tags="$(echo "${tags}" | sed "s/shulker_app/${app}/g")"
-if [ "${tags}" != "" ]; then
-  tags_params="--tag $(echo "${tags}" | sed "s/;;;/ --tag /g")"
-fi
+while IFS= read -r tag; do
+  tag_with_image="$(echo "${tag}" | sed "s/PLACEHOLDER_APP/${app}/g")"
+  tags_params="${tags_params} --tag ${tag_with_image}"
+done < "$tags_path"
+tags_params="$(echo "${tags_params}" | xargs)"
 
-if [ "${labels}" != "" ]; then
-  labels_params="--label $(echo "${labels}" | sed "s/;;;/ --label /g")"
-fi
+while IFS= read -r label; do
+  labels_params="${labels_params} --label ${label}"
+done < "$labels_path"
+labels_params="$(echo "${labels_params}" | xargs)"
 
 docker buildx build \
   --file "apps/${app}/Dockerfile" \

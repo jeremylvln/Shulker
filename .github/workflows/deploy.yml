@@ -46,21 +46,25 @@ jobs:
         id: docker-metadata
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/iamblueslime/shulker_app
-          sep-tags: ";;;"
-          sep-labels: ";;;"
+          images: ghcr.io/iamblueslime/PLACEHOLDER_APP
           tags: |
             type=ref,event=branch
             type=sha,format=long
             type=sha
             type=raw,value=latest
 
+      - name: Write Docker metadata on temporary files
+        shell: bash
+        run:
+          echo "${{ steps.docker-metadata.outputs.tags }}" > /tmp/docker-tags
+          echo "${{ steps.docker-metadata.outputs.labels }}" > /tmp/docker-labels
+
       - name: Publish images
         uses: mansagroup/nrwl-nx-action@v3
         with:
           targets: publish-docker
           parallel: 2
-          args: -- "${{ steps.docker-metadata.outputs.tags }}" "${{ steps.docker-metadata.outputs.labels }}"
+          args: /tmp/docker-tags /tmp/docker-labels
 
   publish-maven:
     runs-on: ubuntu-latest
