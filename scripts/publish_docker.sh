@@ -13,7 +13,7 @@ if [ "${labels}" != "" ]; then
   labels_params="--label $(echo "${labels}" | sed "s/;;;/ --label /g")"
 fi
 
-docker build \
+docker buildx build \
   --file "apps/${app}/Dockerfile" \
   --push \
   ${tags_params} \

@@ -61,8 +61,6 @@ jobs:
           targets: publish-docker
           parallel: 2
           args: -- "${{ steps.docker-metadata.outputs.tags }}" "${{ steps.docker-metadata.outputs.labels }}"
-        env:
-          DOCKER_BUILDKIT: "1"
 
   publish-maven:
     runs-on: ubuntu-latest
