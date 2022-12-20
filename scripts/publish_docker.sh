@@ -15,13 +15,7 @@ fi
 
 docker build \
   --file "apps/${app}/Dockerfile" \
+  --push \
   ${tags_params} \
   ${labels_params} \
   .
-
-
-tags_list=`echo "${tags}" | sed "s/;;;/ /g"`
-for image_tag in ${tags_list};
-do
-  docker push $image_tag;
-done
