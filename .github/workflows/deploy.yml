@@ -55,7 +55,7 @@ jobs:
 
       - name: Write Docker metadata on temporary files
         shell: bash
-        run:
+        run: |
           echo "${{ steps.docker-metadata.outputs.tags }}" > /tmp/docker-tags
           echo "${{ steps.docker-metadata.outputs.labels }}" > /tmp/docker-labels
 
