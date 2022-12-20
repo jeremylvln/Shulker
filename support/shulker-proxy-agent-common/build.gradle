@@ -3,7 +3,7 @@ version = '0.0.1'
 dependencies {
     api project(':support:shulker-proxy-api')
 
-    compileOnly 'net.kyori:adventure-api:4.11.0'
+    compileOnly 'net.kyori:adventure-api:4.12.0'
 
     compileOnly 'io.fabric8:kubernetes-client-api:6.2.0'
     runtimeOnly 'io.fabric8:kubernetes-client:6.2.0'
