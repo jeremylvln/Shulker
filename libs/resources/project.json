@@ -1,4 +1,5 @@
 {
+  "name": "libs-resources",
   "root": "libs/resources",
   "sourceRoot": "libs/resources/src",
   "projectType": "library",
@@ -6,10 +7,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "go fmt ./...",
-          "go vet ./..."
-        ],
+        "commands": ["go fmt ./...", "go vet ./..."],
         "cwd": "libs/resources"
       }
     },

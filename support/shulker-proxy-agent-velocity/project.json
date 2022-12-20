@@ -1,4 +1,5 @@
 {
+  "name": "support-shulker-proxy-agent-velocity",
   "root": "support/shulker-proxy-agent-velocity",
   "sourceRoot": "support/shulker-proxy-agent-velocity/src",
   "projectType": "application",

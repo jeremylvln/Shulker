@@ -1,4 +1,5 @@
 {
+  "name": "support-shulker-proxy-agent-bungeecord",
   "root": "support/shulker-proxy-agent-bungeecord",
   "sourceRoot": "support/shulker-proxy-agent-bungeecord/src",
   "projectType": "application",

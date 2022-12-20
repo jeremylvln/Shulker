@@ -1,4 +1,5 @@
 {
+  "name": "support-shulker-proxy-api",
   "root": "support/shulker-proxy-api",
   "sourceRoot": "support/shulker-proxy-api/src",
   "projectType": "application",
