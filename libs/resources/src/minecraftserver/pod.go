@@ -148,6 +148,10 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 	}
 
 	if b.Instance.Spec.PodOverrides != nil {
+		if b.Instance.Spec.PodOverrides.Resources != nil {
+			pod.Spec.Containers[0].Resources = *b.Instance.Spec.PodOverrides.Resources
+		}
+
 		if b.Instance.Spec.PodOverrides.Affinity != nil {
 			pod.Spec.Affinity = b.Instance.Spec.PodOverrides.Affinity
 		}
@@ -196,9 +200,13 @@ func (b *MinecraftServerResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error
 		Namespace: b.Instance.Namespace,
 	}
 
-	worldUrl, err := resourceRefResolver.ResolveUrl(b.Instance.Spec.Configuration.World)
-	if err != nil {
-		return []corev1.EnvVar{}, nil
+	var worldUrl string
+	var err error
+	if b.Instance.Spec.Configuration.World != nil {
+		worldUrl, err = resourceRefResolver.ResolveUrl(b.Instance.Spec.Configuration.World)
+		if err != nil {
+			return []corev1.EnvVar{}, nil
+		}
 	}
 
 	var pluginUrls []string
@@ -256,6 +264,14 @@ func (b *MinecraftServerResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error
 func (b *MinecraftServerResourcePodBuilder) getEnv() []corev1.EnvVar {
 	env := []corev1.EnvVar{
 		{
+			Name: "SHULKER_SERVER_NAME",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.name",
+				},
+			},
+		},
+		{
 			Name:  "TYPE",
 			Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
 		},
@@ -276,6 +292,10 @@ func (b *MinecraftServerResourcePodBuilder) getEnv() []corev1.EnvVar {
 			Value: "false",
 		},
 		{
+			Name:  "SKIP_SERVER_PROPERTIES",
+			Value: "true",
+		},
+		{
 			Name:  "REPLACE_ENV_IN_PLACE",
 			Value: "true",
 		},
@@ -294,6 +314,18 @@ func (b *MinecraftServerResourcePodBuilder) getEnv() []corev1.EnvVar {
 				},
 			},
 		},
+		{
+			Name:  "MEMORY",
+			Value: "",
+		},
+		{
+			Name:  "JVM_XX_OPTS",
+			Value: "-XX:MaxRAMPercentage=75",
+		},
+	}
+
+	if b.Instance.Spec.PodOverrides != nil {
+		env = append(env, b.Instance.Spec.PodOverrides.Env...)
 	}
 
 	return env

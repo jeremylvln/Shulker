@@ -2,20 +2,29 @@ package resources
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	shulkermciov1alpha1 "github.com/iamblueslime/shulker/libs/crds/v1alpha1"
 )
 
 func GetServerProperties(spec *shulkermciov1alpha1.MinecraftServerConfigurationSpec) string {
-	properties := []string{
-		"online-mode=false",
-		"prevent-proxy-connections=false",
-		"enforce-secure-profiles=true",
-		"previews-chat=true",
-		fmt.Sprintf("max-players=%d", *spec.MaxPlayers),
-		fmt.Sprintf("allow-nether=%t", !spec.DisableNether),
+	properties := make(map[string]string)
+
+	for k, v := range spec.ServerProperties {
+		properties[k] = v
 	}
 
-	return strings.Join(properties, "\n")
+	properties["online-mode"] = "false"
+	properties["prevent-proxy-connections"] = "false"
+	properties["enforce-secure-profiles"] = "true"
+	properties["max-players"] = strconv.Itoa(*spec.MaxPlayers)
+	properties["allow-nether"] = strconv.FormatBool(!spec.DisableNether)
+
+	lines := []string{}
+	for k, v := range properties {
+		lines = append(lines, fmt.Sprintf("%s=%s", k, v))
+	}
+
+	return strings.Join(lines, "\n")
 }

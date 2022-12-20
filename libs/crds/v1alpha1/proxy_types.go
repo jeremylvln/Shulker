@@ -95,6 +95,9 @@ type ProxyConfigurationSpec struct {
 
 // Overrides for the created Pod of the proxy.
 type ProxyPodOverridesSpec struct {
+	// Extra environment variables to add to the crated Pod.
+	Env []corev1.EnvVar `json:"env,omitempty"`
+
 	// The desired compute resource requirements of the created Pod.
 	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
 

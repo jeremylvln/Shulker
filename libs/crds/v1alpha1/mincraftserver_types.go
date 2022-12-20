@@ -90,7 +90,7 @@ type MinecraftServerConfigurationSpec struct {
 
 	// Number of maximum players that can connect to the MinecraftServer.
 	//+kubebuilder:default=20
-	MaxPlayers *int16 `json:"maxPlayers,omitempty"`
+	MaxPlayers *int `json:"maxPlayers,omitempty"`
 
 	// Whether to allow the MinecraftServer to generate a Nether world
 	// and the players to enter it.
@@ -102,6 +102,11 @@ type MinecraftServerConfigurationSpec struct {
 	//+kubebuilder:default=true
 	DisableEnd bool `json:"disableEnd,omitempty"`
 
+	// Custom properties to set inside the server.properties fil of
+	// the Pod. Note: Shulker may override some values.
+	//+optional
+	ServerProperties map[string]string `json:"serverProperties,omitempty"`
+
 	// Type of forwarding the proxies are using between themselves and
 	// this MinecraftServer.
 	//+kubebuilder:default=Velocity
@@ -110,6 +115,9 @@ type MinecraftServerConfigurationSpec struct {
 
 // Overrides for the created Pod of the server.
 type MinecraftServerPodOverridesSpec struct {
+	// Extra environment variables to add to the crated Pod.
+	Env []corev1.EnvVar `json:"env,omitempty"`
+
 	// The desired compute resource requirements of the created Pod.
 	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
 

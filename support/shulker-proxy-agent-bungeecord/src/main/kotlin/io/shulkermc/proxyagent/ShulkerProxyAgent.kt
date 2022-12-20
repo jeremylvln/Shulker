@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent
 
+import io.shulkermc.proxyapi.ShulkerProxyAPI
 import net.md_5.bungee.api.plugin.Plugin
 
 class ShulkerProxyAgent: Plugin() {
@@ -14,4 +15,7 @@ class ShulkerProxyAgent: Plugin() {
     override fun onDisable() {
         this.common.onProxyShutdown()
     }
+
+    fun getAPI(): ShulkerProxyAPI
+        = this.common.api
 }

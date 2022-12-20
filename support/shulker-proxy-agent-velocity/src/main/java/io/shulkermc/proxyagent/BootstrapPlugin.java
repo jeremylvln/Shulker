@@ -6,6 +6,8 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import io.shulkermc.proxyapi.ShulkerProxyAPI;
+
 import java.util.logging.Logger;
 
 @Plugin(
@@ -30,5 +32,9 @@ public class BootstrapPlugin {
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         this.plugin.onProxyShutdown(event);
+    }
+
+    public ShulkerProxyAPI getAPI() {
+        return this.plugin.getCommon().getApi();
     }
 }

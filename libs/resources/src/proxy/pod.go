@@ -163,6 +163,10 @@ func (b *ProxyResourcePodBuilder) Update(object client.Object) error {
 	}
 
 	if b.Instance.Spec.PodOverrides != nil {
+		if b.Instance.Spec.PodOverrides.Resources != nil {
+			pod.Spec.Containers[0].Resources = *b.Instance.Spec.PodOverrides.Resources
+		}
+
 		if b.Instance.Spec.PodOverrides.Affinity != nil {
 			pod.Spec.Affinity = b.Instance.Spec.PodOverrides.Affinity
 		}
@@ -263,18 +267,18 @@ func (b *ProxyResourcePodBuilder) getInitEnv() ([]corev1.EnvVar, error) {
 func (b *ProxyResourcePodBuilder) getEnv() []corev1.EnvVar {
 	env := []corev1.EnvVar{
 		{
-			Name: "SHULKER_PROXY_NAMESPACE",
-			ValueFrom: &corev1.EnvVarSource{
-				FieldRef: &corev1.ObjectFieldSelector{
-					FieldPath: "metadata.namespace",
-				},
-			},
-		},
-		{
 			Name: "SHULKER_PROXY_NAME",
 			ValueFrom: &corev1.EnvVarSource{
 				FieldRef: &corev1.ObjectFieldSelector{
 					FieldPath: "metadata.name",
+				},
+			},
+		},
+		{
+			Name: "SHULKER_PROXY_NAMESPACE",
+			ValueFrom: &corev1.EnvVarSource{
+				FieldRef: &corev1.ObjectFieldSelector{
+					FieldPath: "metadata.namespace",
 				},
 			},
 		},
@@ -290,6 +294,10 @@ func (b *ProxyResourcePodBuilder) getEnv() []corev1.EnvVar {
 			Name:  getVersionEnvFromVersionChannel(b.Instance.Spec.Version.Channel),
 			Value: b.Instance.Spec.Version.Name,
 		},
+	}
+
+	if b.Instance.Spec.PodOverrides != nil {
+		env = append(env, b.Instance.Spec.PodOverrides.Env...)
 	}
 
 	return env
