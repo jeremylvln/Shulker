@@ -1,6 +1,18 @@
 {
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "nx.json": "*",
+    "go.mod": "*",
+    "go.sum": "*",
+    "build.gradle": "*",
+    "gradle.properties": "*",
+    "settings.gradle": "*"
+  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",

@@ -3,17 +3,58 @@ name: ci
 on: pull_request
 
 env:
-  TARGET_NODE_VERSION: '16'
+  TARGET_NODE_VERSION: '18'
   TARGET_GOLANG_VERSION: '1.19'
   TARGET_JAVA_VERSION: '17'
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+
+      - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.TARGET_GOLANG_VERSION }}
+
+      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: ${{ env.TARGET_JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run build
+        uses: mansagroup/nrwl-nx-action@v3
+        with:
+          targets: build
+          parallel: 2
+
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
         uses: actions/setup-node@v3
@@ -39,4 +80,39 @@ jobs:
         uses: mansagroup/nrwl-nx-action@v3
         with:
           targets: test
+          parallel: 3
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+
+      - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.TARGET_GOLANG_VERSION }}
+
+      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: ${{ env.TARGET_JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run lint
+        uses: mansagroup/nrwl-nx-action@v3
+        with:
+          targets: lint
           parallel: 3
