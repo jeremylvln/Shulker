@@ -11,7 +11,8 @@
           "go vet ./..."
         ],
         "cwd": "libs/controllers"
-      }
+      },
+      "inputs": ["default", "go:dependencies"]
     }
   },
   "tags": ["lang:go"],

@@ -8,13 +8,15 @@
       "outputs": ["dist/support/shulker-proxy-agent-velocity"],
       "options": {
         "command": "gradle :support:shulker-proxy-agent-velocity:build"
-      }
+      },
+      "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "gradle :support:shulker-proxy-agent-velocity:test"
-      }
+      },
+      "inputs": ["default", "java:dependencies"]
     },
     "publish-maven": {
       "executor": "nx:run-commands",

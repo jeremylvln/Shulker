@@ -2,16 +2,24 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
-    "nx.json": "*",
     "go.mod": "*",
     "go.sum": "*",
-    "build.gradle": "*",
+    "**/build.gradle": "*",
     "gradle.properties": "*",
     "settings.gradle": "*"
+  },
+  "namedInputs": {
+    "go:dependencies": [
+      "{workspaceRoot}/go.mod",
+      "{workspaceRoot}/go.sum"
+    ],
+    "java:dependencies": [
+      "{workspaceRoot}/build.gradle",
+      "{workspaceRoot}/gradle.properties",
+      "{workspaceRoot}/settings.gradle",
+      "{projectRoot}/build.gradle",
+      "{projectRoot}/gradle.properties"
+    ]
   },
   "tasksRunnerOptions": {
     "default": {

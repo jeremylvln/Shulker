@@ -8,13 +8,15 @@
       "outputs": ["dist/support/shulker-proxy-api"],
       "options": {
         "command": "gradle :support:shulker-proxy-api:build"
-      }
+      },
+      "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "gradle :support:shulker-proxy-api:test"
-      }
+      },
+      "inputs": ["default", "java:dependencies"]
     },
     "publish-maven": {
       "executor": "nx:run-commands",

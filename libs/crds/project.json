@@ -11,7 +11,8 @@
           "go vet ./..."
         ],
         "cwd": "libs/crds"
-      }
+      },
+      "inputs": ["default", "go:dependencies"]
     }
   },
   "tags": ["lang:go"]

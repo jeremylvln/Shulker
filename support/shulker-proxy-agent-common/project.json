@@ -8,13 +8,15 @@
       "outputs": ["dist/support/shulker-proxy-agent-common"],
       "options": {
         "command": "gradle :support:shulker-proxy-agent-common:build"
-      }
+      },
+      "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "gradle :support:shulker-proxy-agent-common:test"
-      }
+      },
+      "inputs": ["default", "java:dependencies"]
     }
   },
   "tags": ["lang:java"],
