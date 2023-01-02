@@ -1,5 +1,6 @@
 {
-  "name": "docs",
+  "name": "@shulker/docs",
+  "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",

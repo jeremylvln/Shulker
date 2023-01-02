@@ -1,7 +1,6 @@
 {
   "name": "shulker",
   "version": "0.0.0",
-  "license": "GPL",
   "private": true,
   "scripts": {
     "build": "nx run-many --target=build --all",
@@ -12,7 +11,7 @@
     "config:gen": "bash scripts/generate_config.sh"
   },
   "devDependencies": {
-    "nx": "15.3.3",
+    "nx": "15.4.2",
     "prettier": "2.6.2"
   },
   "workspaces": [
