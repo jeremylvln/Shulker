@@ -16,8 +16,7 @@
     "prettier": "2.6.2"
   },
   "workspaces": [
-    "apps/*",
-    "libs/*",
+    "packages/*",
     "docs"
   ]
 }

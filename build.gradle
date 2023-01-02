@@ -3,7 +3,7 @@ plugins {
 }
 
 configure(subprojects.findAll {
-    !['support'].contains(it.name)
+    !['packages'].contains(it.name)
 }) {
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -14,7 +14,7 @@ configure(subprojects.findAll {
 
     group = 'io.shulkermc'
 
-    it.buildDir = "$rootDir/dist/support/$it.name"
+    it.buildDir = "$rootDir/dist/packages/$it.name"
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     compileJava.options.encoding = 'UTF-8'

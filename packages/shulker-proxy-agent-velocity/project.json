@@ -1,0 +1,31 @@
+{
+  "name": "shulker-proxy-agent-velocity",
+  "root": "packages/shulker-proxy-agent-velocity",
+  "sourceRoot": "packages/shulker-proxy-agent-velocity/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["dist/support/shulker-proxy-agent-velocity"],
+      "options": {
+        "command": "gradle :packages:shulker-proxy-agent-velocity:build -x test"
+      },
+      "inputs": ["default", "java:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :packages:shulker-proxy-agent-velocity:test"
+      },
+      "inputs": ["default", "java:dependencies"]
+    },
+    "publish-maven": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :packages:shulker-proxy-agent-velocity:publish"
+      }
+    }
+  },
+  "tags": ["lang:java"],
+  "implicitDependencies": ["shulker-proxy-agent-common"]
+}

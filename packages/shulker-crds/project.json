@@ -1,0 +1,17 @@
+{
+  "name": "shulker-crds",
+  "root": "packages/shulker-crds",
+  "sourceRoot": "packages/shulker-crds/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["go fmt ./...", "go vet ./..."],
+        "cwd": "packages/shulker-crds"
+      },
+      "inputs": ["default", "go:dependencies"]
+    }
+  },
+  "tags": ["lang:go"]
+}

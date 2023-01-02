@@ -18,7 +18,7 @@ while IFS= read -r label; do
 done < "$labels_path"
 
 docker buildx build \
-  --file "apps/${app}/Dockerfile" \
+  --file "packages/${app}/Dockerfile" \
   --push \
   "${tags_params[@]}" \
   "${labels_params[@]}" \

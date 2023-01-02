@@ -1,0 +1,43 @@
+{
+  "name": "shulker-operator",
+  "root": "packages/shulker-operator",
+  "sourceRoot": "packages/shulker-operator/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["dist/packages/shulker-operator"],
+      "options": {
+        "command": "go build -o ../../../dist/packages/shulker-operator/shulker-operator",
+        "cwd": "packages/shulker-operator/src"
+      },
+      "inputs": ["default", "go:dependencies"],
+      "dependsOn": ["^lint"]
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go run .",
+        "cwd": "packages/shulker-operator/src"
+      },
+      "inputs": ["default", "go:dependencies"],
+      "dependsOn": ["^lint"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["go fmt ./...", "go vet ./..."],
+        "cwd": "packages/shulker-operator/src"
+      },
+      "inputs": ["default", "go:dependencies"]
+    },
+    "publish-docker": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/publish_docker.sh shulker-operator"
+      }
+    }
+  },
+  "tags": ["lang:go"],
+  "implicitDependencies": ["shulker-crds", "shulker-controller-utils", "shulker-resource-utils"]
+}

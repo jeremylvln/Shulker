@@ -1,0 +1,18 @@
+{
+  "name": "shulker-controller-utils",
+  "root": "packages/shulker-controller-utils",
+  "sourceRoot": "packages/shulker-controller-utils/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["go fmt ./...", "go vet ./..."],
+        "cwd": "packages/shulker-controller-utils"
+      },
+      "inputs": ["default", "go:dependencies"]
+    }
+  },
+  "tags": ["lang:go"],
+  "implicitDependencies": ["shulker-crds", "shulker-resource-utils"]
+}

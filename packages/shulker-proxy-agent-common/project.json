@@ -1,0 +1,25 @@
+{
+  "name": "shulker-proxy-agent-common",
+  "root": "packages/shulker-proxy-agent-common",
+  "sourceRoot": "packages/shulker-proxy-agent-common/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["dist/support/shulker-proxy-agent-common"],
+      "options": {
+        "command": "gradle :packages:shulker-proxy-agent-common:build -x test"
+      },
+      "inputs": ["default", "java:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :packages:shulker-proxy-agent-common:test"
+      },
+      "inputs": ["default", "java:dependencies"]
+    }
+  },
+  "tags": ["lang:java"],
+  "implicitDependencies": ["shulker-proxy-api"]
+}
