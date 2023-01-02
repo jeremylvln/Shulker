@@ -1,21 +1,51 @@
-<p align="center"><a href="https://github.com/IamBlueSlime/shulker" target="blank"><img src="./.github/assets/logo.png" width="80" alt="Shulker's Logo" /></a></p>
-<h1 align="center">Shulker</h1>
-<p align="center">Put Minecraft in a <i>box</i> :package:</p>
-
-<p align="center">
-</p>
+<div align="center">
+  <img src=".github/assets/logo.png" alt="logo" width="100" height="auto" />
+  <h1>Shulker</h1>
+  <p>Put Minecraft in a <i>box</i> :package:</p>
+  
+  <p>
+    <a href="https://github.com/IamBlueSlime/Shulker/issues/">
+      <img src="https://img.shields.io/github/issues/IamBlueSlime/Shulker" alt="Open Issues" />
+    </a>
+    <a href="https://github.com/IamBlueSlime/Shulker/stargazers">
+      <img src="https://img.shields.io/github/stars/IamBlueSlime/Shulker" alt="stars" />
+    </a>
+    <a href="https://github.com/IamBlueSlime/Shulker/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/IamBlueSlime/Shulker.svg" alt="License" />
+    </a>
+    <br />
+    <a href="https://github.com/sponsors/IamBlueSlime">
+      <img src="https://img.shields.io/github/sponsors/IamBlueSlime" alt="GitHub Sponsors" />
+    </a>
+  </p>
+   
+  <h4>
+    <a href="https://shulker.jeremylvln.fr">Documentation</a>
+    <span> · </span>
+    <a href="https://github.com/IamBlueSlime/Shulker/issues">Report Bug</a>
+    <span> · </span>
+    <a href="https://github.com/users/IamBlueSlime/projects/2">Roadmap</a>
+    <span> · </span>
+    <a href="https://github.com/IamBlueSlime/Shulker/discussions">Discussions</a>
+  </h4>
+</div>
 
 ## Description
 
-TODO.
+Shulker aims to be your default choice to managing Minecraft infrastructures
+in the cloud with Kubernetes.
+
+> Everybody with some knowledge about Kubernetes should be able to connect
+> to a Minecraft Network within 10 minutes. That's the goal.
 
 ## Getting started
 
-TODO.
+See the **[Getting Started](https://shulker.jeremylvln.fr/getting-started/installation)**
+section of the documentation to start using Shulker!
 
 ## License
 
-Shulker is distributed under the [Apache License 2.0](LICENSE.txt).
+Shulker is distributed under the [AGPL 3.0](LICENSE.txt).
 
 ## Contributors ✨
 
