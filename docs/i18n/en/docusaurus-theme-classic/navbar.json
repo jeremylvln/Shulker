@@ -6,5 +6,13 @@
   "item.label.GitHub": {
     "message": "GitHub",
     "description": "Navbar item with label GitHub"
+  },
+  "item.label.Getting Started": {
+    "message": "Getting Started",
+    "description": "Navbar item with label Getting Started"
+  },
+  "item.label.Recipes": {
+    "message": "Recipes",
+    "description": "Navbar item with label Recipes"
   }
 }

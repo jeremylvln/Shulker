@@ -77,10 +77,6 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Understanding the Basics',
-                to: '/understanding-the-basics/installation',
-              },
-              {
                 label: 'Getting Started',
                 to: '/getting-started/installation',
               },
