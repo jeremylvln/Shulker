@@ -16,7 +16,7 @@ const config = {
   projectName: 'Shulker',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'fr'],
   },
   presets: [
     [
@@ -26,7 +26,9 @@ const config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/IamBlueSlime/Shulker/docs',
+          editUrl: ({locale, docPath}) => locale === 'en'
+            ? `https://github.com/IamBlueSlime/Shulker/edit/main/docs/docs/${docPath}`
+            : `https://crowdin.com/project/shulker/${locale}`,
         },
         blog: false,
         theme: {
@@ -42,18 +44,24 @@ const config = {
         title: 'Shulker',
         logo: {
           alt: 'Shulker Logo',
-          src: 'img/logo.svg',
+          src: 'img/logo.png',
         },
         items: [
-          // {
-          //   type: 'doc',
-          //   docId: 'intro',
-          //   position: 'left',
-          //   label: 'Tutorial',
-          // },
+          {
+            type: 'doc',
+            docId: 'getting-started/installation',
+            position: 'left',
+            label: 'Getting Started',
+          },
+          {
+            type: 'doc',
+            docId: 'recipes/minecraft-cluster',
+            position: 'left',
+            label: 'Recipes',
+          },
           {
             type: 'localeDropdown',
-            position: 'left',
+            position: 'right',
           },
           {
             href: 'https://github.com/IamBlueSlime/Shulker',
@@ -65,38 +73,38 @@ const config = {
       footer: {
         style: 'dark',
         links: [
-          // {
-          //   title: 'Docs',
-          //   items: [
-          //     {
-          //       label: 'Tutorial',
-          //       to: '/docs/intro',
-          //     },
-          //   ],
-          // },
-          // {
-          //   title: 'Community',
-          //   items: [
-          //     {
-          //       label: 'Stack Overflow',
-          //       href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-          //     },
-          //     {
-          //       label: 'Discord',
-          //       href: 'https://discordapp.com/invite/docusaurus',
-          //     },
-          //     {
-          //       label: 'Twitter',
-          //       href: 'https://twitter.com/docusaurus',
-          //     },
-          //   ],
-          // },
+          {
+            title: 'Docs',
+            items: [
+              {
+                label: 'Understanding the Basics',
+                to: '/understanding-the-basics/installation',
+              },
+              {
+                label: 'Getting Started',
+                to: '/getting-started/installation',
+              },
+              {
+                label: 'Recipes',
+                to: '/recipes/minecraft-cluster',
+              },
+            ],
+          },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'GitHub Discussions',
+                href: 'https://github.com/IamBlueSlime/Shulker/discussions',
+              },
+            ],
+          },
           {
             title: 'More',
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/IamBlueSlime/Shulker',
               },
             ],
           },
