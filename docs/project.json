@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "root": "docs",
-  "sourceRoot": "docs/src",
+  "sourceRoot": "docs/docs",
   "projectType": "application",
   "targets": {
     "build": {
@@ -16,6 +16,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npm run start",
+        "cwd": "docs"
+      }
+    },
+    "i18n": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run write-translations",
         "cwd": "docs"
       }
     }
