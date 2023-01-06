@@ -1,6 +1,6 @@
 {
   "extends": ["config:base", ":semanticCommits"],
-  "automerge": true,
+  "automerge": false,
   "dependencyDashboard": false,
   "enabledManagers": ["github-actions", "gomod", "gradle"],
   "labels": ["type:dependencies :wrench:"],
