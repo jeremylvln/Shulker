@@ -7,9 +7,9 @@ COPY go.mod go.mod
 COPY go.sum go.sum
 RUN go mod download
 
-COPY packages/crds packages/crds
-COPY packages/controller-utils packages/controller-utils
-COPY packages/resource-utils packages/resource-utils
+COPY packages/shulker-crds packages/shulker-crds
+COPY packages/shulker-controller-utils packages/shulker-controller-utils
+COPY packages/shulker-resource-utils packages/shulker-resource-utils
 COPY packages/shulker-operator packages/shulker-operator
 
 RUN cd packages/shulker-operator/src && \
