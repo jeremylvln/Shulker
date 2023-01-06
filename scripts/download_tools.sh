@@ -8,11 +8,11 @@ mkdir -p "${TOOLSDIR}"
 
 ## Tool Binaries
 KUSTOMIZE="${TOOLSDIR}/kustomize"
-KUSTOMIZE_VERSION="v3.8.7"
+KUSTOMIZE_VERSION="v4.5.7"
 KUSTOMIZE_INSTALL_SCRIPT="https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"
 
 CONTROLLER_GEN="${TOOLSDIR}/controller-gen"
-CONTROLLER_GEN_VERSION="v0.9.2"
+CONTROLLER_GEN_VERSION="v0.11.1"
 
 ENVTEST="${TOOLSDIR}/setup-envtest"
 ENVTEST_VERSION="latest"

@@ -3,6 +3,7 @@ layout:
 - go.kubebuilder.io/v3
 projectName: shulker
 repo: github.com/iamblueslime/shulker
+multigroup: true
 resources:
 - api:
     crdVersion: v1

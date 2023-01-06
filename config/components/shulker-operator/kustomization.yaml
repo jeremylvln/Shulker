@@ -1,0 +1,10 @@
+resources:
+- manager.yaml
+
+bases:
+- rbac
+- webhook
+- prometheus
+
+patchesStrategicMerge:
+- manager_auth_proxy_patch.yaml
