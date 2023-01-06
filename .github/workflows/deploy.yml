@@ -43,6 +43,12 @@ jobs:
           node-version: ${{ env.TARGET_NODE_VERSION }}
           cache: npm
 
+      - name: Cache Kubernetes tools
+        uses: actions/cache@v3
+        with:
+          path: scripts/.tools
+          key: ${{ runner.os }}-k8stools-${{ hashFiles('scripts/download_tools.sh') }}
+
       - name: Install Node.js dependencies
         run: npm ci
 
@@ -99,6 +105,12 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
+      - name: Cache Kubernetes tools
+        uses: actions/cache@v3
+        with:
+          path: scripts/.tools
+          key: ${{ runner.os }}-k8stools-${{ hashFiles('scripts/download_tools.sh') }}
+
       - name: Install Node.js dependencies
         run: npm ci
 
@@ -138,6 +150,12 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v2
+
+      - name: Cache Kubernetes tools
+        uses: actions/cache@v3
+        with:
+          path: scripts/.tools
+          key: ${{ runner.os }}-k8stools-${{ hashFiles('scripts/download_tools.sh') }}
 
       - name: Install Node.js dependencies
         run: npm ci
