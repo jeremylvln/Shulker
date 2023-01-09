@@ -1,8 +1,6 @@
 name: Bug Report
 description: File a bug report
 labels: ["type:bug :bug:", "flag:triage :recycle:"]
-assignees:
-  - IamBlueSlime
 body:
   - type: markdown
     attributes:
@@ -20,23 +18,31 @@ body:
       required: true
 
   - type: dropdown
+    id: components
+    attributes:
+      label: What components are involved in your issue?
+      multiple: true
+      options:
+        - Operator
+        - Proxy API
+        - Proxy Agent (BungeeCord)
+        - Proxy Agent (Velocity)
+
+  - type: input
     id: version
     attributes:
       label: Version
       description: What version of our software are you running?
-      options:
-        - Alpha
+      placeholder: ex. 0.0.1-alpha
     validations:
       required: true
 
-  - type: dropdown
+  - type: input
     id: k8s-version
     attributes:
       label: Kubernetes Version
       description: What version of Kubernetes are you running?
-      options:
-        - '1.20'
-        - '1.21'
+      placeholder: ex. 1.26
     validations:
       required: true
 

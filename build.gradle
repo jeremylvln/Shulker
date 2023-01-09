@@ -2,6 +2,10 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.7.22" apply false
 }
 
+allprojects {
+    version = '0.0.1'
+}
+
 configure(subprojects.findAll {
     !['packages'].contains(it.name)
 }) {
@@ -9,8 +13,6 @@ configure(subprojects.findAll {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'idea'
     apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
-    apply plugin: 'signing'
 
     group = 'io.shulkermc'
 
@@ -28,64 +30,69 @@ configure(subprojects.findAll {
         testImplementation 'junit:junit:4.13.2'
     }
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                artifactId = project.name
-                from components.java
+    if (!it.hasProperty('noPublishing')) {
+        apply plugin: 'maven-publish'
+        apply plugin: 'signing'
 
-                versionMapping {
-                    usage('java-api') {
-                        fromResolutionOf('runtimeClasspath')
-                    }
-                    usage('java-runtime') {
-                        fromResolutionResult()
-                    }
-                }
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    artifactId = project.name
+                    from components.java
 
-                pom {
-                    name = project.name
-                    // description = 'A concise description of my library'
-                    url = "https://github.com/IamBlueSlime/shulker"
-
-                    /*licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    versionMapping {
+                        usage('java-api') {
+                            fromResolutionOf('runtimeClasspath')
                         }
-                    }*/
-
-                    developers {
-                        developer {
-                            id = 'iamblueslime'
-                            name = 'Jérémy Levilain'
-                            email = 'jeremy@jeremylvln.fr'
+                        usage('java-runtime') {
+                            fromResolutionResult()
                         }
                     }
 
-                    scm {
-                        connection = 'scm:git:git://github.com/IamBlueSlime/shulker.git'
-                        developerConnection = 'scm:git:ssh://github.com/IamBlueSlime/shulker.git'
+                    pom {
+                        name = project.name
+                        // description = 'A concise description of my library'
                         url = "https://github.com/IamBlueSlime/shulker"
+
+                        /*licenses {
+                            license {
+                                name = 'The Apache License, Version 2.0'
+                                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            }
+                        }*/
+
+                        developers {
+                            developer {
+                                id = 'iamblueslime'
+                                name = 'Jérémy Levilain'
+                                email = 'jeremy@jeremylvln.fr'
+                            }
+                        }
+
+                        scm {
+                            connection = 'scm:git:git://github.com/IamBlueSlime/shulker.git'
+                            developerConnection = 'scm:git:ssh://github.com/IamBlueSlime/shulker.git'
+                            url = "https://github.com/IamBlueSlime/shulker"
+                        }
+                    }
+                }
+            }
+
+            repositories {
+                maven {
+                    name = "Shulker"
+                    url = "https://maven.jeremylvln.fr/artifactory/shulker"
+                    credentials {
+                        username = project.findProperty("artifactory.username") ?: System.getenv("ARTIFACTORY_USERNAME")
+                        password = project.findProperty("artifactory.password") ?: System.getenv("ARTIFACTORY_PASSWORD")
                     }
                 }
             }
         }
 
-        repositories {
-            maven {
-                name = "Shulker"
-                url = "https://maven.jeremylvln.fr/artifactory/shulker"
-                credentials {
-                    username = project.findProperty("artifactory.username") ?: System.getenv("ARTIFACTORY_USERNAME")
-                    password = project.findProperty("artifactory.password") ?: System.getenv("ARTIFACTORY_PASSWORD")
-                }
-            }
+        signing {
+            useGpgCmd()
+            sign publishing.publications.mavenJava
         }
-    }
-
-    signing {
-        useGpgCmd()
-        sign publishing.publications.mavenJava
     }
 }

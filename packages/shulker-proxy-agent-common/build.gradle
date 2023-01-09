@@ -1,5 +1,3 @@
-version = '0.0.1'
-
 dependencies {
     api project(':packages:shulker-proxy-api')
 

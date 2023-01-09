@@ -1,5 +1,4 @@
 archivesBaseName = "ShulkerProxyAgent-BungeeCord"
-version = '0.0.1'
 
 repositories {
     maven {
