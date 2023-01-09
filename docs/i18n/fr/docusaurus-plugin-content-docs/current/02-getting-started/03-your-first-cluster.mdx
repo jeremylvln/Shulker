@@ -1,0 +1,146 @@
+import CodeBlock from '@theme/CodeBlock';
+
+# Your First Cluster
+
+In this chapter, you'll create your first Minecraft Cluster. It is based on the "Getting Started" example available on [GitHub](https://github.com/IamBlueSlime/Shulker/tree/main/examples/getting-started).
+
+:::tip
+
+To cleanup this tutorial more easily, create a temporary dedicated namespace:
+
+```bash
+$ kubectl create ns shulker-tutorial
+```
+
+After this tutorial, you'll be able to delete it completly with all its contained resources:
+
+```bash
+$ kubectl delete ns shulker-tutorial
+```
+
+:::
+
+## A _spoon_ of MinecraftCluster
+
+Everything starts by creating a `MincraftCluster`. As described in the **[Architecture](/architecture)** chapter, it is the most important entity because it is referenced in many other resources.
+
+Create a `cluster.yaml` file containing the following:
+
+import ClusterSource from '!!raw-loader!../../../examples/getting-started/cluster.yaml';
+
+<CodeBlock language="yaml" title="/cluster.yaml" showLineNumbers={true}>{ClusterSource}</CodeBlock>
+
+And then apply this file:
+
+```bash
+$ kubectl apply -f cluster.yaml -n shulker-tutorial
+```
+
+After this, the Shulker Operator should have started some work but nothing really visible: no Pods are created yet. However, we are now ready for the _main course_.
+
+## A _drizzle_ of Proxy
+
+For the players to be able to connect to our Minecraft Cluster, we need at least one **Proxy**. While we could directly create a **Proxy** resource, we will create a **ProxyDeployment** instead. It will handle replication among other things, but more importantly, it will create and bind a **Kubernetes Service** for us, with the `LoadBalancer` type by default.
+
+:::note
+
+Each **ProxyDeployment** has its own, dedicated Service. This allows you to have a bunch of "public" proxies for your players while having a separate entrypoint for privileged players (like a staff, etc...).
+
+:::
+
+Create a `proxy.yaml` file containing the following:
+
+import ProxySource from '!!raw-loader!../../../examples/getting-started/proxy.yaml';
+
+<CodeBlock language="yaml" title="/proxy.yaml" showLineNumbers={true}>{ProxySource}</CodeBlock>
+
+And then apply this file:
+
+```bash
+$ kubectl apply -f proxy.yaml -n shulker-tutorial
+```
+
+You'll soon start to see a `public-xxx-xxx` Pod being scheduled. Wait a little bit for it to be ready. If you look at the logs of this Pod, you'll probably see some lines like this:
+
+```
+[io.shulkermc.proxyagent.BootstrapPlugin]: Identified Shulker proxy: shulker-tutorial/public-xxx-xxx
+[io.fabric8.kubernetes.client.dsl.internal.VersionUsageUtils]: The client is using resource type 'proxies' with unstable version 'v1alpha1'
+[io.shulkermc.proxyagent.BootstrapPlugin]: Proxy will be force stopped in 86400 seconds
+[io.fabric8.kubernetes.client.dsl.internal.VersionUsageUtils]: The client is using resource type 'minecraftservers' with unstable version 'v1alpha1'
+```
+
+This is due to Shulker injecting automatically an agent plugin to handle some work that cannot be only done from the infrastructure.
+
+:::note
+
+You probably question yourself about the log line indicating that the proxy will be force stopped after some time. Due to players being constantly connected to the proxies, updating them is hard because the only way of doing it is by rebooting it, causing players to disconnect without any way to recover them (at least on **Minecraft: Java Edition**).
+
+After a fixed amount of time, a proxy will enter the **Drain** mode, meaning that Kubernetes will exclude this proxy from the Service. This will prevent any new player from connecting to this proxy allowing it to be drained step by step (considering the players will deconnect after some play time).
+
+The proxy will check that it is empty every 30 seconds, if there is no player, it will shutdown itself, otherwise it will wait.
+
+It is important to note that a new Proxy is automatically created when one enters the **Drain** mode, to ensure the availability of the **ProxyDeployment**.
+
+:::
+
+While you read the block above, your Kubernetes Cluster should already have created a `LoadBalancer` Service. If you add the IP to the game's server list, you should see an output similar to the following:
+
+<center>
+<img
+  alt="Server list screenshot"
+  src='/img/getting-started/motd.png'
+  width="750px"
+/>
+</center>
+
+However, if you try to connect, you'll be kicked out with the following error:
+
+<center>
+<img
+  alt="No limbo screenshot"
+  src='/img/getting-started/no-limbo.png'
+  width="750px"
+/>
+</center>
+
+By default, the Shulker Agent will try to connect the player to the first server with the `limbo` tag. Because there is no server currently running in the cluster, there is no other choice than kicking the player.
+
+## A _pinch_ of MinecraftServer
+
+The concept is more or less the same as for a Proxy, except that no Kubernetes Service is created because the only entrypoints are the Proxies.
+
+Create a `minecraftserver.yaml` file containing the following:
+
+import MinecraftServerSource from '!!raw-loader!../../../examples/getting-started/minecraftserver.yaml';
+
+<CodeBlock language="yaml" title="/minecraftserver.yaml" showLineNumbers={true}>{MinecraftServerSource}</CodeBlock>
+
+And then apply this file:
+
+```bash
+$ kubectl apply -f minecraftserver.yaml -n shulker-tutorial
+```
+
+A new Pod representing the MinecraftServer will be created. After a short period, the Pod will be marked as healthy. If you look back to the Proxy's logs, you'll see that the Shulker Agent registered automatically the server into its server list:
+
+```
+[io.shulkermc.proxyagent.BootstrapPlugin]: Registering server 'limbo-xxx-xxx' to directory
+```
+
+Finally, without any surprise, if you retry to connect to the proxy, you'll arrive on the server you just created:
+
+<center>
+<img
+  alt="Server screenshot"
+  src='/img/getting-started/server.png'
+  width="750px"
+/>
+</center>
+
+:::note
+
+Pay attention to the `tags` field of the MinecraftServer resource you just created. The Shulker Agent will connect the player to the first server it finds with the `limbo` tag. It is optional to provide tags to servers. They could, however, be retrieved using Shulker's Proxy API.
+
+:::
+
+**Congratulations!** You have successfuly creatd your first Minecraft Cluster using Shulker!
