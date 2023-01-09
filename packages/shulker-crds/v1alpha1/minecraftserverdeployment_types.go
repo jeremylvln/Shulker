@@ -17,15 +17,15 @@ type MinecraftServerDeploymentSpec struct {
 	// Reference to a MinecraftCluster. Adding this will enroll
 	// this MinecraftServerDeployment to be part of a MinecraftCluster.
 	//+kubebuilder:validation:Required
-	ClusterRef MinecraftClusterRef `json:"clusterRef,omitempty"`
+	ClusterRef MinecraftClusterRef `json:"clusterRef"`
 
 	// Number of MinecraftServer replicas to create.
 	//+kubebuilder:validation:Required
-	Replicas int32 `json:"replicas,omitempty"`
+	Replicas int32 `json:"replicas"`
 
 	// Template defining the content of the created MinecraftServers.
 	//+kubebuilder:validation:Required
-	Template MinecraftServerTemplate `json:"template,omitempty"`
+	Template MinecraftServerTemplate `json:"template"`
 }
 
 type MinecraftServerDeploymentStatusCondition string
@@ -40,7 +40,7 @@ type MinecraftServerDeploymentStatus struct {
 	// MinecraftServerDeployment object.
 	// Known .status.conditions.type are: "Available".
 	//+kubebuilder:validation:Required
-	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
+	Conditions []metav1.Condition `json:"conditions" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 
 	// Number of total replicas in this MinecraftServerDeployment.
 	Replicas int32 `json:"replicas"`

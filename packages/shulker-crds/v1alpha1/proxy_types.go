@@ -24,9 +24,10 @@ type ProxySpec struct {
 	// The version can come from a channel which allows the user
 	// to run a version different from the default BungeeCord.
 	//+kubebuilder:validation:Required
-	Version ProxyVersionSpec `json:"version,omitempty"`
+	Version ProxyVersionSpec `json:"version"`
 
 	// Custom configuration flags to custom the proxy behavior.
+	//+kubebuilder:default={}
 	Configuration ProxyConfigurationSpec `json:"config,omitempty"`
 
 	// Overrides for values to be injected in the created Pod
@@ -81,6 +82,7 @@ type ProxyConfigurationSpec struct {
 	Motd string `json:"motd,omitempty"`
 
 	// Server icon image in base64 format.
+	//+optional
 	ServerIcon string `json:"serverIcon,omitempty"`
 
 	// Whether to enable the PROXY protocol.
@@ -121,7 +123,7 @@ type ProxyStatus struct {
 	// Proxy object.
 	// Known .status.conditions.type are: "Ready", "Phase".
 	//+kubebuilder:validation:Required
-	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
+	Conditions []metav1.Condition `json:"conditions" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 }
 
 func (s *ProxyStatus) SetCondition(condition ProxyStatusCondition, status metav1.ConditionStatus, reason string, message string) metav1.Condition {
@@ -155,9 +157,11 @@ type Proxy struct {
 // Template containing the metadata and spec of the
 // Proxy. Will be used in ProxyDeployment.
 type ProxyTemplate struct {
+	//+kubebuilder:validation:Required
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec ProxySpec `json:"spec,omitempty"`
+	//+kubebuilder:validation:Required
+	Spec ProxySpec `json:"spec"`
 }
 
 //+kubebuilder:object:root=true

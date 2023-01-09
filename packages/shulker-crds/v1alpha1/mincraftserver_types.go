@@ -25,9 +25,10 @@ type MinecraftServerSpec struct {
 	// The version can come from a channel which allows the user
 	// to run a version different from the default Paper.
 	//+kubebuilder:validation:Required
-	Version MinecraftServerVersionSpec `json:"version,omitempty"`
+	Version MinecraftServerVersionSpec `json:"version"`
 
 	// Custom configuration flags to custom the server behavior.
+	//+kubebuilder:default={}
 	Configuration MinecraftServerConfigurationSpec `json:"config,omitempty"`
 
 	// Overrides for values to be injected in the created Pod
@@ -71,7 +72,7 @@ const (
 type MinecraftServerConfigurationSpec struct {
 	// Name of an optional ConfigMap already containing the server
 	// configuration.
-	// +optional
+	//+optional
 	ExistingConfigMapName string `json:"existingConfigMapName,omitempty"`
 
 	// Reference to a world to download and extract. Gzipped tarball
@@ -116,15 +117,19 @@ type MinecraftServerConfigurationSpec struct {
 // Overrides for the created Pod of the server.
 type MinecraftServerPodOverridesSpec struct {
 	// Extra environment variables to add to the crated Pod.
+	//+optional
 	Env []corev1.EnvVar `json:"env,omitempty"`
 
 	// The desired compute resource requirements of the created Pod.
+	//+optional
 	Resources *corev1.ResourceRequirements `json:"resources,omitempty"`
 
 	// Affinity scheduling rules to be applied on created Pod.
+	//+optional
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 
 	// Name of the ServiceAccount to use.
+	//+optional
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
 }
 
@@ -141,7 +146,7 @@ type MinecraftServerStatus struct {
 	// MinecraftServer object.
 	// Known .status.conditions.type are: "Ready", "Phase".
 	//+kubebuilder:validation:Required
-	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
+	Conditions []metav1.Condition `json:"conditions" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 
 	// IP address of the Pod.
 	ServerIP string `json:"serverIP"`
@@ -178,9 +183,11 @@ type MinecraftServer struct {
 // Template containing the metadata and spec of the
 // MinecraftServer. Will be used in MinecraftServer.
 type MinecraftServerTemplate struct {
+	//+kubebuilder:validation:Required
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MinecraftServerSpec `json:"spec,omitempty"`
+	//+kubebuilder:validation:Required
+	Spec MinecraftServerSpec `json:"spec"`
 }
 
 //+kubebuilder:object:root=true

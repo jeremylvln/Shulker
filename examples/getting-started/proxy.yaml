@@ -1,0 +1,17 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyDeployment
+metadata:
+  name: public
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config: {}

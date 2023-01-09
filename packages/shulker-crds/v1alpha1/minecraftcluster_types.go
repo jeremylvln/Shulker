@@ -53,7 +53,7 @@ type MinecraftClusterRef struct {
 	// Name of the MinecraftCluster Kubernetes object owning
 	// this resource.
 	//+kubebuilder:validation:Required
-	Name string `json:"name,omitempty"`
+	Name string `json:"name"`
 }
 
 func init() {

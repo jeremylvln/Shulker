@@ -20,19 +20,19 @@ type ResourceRefSource struct {
 type ResourceRefMavenSelector struct {
 	// URL to the Maven repository to download the artifact from.
 	//+kubebuilder:validation:Required
-	Repository string `json:"repository,omitempty"`
+	Repository string `json:"repository"`
 
 	// Group ID of the Maven artifact to download.
 	//+kubebuilder:validation:Required
-	GroupId string `json:"groupId,omitempty"`
+	GroupId string `json:"groupId"`
 
 	// Artifact ID of the Maven artifact to download.
 	//+kubebuilder:validation:Required
-	ArtifactId string `json:"artifactId,omitempty"`
+	ArtifactId string `json:"artifactId"`
 
 	// Version of the Maven artifact to download.
 	//+kubebuilder:validation:Required
-	Version string `json:"version,omitempty"`
+	Version string `json:"version"`
 
 	// Name of the Kubernetes Secret containing the repository
 	// credentials. The secret must contains a username

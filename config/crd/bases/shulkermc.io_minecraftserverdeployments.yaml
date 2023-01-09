@@ -59,6 +59,8 @@ spec:
                     description: Name of the MinecraftCluster Kubernetes object owning
                       this resource.
                     type: string
+                required:
+                - name
                 type: object
               replicas:
                 description: Number of MinecraftServer replicas to create.
@@ -81,6 +83,8 @@ spec:
                             description: Name of the MinecraftCluster Kubernetes object
                               owning this resource.
                             type: string
+                        required:
+                        - name
                         type: object
                       config:
                         description: Custom configuration flags to custom the server
@@ -144,6 +148,11 @@ spec:
                                           description: Version of the Maven artifact
                                             to download.
                                           type: string
+                                      required:
+                                      - artifactId
+                                      - groupId
+                                      - repository
+                                      - version
                                       type: object
                                   type: object
                               type: object
@@ -185,6 +194,11 @@ spec:
                                           description: Version of the Maven artifact
                                             to download.
                                           type: string
+                                      required:
+                                      - artifactId
+                                      - groupId
+                                      - repository
+                                      - version
                                       type: object
                                   type: object
                               type: object
@@ -240,6 +254,11 @@ spec:
                                         description: Version of the Maven artifact
                                           to download.
                                         type: string
+                                    required:
+                                    - artifactId
+                                    - groupId
+                                    - repository
+                                    - version
                                     type: object
                                 type: object
                             type: object
@@ -1393,8 +1412,16 @@ spec:
                         required:
                         - name
                         type: object
+                    required:
+                    - version
                     type: object
+                required:
+                - spec
                 type: object
+            required:
+            - clusterRef
+            - replicas
+            - template
             type: object
           status:
             description: MinecraftServerDeploymentStatus defines the observed state
@@ -1488,6 +1515,7 @@ spec:
                 type: integer
             required:
             - availableReplicas
+            - conditions
             - replicas
             - selector
             - unavailableReplicas

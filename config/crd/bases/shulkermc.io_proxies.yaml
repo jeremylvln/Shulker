@@ -57,6 +57,8 @@ spec:
                     description: Name of the MinecraftCluster Kubernetes object owning
                       this resource.
                     type: string
+                required:
+                - name
                 type: object
               config:
                 description: Custom configuration flags to custom the proxy behavior.
@@ -112,6 +114,11 @@ spec:
                                 version:
                                   description: Version of the Maven artifact to download.
                                   type: string
+                              required:
+                              - artifactId
+                              - groupId
+                              - repository
+                              - version
                               type: object
                           type: object
                       type: object
@@ -150,6 +157,11 @@ spec:
                                 version:
                                   description: Version of the Maven artifact to download.
                                   type: string
+                              required:
+                              - artifactId
+                              - groupId
+                              - repository
+                              - version
                               type: object
                           type: object
                       type: object
@@ -1206,6 +1218,8 @@ spec:
                 required:
                 - name
                 type: object
+            required:
+            - version
             type: object
           status:
             description: ProxyStatus defines the observed state of Proxy
@@ -1280,7 +1294,11 @@ spec:
                   - type
                   type: object
                 type: array
+            required:
+            - conditions
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true

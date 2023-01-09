@@ -18,20 +18,20 @@ type ProxyDeploymentSpec struct {
 	// Reference to a MinecraftCluster. Adding this will enroll
 	// this ProxyDeployment to be part of a MinecraftCluster.
 	//+kubebuilder:validation:Required
-	ClusterRef MinecraftClusterRef `json:"clusterRef,omitempty"`
+	ClusterRef MinecraftClusterRef `json:"clusterRef"`
 
 	// Number of Proxy replicas to create.
 	//+kubebuilder:validation:Required
-	Replicas int32 `json:"replicas,omitempty"`
+	Replicas int32 `json:"replicas"`
 
 	// The desired state of the Kubernetes Service to create for the
 	// Proxy Deployment.
-	//+kubebuilder:validation:Required
+	//+optional
 	Service ProxyDeploymentServiceSpec `json:"service,omitempty"`
 
 	// Template defining the content of the created Proxies.
 	//+kubebuilder:validation:Required
-	Template ProxyTemplate `json:"template,omitempty"`
+	Template ProxyTemplate `json:"template"`
 }
 
 // Configuration attributes for the Service resource.
@@ -62,7 +62,7 @@ type ProxyDeploymentStatus struct {
 	// ProxyDeployment object.
 	// Known .status.conditions.type are: "Available".
 	//+kubebuilder:validation:Required
-	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
+	Conditions []metav1.Condition `json:"conditions" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 
 	// Number of total replicas in this ProxyDeployment.
 	Replicas int32 `json:"replicas"`

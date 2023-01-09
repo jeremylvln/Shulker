@@ -49,7 +49,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'getting-started/installation',
+            docId: 'getting-started/prerequisites',
             position: 'left',
             label: 'Getting Started',
           },
@@ -78,7 +78,7 @@ const config = {
             items: [
               {
                 label: 'Getting Started',
-                to: '/getting-started/installation',
+                to: '/getting-started/prerequisites',
               },
               {
                 label: 'Recipes',

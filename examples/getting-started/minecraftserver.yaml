@@ -1,0 +1,16 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerDeployment
+metadata:
+  name: limbo
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  template:
+    spec:
+      tags:
+        - limbo
+      version:
+        channel: Paper
+        name: '1.19.3'
+      config: {}
