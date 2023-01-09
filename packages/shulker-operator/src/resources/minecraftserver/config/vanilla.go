@@ -18,7 +18,11 @@ func GetServerProperties(spec *shulkermciov1alpha1.MinecraftServerConfigurationS
 	properties["online-mode"] = "false"
 	properties["prevent-proxy-connections"] = "false"
 	properties["enforce-secure-profiles"] = "true"
-	properties["max-players"] = strconv.Itoa(*spec.MaxPlayers)
+
+	if spec.MaxPlayers != nil {
+		properties["max-players"] = strconv.Itoa(*spec.MaxPlayers)
+	}
+
 	properties["allow-nether"] = strconv.FormatBool(!spec.DisableNether)
 
 	lines := []string{}
