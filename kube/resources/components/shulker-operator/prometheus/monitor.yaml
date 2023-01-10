@@ -10,15 +10,15 @@ metadata:
     app.kubernetes.io/part-of: shulker
     app.kubernetes.io/managed-by: kustomize
   name: operator-metrics-monitor
-  namespace: system
+  namespace: shulker-system
 spec:
   endpoints:
-    - path: /metrics
-      port: https
-      scheme: https
-      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-      tlsConfig:
-        insecureSkipVerify: true
+  - path: /metrics
+    targetPort: 8443
+    scheme: https
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    tlsConfig:
+      insecureSkipVerify: true
   selector:
     matchLabels:
       control-plane: shulker-operator

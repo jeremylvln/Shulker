@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/part-of: shulker
     app.kubernetes.io/managed-by: kustomize
   name: selfsigned-issuer
-  namespace: system
+  namespace: shulker-system
 spec:
   selfSigned: {}
 
@@ -25,7 +25,7 @@ metadata:
     app.kubernetes.io/part-of: shulker
     app.kubernetes.io/managed-by: kustomize
   name: serving-cert
-  namespace: system
+  namespace: shulker-system
 spec:
   dnsNames:
   - $(SHULKER_OPERATOR_SERVICE_NAME).$(SHULKER_OPERATOR_SERVICE_NAMESPACE).svc

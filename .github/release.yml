@@ -1,0 +1,20 @@
+changelog:
+  categories:
+    - title: "Breaking Changes :warning:"
+      labels:
+        - "flag:breaking change :warning:"
+    - title: "Enhancements :rocket:"
+      labels:
+        - "type:enhancement :rocket:"
+    - title: "Bug Fixes :bug:"
+      labels:
+        - "type:bug :bug:"
+    - title: "Documentation :books:"
+      labels:
+        - "type:documentation :books:"
+    - title: "Dependencies :wrench:"
+      labels:
+        - "type:dependencies :wrench:"
+    - title: Other Changes
+      labels:
+        - "*"

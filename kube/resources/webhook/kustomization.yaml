@@ -1,0 +1,10 @@
+resources:
+- manifests.yaml
+- certificate.yaml
+
+# patchesStrategicMerge:
+# TODO: add when webhooks
+# - webhookcainjection_patch.yaml
+
+configurations:
+- kustomizeconfig.yaml

@@ -15,7 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: operator
-  namespace: system
+  namespace: shulker-system
   labels:
     control-plane: shulker-operator
     app.kubernetes.io/name: deployment
@@ -41,7 +41,7 @@ spec:
         - /shulker-operator
         args:
         - --leader-elect
-        image: ghcr.io/iamblueslime/shulker-operator:latest
+        image: ghcr.io/iamblueslime/shulker-operator
         name: manager
         ports:
         - containerPort: 8080

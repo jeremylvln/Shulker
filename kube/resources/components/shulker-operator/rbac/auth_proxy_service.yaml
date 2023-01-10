@@ -10,12 +10,11 @@ metadata:
     app.kubernetes.io/part-of: shulker
     app.kubernetes.io/managed-by: kustomize
   name: operator-metrics-service
-  namespace: system
+  namespace: shulker-system
 spec:
   ports:
-  - name: https
-    port: 8443
+  - port: 8443
     protocol: TCP
-    targetPort: https
+    targetPort: metrics-proxy
   selector:
     control-plane: shulker-operator

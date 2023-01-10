@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: operator
-  namespace: system
+  namespace: shulker-system
 spec:
   template:
     spec:
@@ -15,9 +15,9 @@ spec:
         - --logtostderr=true
         - --v=0
         ports:
-        - containerPort: 8443
+        - name: metrics-proxy
+          containerPort: 8443
           protocol: TCP
-          name: https
         resources:
           limits:
             cpu: 500m
