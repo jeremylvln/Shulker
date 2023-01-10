@@ -11,7 +11,7 @@ dependencies {
     implementation project(':packages:shulker-proxy-agent-common')
 
     compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
-    implementation "net.kyori:adventure-platform-bungeecord:4.1.2"
+    implementation "net.kyori:adventure-platform-bungeecord:4.2.0"
 }
 
 jar {
