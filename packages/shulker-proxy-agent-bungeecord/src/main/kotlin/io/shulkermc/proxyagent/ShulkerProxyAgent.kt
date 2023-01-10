@@ -3,7 +3,7 @@ package io.shulkermc.proxyagent
 import io.shulkermc.proxyapi.ShulkerProxyAPI
 import net.md_5.bungee.api.plugin.Plugin
 
-class ShulkerProxyAgent: Plugin() {
+class ShulkerProxyAgent : Plugin() {
     private lateinit var common: ShulkerProxyAgentCommon
 
     override fun onEnable() {
@@ -16,6 +16,6 @@ class ShulkerProxyAgent: Plugin() {
         this.common.onProxyShutdown()
     }
 
-    fun getAPI(): ShulkerProxyAPI
-        = this.common.api
+    fun getAPI(): ShulkerProxyAPI =
+        this.common.api
 }

@@ -13,8 +13,8 @@ import java.time.OffsetDateTime
 
 class KubernetesGatewayAdapterImpl(proxyNamespace: String, proxyName: String) : KubernetesGatewayAdapter {
     private val kubernetesClient: KubernetesClient = KubernetesClientBuilder()
-            .withHttpClientFactory(OkHttpClientFactory())
-            .build()
+        .withHttpClientFactory(OkHttpClientFactory())
+        .build()
 
     private val proxyApi = this.kubernetesClient.resources(ShulkerV1alpha1Proxy::class.java, ShulkerV1alpha1Proxy.List::class.java)
     private val minecraftServerApi = this.kubernetesClient.resources(ShulkerV1alpha1MinecraftServer::class.java, ShulkerV1alpha1MinecraftServer.List::class.java)
@@ -32,26 +32,26 @@ class KubernetesGatewayAdapterImpl(proxyNamespace: String, proxyName: String) : 
 
     override fun emitAgentReady() {
         val event = this.createEventBuilder()
-                .withType("Normal")
-                .withReason("AgentReady")
-                .withMessage("Agent is initialized and ready")
-                .build()
+            .withType("Normal")
+            .withReason("AgentReady")
+            .withMessage("Agent is initialized and ready")
+            .build()
 
         this.kubernetesClient.v1().events()
-                .resource(event)
-                .create()
+            .resource(event)
+            .create()
     }
 
     override fun emitNotAcceptingPlayers() {
         val event = this.createEventBuilder()
-                .withType("Normal")
-                .withReason("NotAcceptingPlayers")
-                .withMessage("Proxy is no longer accepting players")
-                .build()
+            .withType("Normal")
+            .withReason("NotAcceptingPlayers")
+            .withMessage("Proxy is no longer accepting players")
+            .build()
 
         this.kubernetesClient.v1().events()
-                .resource(event)
-                .create()
+            .resource(event)
+            .create()
     }
 
     override fun listMinecraftServers(): ShulkerV1alpha1MinecraftServer.List {
@@ -71,11 +71,11 @@ class KubernetesGatewayAdapterImpl(proxyNamespace: String, proxyName: String) : 
             override fun onDelete(proxy: ShulkerV1alpha1Proxy, deletedFinalStateUnknown: Boolean) {
                 callback(WatchAction.DELETED, proxy)
             }
-        };
+        }
 
         val proxyInformer = proxyApi
-                .inNamespace(this.proxyReference.namespace)
-                .inform(eventHandler, 30L * 1000)
+            .inNamespace(this.proxyReference.namespace)
+            .inform(eventHandler, 30L * 1000)
 
         proxyInformer.start()
     }
@@ -93,7 +93,7 @@ class KubernetesGatewayAdapterImpl(proxyNamespace: String, proxyName: String) : 
             override fun onDelete(minecraftServer: ShulkerV1alpha1MinecraftServer, deletedFinalStateUnknown: Boolean) {
                 callback(WatchAction.DELETED, minecraftServer)
             }
-        };
+        }
 
         val minecraftServerInformer = minecraftServerApi
             .inNamespace(this.proxyReference.namespace)
@@ -106,16 +106,16 @@ class KubernetesGatewayAdapterImpl(proxyNamespace: String, proxyName: String) : 
         val timestamp = OffsetDateTime.now().toString()
 
         return EventBuilder()
-                .withNewMetadata()
-                    .withNamespace(this.proxyReference.namespace)
-                    .withGenerateName(this.proxyReference.name)
-                .endMetadata()
-                .withNewSource()
-                    .withComponent("shulker-proxy-agent")
-                .endSource()
-                .withInvolvedObject(this.proxyReference)
-                .withFirstTimestamp(timestamp)
-                .withLastTimestamp(timestamp)
-                .withCount(1)
+            .withNewMetadata()
+            .withNamespace(this.proxyReference.namespace)
+            .withGenerateName(this.proxyReference.name)
+            .endMetadata()
+            .withNewSource()
+            .withComponent("shulker-proxy-agent")
+            .endSource()
+            .withInvolvedObject(this.proxyReference)
+            .withFirstTimestamp(timestamp)
+            .withLastTimestamp(timestamp)
+            .withCount(1)
     }
 }

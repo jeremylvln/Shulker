@@ -8,18 +8,18 @@ import java.net.InetSocketAddress
 
 class DirectoryAdapterImpl(
     private val agent: ShulkerProxyAgentCommon
-): DirectoryAdapter {
+) : DirectoryAdapter {
     private val serversByTag = HashMap<ServerTag, MutableSet<ServerName>>()
     private val tagsByServer = HashMap<ServerName, Set<ServerTag>>()
 
     fun registerServer(name: ServerName, address: InetSocketAddress, tags: Set<ServerTag>) {
-        this.agent.logger.info("Registering server '${name}' to directory")
+        this.agent.logger.info("Registering server '$name' to directory")
 
         this.agent.proxyInterface.registerServer(name, address)
 
         for (tag in tags) {
             this.serversByTag.getOrPut(tag) { HashSet() }.add(name)
-            this.agent.logger.fine("Tagged '$tag' on server '${name}'")
+            this.agent.logger.fine("Tagged '$tag' on server '$name'")
         }
         this.tagsByServer[name] = tags
     }
@@ -31,7 +31,7 @@ class DirectoryAdapterImpl(
         if (tags != null) {
             tags.forEach { tag ->
                 this.serversByTag[tag]!!.remove(name)
-                this.agent.logger.fine("Untagged '$tag' from server '${name}'")
+                this.agent.logger.fine("Untagged '$tag' from server '$name'")
             }
             this.tagsByServer.remove(name)
         }

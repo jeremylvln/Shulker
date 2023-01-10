@@ -5,7 +5,6 @@ import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
 import io.shulkermc.proxyagent.adapters.kubernetes.models.ShulkerV1alpha1MinecraftServer
 import java.net.InetSocketAddress
-import java.util.*
 import kotlin.collections.HashSet
 import kotlin.jvm.optionals.getOrElse
 

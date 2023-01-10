@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 class ProxyInterfaceBungeeCord(
     private val plugin: Plugin,
     private val proxy: ProxyServer
-): ProxyInterface {
+) : ProxyInterface {
     override fun shutdown() {
         this.proxy.stop()
     }
@@ -38,27 +38,33 @@ class ProxyInterfaceBungeeCord(
     }
 
     override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
-        this.proxy.pluginManager.registerListener(this.plugin, object : Listener {
-            @EventHandler(priority = EventPriority.LOWEST)
-            private fun onServerConnect(event: ServerConnectEvent) {
-                val result = hook(wrapPlayer(event.player), event.target.name)
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.LOWEST)
+                private fun onServerConnect(event: ServerConnectEvent) {
+                    val result = hook(wrapPlayer(event.player), event.target.name)
 
-                if (result.newServerName.isPresent)
-                    event.target = proxy.servers[result.newServerName.get()]!!
+                    if (result.newServerName.isPresent)
+                        event.target = proxy.servers[result.newServerName.get()]!!
+                }
             }
-        })
+        )
     }
 
     override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
-        this.proxy.pluginManager.registerListener(this.plugin, object : Listener {
-            @EventHandler(priority = EventPriority.HIGHEST)
-            private fun onPreLogin(event: PreLoginEvent) {
-                val result = hook()
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.HIGHEST)
+                private fun onPreLogin(event: PreLoginEvent) {
+                    val result = hook()
 
-                if (!result.allowed)
-                    event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                    if (!result.allowed)
+                        event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                }
             }
-        })
+        )
     }
 
     override fun getPlayerCount(): Int {

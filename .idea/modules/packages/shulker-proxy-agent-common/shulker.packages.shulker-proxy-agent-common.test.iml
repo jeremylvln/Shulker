@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":packages:shulker-proxy-agent-common:test" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files" />
+        </compilerSettings>
+        <compilerArguments>
+          <flagArguments>
+            <flagArg name="noReflect" arg="true" />
+            <flagArg name="noStdlib" arg="true" />
+          </flagArguments>
+          <stringArguments>
+            <stringArg name="classpath">
+              <args>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.7.22/b75c999616784d452613d670fec56a527f2bd3d1/kotlin-stdlib-jdk8-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-httpclient-okhttp/6.2.0/7a683dfbd911e08e8f189f0b856e097b893f3633/kubernetes-httpclient-okhttp-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.7.22/6aa0a0e051d6b828dc25047025ec245758fab6d9/kotlin-stdlib-jdk7-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.22/9fb43bccb6cf8cfaaf3776c75f5df4f052f09b72/kotlin-stdlib-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-client-api/6.2.0/2eb04b9be96b0f24790a844849c5b3dd6a2aa523/kubernetes-client-api-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.12.12/d952189f6abb148ff72aab246aa8c28cf99b469f/logging-interceptor-3.12.12.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.12.12/d3e1ce1d2b3119adf270b2d00d947beb03fe3321/okhttp-3.12.12.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-gatewayapi/6.2.0/27806c056669f5174e3b3ae765e344c4999d75dd/kubernetes-model-gatewayapi-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-rbac/6.2.0/2ea6439efeafc044b2a2b2f17639151454f2d126/kubernetes-model-rbac-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-admissionregistration/6.2.0/a7649aec3e2ab04c761fc59f19585fada45b4304/kubernetes-model-admissionregistration-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-apps/6.2.0/9e2f918bc6461fc97064508643e2f270a6a7e72a/kubernetes-model-apps-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-autoscaling/6.2.0/8b2024bdb2d0bfa1b7bd00fe7b90e0e1906a2486/kubernetes-model-autoscaling-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-apiextensions/6.2.0/8abec4acbc9552894de32e62f77ad59dc4ab59a5/kubernetes-model-apiextensions-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-batch/6.2.0/a79ba204bad7f06c3dc99009d05e584c68ead654/kubernetes-model-batch-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-certificates/6.2.0/7e2e963eb8c8953bf0e63ec3fbbe3fcae2d7ba13/kubernetes-model-certificates-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-coordination/6.2.0/e6f725fabf14f957be966d7bf6e428b7f866457d/kubernetes-model-coordination-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-discovery/6.2.0/12c1d938d005592a7fc50f85a63dd02b598c929c/kubernetes-model-discovery-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-events/6.2.0/5f52d3821f86a995e3941e72fc8d3bd96f2bbc21/kubernetes-model-events-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-extensions/6.2.0/558006bc903f9647e3e8e75babf297239ecade1f/kubernetes-model-extensions-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-flowcontrol/6.2.0/365562c16f99fdc0cf7e64e87f70302b4fed1899/kubernetes-model-flowcontrol-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-networking/6.2.0/5bd92b53f0c860ead6ea7528efb877d1016aba3/kubernetes-model-networking-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-metrics/6.2.0/8cf4090e4fb727c2adccf1cc7f3ebe9fe31b33d4/kubernetes-model-metrics-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-policy/6.2.0/3c67257c607916316ebb17b7e0b8c69857f058/kubernetes-model-policy-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-scheduling/6.2.0/47a156bccfce9e17ada29223fbdcf0572bcac0c8/kubernetes-model-scheduling-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-storageclass/6.2.0/52a0e460423eb184830802e91db709c79ae45ec/kubernetes-model-storageclass-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-node/6.2.0/e49df7359844685a2cf87e16316c78c4289d62d1/kubernetes-model-node-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-core/6.2.0/245a198f9a26f81d9cc3e5ab1fa1709427961af3/kubernetes-model-core-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-common/6.2.0/db9fc4a68a59dba4a35d828002c1bae18aa97a32/kubernetes-model-common-6.2.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.36/6c62681a2f655b49963a5983b8b0950a6120ae14/slf4j-api-1.7.36.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.yaml/snakeyaml/1.33/2cd0a87ff7df953f810c344bdf2fe3340b954c69/snakeyaml-1.33.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.13.4/e6d820112871f33cd94a1dcc54eef58874753b5/jackson-datatype-jsr310-2.13.4.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.13.4/98b0edfa8e4084078f10b7b356c300ded4a71491/jackson-databind-2.13.4.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.13.4/cf934c681294b97ef6d80082faeefbe1edadf56/jackson-core-2.13.4.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.13.4/858c6cc78e1f08a885b1613e1d817c829df70a6e/jackson-annotations-2.13.4.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.13.4/3142ec201e878372d1561e64bd1a947d9e88a03d/jackson-dataformat-yaml-2.13.4.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
+              </args>
+            </stringArg>
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/test" />
+            <stringArg name="jvmTarget" arg="1.8" />
+            <stringArg name="moduleName" arg="shulker-proxy-agent-common" />
+            <stringArg name="apiVersion" arg="1.7" />
+            <stringArg name="languageVersion" arg="1.7" />
+          </stringArguments>
+          <arrayArguments>
+            <arrayArg name="friendPaths">
+              <args>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/java/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/libs/shulker-proxy-agent-common-0.0.1.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginClasspaths">
+              <args>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.7.22/496ed7206d5d7ddb1bc3fc5ecb357558a26e1954/kotlin-scripting-jvm-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.7.22/98ac39f8f50d398e9e8df8a1d30fc854f83f3629/kotlin-scripting-common-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.22/9fb43bccb6cf8cfaaf3776c75f5df4f052f09b72/kotlin-stdlib-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.7.22/703a4d56168f3517532bc04481e3c8b751f685cb/kotlin-script-runtime-1.7.22.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginOptions" />
+          </arrayArguments>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <output-test url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/java/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common/src/test" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent-common.main" />
+    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.22" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.7.22" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-client-api:6.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:3.12.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.12.12" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.7.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-gatewayapi:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-rbac:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-admissionregistration:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-apps:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-autoscaling:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-apiextensions:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-batch:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-certificates:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-coordination:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-discovery:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-events:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-extensions:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-flowcontrol:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-networking:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-metrics:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-policy:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-scheduling:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-storageclass:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-node:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-core:6.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.36" level="project" />
+    <orderEntry type="library" name="Gradle: org.yaml:snakeyaml:1.33" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.13.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.13.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.4" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.15.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-common:6.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.13.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client-api:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:zjsonpatch:0.3.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-gatewayapi:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-rbac:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-admissionregistration:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-apps:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-autoscaling:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-apiextensions:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-batch:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-certificates:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-coordination:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-discovery:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-events:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-extensions:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-flowcontrol:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-networking:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-metrics:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-policy:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-scheduling:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-storageclass:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-node:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-core:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.14.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.14.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-common:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.14.1" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="shulker.packages.shulker-proxy-agent-common.main" />
+</module>
