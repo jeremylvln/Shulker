@@ -16,18 +16,18 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
     fun onProxyInitialization() {
         try {
-            val config = parse()
+            val config = Configuration.load()
 
             this.logger.info("Identified Shulker proxy: ${config.proxyNamespace}/${config.proxyName}")
 
             val fileSystem = FileSystemAdapterImpl()
             this.kubernetesGateway = KubernetesGatewayAdapterImpl(config.proxyNamespace, config.proxyName)
 
-            DrainFeature(this, fileSystem, kubernetesGateway!!, config.ttlSeconds)
-            DirectoryFeature(this, kubernetesGateway!!)
+            DrainFeature(this, fileSystem, this.kubernetesGateway!!, config.ttlSeconds)
+            DirectoryFeature(this, this.kubernetesGateway!!)
             LimboFeature(this)
 
-            kubernetesGateway!!.emitAgentReady()
+            this.kubernetesGateway!!.emitAgentReady()
         } catch (e: Exception) {
             this.logger.severe("Failed to parse configuration")
             e.printStackTrace()
