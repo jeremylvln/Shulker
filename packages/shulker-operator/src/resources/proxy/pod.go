@@ -72,7 +72,7 @@ func (b *ProxyResourcePodBuilder) Update(object client.Object) error {
 		},
 		Containers: []corev1.Container{
 			{
-				Image: "itzg/bungeecord:latest",
+				Image: "itzg/bungeecord:java17-2022.4.1",
 				Name:  "proxy",
 				Ports: []corev1.ContainerPort{{
 					Name:          "minecraft",
@@ -97,7 +97,7 @@ func (b *ProxyResourcePodBuilder) Update(object client.Object) error {
 					InitialDelaySeconds: 10,
 					PeriodSeconds:       10,
 				},
-				ImagePullPolicy: corev1.PullAlways,
+				ImagePullPolicy: corev1.PullIfNotPresent,
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{
 					{
