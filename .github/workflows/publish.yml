@@ -52,26 +52,14 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Prepare Docker metadata (release)
+      - name: Prepare Docker metadata
         id: docker-metadata
-        if: startsWith(github.ref, 'refs/tags/') == true
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/iamblueslime/placeholder_app_name
           tags: |
-            type=raw,value=latest
+            ${{ (startsWith(github.ref, 'refs/tags/') == true && 'type=raw,value=latest') || 'type=raw,value=next' }}
             type=ref,event=tag
-            type=sha,format=long
-            type=sha
-
-      - name: Prepare Docker metadata (next)
-        id: docker-metadata
-        if: startsWith(github.ref, 'refs/tags/') == false
-        uses: docker/metadata-action@v4
-        with:
-          images: ghcr.io/iamblueslime/placeholder_app_name
-          tags: |
-            type=raw,value=next
             type=sha,format=long
             type=sha
 
