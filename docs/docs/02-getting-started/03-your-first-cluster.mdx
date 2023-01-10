@@ -6,23 +6,17 @@ In this chapter, you'll create your first Minecraft Cluster. It is
 based on the "Getting Started" example available on
 [GitHub](https://github.com/IamBlueSlime/Shulker/tree/main/examples/getting-started).
 
-:::tip
+## Creating your tutorial environment
 
-To cleanup this tutorial more easily, create a temporary dedicated
-namespace:
+For you to clean the resources created during this tutorial, we
+will first create a Kubernetes namespace to hold our resources:
 
 ```bash
 $ kubectl create ns shulker-tutorial
 ```
 
-After this tutorial, you'll be able to delete it completly with all
-its contained resources:
-
-```bash
-$ kubectl delete ns shulker-tutorial
-```
-
-:::
+At the end of this tutorial, the cleaning will be as simple as deleting
+the namespace.
 
 ## A _spoon_ of MinecraftCluster
 
@@ -185,3 +179,28 @@ could, however, be retrieved using Shulker's Proxy API.
 :::
 
 **Congratulations!** You have successfuly creatd your first Minecraft Cluster using Shulker!
+
+## Cleaning everything up
+
+Deleting the three resources you created will destroy all the resources
+created by Shulker under the hood:
+
+```bash
+$ kubectl delete -f minecraftserver.yaml
+$ kubectl delete -f proxy.yaml
+$ kubectl delete -f cluster.yaml
+```
+
+If you created a namespace dedicated to this tutorial, you can simply
+delete it without bothering deleting the resources one-by-one:
+
+```bash
+$ kubectl delete ns shulker-tutorial
+```
+
+:::note
+
+The command could block some seconds/minutes during the deletion of all
+the resources contained in the namespace.
+
+:::
