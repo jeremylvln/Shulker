@@ -27,13 +27,11 @@ class DirectoryAdapterImpl(
     fun unregisterServer(name: ServerName) {
         this.agent.logger.info("Unregistering server '$name' from directory")
 
-        if (this.serversByTag.containsKey(name)) {
-            val tags = this.tagsByServer[name]
-            if (tags != null) {
-                for (tag in tags) {
-                    this.serversByTag[tag]!!.remove(name)
-                    this.agent.logger.fine("Untagged '$tag' from server '${name}'")
-                }
+        val tags = this.tagsByServer[name]
+        if (tags != null) {
+            tags.forEach { tag ->
+                this.serversByTag[tag]!!.remove(name)
+                this.agent.logger.fine("Untagged '$tag' from server '${name}'")
             }
             this.tagsByServer.remove(name)
         }

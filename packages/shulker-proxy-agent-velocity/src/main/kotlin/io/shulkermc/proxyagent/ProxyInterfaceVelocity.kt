@@ -36,7 +36,7 @@ class ProxyInterfaceVelocity(
     }
 
     override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
-        this.proxy.eventManager.register(plugin, ServerPreConnectEvent::class.java, PostOrder.LAST) { event ->
+        this.proxy.eventManager.register(this.plugin, ServerPreConnectEvent::class.java, PostOrder.LAST) { event ->
             val result = hook(this.wrapPlayer(event.player), event.originalServer.serverInfo.name)
 
             if (result.newServerName.isPresent)
@@ -45,7 +45,7 @@ class ProxyInterfaceVelocity(
     }
 
     override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
-        this.proxy.eventManager.register(plugin, PreLoginEvent::class.java, PostOrder.FIRST) { event ->
+        this.proxy.eventManager.register(this.plugin, PreLoginEvent::class.java, PostOrder.FIRST) { event ->
             val result = hook()
 
             if (!result.allowed)
