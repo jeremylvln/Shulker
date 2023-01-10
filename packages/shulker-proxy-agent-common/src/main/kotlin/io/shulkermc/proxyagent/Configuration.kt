@@ -1,9 +1,9 @@
 package io.shulkermc.proxyagent
 
 data class Configuration(
-        val proxyNamespace: String,
-        val proxyName: String,
-        val ttlSeconds: Long
+    val proxyNamespace: String,
+    val proxyName: String,
+    val ttlSeconds: Long
 ) {
     companion object {
         fun load(): Configuration {

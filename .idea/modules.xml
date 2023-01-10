@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shulker.iml" filepath="$PROJECT_DIR$/.idea/modules/shulker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker.packages.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker.packages.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-bungeecord/shulker.packages.shulker-proxy-agent-bungeecord.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-bungeecord/shulker.packages.shulker-proxy-agent-bungeecord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-bungeecord/shulker.packages.shulker-proxy-agent-bungeecord.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-bungeecord/shulker.packages.shulker-proxy-agent-bungeecord.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-bungeecord/shulker.packages.shulker-proxy-agent-bungeecord.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-bungeecord/shulker.packages.shulker-proxy-agent-bungeecord.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-common/shulker.packages.shulker-proxy-agent-common.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-common/shulker.packages.shulker-proxy-agent-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-common/shulker.packages.shulker-proxy-agent-common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-common/shulker.packages.shulker-proxy-agent-common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-common/shulker.packages.shulker-proxy-agent-common.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-common/shulker.packages.shulker-proxy-agent-common.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-velocity/shulker.packages.shulker-proxy-agent-velocity.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-velocity/shulker.packages.shulker-proxy-agent-velocity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-velocity/shulker.packages.shulker-proxy-agent-velocity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-velocity/shulker.packages.shulker-proxy-agent-velocity.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-velocity/shulker.packages.shulker-proxy-agent-velocity.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent-velocity/shulker.packages.shulker-proxy-agent-velocity.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.test.iml" />
+    </modules>
+  </component>
+</project>

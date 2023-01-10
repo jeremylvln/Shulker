@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 class ProxyInterfaceVelocity(
     private val plugin: BootstrapPlugin,
     private val proxy: ProxyServer
-): ProxyInterface {
+) : ProxyInterface {
     override fun shutdown() {
         this.proxy.shutdown()
     }

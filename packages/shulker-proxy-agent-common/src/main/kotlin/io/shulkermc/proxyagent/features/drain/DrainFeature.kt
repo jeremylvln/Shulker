@@ -21,7 +21,8 @@ class DrainFeature(
 
         val MSG_NOT_ACCEPTING_PLAYERS = createDisconnectMessage(
             "Proxy is not accepting players, try reconnect.",
-            NamedTextColor.RED)
+            NamedTextColor.RED
+        )
     }
 
     private var acceptingPlayers = true
@@ -69,7 +70,7 @@ class DrainFeature(
             throw RuntimeException(e)
         }
 
-        this.agent.logger.info("Proxy is no longer accepting players");
+        this.agent.logger.info("Proxy is no longer accepting players")
 
         this.agent.proxyInterface.scheduleRepeatingTask(30L, 30L, TimeUnit.SECONDS) {
             val playerCount = this.agent.proxyInterface.getPlayerCount()

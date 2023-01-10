@@ -15,7 +15,8 @@ class LimboFeature(
 
         val MSG_NO_LIMBO_FOUND = createDisconnectMessage(
             "No limbo server found, please check your cluster configuration.",
-            NamedTextColor.RED)
+            NamedTextColor.RED
+        )
     }
     init {
         this.agent.proxyInterface.addServerPreConnectHook { player, originalServerName ->
