@@ -8,8 +8,14 @@ The **Shulker Operator** can be installed using **Kustomize**:
 
 ```bash
 $ git clone https://github.com/IamBlueSlime/Shulker
-$ kubectl apply -k Shulker/config/default -n shulker-system
+$ kubectl apply -k Shulker/kube/overlays/stable -n shulker-system
 ```
+
+:::note
+
+If Prometheus is installed (along with its custom CRDs), you would prefer selecting the `stable-with-prometheus` overlay which will create appropriate `ServiceMonitor`s resources.
+
+:::
 
 After this, a `shulker-operator` Pod should be scheduled and work immediately.
 
