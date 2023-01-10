@@ -1,9 +1,14 @@
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.7.22" apply false
+    id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
 }
 
 allprojects {
     version = '0.0.1'
+
+    repositories {
+        mavenCentral()
+    }
 }
 
 configure(subprojects.findAll {
@@ -13,6 +18,7 @@ configure(subprojects.findAll {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'idea'
     apply plugin: 'java-library'
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
     group = 'io.shulkermc'
 
@@ -20,11 +26,6 @@ configure(subprojects.findAll {
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     compileJava.options.encoding = 'UTF-8'
-
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
 
     dependencies {
         testImplementation 'junit:junit:4.13.2'
