@@ -96,6 +96,7 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 					InitialDelaySeconds: 60,
 					PeriodSeconds:       10,
 				},
+				ImagePullPolicy: corev1.PullAlways,
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{
 					{
@@ -148,6 +149,12 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 	}
 
 	if b.Instance.Spec.PodOverrides != nil {
+		if b.Instance.Spec.PodOverrides.Image != nil {
+			pod.Spec.Containers[0].Image = b.Instance.Spec.PodOverrides.Image.Name
+			pod.Spec.Containers[0].ImagePullPolicy = b.Instance.Spec.PodOverrides.Image.PullPolicy
+			pod.Spec.ImagePullSecrets = append(pod.Spec.ImagePullSecrets, b.Instance.Spec.PodOverrides.Image.PullSecrets...)
+		}
+
 		if b.Instance.Spec.PodOverrides.Resources != nil {
 			pod.Spec.Containers[0].Resources = *b.Instance.Spec.PodOverrides.Resources
 		}

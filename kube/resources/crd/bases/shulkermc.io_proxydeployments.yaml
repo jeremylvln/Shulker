@@ -1325,6 +1325,40 @@ spec:
                               - name
                               type: object
                             type: array
+                          image:
+                            description: Image to use as replacement for the built-in
+                              one.
+                            properties:
+                              imagePullSecrets:
+                                description: A list of secrets to use to pull the
+                                  image.
+                                items:
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
+                                  x-kubernetes-map-type: atomic
+                                type: array
+                              name:
+                                description: Complete name of the image, including
+                                  the repository name and tag.
+                                type: string
+                              pullPolicy:
+                                default: IfNotPresent
+                                description: Policy about when to pull the image.
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
+                                type: string
+                            type: object
                           resources:
                             description: The desired compute resource requirements
                               of the created Pod.
