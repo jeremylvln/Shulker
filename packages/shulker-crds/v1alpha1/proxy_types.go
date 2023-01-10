@@ -97,6 +97,10 @@ type ProxyConfigurationSpec struct {
 
 // Overrides for the created Pod of the proxy.
 type ProxyPodOverridesSpec struct {
+	// Image to use as replacement for the built-in one.
+	//+optional
+	Image *ImageOverrideSpec `json:"image,omitempty"`
+
 	// Extra environment variables to add to the crated Pod.
 	Env []corev1.EnvVar `json:"env,omitempty"`
 

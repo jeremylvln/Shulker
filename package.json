@@ -7,8 +7,8 @@
     "build": "nx run-many --target=build --all",
     "postinstall": "npm run tools:install",
     "tools:install": "bash scripts/download_tools.sh",
-    "crd:install": "kustomize build config/crd | kubectl apply -f -",
-    "crd:uninstall": "kustomize build config/crd | kubectl delete -f -",
+    "crd:install": "kustomize build kube/resources/crd | kubectl apply -f -",
+    "crd:uninstall": "kustomize build kube/resources/crd | kubectl delete -f -",
     "config:gen": "bash scripts/generate_config.sh"
   },
   "devDependencies": {
