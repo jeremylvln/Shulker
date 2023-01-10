@@ -71,7 +71,7 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 		},
 		Containers: []corev1.Container{
 			{
-				Image: "itzg/minecraft-server:latest",
+				Image: "itzg/minecraft-server:2022.16.0-java17",
 				Name:  "minecraft-server",
 				Ports: []corev1.ContainerPort{{
 					Name:          "minecraft",
@@ -96,7 +96,7 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 					InitialDelaySeconds: 60,
 					PeriodSeconds:       10,
 				},
-				ImagePullPolicy: corev1.PullAlways,
+				ImagePullPolicy: corev1.PullIfNotPresent,
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{
 					{
