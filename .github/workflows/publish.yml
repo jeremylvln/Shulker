@@ -75,6 +75,7 @@ jobs:
           targets: publish-docker
           parallel: 2
           args: /tmp/docker-tags /tmp/docker-labels
+          all: ${{ startsWith(github.ref, 'refs/tags/') == true }}
 
   publish-maven:
     runs-on: ubuntu-latest
@@ -121,7 +122,8 @@ jobs:
         uses: mansagroup/nrwl-nx-action@v3
         with:
           targets: publish-maven
-          parallel: 3
+          parallel: 1
+          all: ${{ startsWith(github.ref, 'refs/tags/') == true }}
         env:
           ORG_GRADLE_PROJECT_signing.gnupg.keyName: "${{ steps.gpg-signing-key.outputs.keyid }}"
           ORG_GRADLE_PROJECT_signing.gnupg.passphrase: "${{ secrets.GPG_PASSPHRASE }}"
@@ -140,6 +142,9 @@ jobs:
     permissions:
       contents: write
       discussions: write
+
+    environment:
+      name: release
 
     steps:
       - name: Release
