@@ -143,15 +143,10 @@ jobs:
       contents: write
       discussions: write
 
-    environment:
-      name: release
-
     steps:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          draft: true
-          prerelease: true
           discussion_category_name: Announcements
           generate_release_notes: true
 
