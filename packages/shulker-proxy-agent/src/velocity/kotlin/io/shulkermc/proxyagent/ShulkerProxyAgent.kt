@@ -18,7 +18,7 @@ class ShulkerProxyAgent(
     logger: Logger
 ) {
     private val proxyInterface = ProxyInterfaceVelocity(this, proxy)
-    val common = ShulkerProxyAgentCommon(this.proxyInterface, logger)
+    private val common = ShulkerProxyAgentCommon(this.proxyInterface, logger)
 
     @Subscribe
     fun onProxyInitialization(@Suppress("UNUSED_PARAMETER") event: ProxyInitializeEvent) {

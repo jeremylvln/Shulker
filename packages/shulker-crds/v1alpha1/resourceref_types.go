@@ -34,6 +34,10 @@ type ResourceRefMavenSelector struct {
 	//+kubebuilder:validation:Required
 	Version string `json:"version"`
 
+	// Classifier of the Maven artifact to download.
+	//+optional
+	Classifier string `json:"classifier,omitempty"`
+
 	// Name of the Kubernetes Secret containing the repository
 	// credentials. The secret must contains a username
 	// and password keys.

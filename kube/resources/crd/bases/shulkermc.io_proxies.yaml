@@ -99,6 +99,10 @@ spec:
                                   description: Artifact ID of the Maven artifact to
                                     download.
                                   type: string
+                                classifier:
+                                  description: Classifier of the Maven artifact to
+                                    download.
+                                  type: string
                                 credentialsSecretName:
                                   description: Name of the Kubernetes Secret containing
                                     the repository credentials. The secret must contains
@@ -140,6 +144,10 @@ spec:
                               properties:
                                 artifactId:
                                   description: Artifact ID of the Maven artifact to
+                                    download.
+                                  type: string
+                                classifier:
+                                  description: Classifier of the Maven artifact to
                                     download.
                                   type: string
                                 credentialsSecretName:

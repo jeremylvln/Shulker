@@ -38,12 +38,18 @@ func (r *ResourceRefResolver) ResolveUrl(resourceRef *v1alpha1.ResourceRef) (str
 }
 
 func (r *ResourceRefResolver) resolveMavenRefUrl(mavenSelector *v1alpha1.ResourceRefMavenSelector) (string, error) {
+	classifierSuffix := ""
+	if mavenSelector.Classifier != "" {
+		classifierSuffix = fmt.Sprintf("-%s", mavenSelector.Classifier)
+	}
+
 	mavenUrl, err := url.Parse(fmt.Sprintf(
-		"%[1]s/%[2]s/%[3]s/%[4]s/%[3]s-%[4]s.jar",
+		"%[1]s/%[2]s/%[3]s/%[4]s/%[3]s-%[4]s%[5]s.jar",
 		mavenSelector.Repository,
 		strings.ReplaceAll(mavenSelector.GroupId, ".", "/"),
 		mavenSelector.ArtifactId,
 		mavenSelector.Version,
+		classifierSuffix,
 	))
 	if err != nil {
 		return "", err
