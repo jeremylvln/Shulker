@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.7.22" apply false
+    id "org.jetbrains.kotlin.kapt" version "1.8.0" apply false
     id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
     id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
 }
@@ -112,6 +113,8 @@ configure(subprojects.findAll {
     }
 
     if (it.hasProperty('isProxyPlugin')) {
+        apply plugin: 'org.jetbrains.kotlin.kapt'
+
         sourceSets {
             bungeecord {
                 compileClasspath += main.output
@@ -150,7 +153,7 @@ configure(subprojects.findAll {
             bungeecordCompileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
             bungeecordImplementation "net.kyori:adventure-platform-bungeecord:4.1.2"
             velocityCompileOnly 'com.velocitypowered:velocity-api:3.1.1'
-            velocityAnnotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
+            kaptVelocity 'com.velocitypowered:velocity-api:3.1.1'
         }
 
         task bungeecordJar(type: ShadowJar) {

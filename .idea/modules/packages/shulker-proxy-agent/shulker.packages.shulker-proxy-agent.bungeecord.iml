@@ -10,7 +10,7 @@
       </configuration>
     </facet>
     <facet type="kotlin-language" name="Kotlin">
-      <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
+      <configuration version="5" platform="JVM 17" allPlatforms="JVM [17]" useProjectSettings="false">
         <compilerSettings>
           <option name="additionalArguments" value="-Xallow-no-source-files" />
         </compilerSettings>
@@ -23,7 +23,7 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.7.22/b75c999616784d452613d670fec56a527f2bd3d1/kotlin-stdlib-jdk8-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.0/ed04f49e186a116753ad70d34f0ac2925d1d8020/kotlin-stdlib-jdk8-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-api/1.19-R0.1-SNAPSHOT/6349f902b4f05e931679be14a7f925306b95b8d8/bungeecord-api-1.19-R0.1-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-bungeecord/4.1.2/9dc995f6a38fef5405268f39fa91c351e1a77a97/adventure-platform-bungeecord-4.1.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-api/4.1.2/27e16d2dea63035f137ed5841b4bb759a1eee934/adventure-platform-api-4.1.2.jar</arg>
@@ -34,8 +34,8 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-api/4.12.0/f2351c9766a9c68e9535fa5157699f44ef53d8be/adventure-api-4.12.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-httpclient-okhttp/6.2.0/7a683dfbd911e08e8f189f0b856e097b893f3633/kubernetes-httpclient-okhttp-6.2.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-client-api/6.3.1/fedbc455442930dde4394544a584865f29b64c77/kubernetes-client-api-6.3.1.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.7.22/6aa0a0e051d6b828dc25047025ec245758fab6d9/kotlin-stdlib-jdk7-1.7.22.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.22/9fb43bccb6cf8cfaaf3776c75f5df4f052f09b72/kotlin-stdlib-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.8.0/3c91271347f678c239607abb676d4032a7898427/kotlin-stdlib-jdk7-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.8.0/1796921c7a3e2e2665a83e6c8d33399336cd39bc/kotlin-stdlib-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-protocol/1.19-R0.1-SNAPSHOT/aa00ea5173da792fb95556fe46226f1d36b3b6ec/bungeecord-protocol-1.19-R0.1-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-chat/1.19-R0.1-SNAPSHOT/33b5c859e9589ba2acddfb31471f43a04111451c/bungeecord-chat-1.19-R0.1-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-config/1.19-R0.1-SNAPSHOT/41d6bcc8dc98a1da738cd78015d156a160c6ee3f/bungeecord-config-1.19-R0.1-SNAPSHOT.jar</arg>
@@ -75,7 +75,7 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.14.1/cf6d18651659a2e64301452c841e6daa62e77bf6/jackson-dataformat-yaml-2.14.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.12.12/d952189f6abb148ff72aab246aa8c28cf99b469f/logging-interceptor-3.12.12.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.12.12/d3e1ce1d2b3119adf270b2d00d947beb03fe3321/okhttp-3.12.12.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.10/dd9b193aef96e973d5a11ab13cd17430c2e4306b/gson-2.10.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/brigadier/1.0.16-SNAPSHOT/86edc5380c2b4fa37dca9810104fff8a7460411c/brigadier-1.0.16-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.85.Final/984ce1da2711ec38037bf7d97d98a0ddae38e02b/netty-codec-4.1.85.Final.jar</arg>
@@ -96,21 +96,26 @@
               </args>
             </stringArg>
             <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/bungeecord" />
-            <stringArg name="jvmTarget" arg="1.8" />
+            <stringArg name="jvmTarget" arg="17" />
             <stringArg name="moduleName" arg="shulker-proxy-agent_bungeecord" />
-            <stringArg name="apiVersion" arg="1.7" />
-            <stringArg name="languageVersion" arg="1.7" />
+            <stringArg name="apiVersion" arg="1.8" />
+            <stringArg name="languageVersion" arg="1.8" />
           </stringArguments>
           <arrayArguments>
             <arrayArg name="friendPaths" />
             <arrayArg name="pluginClasspaths">
               <args>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.7.22/496ed7206d5d7ddb1bc3fc5ecb357558a26e1954/kotlin-scripting-jvm-1.7.22.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.7.22/98ac39f8f50d398e9e8df8a1d30fc854f83f3629/kotlin-scripting-common-1.7.22.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.22/9fb43bccb6cf8cfaaf3776c75f5df4f052f09b72/kotlin-stdlib-1.7.22.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.8.0/eb9118d4bcceaa2a94b2ae2a33a4ddba7c9a947f/kotlin-compiler-embeddable-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.8.0/1f7345b3fc46786c1f36a4ba0728a95990d05929/kotlin-scripting-jvm-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.8.0/ffeb4c0c2b3978876b993d6b55646e6b567077a8/kotlin-scripting-common-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.8.0/1796921c7a3e2e2665a83e6c8d33399336cd39bc/kotlin-stdlib-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.7.22/703a4d56168f3517532bc04481e3c8b751f685cb/kotlin-script-runtime-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.8.0/b2f7e760d283cb339974851c222a4c1d48f2d3d/kotlin-script-runtime-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.6.10/1cbe9c92c12a94eea200d23c2bbaedaf3daf5132/kotlin-reflect-1.6.10.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-embeddable/1.8.0/d255216c551685dc3a7e852b53617f5f01aaaa5c/kotlin-daemon-embeddable-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.intellij.deps/trove4j/1.0.20200330/3afb14d5f9ceb459d724e907a21145e8ff394f02/trove4j-1.0.20200330.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.6.0/330f2244e9030119ab3030fc3fededc86713d9cc/jna-5.6.0.jar</arg>
               </args>
             </arrayArg>
             <arrayArg name="pluginOptions" />
@@ -122,6 +127,12 @@
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/bungeecord" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/generated/source/kapt/bungeecord">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/generated/source/kapt/bungeecord" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/generated/source/kaptKotlin/bungeecord">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/generated/source/kaptKotlin/bungeecord" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/bungeecord">
       <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/bungeecord/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/bungeecord/kotlin" isTestSource="false" />
@@ -131,15 +142,24 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent.main" />
+    <orderEntry type="module-library">
+      <library name="Gradle: kaptGeneratedClasses">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/tmp/kapt3/classes/bungeecord" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: net.kyori:adventure-platform-bungeecord:4.1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.2.0" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-client-api:6.3.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.22" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.7.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-protocol:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-chat:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-config:1.19-R0.1-SNAPSHOT" level="project" />
@@ -182,7 +202,7 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.7.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:brigadier:1.0.16-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec:4.1.85.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.sf.trove4j:core:3.1.0" level="project" />

@@ -14,7 +14,7 @@ import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
 class ProxyInterfaceVelocity(
-    private val plugin: BootstrapPlugin,
+    private val plugin: ShulkerProxyAgent,
     private val proxy: ProxyServer
 ) : ProxyInterface {
     override fun shutdown() {
