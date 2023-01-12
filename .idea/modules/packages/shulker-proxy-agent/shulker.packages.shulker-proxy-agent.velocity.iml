@@ -87,7 +87,8 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.typesafe/config/1.4.0/a8b341fe81552834edc231193afd6f56a96f0eff/config-1.4.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/common</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/tmp/kapt3/classes/common</arg>
               </args>
             </stringArg>
             <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/velocity" />
@@ -120,7 +121,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/java/velocity" />
+    <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/velocity" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/generated/source/kapt/velocity">
       <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/generated/source/kapt/velocity" isTestSource="false" generated="true" />
@@ -138,7 +139,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent.main" />
+    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent.common" />
     <orderEntry type="module-library">
       <library name="Gradle: kaptGeneratedClasses">
         <CLASSES>

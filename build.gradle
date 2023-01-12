@@ -116,24 +116,26 @@ configure(subprojects.findAll {
         apply plugin: 'org.jetbrains.kotlin.kapt'
 
         sourceSets {
+            common
+
             bungeecord {
-                compileClasspath += main.output
-                runtimeClasspath += main.output
+                compileClasspath += common.output
+                runtimeClasspath += common.output
             }
 
             velocity {
-                compileClasspath += main.output
-                runtimeClasspath += main.output
+                compileClasspath += common.output
+                runtimeClasspath += common.output
             }
         }
 
         configurations {
-            bungeecordCompileOnly.extendsFrom(compileOnly)
-            bungeecordRuntimeOnly.extendsFrom(runtimeOnly)
-            bungeecordImplementation.extendsFrom(implementation)
-            velocityCompileOnly.extendsFrom(compileOnly)
-            velocityRuntimeOnly.extendsFrom(runtimeOnly)
-            velocityImplementation.extendsFrom(implementation)
+            bungeecordCompileOnly.extendsFrom(commonCompileOnly)
+            bungeecordRuntimeOnly.extendsFrom(commonRuntimeOnly)
+            bungeecordImplementation.extendsFrom(commonImplementation)
+            velocityCompileOnly.extendsFrom(commonCompileOnly)
+            velocityRuntimeOnly.extendsFrom(commonRuntimeOnly)
+            velocityImplementation.extendsFrom(commonImplementation)
         }
 
         repositories {
@@ -149,7 +151,7 @@ configure(subprojects.findAll {
         }
 
         dependencies {
-            compileOnly 'net.kyori:adventure-api:4.12.0'
+            commonCompileOnly 'net.kyori:adventure-api:4.12.0'
             bungeecordCompileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
             bungeecordImplementation "net.kyori:adventure-platform-bungeecord:4.1.2"
             velocityCompileOnly 'com.velocitypowered:velocity-api:3.1.1'
@@ -158,14 +160,14 @@ configure(subprojects.findAll {
 
         task bungeecordJar(type: ShadowJar) {
             archiveClassifier.set("bungeecord")
-            from sourceSets.main.output
+            from sourceSets.common.output
             from sourceSets.bungeecord.output
             configurations = [project.configurations.bungeecordRuntimeClasspath]
         }
 
         task velocityJar(type: ShadowJar) {
             archiveClassifier.set("velocity")
-            from sourceSets.main.output
+            from sourceSets.common.output
             from sourceSets.velocity.output
             configurations = [project.configurations.velocityRuntimeClasspath]
         }
