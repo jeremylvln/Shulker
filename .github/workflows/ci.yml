@@ -143,3 +143,12 @@ jobs:
           targets: lint
           # parallel: 3
           parallel: 1
+
+  semantic:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ensure semantic
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
