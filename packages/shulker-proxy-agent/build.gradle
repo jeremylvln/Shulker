@@ -1,0 +1,7 @@
+dependencies {
+    api project(':packages:shulker-proxy-api')
+
+    compileOnly 'io.fabric8:kubernetes-client-api:6.3.1'
+    runtimeOnly 'io.fabric8:kubernetes-client:6.3.1'
+    implementation 'io.fabric8:kubernetes-httpclient-okhttp:6.2.0'
+}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-proxy-agent-common:test" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-proxy-agent:test" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
@@ -14,17 +14,17 @@
           <stringArguments>
             <stringArg name="classpath">
               <args>
-                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/main</arg>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.7.22/b75c999616784d452613d670fec56a527f2bd3d1/kotlin-stdlib-jdk8-1.7.22.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-httpclient-okhttp/6.2.0/7a683dfbd911e08e8f189f0b856e097b893f3633/kubernetes-httpclient-okhttp-6.2.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-junit/1.7.22/4c5d6cf876d40ed8459b670f1b585e7fde7681c8/kotlin-test-junit-1.7.22.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test/1.7.22/e117bd8810225d480b73429737523c0d913bac38/kotlin-test-1.7.22.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.7.22/6aa0a0e051d6b828dc25047025ec245758fab6d9/kotlin-stdlib-jdk7-1.7.22.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.22/9fb43bccb6cf8cfaaf3776c75f5df4f052f09b72/kotlin-stdlib-1.7.22.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-client-api/6.2.0/2eb04b9be96b0f24790a844849c5b3dd6a2aa523/kubernetes-client-api-6.2.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.12.12/d952189f6abb148ff72aab246aa8c28cf99b469f/logging-interceptor-3.12.12.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.12.12/d3e1ce1d2b3119adf270b2d00d947beb03fe3321/okhttp-3.12.12.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-model-gatewayapi/6.2.0/27806c056669f5174e3b3ae765e344c4999d75dd/kubernetes-model-gatewayapi-6.2.0.jar</arg>
@@ -56,20 +56,22 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.13.4/858c6cc78e1f08a885b1613e1d817c829df70a6e/jackson-annotations-2.13.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.13.4/3142ec201e878372d1561e64bd1a947d9e88a03d/jackson-dataformat-yaml-2.13.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar</arg>
               </args>
             </stringArg>
-            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/test" />
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/test" />
             <stringArg name="jvmTarget" arg="1.8" />
-            <stringArg name="moduleName" arg="shulker-proxy-agent-common" />
+            <stringArg name="moduleName" arg="shulker-proxy-agent" />
             <stringArg name="apiVersion" arg="1.7" />
             <stringArg name="languageVersion" arg="1.7" />
           </stringArguments>
           <arrayArguments>
             <arrayArg name="friendPaths">
               <args>
-                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/java/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/libs/shulker-proxy-agent-common-0.0.1.jar</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/java/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/libs/shulker-proxy-agent-0.0.1.jar</arg>
               </args>
             </arrayArg>
             <arrayArg name="pluginClasspaths">
@@ -89,22 +91,22 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output-test url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/java/test" />
+    <output-test url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common/src/test" />
+    <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent-common.main" />
+    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent.main" />
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.22" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test:1.7.22" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.22" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.7.22" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-client-api:6.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:3.12.12" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.12.12" level="project" />
-    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-junit:1.7.22" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.7.22" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-gatewayapi:6.2.0" level="project" />
@@ -134,8 +136,10 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.13.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.4" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.15.0" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-model-common:6.2.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.13.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client:6.3.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.3.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client-api:6.3.1" level="project" />
@@ -167,5 +171,5 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-model-common:6.3.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.14.1" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="shulker.packages.shulker-proxy-agent-common.main" />
+  <component name="TestModuleProperties" production-module="shulker.packages.shulker-proxy-agent.main" />
 </module>

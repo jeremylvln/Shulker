@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-proxy-agent-common:main" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-proxy-agent:main" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -11,7 +11,7 @@
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
         <compilerSettings>
-          <option name="additionalArguments" value="-Xallow-no-source-files" />
+          <option name="additionalArguments" value="-Xallow-no-source-files -Werror" />
         </compilerSettings>
         <compilerArguments>
           <flagArguments>
@@ -66,9 +66,9 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
               </args>
             </stringArg>
-            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/main" />
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/main" />
             <stringArg name="jvmTarget" arg="1.8" />
-            <stringArg name="moduleName" arg="shulker-proxy-agent-common" />
+            <stringArg name="moduleName" arg="shulker-proxy-agent" />
             <stringArg name="apiVersion" arg="1.7" />
             <stringArg name="languageVersion" arg="1.7" />
           </stringArguments>
@@ -91,11 +91,11 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent-common/classes/kotlin/main" />
+    <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/main" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common/src/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common/src/main/kotlin" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent-common/src/main/resources" type="java-resource" />
+    <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-agent/src/main/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,6 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.7.22" apply false
     id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
+    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
 }
 
 allprojects {
@@ -19,6 +22,7 @@ configure(subprojects.findAll {
     apply plugin: 'idea'
     apply plugin: 'java-library'
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     group = 'io.shulkermc'
 
@@ -28,7 +32,17 @@ configure(subprojects.findAll {
     compileJava.options.encoding = 'UTF-8'
 
     dependencies {
-        testImplementation 'junit:junit:4.13.2'
+        testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    }
+
+    compileKotlin {
+        kotlinOptions.allWarningsAsErrors = true
+    }
+
+    assemble.dependsOn(shadowJar)
+
+    shadowJar {
+        archiveClassifier.set("")
     }
 
     if (!it.hasProperty('noPublishing')) {
@@ -94,6 +108,81 @@ configure(subprojects.findAll {
         signing {
             useGpgCmd()
             sign publishing.publications.mavenJava
+        }
+    }
+
+    if (it.hasProperty('isProxyPlugin')) {
+        sourceSets {
+            bungeecord {
+                compileClasspath += main.output
+                runtimeClasspath += main.output
+            }
+
+            velocity {
+                compileClasspath += main.output
+                runtimeClasspath += main.output
+            }
+        }
+
+        configurations {
+            bungeecordCompileOnly.extendsFrom(compileOnly)
+            bungeecordRuntimeOnly.extendsFrom(runtimeOnly)
+            bungeecordImplementation.extendsFrom(implementation)
+            velocityCompileOnly.extendsFrom(compileOnly)
+            velocityRuntimeOnly.extendsFrom(runtimeOnly)
+            velocityImplementation.extendsFrom(implementation)
+        }
+
+        repositories {
+            maven {
+                name = 'md5'
+                url 'https://oss.sonatype.org/content/repositories/snapshots'
+            }
+
+            maven {
+                name = 'papermc'
+                url = 'https://repo.papermc.io/repository/maven-public/'
+            }
+        }
+
+        dependencies {
+            compileOnly 'net.kyori:adventure-api:4.12.0'
+            bungeecordCompileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
+            bungeecordImplementation "net.kyori:adventure-platform-bungeecord:4.1.2"
+            velocityCompileOnly 'com.velocitypowered:velocity-api:3.1.1'
+            velocityAnnotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
+        }
+
+        task bungeecordJar(type: ShadowJar) {
+            archiveClassifier.set("bungeecord")
+            from sourceSets.main.output
+            from sourceSets.bungeecord.output
+            configurations = [project.configurations.bungeecordRuntimeClasspath]
+        }
+
+        task velocityJar(type: ShadowJar) {
+            archiveClassifier.set("velocity")
+            from sourceSets.main.output
+            from sourceSets.velocity.output
+            configurations = [project.configurations.velocityRuntimeClasspath]
+        }
+
+        artifacts {
+            bungeecordJar
+            velocityJar
+        }
+
+        assemble.dependsOn(bungeecordJar, velocityJar)
+
+        if (!it.hasProperty('noPublishing')) {
+            publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        artifact bungeecordJar
+                        artifact velocityJar
+                    }
+                }
+            }
         }
     }
 }
