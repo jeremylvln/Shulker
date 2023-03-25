@@ -5,3 +5,6 @@ dependencies {
     commonRuntimeOnly 'io.fabric8:kubernetes-client:6.3.1'
     commonImplementation 'io.fabric8:kubernetes-httpclient-okhttp:6.2.0'
 }
+
+bungeecordJar.dependsOn(":packages:shulker-proxy-api:shadowJar")
+velocityJar.dependsOn(":packages:shulker-proxy-api:shadowJar")

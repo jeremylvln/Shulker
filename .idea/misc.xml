@@ -7,5 +7,5 @@
       <item index="2" class="java.lang.String" itemvalue="net.md_5.bungee.event.EventHandler" />
     </list>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="18" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="19" project-jdk-type="JavaSDK" />
 </project>

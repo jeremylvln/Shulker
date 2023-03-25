@@ -5,8 +5,12 @@ import io.shulkermc.proxyagent.api.adapters.DirectoryAdapterImpl
 import io.shulkermc.proxyapi.ShulkerProxyAPI
 import io.shulkermc.proxyapi.adapters.DirectoryAdapter
 
-class ShulkerProxyAPIImpl(agent: ShulkerProxyAgentCommon) : ShulkerProxyAPI {
+class ShulkerProxyAPIImpl(agent: ShulkerProxyAgentCommon) : ShulkerProxyAPI() {
     val directoryAdapter = DirectoryAdapterImpl(agent)
+
+    init {
+        INSTANCE = this
+    }
 
     override fun getDirectoryAdapter(): DirectoryAdapter {
         return this.directoryAdapter

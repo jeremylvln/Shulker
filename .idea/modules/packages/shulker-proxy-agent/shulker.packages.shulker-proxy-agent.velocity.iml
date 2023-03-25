@@ -76,7 +76,7 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/configurate-core/3.7.2/985223b13c7da64116a7e20203b2904023eeb1db/configurate-core-3.7.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/30.1-jre/d0c3ce2311c9e36e73228da25a6e99b2ab826f/guava-30.1-jre.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.6.1/52ca62b41f68584c4d2de39d6176758e9383d0b6/checker-qual-3.6.1.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/c85456381b9942f529995996793190c091ef57a9/velocity-brigadier-1.0.0-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/719dd1bda540a9be7f70f23c68fbe1a0e2fc69ca/velocity-brigadier-1.0.0-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar</arg>
