@@ -84,8 +84,9 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 							Command: []string{"bash", "/health.sh"},
 						},
 					},
-					InitialDelaySeconds: 60,
-					PeriodSeconds:       10,
+					InitialDelaySeconds: 30,
+					PeriodSeconds:       5,
+					FailureThreshold:    5,
 				},
 				ReadinessProbe: &corev1.Probe{
 					ProbeHandler: corev1.ProbeHandler{
@@ -93,8 +94,9 @@ func (b *MinecraftServerResourcePodBuilder) Update(object client.Object) error {
 							Command: []string{"bash", "/health.sh"},
 						},
 					},
-					InitialDelaySeconds: 60,
-					PeriodSeconds:       10,
+					InitialDelaySeconds: 30,
+					PeriodSeconds:       5,
+					FailureThreshold:    5,
 				},
 				ImagePullPolicy: corev1.PullIfNotPresent,
 				SecurityContext: b.getSecurityContext(),

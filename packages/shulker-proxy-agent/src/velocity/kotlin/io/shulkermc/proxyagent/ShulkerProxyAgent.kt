@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent
 
+import com.google.inject.Inject
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
@@ -13,7 +14,7 @@ import java.util.logging.Logger
     version = "0.0.1",
     authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 )
-class ShulkerProxyAgent(
+class ShulkerProxyAgent @Inject constructor(
     proxy: ProxyServer,
     logger: Logger
 ) {
