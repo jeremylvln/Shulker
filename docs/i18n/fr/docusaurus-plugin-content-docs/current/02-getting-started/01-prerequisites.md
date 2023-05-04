@@ -9,7 +9,7 @@ Shulker should be able to be installed on any Kubernetes cluster meeting the fol
 
 :::note
 
-By default, any **ProxyDeployment** created will create automatically a Kubernetes Service with the `LoadBalancer` kind. For this behavior to work properly, your cloud provider should support load balancer provisionning. While this is a non-issue for almost all cloud providers, it may be one if you are self-provisionning your own Kubernetes Cluster.
+By default, any `ProxyFleet` will create automatically a Kubernetes Service of `LoadBalancer` kind. For this behavior to work properly, your cloud provider should support load balancer provisioning. While this is a non-issue for almost all cloud providers,  it may be one if you are self-provisioning your own Kubernetes Cluster.
 
 :::
 
@@ -21,8 +21,28 @@ The node requirements are those for the Shulker operators to work. It may not re
 
 All Shulker components should be installed in the same namespace, `shulker-system` by default.
 
-## Third-party softwares
+## Mandatory softwares
 
-In addition to a working Kubernetes Cluster, **[cert-manager](https://cert-manager.io/)** is also required to be installed. It will be used to generate self-signed certificates for internal use (mostly to secure internal communication with Kubernetes's controle plane).
+### Cert-Manager
+
+Cert-Manager will be used to generate self-signed certificates for internal use (mostly to secure internal communication between Shulker components and Kubernetes's control plane).
+
+- Website: https://cert-manager.io/
+- Installation guide: https://cert-manager.io/docs/installation/
+
+### Agones
+
+Shulker delegates the management of game servers (proxies and servers) to Agones.
+
+- Website: https://agones.dev/site/
+- Installation guide: https://agones.dev/site/docs/installation/
+
+:::warning
+
+Watch out that while Shulker does not need heavy scaling to handle production workload, Agones sure does. Please consider your needs when installing and configuring Agones.
+
+:::
+
+## Optional softwares
 
 **[Prometheus](https://github.com/prometheus-operator/prometheus-operator)** metrics are also exposed by some components. Monitor manifests can be optionally installed.
