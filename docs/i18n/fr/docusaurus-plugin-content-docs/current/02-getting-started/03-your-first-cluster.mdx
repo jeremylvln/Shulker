@@ -57,9 +57,9 @@ $ kubectl apply -f proxy.yaml -n shulker-tutorial
 You'll soon start to see a `public-xxx-xxx` Pod being scheduled. Wait a little bit for it to be ready. If you look at the logs of this Pod, you'll probably see some lines like this:
 
 ```
-[io.shulkermc.proxyagent.BootstrapPlugin]: Identified Shulker proxy: shulker-tutorial/public-xxx-xxx
+[io.shulkermc.serveragent.BootstrapPlugin]: Identified Shulker proxy: shulker-tutorial/public-xxx-xxx
 [io.fabric8.kubernetes.client.dsl.internal.VersionUsageUtils]: The client is using resource type 'proxies' with unstable version 'v1alpha1'
-[io.shulkermc.proxyagent.BootstrapPlugin]: Proxy will be force stopped in 86400 seconds
+[io.shulkermc.serveragent.BootstrapPlugin]: Proxy will be force stopped in 86400 seconds
 [io.fabric8.kubernetes.client.dsl.internal.VersionUsageUtils]: The client is using resource type 'minecraftservers' with unstable version 'v1alpha1'
 ```
 
@@ -118,7 +118,7 @@ $ kubectl apply -f minecraftserver.yaml -n shulker-tutorial
 A new Pod representing the MinecraftServer will be created. After a short period, the Pod will be marked as healthy. If you look back to the Proxy's logs, you'll see that the Shulker Agent registered automatically the server into its server list:
 
 ```
-[io.shulkermc.proxyagent.BootstrapPlugin]: Registering server 'limbo-xxx-xxx' to directory
+[io.shulkermc.serveragent.BootstrapPlugin]: Registering server 'limbo-xxx-xxx' to directory
 ```
 
 Finally, without any surprise, if you retry to connect to the proxy, you'll arrive on the server you just created:
