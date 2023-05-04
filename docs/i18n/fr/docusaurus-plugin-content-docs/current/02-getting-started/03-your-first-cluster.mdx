@@ -34,7 +34,7 @@ After this, the Shulker Operator should have started some work but nothing reall
 
 ## A _drizzle_ of Proxy
 
-For the players to be able to connect to our Minecraft Cluster, we need at least one **Proxy**. While we could directly create a **Proxy** resource, we will create a **ProxyDeployment** instead. It will handle replication among other things, but more importantly, it will create and bind a **Kubernetes Service** for us, with the `LoadBalancer` type by default.
+For the players to be able to connect to our Minecraft Cluster, we need at least one **Proxy**. So let's create a `ProxyFleet`. It will handle replication among other things, but more importantly, it will create and bind a **Kubernetes Service** for us, with the `LoadBalancer` type by default.
 
 :::note
 
@@ -73,7 +73,7 @@ After a fixed amount of time, a proxy will enter the **Drain** mode, meaning tha
 
 The proxy will check that it is empty every 30 seconds, if there is no player, it will shutdown itself, otherwise it will wait.
 
-It is important to note that a new Proxy is automatically created when one enters the **Drain** mode, to ensure the availability of the **ProxyDeployment**.
+It is important to note that a new Proxy is automatically created when one enters the **Drain** mode, to ensure the availability of the **ProxyFleet**.
 
 :::
 
@@ -97,7 +97,7 @@ However, if you try to connect, you'll be kicked out with the following error:
 />
 </center>
 
-By default, the Shulker Agent will try to connect the player to the first server with the `limbo` tag. Because there is no server currently running in the cluster, there is no other choice than kicking the player.
+By default, the Shulker Agent will try to connect the player to the first server with the `lobby` tag. If none are found the agent will try to fallback on a server with the `limbo` tag. Because there is no server currently running in the cluster, there is no other choice than kicking the player.
 
 ## A _pinch_ of MinecraftServer
 
@@ -133,11 +133,11 @@ Finally, without any surprise, if you retry to connect to the proxy, you'll arri
 
 :::note
 
-Pay attention to the `tags` field of the MinecraftServer resource you just created. The Shulker Agent will connect the player to the first server it finds with the `limbo` tag. It is optional to provide tags to servers. They could, however, be retrieved using Shulker's Proxy API.
+Pay attention to the `tags` field of the MinecraftServer resource you just created. The Shulker Agent will connect the player to the first server it finds with the `lobby` tag. If none, it will try to fallback on one with the `limbo` tag. It is optional to provide tags to servers. They could, however, be retrieved using Shulker's Proxy API.
 
 :::
 
-**Congratulations!** You have successfuly creatd your first Minecraft Cluster using Shulker!
+**Congratulations!** You have successfully created your first Minecraft Cluster using Shulker!
 
 ## Cleaning everything up
 
