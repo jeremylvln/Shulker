@@ -1,5 +1,5 @@
 apiVersion: shulkermc.io/v1alpha1
-kind: MinecraftServerDeployment
+kind: MinecraftServerFleet
 metadata:
   name: limbo
 spec:
