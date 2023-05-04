@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-proxy-agent:bungeecord" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-proxy-agent:bungeecord" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.1.0" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -23,8 +23,10 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/java/main</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.0/ed04f49e186a116753ad70d34f0ac2925d1d8020/kotlin-stdlib-jdk8-1.8.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-api/1.19-R0.1-SNAPSHOT/2544b39780a1c020191724392e5c0f7351a082e3/bungeecord-api-1.19-R0.1-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-api/1.19-R0.1-SNAPSHOT/335bf204ac343a581a98e8fe7427883029dbf45d/bungeecord-api-1.19-R0.1-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-bungeecord/4.1.2/9dc995f6a38fef5405268f39fa91c351e1a77a97/adventure-platform-bungeecord-4.1.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-api/4.1.2/27e16d2dea63035f137ed5841b4bb759a1eee934/adventure-platform-api-4.1.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-bungeecord/4.1.2/28c34b383bf41e615fa744b673c2ecb61798e610/adventure-text-serializer-bungeecord-4.1.2.jar</arg>
@@ -36,12 +38,13 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric8/kubernetes-client-api/6.3.1/fedbc455442930dde4394544a584865f29b64c77/kubernetes-client-api-6.3.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.8.0/3c91271347f678c239607abb676d4032a7898427/kotlin-stdlib-jdk7-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.8.0/1796921c7a3e2e2665a83e6c8d33399336cd39bc/kotlin-stdlib-1.8.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-protocol/1.19-R0.1-SNAPSHOT/123bd87829fc33626d7042a43a1ce05b0a102ca2/bungeecord-protocol-1.19-R0.1-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-chat/1.19-R0.1-SNAPSHOT/3d8deabf471ef9c45421bf63e91f630dd99b1fe5/bungeecord-chat-1.19-R0.1-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-config/1.19-R0.1-SNAPSHOT/498c21919c5cc4c2f0affe46232aa04bf665c97/bungeecord-config-1.19-R0.1-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-event/1.19-R0.1-SNAPSHOT/2577b44ce2f5c4a5ceeb3784c1374b35a867e0f0/bungeecord-event-1.19-R0.1-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.90.Final/e42282002cf22105e7e993651aead231246d0220/netty-transport-native-unix-common-4.1.90.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-protocol/1.19-R0.1-SNAPSHOT/8b63401819fd5a8ad34c6066563e00644854651b/bungeecord-protocol-1.19-R0.1-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-chat/1.19-R0.1-SNAPSHOT/63409756348f64bd60f5ff3345556c0b7dfdf884/bungeecord-chat-1.19-R0.1-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-config/1.19-R0.1-SNAPSHOT/220e5dca51a299a8984ca02d63c42b9b06211217/bungeecord-config-1.19-R0.1-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-event/1.19-R0.1-SNAPSHOT/ec5fae7a2d0c03c6fad5949ff3672bb42c2d83d1/bungeecord-event-1.19-R0.1-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.92.Final/22364cca56b752abb49fb7972f0f6299b8d6be98/netty-transport-native-unix-common-4.1.92.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.yaml/snakeyaml/1.33/2cd0a87ff7df953f810c344bdf2fe3340b954c69/snakeyaml-1.33.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-stub/1.54.1/6f2267abcdf55223a315b1df8348c94820ba3d7a/grpc-stub-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.1-jre/60458f877d055d0c9114d9e1a2efb737b4bc282c/guava-31.1-jre.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/examination-string/1.3.0/6f34afef5c54ccce4996bc321abf77518b55b4bd/examination-string-1.3.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/examination-api/1.3.0/8a2d185275307f1e2ef2adf7152b9a0d1d44c30b/examination-api-1.3.0.jar</arg>
@@ -73,25 +76,32 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.14.1/7a07bc535ccf0b7f6929c4d0f2ab9b294ef7c4a3/jackson-core-2.14.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.14.1/2a6ad504d591a7903ffdec76b5b7252819a2d162/jackson-annotations-2.14.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.14.1/cf6d18651659a2e64301452c841e6daa62e77bf6/jackson-dataformat-yaml-2.14.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.54.1/3af888f22f0242a4b1272954166173f96db47a79/grpc-protobuf-1.54.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.9.0/e4ada41aaaf6ecdedf132f44251d0d50813f7f90/proto-google-common-protos-2.9.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.22.2/fdee98b8f6abab73f146a4edb4c09e56f8278d03/protobuf-java-3.22.2.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.3.2/934c04d3cfef185a8008e7bf34331b79730a9d43/javax.annotation-api-1.3.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.12.12/d952189f6abb148ff72aab246aa8c28cf99b469f/logging-interceptor-3.12.12.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.12.12/d3e1ce1d2b3119adf270b2d00d947beb03fe3321/okhttp-3.12.12.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.10/dd9b193aef96e973d5a11ab13cd17430c2e4306b/gson-2.10.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/brigadier/1.0.16-SNAPSHOT/86edc5380c2b4fa37dca9810104fff8a7460411c/brigadier-1.0.16-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.90.Final/9992a22c82e18b8fd4f34989535f3e504e55aa37/netty-codec-4.1.90.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.92.Final/9496b3d59290edcc6480cbe064f33560873f7484/netty-codec-4.1.92.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.trove4j/core/3.1.0/5fd0207b685536b29dd65c86f4b3bf89befb885c/core-3.1.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/se.llbit/jo-nbt/1.3.0/fbbf96a883d5b53536bc526a57a22c550e15f02f/jo-nbt-1.3.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.90.Final/82d68da212f62b076c763f5efa9b072d2abc018f/netty-transport-4.1.90.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.90.Final/937eb60c19c5f5c1326b96123c9ec3d33238d4d5/netty-buffer-4.1.90.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.90.Final/47c415d8c83f08b820ba00e6497a6cf19dd0155f/netty-resolver-4.1.90.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.90.Final/43597a09382c6ae2bef469a9b3a41e8a17850638/netty-common-4.1.90.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.92.Final/e0cf483b7c04af7207c02a6ff0c861592b09c97a/netty-transport-4.1.92.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.92.Final/5ff1ba7ec68c20e635fc0f2b792c38c951f688d6/netty-buffer-4.1.92.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.92.Final/fe96e210a4e139cb043d26702792b6098b93b13f/netty-resolver-4.1.92.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.92.Final/66133f9ad31816a227acf3030632903cb9e4c5a2/netty-common-4.1.92.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf-lite/1.54.1/865388468541fc52f1375f93a89864272e335cb3/grpc-protobuf-lite-1.54.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.54.1/246ee0cafff9104aba6edd5c4423d4a43216c620/grpc-api-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.12.0/d5692f0526415fcc6de94bb5bfbd3afd9dd3b3e5/checker-qual-3.12.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.11.0/c5a0ace696d3f8b1c1d8cc036d8c03cc0cbe6b69/error_prone_annotations-2.11.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-context/1.54.1/7225b68b8f61cb68014b85cacd4365e657e80b5b/grpc-context-1.54.1.jar</arg>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/common</arg>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/tmp/kapt3/classes/common</arg>
               </args>
@@ -153,19 +163,24 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
+    <orderEntry type="module" module-name="shulker.packages.agones-java-sdk.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: net.kyori:adventure-platform-bungeecord:4.1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.2.0" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-client-api:6.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-stub:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.22.2" level="project" />
+    <orderEntry type="library" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-protocol:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-chat:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-config:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-event:1.19-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.92.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.yaml:snakeyaml:1.33" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:31.1-jre" level="project" />
     <orderEntry type="library" name="Gradle: net.kyori:adventure-platform-api:4.1.2" level="project" />
@@ -203,34 +218,56 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-api:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.api.grpc:proto-google-common-protos:2.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf-lite:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:brigadier:1.0.16-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec:4.1.90.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec:4.1.92.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.sf.trove4j:core:3.1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: se.llbit:jo-nbt:1.3.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.gson:gson:2.10" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-buffer:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-common:4.1.90.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.checkerframework:checker-qual:3.12.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.errorprone:error_prone_annotations:2.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport:4.1.92.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-buffer:4.1.92.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-common:4.1.92.Final" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.12.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.18.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.15.0" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-model-common:6.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.14.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver:4.1.90.Final" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-context:1.54.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver:4.1.92.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client:6.3.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-netty:1.54.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-platform-facet:4.1.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-text-serializer-gson:4.11.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-text-serializer-legacy:4.11.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:zjsonpatch:0.3.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:31.1-android" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-core:1.54.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-http2:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-handler-proxy:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.perfmark:perfmark-api:0.25.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.87.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-nbt:4.11.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-api:4.11.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.android:annotations:4.1.1.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.21" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-http:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-handler:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-transport:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-buffer:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-common:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-socks:4.1.87.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-key:4.11.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-resolver:4.1.87.Final" level="project" />
   </component>
 </module>

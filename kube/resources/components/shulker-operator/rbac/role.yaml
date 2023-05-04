@@ -34,18 +34,31 @@ rules:
   - update
   - watch
 - apiGroups:
+  - agones.dev
+  resources:
+  - fleets
+  - gameservers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - shulkermc.io
   resources:
   - minecraftclusters
   - minecraftclusters/status
   - minecraftserverdeployments
   - minecraftserverdeployments/status
+  - minecraftserverfleets
+  - minecraftserverfleets/status
   - minecraftservers
   - minecraftservers/status
-  - proxydeployments
-  - proxydeployments/status
-  - proxies
-  - proxies/status
+  - proxyfleets
+  - proxyfleets/status
   verbs:
   - create
   - delete

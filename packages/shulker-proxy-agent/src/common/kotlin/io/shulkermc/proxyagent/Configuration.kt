@@ -1,27 +1,7 @@
 package io.shulkermc.proxyagent
 
-data class Configuration(
-    val proxyNamespace: String,
-    val proxyName: String,
-    val ttlSeconds: Long
-) {
-    companion object {
-        fun load(): Configuration {
-            val proxyNamespace = System.getenv("SHULKER_PROXY_NAMESPACE")
-                ?: throw IllegalStateException("No SHULKER_PROXY_NAMESPACE found in environment")
-
-            val proxyName = System.getenv("SHULKER_PROXY_NAME")
-                ?: throw IllegalStateException("No SHULKER_PROXY_NAME found in environment")
-
-            val ttlSecondsStr = System.getenv("SHULKER_PROXY_TTL_SECONDS")
-                ?: throw IllegalStateException("No SHULKER_PROXY_TTL_SECONDS found in environment")
-            val ttlSeconds = ttlSecondsStr.toLong()
-
-            return Configuration(
-                proxyNamespace,
-                proxyName,
-                ttlSeconds
-            )
-        }
-    }
+object Configuration {
+    val PROXY_NAMESPACE = requireNotNull(System.getenv("SHULKER_PROXY_NAMESPACE")) { "Missing SHULKER_PROXY_NAMESPACE" }
+    val PROXY_NAME = requireNotNull(System.getenv("SHULKER_PROXY_NAME")) { "Missing SHULKER_PROXY_NAME" }
+    val PROXY_TTL_SECONDS = requireNotNull(System.getenv("SHULKER_PROXY_TTL_SECONDS")) { "Missing SHULKER_PROXY_TTL_SECONDS" }.toLong()
 }

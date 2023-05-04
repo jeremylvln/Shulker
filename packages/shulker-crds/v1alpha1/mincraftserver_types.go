@@ -141,7 +141,6 @@ type MinecraftServerStatusCondition string
 
 const (
 	MinecraftServerReadyCondition MinecraftServerStatusCondition = "Ready"
-	MinecraftServerPhaseCondition MinecraftServerStatusCondition = "Phase"
 )
 
 // MinecraftServerStatus defines the observed state of MinecraftServer
@@ -152,8 +151,11 @@ type MinecraftServerStatus struct {
 	//+kubebuilder:validation:Required
 	Conditions []metav1.Condition `json:"conditions" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,1,rep,name=conditions"`
 
-	// IP address of the Pod.
-	ServerIP string `json:"serverIP"`
+	// IP address of the GameServer.
+	Address string `json:"address"`
+
+	// Port of the GameServer.
+	Port int32 `json:"port"`
 }
 
 func (s *MinecraftServerStatus) SetCondition(condition MinecraftServerStatusCondition, status metav1.ConditionStatus, reason string, message string) metav1.Condition {

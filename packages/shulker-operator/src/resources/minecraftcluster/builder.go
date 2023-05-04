@@ -25,6 +25,8 @@ func (b *MinecraftClusterResourceBuilder) ResourceBuilders() ([]common.ResourceB
 		b.MinecraftClusterProxyRole(),
 		b.MinecraftClusterProxyRoleBinding(),
 		b.MinecraftClusterMinecraftServerServiceAccount(),
+		b.MinecraftClusterMinecraftServerRole(),
+		b.MinecraftClusterMinecraftServerRoleBinding(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
@@ -48,6 +50,14 @@ func (b *MinecraftClusterResourceBuilder) getProxyRoleBindingName() string {
 }
 
 func (b *MinecraftClusterResourceBuilder) getMinecraftServerServiceAccountName() string {
+	return fmt.Sprintf("%s-server", b.Instance.Name)
+}
+
+func (b *MinecraftClusterResourceBuilder) getMinecraftServerRoleName() string {
+	return fmt.Sprintf("%s-server", b.Instance.Name)
+}
+
+func (b *MinecraftClusterResourceBuilder) getMinecraftServerRoleBindingName() string {
 	return fmt.Sprintf("%s-server", b.Instance.Name)
 }
 

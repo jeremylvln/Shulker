@@ -21,16 +21,12 @@ class ProxyInterfaceBungeeCord(
     private val plugin: Plugin,
     private val proxy: ProxyServer
 ) : ProxyInterface {
-    override fun shutdown() {
-        this.proxy.stop()
-    }
-
     override fun registerServer(name: ServerName, address: InetSocketAddress) {
         this.proxy.servers[name] = this.proxy.constructServerInfo(name, address, "", false)
     }
 
-    override fun unregisterServer(name: String) {
-        this.proxy.servers.remove(name)
+    override fun unregisterServer(name: String): Boolean {
+        return this.proxy.servers.remove(name) != null
     }
 
     override fun hasServer(name: String): Boolean {
@@ -43,6 +39,7 @@ class ProxyInterfaceBungeeCord(
             object : Listener {
                 @EventHandler(priority = EventPriority.LOWEST)
                 private fun onServerConnect(event: ServerConnectEvent) {
+                    if (event.isCancelled) return
                     val result = hook(wrapPlayer(event.player), event.target.name)
 
                     if (result.newServerName.isPresent)
@@ -58,6 +55,7 @@ class ProxyInterfaceBungeeCord(
             object : Listener {
                 @EventHandler(priority = EventPriority.HIGHEST)
                 private fun onPreLogin(event: PreLoginEvent) {
+                    if (event.isCancelled) return
                     val result = hook()
 
                     if (!result.allowed)

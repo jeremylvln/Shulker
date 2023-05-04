@@ -1,0 +1,37 @@
+{
+  "name": "shulker-server-api",
+  "root": "packages/shulker-server-api",
+  "sourceRoot": "packages/shulker-server-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["dist/packages/shulker-server-api"],
+      "options": {
+        "command": "gradle :packages:shulker-server-api:build -x check"
+      },
+      "inputs": ["default", "java:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :packages:shulker-server-api:test"
+      },
+      "inputs": ["default", "java:dependencies"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :packages:shulker-server-api:ktlintCheck"
+      },
+      "inputs": ["default", "java:dependencies"]
+    },
+    "publish-maven": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gradle :packages:shulker-server-api:publish"
+      }
+    }
+  },
+  "tags": ["lang:java"]
+}

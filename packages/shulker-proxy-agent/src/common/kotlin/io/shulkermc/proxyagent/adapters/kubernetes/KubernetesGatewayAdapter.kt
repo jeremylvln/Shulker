@@ -1,7 +1,6 @@
 package io.shulkermc.proxyagent.adapters.kubernetes
 
-import io.shulkermc.proxyagent.adapters.kubernetes.models.ShulkerV1alpha1MinecraftServer
-import io.shulkermc.proxyagent.adapters.kubernetes.models.ShulkerV1alpha1Proxy
+import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 
 enum class WatchAction {
     ADDED, MODIFIED, DELETED
@@ -10,11 +9,8 @@ enum class WatchAction {
 interface KubernetesGatewayAdapter {
     fun destroy()
 
-    fun emitAgentReady()
-    fun emitNotAcceptingPlayers()
+    fun listMinecraftServers(): AgonesV1GameServer.List
 
-    fun listMinecraftServers(): ShulkerV1alpha1MinecraftServer.List
-
-    fun watchProxyEvent(callback: (action: WatchAction, proxy: ShulkerV1alpha1Proxy) -> Unit)
-    fun watchMinecraftServerEvent(callback: (action: WatchAction, minecraftServer: ShulkerV1alpha1MinecraftServer) -> Unit)
+    fun watchProxyEvents(callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit)
+    fun watchMinecraftServerEvents(callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit)
 }

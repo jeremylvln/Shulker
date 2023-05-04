@@ -8,12 +8,11 @@ package resources
 import (
 	"fmt"
 
+	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-
-	shulkermciov1alpha1 "github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1"
 )
 
 type MinecraftClusterProxyRoleBuilder struct {
@@ -39,14 +38,9 @@ func (b *MinecraftClusterProxyRoleBuilder) Update(object client.Object) error {
 
 	role.Rules = []rbacv1.PolicyRule{
 		{
-			APIGroups: []string{shulkermciov1alpha1.GroupVersion.Group},
-			Resources: []string{"proxies"},
-			Verbs:     []string{"list", "watch"},
-		},
-		{
-			APIGroups: []string{shulkermciov1alpha1.GroupVersion.Group},
-			Resources: []string{"minecraftservers"},
-			Verbs:     []string{"list", "watch"},
+			APIGroups: []string{agonesv1.SchemeGroupVersion.Group},
+			Resources: []string{"gameservers"},
+			Verbs:     []string{"list", "watch", "update"},
 		},
 		{
 			APIGroups: []string{""},

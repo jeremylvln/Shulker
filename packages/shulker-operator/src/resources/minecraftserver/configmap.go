@@ -81,8 +81,15 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.MinecraftServerCon
 			(cd "${SERVER_CONFIG_DIR}" && wget "${SERVER_WORLD_URL}" -O - | tar -xzv)
 		fi
 
+		mkdir -p "${SERVER_CONFIG_DIR}/plugins"
+		if [ "${TYPE}" == "PAPER" ]; then
+			(cd "${SERVER_CONFIG_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-server-agent/${SHULKER_SERVER_AGENT_VERSION}/shulker-server-agent-${SHULKER_SERVER_AGENT_VERSION}-paper.jar)
+		else
+			echo "[!] No server agent available for this server type"
+			exit 1
+		fi
+
 		if [ "${SERVER_PLUGIN_URLS}" != "" ]; then
-			mkdir -p "${SERVER_CONFIG_DIR}/plugins"
 			for plugin_url in ${SERVER_PLUGIN_URLS//;/ }; do
 				(cd "${SERVER_CONFIG_DIR}/plugins" && wget "${plugin_url}")
 			done

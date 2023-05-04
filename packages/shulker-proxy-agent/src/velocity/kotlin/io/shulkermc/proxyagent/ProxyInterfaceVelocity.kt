@@ -12,23 +12,18 @@ import io.shulkermc.proxyapi.adapters.ServerName
 import net.kyori.adventure.text.Component
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.optionals.getOrElse
 
-class ProxyInterfaceVelocity(
-    private val plugin: ShulkerProxyAgent,
-    private val proxy: ProxyServer
-) : ProxyInterface {
-    override fun shutdown() {
-        this.proxy.shutdown()
-    }
-
+class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val proxy: ProxyServer) : ProxyInterface {
     override fun registerServer(name: ServerName, address: InetSocketAddress) {
         this.proxy.registerServer(ServerInfo(name, address))
     }
 
-    override fun unregisterServer(name: String) {
-        this.proxy.getServer(name).ifPresent { registeredServer ->
+    override fun unregisterServer(name: String): Boolean {
+        return this.proxy.getServer(name).map { registeredServer ->
             this.proxy.unregisterServer(registeredServer.serverInfo)
-        }
+            true
+        }.getOrElse { false }
     }
 
     override fun hasServer(name: String): Boolean {
@@ -37,6 +32,7 @@ class ProxyInterfaceVelocity(
 
     override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
         this.proxy.eventManager.register(this.plugin, ServerPreConnectEvent::class.java, PostOrder.LAST) { event ->
+            if (!event.result.isAllowed) return@register
             val result = hook(this.wrapPlayer(event.player), event.originalServer.serverInfo.name)
 
             if (result.newServerName.isPresent)
@@ -46,6 +42,7 @@ class ProxyInterfaceVelocity(
 
     override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
         this.proxy.eventManager.register(this.plugin, PreLoginEvent::class.java, PostOrder.FIRST) { event ->
+            if (!event.result.isAllowed) return@register
             val result = hook()
 
             if (!result.allowed)

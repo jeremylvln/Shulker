@@ -24,7 +24,8 @@ type MinecraftServerResourceBuilder struct {
 
 func (b *MinecraftServerResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder, []common.ResourceBuilder) {
 	builders := []common.ResourceBuilder{
-		b.MinecraftServerPod(),
+		b.MinecraftServerGameServer(),
+		b.MinecraftServerConfigMap(),
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
@@ -35,7 +36,7 @@ func (b *MinecraftServerResourceBuilder) ResourceBuilders() ([]common.ResourceBu
 	return builders, dirtyBuilders
 }
 
-func (b *MinecraftServerResourceBuilder) GetPodName() string {
+func (b *MinecraftServerResourceBuilder) GetGameServerName() string {
 	return b.Instance.Name
 }
 

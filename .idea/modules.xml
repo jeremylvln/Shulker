@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/shulker.iml" filepath="$PROJECT_DIR$/.idea/modules/shulker.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker.packages.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker.packages.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/agones-java-sdk/shulker.packages.agones-java-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/agones-java-sdk/shulker.packages.agones-java-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/agones-java-sdk/shulker.packages.agones-java-sdk.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/agones-java-sdk/shulker.packages.agones-java-sdk.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/agones-java-sdk/shulker.packages.agones-java-sdk.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/agones-java-sdk/shulker.packages.agones-java-sdk.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent/shulker.packages.shulker-proxy-agent.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent/shulker.packages.shulker-proxy-agent.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent/shulker.packages.shulker-proxy-agent.bungeecord.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent/shulker.packages.shulker-proxy-agent.bungeecord.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent/shulker.packages.shulker-proxy-agent.common.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-agent/shulker.packages.shulker-proxy-agent.common.iml" />
@@ -13,6 +16,14 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-proxy-api/shulker.packages.shulker-proxy-api.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.common.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.paper.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.paper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-agent/shulker.packages.shulker-server-agent.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-api/shulker.packages.shulker-server-api.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-api/shulker.packages.shulker-server-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-api/shulker.packages.shulker-server-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-api/shulker.packages.shulker-server-api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/packages/shulker-server-api/shulker.packages.shulker-server-api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/packages/shulker-server-api/shulker.packages.shulker-server-api.test.iml" />
     </modules>
   </component>
 </project>

@@ -1320,6 +1320,9 @@ spec:
           status:
             description: MinecraftServerStatus defines the observed state of MinecraftServer
             properties:
+              address:
+                description: IP address of the GameServer.
+                type: string
               conditions:
                 description: 'Conditions represent the latest available observations
                   of a MinecraftServer object. Known .status.conditions.type are:
@@ -1391,12 +1394,14 @@ spec:
                   - type
                   type: object
                 type: array
-              serverIP:
-                description: IP address of the Pod.
-                type: string
+              port:
+                description: Port of the GameServer.
+                format: int32
+                type: integer
             required:
+            - address
             - conditions
-            - serverIP
+            - port
             type: object
         required:
         - spec

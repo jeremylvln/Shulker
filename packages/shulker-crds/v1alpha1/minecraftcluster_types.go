@@ -15,17 +15,10 @@ type MinecraftClusterSpec struct {
 
 // MinecraftClusterStatus defines the observed state of MinecraftCluster
 type MinecraftClusterStatus struct {
-	// Number of proxies.
-	Proxies int32 `json:"proxies"`
-
-	// Number of servers.
-	Servers int32 `json:"servers"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:printcolumn:name="Proxies",type="number",JSONPath=".status.proxies"
-//+kubebuilder:printcolumn:name="Servers",type="number",JSONPath=".status.servers"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 //+kubebuilder:resource:shortName={"skrmc"},categories=all
 

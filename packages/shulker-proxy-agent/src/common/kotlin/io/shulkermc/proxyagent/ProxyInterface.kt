@@ -7,10 +7,8 @@ import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
 interface ProxyInterface {
-    fun shutdown()
-
     fun registerServer(name: ServerName, address: InetSocketAddress)
-    fun unregisterServer(name: String)
+    fun unregisterServer(name: String): Boolean
     fun hasServer(name: String): Boolean
 
     fun addServerPreConnectHook(hook: ServerPreConnectHook)

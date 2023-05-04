@@ -1,8 +1,0 @@
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-javadoc {
-    options.addBooleanOption('html5', true)
-}

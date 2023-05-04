@@ -8,7 +8,7 @@ plugins {
 }
 
 allprojects {
-    version = '0.0.1'
+    version = '0.1.0'
 
     repositories {
         mavenCentral()
@@ -185,6 +185,61 @@ configure(subprojects.findAll {
                     mavenJava(MavenPublication) {
                         artifact bungeecordJar
                         artifact velocityJar
+                    }
+                }
+            }
+        }
+    } else if (it.hasProperty('isServerPlugin')) {
+        sourceSets {
+            common
+
+            paper {
+                compileClasspath += common.output
+                runtimeClasspath += common.output
+            }
+        }
+
+        configurations {
+            paperCompileOnly.extendsFrom(commonCompileOnly)
+            paperRuntimeOnly.extendsFrom(commonRuntimeOnly)
+            paperImplementation.extendsFrom(commonImplementation)
+        }
+
+        repositories {
+            maven {
+                name = 'md5'
+                url 'https://oss.sonatype.org/content/repositories/snapshots'
+            }
+
+            maven {
+                name = 'papermc'
+                url = 'https://repo.papermc.io/repository/maven-public/'
+            }
+        }
+
+        dependencies {
+            commonCompileOnly 'net.kyori:adventure-api:4.12.0'
+            paperCompileOnly("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
+        }
+
+        task paperJar(type: ShadowJar) {
+            archiveClassifier.set("paper")
+            from sourceSets.common.output
+            from sourceSets.paper.output
+            configurations = [project.configurations.paperRuntimeClasspath]
+        }
+
+        artifacts {
+            paperJar
+        }
+
+        assemble.dependsOn(paperJar)
+
+        if (!it.hasProperty('noPublishing')) {
+            publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        artifact paperJar
                     }
                 }
             }

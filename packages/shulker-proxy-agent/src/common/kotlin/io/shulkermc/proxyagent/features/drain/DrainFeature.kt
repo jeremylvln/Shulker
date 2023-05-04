@@ -31,12 +31,12 @@ class DrainFeature(
     init {
         this.agent.proxyInterface.addPlayerPreLoginHook { this.onPreLogin() }
 
-        kubernetesGateway.watchProxyEvent { action, proxy ->
-            this.agent.logger.fine("Detected modification on Kubernetes Proxy '${proxy.metadata.name}'")
+        this.kubernetesGateway.watchProxyEvents { action, proxy ->
+            this.agent.logger.fine("Detected modification on Proxy '${proxy.metadata.name}'")
 
             if (action == WatchAction.MODIFIED) {
                 val annotations: Map<String, String> = proxy.metadata.annotations
-                    ?: return@watchProxyEvent
+                    ?: return@watchProxyEvents
 
                 if (annotations.containsKey(PROXY_DRAIN_ANNOTATION))
                     if (annotations[PROXY_DRAIN_ANNOTATION] == "true")
@@ -46,7 +46,7 @@ class DrainFeature(
 
         this.agent.logger.info("Proxy will be force stopped in ${this.ttlSeconds} seconds")
         this.agent.proxyInterface.scheduleDelayedTask(this.ttlSeconds, TimeUnit.SECONDS) {
-            this.agent.proxyInterface.shutdown()
+            this.agent.agonesGateway.emitProxyShutdown()
         }
     }
 
@@ -65,7 +65,6 @@ class DrainFeature(
         try {
             this.fileSystem.createDrainFile()
             this.acceptingPlayers = false
-            this.kubernetesGateway.emitNotAcceptingPlayers()
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
@@ -77,7 +76,7 @@ class DrainFeature(
 
             if (playerCount == 0) {
                 this.agent.logger.info("Proxy is empty, stopping")
-                this.agent.proxyInterface.shutdown()
+                this.agent.agonesGateway.emitProxyShutdown()
             } else {
                 this.agent.logger.info(String.format("There are still %d players connected, waiting", playerCount))
             }

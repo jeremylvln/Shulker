@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-proxy-agent:velocity" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.0.1" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-proxy-agent:velocity" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.1.0" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -23,6 +23,8 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/java/main</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.0/ed04f49e186a116753ad70d34f0ac2925d1d8020/kotlin-stdlib-jdk8-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.velocitypowered/velocity-api/3.1.1/82f54eae5d50f9390947c2623c6d6fe84e6fb0/velocity-api-3.1.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-key/4.12.0/c5c1e8a4f0664b91e3116e5ecdd8d271362d4ae9/adventure-key-4.12.0.jar</arg>
@@ -66,6 +68,11 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.14.1/7a07bc535ccf0b7f6929c4d0f2ab9b294ef7c4a3/jackson-core-2.14.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.14.1/2a6ad504d591a7903ffdec76b5b7252819a2d162/jackson-annotations-2.14.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.14.1/cf6d18651659a2e64301452c841e6daa62e77bf6/jackson-dataformat-yaml-2.14.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.54.1/3af888f22f0242a4b1272954166173f96db47a79/grpc-protobuf-1.54.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.9.0/e4ada41aaaf6ecdedf132f44251d0d50813f7f90/proto-google-common-protos-2.9.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.22.2/fdee98b8f6abab73f146a4edb4c09e56f8278d03/protobuf-java-3.22.2.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-stub/1.54.1/6f2267abcdf55223a315b1df8348c94820ba3d7a/grpc-stub-1.54.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.3.2/934c04d3cfef185a8008e7bf34331b79730a9d43/javax.annotation-api-1.3.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.12.12/d952189f6abb148ff72aab246aa8c28cf99b469f/logging-interceptor-3.12.12.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.12.12/d3e1ce1d2b3119adf270b2d00d947beb03fe3321/okhttp-3.12.12.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.moandjiezana.toml/toml4j/0.7.2/a03337911d0bd2c40932aca3946edb30d0e7d0c/toml4j-0.7.2.jar</arg>
@@ -74,19 +81,22 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/configurate-hocon/3.7.2/a5e49f57ae8f5e61dbae48a158a28343e7d6f707/configurate-hocon-3.7.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/configurate-gson/3.7.2/431733e80d7dfc62b37962c2723bba5c996548f/configurate-gson-3.7.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/configurate-core/3.7.2/985223b13c7da64116a7e20203b2904023eeb1db/configurate-core-3.7.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/30.1-jre/d0c3ce2311c9e36e73228da25a6e99b2ab826f/guava-30.1-jre.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.6.1/52ca62b41f68584c4d2de39d6176758e9383d0b6/checker-qual-3.6.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.1-android/9222c47cc3ae890f07f7c961bbb3cb69050fe4aa/guava-31.1-android.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.12.0/d5692f0526415fcc6de94bb5bfbd3afd9dd3b3e5/checker-qual-3.12.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/719dd1bda540a9be7f70f23c68fbe1a0e2fc69ca/velocity-brigadier-1.0.0-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf-lite/1.54.1/865388468541fc52f1375f93a89864272e335cb3/grpc-protobuf-lite-1.54.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.54.1/246ee0cafff9104aba6edd5c4423d4a43216c620/grpc-api-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.3.4/dac170e4594de319655ffb62f41cbd6dbb5e601e/error_prone_annotations-2.3.4.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.15.0/bc28b5a964c8f5721eb58ee3f3c47a9bcbf4f4d8/okio-1.15.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/6975da39a7040257bd51d21a231b76c915872d38/javax.inject-1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/aopalliance/aopalliance/1.0/235ba8b489512805ac13a8f9ea77a1ca5ebe3e8/aopalliance-1.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.typesafe/config/1.4.0/a8b341fe81552834edc231193afd6f56a96f0eff/config-1.4.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-context/1.54.1/7225b68b8f61cb68014b85cacd4365e657e80b5b/grpc-context-1.54.1.jar</arg>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/classes/kotlin/common</arg>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-agent/tmp/kapt3/classes/common</arg>
               </args>
@@ -150,11 +160,16 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
+    <orderEntry type="module" module-name="shulker.packages.agones-java-sdk.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.velocitypowered:velocity-api:3.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.2.0" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-client-api:6.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.22.2" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-stub:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-gson:4.12.0" level="project" />
@@ -167,8 +182,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.inject:guice:5.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.spongepowered:configurate-hocon:3.7.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.spongepowered:configurate-gson:3.7.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:30.1-jre" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.checkerframework:checker-qual:3.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:31.1-android" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.velocitypowered:velocity-brigadier:1.0.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-key:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:examination-string:1.3.0" level="project" />
@@ -201,22 +216,43 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.api.grpc:proto-google-common-protos:2.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf-lite:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-api:1.54.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.spongepowered:configurate-core:3.7.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.typesafe:config:1.4.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.errorprone:error_prone_annotations:2.3.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.18.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.15.0" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-model-common:6.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.14.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-context:1.54.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client:6.3.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.3.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-netty:1.54.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:zjsonpatch:0.3.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-core:1.54.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-http2:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-handler-proxy:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.perfmark:perfmark-api:0.25.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.87.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.android:annotations:4.1.1.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.21" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-http:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-handler:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-transport:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-buffer:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-common:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-socks:4.1.87.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-resolver:4.1.87.Final" level="project" />
   </component>
 </module>

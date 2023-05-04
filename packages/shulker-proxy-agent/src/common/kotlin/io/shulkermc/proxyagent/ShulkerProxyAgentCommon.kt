@@ -1,5 +1,7 @@
 package io.shulkermc.proxyagent
 
+import io.shulkermc.proxyagent.adapters.agones.AgonesGatewayAdapter
+import io.shulkermc.proxyagent.adapters.agones.AgonesGatewayAdapterImpl
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapterImpl
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapterImpl
@@ -12,31 +14,30 @@ import java.util.logging.Logger
 
 class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Logger) {
     val api = ShulkerProxyAPIImpl(this)
-    private var kubernetesGateway: KubernetesGatewayAdapter? = null
+    private lateinit var kubernetesGateway: KubernetesGatewayAdapter
+    lateinit var agonesGateway: AgonesGatewayAdapter
 
     fun onProxyInitialization() {
         try {
-            val config = Configuration.load()
-
-            this.logger.info("Identified Shulker proxy: ${config.proxyNamespace}/${config.proxyName}")
+            this.logger.info("Identified Shulker proxy: ${Configuration.PROXY_NAMESPACE}/${Configuration.PROXY_NAME}")
 
             val fileSystem = FileSystemAdapterImpl()
-            this.kubernetesGateway = KubernetesGatewayAdapterImpl(config.proxyNamespace, config.proxyName)
+            this.kubernetesGateway = KubernetesGatewayAdapterImpl(Configuration.PROXY_NAMESPACE, Configuration.PROXY_NAME)
+            this.agonesGateway = AgonesGatewayAdapterImpl()
 
-            DrainFeature(this, fileSystem, this.kubernetesGateway!!, config.ttlSeconds)
-            DirectoryFeature(this, this.kubernetesGateway!!)
+            DrainFeature(this, fileSystem, this.kubernetesGateway, Configuration.PROXY_TTL_SECONDS)
+            DirectoryFeature(this, this.kubernetesGateway)
             LimboFeature(this)
 
-            this.kubernetesGateway!!.emitAgentReady()
+            this.agonesGateway.emitProxyReady()
         } catch (e: Exception) {
             this.logger.severe("Failed to parse configuration")
             e.printStackTrace()
-            this.proxyInterface.shutdown()
         }
     }
 
     fun onProxyShutdown() {
-        if (this.kubernetesGateway != null)
-            this.kubernetesGateway!!.destroy()
+        this.kubernetesGateway.destroy()
+        this.agonesGateway.emitProxyShutdown()
     }
 }

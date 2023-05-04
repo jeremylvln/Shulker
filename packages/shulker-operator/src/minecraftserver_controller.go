@@ -8,6 +8,7 @@ package main
 import (
 	"context"
 
+	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
 	corev1 "k8s.io/api/core/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,7 +29,8 @@ type MinecraftServerReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups="",resources=pods,verbs=get;list;watch;create;update
+//+kubebuilder:rbac:groups="",resources=configmaps,verbs=get;list;watch;create;update
+//+kubebuilder:rbac:groups=agones.dev,resources=gameservers,verbs=get;list;watch;create;update
 //+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftservers,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=shulkermc.io,resources=minecraftservers/status,verbs=get;update;patch
 
@@ -68,41 +70,29 @@ func (r *MinecraftServerReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return ctrl.Result{}, err
 	}
 
-	pod := corev1.Pod{}
+	gameServer := agonesv1.GameServer{}
 	err = r.Get(ctx, client.ObjectKey{
 		Namespace: minecraftServer.Namespace,
-		Name:      resourceBuilder.GetPodName(),
-	}, &pod)
+		Name:      resourceBuilder.GetGameServerName(),
+	}, &gameServer)
 	if err != nil && !k8serrors.IsNotFound(err) {
 		return ctrl.Result{}, err
 	}
 
-	if pod.DeletionTimestamp != nil || pod.Status.Phase == corev1.PodSucceeded {
-		logger.Info("Pod is terminating, deleting MinecraftServer")
+	if gameServer.DeletionTimestamp != nil || gameServer.Status.State == agonesv1.GameServerStateShutdown {
+		logger.Info("GameServer is terminating, deleting MinecraftServer")
 		err = r.Delete(ctx, minecraftServer)
 		return ctrl.Result{}, err
 	}
 
-	minecraftServer.Status.ServerIP = pod.Status.PodIP
+	minecraftServer.Status.Address = gameServer.Status.Address
+	minecraftServer.Status.Port = gameServer.Status.Ports[0].Port
 
-	var readyCondition metav1.Condition
-
-	if err == nil {
-		readyCondition = minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerReadyCondition, metav1.ConditionFalse, "PodNotReady", "Pod is not ready")
-
-		for _, condition := range pod.Status.Conditions {
-			if condition.Type == corev1.PodReady && condition.Status == corev1.ConditionTrue {
-				readyCondition = minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerReadyCondition, metav1.ConditionTrue, "PodReady", "Pod is ready")
-			}
-		}
+	isReady := gameServer.Status.State == agonesv1.GameServerStateReady || gameServer.Status.State == agonesv1.GameServerStateAllocated
+	if isReady {
+		minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerReadyCondition, metav1.ConditionTrue, "ReadyOrAllocated", "Server is ready and maybe already allocated")
 	} else {
-		readyCondition = minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerReadyCondition, metav1.ConditionUnknown, "PodNotExists", "Pod does not exists")
-	}
-
-	if readyCondition.Status == metav1.ConditionTrue {
-		minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerPhaseCondition, metav1.ConditionUnknown, "Running", "MinecraftServer is running")
-	} else {
-		minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerPhaseCondition, metav1.ConditionUnknown, "Unknown", "MinecraftServer status is unknown")
+		minecraftServer.Status.SetCondition(shulkermciov1alpha1.MinecraftServerReadyCondition, metav1.ConditionFalse, "Unknown", "Server is not ready yet")
 	}
 
 	return ctrl.Result{}, r.Status().Update(ctx, minecraftServer)

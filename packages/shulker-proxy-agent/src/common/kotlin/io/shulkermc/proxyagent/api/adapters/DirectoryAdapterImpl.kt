@@ -13,30 +13,26 @@ class DirectoryAdapterImpl(
     private val tagsByServer = HashMap<ServerName, Set<ServerTag>>()
 
     fun registerServer(name: ServerName, address: InetSocketAddress, tags: Set<ServerTag>) {
-        this.agent.logger.info("Registering server '$name' to directory")
-
         this.agent.proxyInterface.registerServer(name, address)
 
         for (tag in tags) {
-            this.serversByTag.getOrPut(tag) { HashSet() }.add(name)
+            this.serversByTag.getOrPut(tag) { mutableSetOf() }.add(name)
             this.agent.logger.fine("Tagged '$tag' on server '$name'")
         }
         this.tagsByServer[name] = tags
+        this.agent.logger.info("Added server '$name' to directory")
     }
 
     fun unregisterServer(name: ServerName) {
-        this.agent.logger.info("Unregistering server '$name' from directory")
+        if (this.agent.proxyInterface.unregisterServer(name)) {
+            this.agent.logger.info("Removed server '$name' from directory")
 
-        val tags = this.tagsByServer[name]
-        if (tags != null) {
-            tags.forEach { tag ->
-                this.serversByTag[tag]!!.remove(name)
-                this.agent.logger.fine("Untagged '$tag' from server '$name'")
+            val tags = this.tagsByServer[name]
+            if (tags != null) {
+                tags.forEach { tag -> this.serversByTag[tag]!!.remove(name) }
+                this.tagsByServer.remove(name)
             }
-            this.tagsByServer.remove(name)
         }
-
-        this.agent.proxyInterface.unregisterServer(name)
     }
 
     override fun getServersByTag(tag: String): Set<ServerName> {
