@@ -51,8 +51,6 @@ rules:
   resources:
   - minecraftclusters
   - minecraftclusters/status
-  - minecraftserverdeployments
-  - minecraftserverdeployments/status
   - minecraftserverfleets
   - minecraftserverfleets/status
   - minecraftservers

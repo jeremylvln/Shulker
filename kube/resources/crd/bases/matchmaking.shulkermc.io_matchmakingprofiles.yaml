@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.12.0
-  name: minecraftclusters.shulkermc.io
+  name: matchmakingprofiles.matchmaking.shulkermc.io
 spec:
-  group: shulkermc.io
+  group: matchmaking.shulkermc.io
   names:
     categories:
     - all
-    kind: MinecraftCluster
-    listKind: MinecraftClusterList
-    plural: minecraftclusters
+    kind: MatchmakingProfile
+    listKind: MatchmakingProfileList
+    plural: matchmakingprofiles
     shortNames:
-    - skrmc
-    singular: minecraftcluster
+    - skrmp
+    singular: matchmakingprofile
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -25,7 +25,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MinecraftCluster is the Schema for the minecraftclusters API
+        description: MatchmakingProfile is the Schema for the matchmakingprofiles
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -40,13 +41,23 @@ spec:
           metadata:
             type: object
           spec:
-            description: MinecraftClusterSpec defines the desired state of MinecraftCluster
+            description: MatchmakingProfileSpec defines the desired state of MatchmakingProfile
+            properties:
+              clusterRef:
+                description: Reference to a MinecraftCluster. Adding this will enroll
+                  this MatchmakingProfile to be part of a MinecraftCluster.
+                properties:
+                  name:
+                    description: Name of the MinecraftCluster Kubernetes object owning
+                      this resource.
+                    type: string
+                required:
+                - name
+                type: object
             type: object
-          status:
-            description: MinecraftClusterStatus defines the observed state of MinecraftCluster
-            type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
-    subresources:
-      status: {}
+    subresources: {}

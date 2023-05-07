@@ -14,8 +14,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	shulkermciov1alpha1 "github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1"
-	config "github.com/iamblueslime/shulker/packages/shulker-operator/src/resources/minecraftserver/config"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	config "github.com/jeremylvln/shulker/packages/shulker-operator/src/resources/minecraftserver/config"
 )
 
 type MinecraftServerResourceConfigMapBuilder struct {

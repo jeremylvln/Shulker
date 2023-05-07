@@ -1,12 +1,12 @@
 dependencies {
     commonApi(project(":packages:shulker-server-api"))
-    commonImplementation(project(":packages:agones-java-sdk"))
+    commonImplementation(project(":packages:shulker-agones-java-sdk"))
 }
 
 tasks {
     paperJar {
         dependsOn(":packages:shulker-server-api:shadowJar")
-        dependsOn(":packages:agones-java-sdk:shadowJar")
+        dependsOn(":packages:shulker-agones-java-sdk:shadowJar")
         mergeServiceFiles()
     }
 }

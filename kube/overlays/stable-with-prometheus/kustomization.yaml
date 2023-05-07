@@ -9,7 +9,7 @@ bases:
 - ../../resources/components/shulker-operator/prometheus
 
 images:
-  - name: ghcr.io/iamblueslime/shulker-operator
+  - name: ghcr.io/jeremylvln/shulker-operator
     newTag: v0.0.1
 
 vars:

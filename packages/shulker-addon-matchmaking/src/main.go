@@ -58,39 +58,18 @@ func main() {
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "b3355872.shulkermc.io",
+		LeaderElectionID:       "b3355872.matchmaking.shulkermc.io",
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
 	}
 
-	if err = (&MinecraftClusterReconciler{
+	if err = (&MatchmakingProfileReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MinecraftCluster")
-		os.Exit(1)
-	}
-	if err = (&ProxyFleetReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "ProxyFleet")
-		os.Exit(1)
-	}
-	if err = (&MinecraftServerReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MinecraftServer")
-		os.Exit(1)
-	}
-	if err = (&MinecraftServerFleetReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MinecraftServerFleet")
+		setupLog.Error(err, "unable to create controller", "controller", "MatchmakingProfile")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

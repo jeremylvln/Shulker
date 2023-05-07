@@ -1,8 +1,8 @@
 domain: shulkermc.io
 layout:
-- go.kubebuilder.io/v3
+- go.kubebuilder.io/v4
 projectName: shulker
-repo: github.com/iamblueslime/shulker
+repo: github.com/jeremylvln/shulker
 multigroup: true
 resources:
 - api:
@@ -11,7 +11,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftCluster
-  path: github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -19,7 +19,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: ProxyFleet
-  path: github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -27,7 +27,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftServer
-  path: github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -35,6 +35,14 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftServerFleet
-  path: github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: matchmaking.shulkermc.io
+  kind: MatchmakingProfile
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/matchmaking/v1alpha1
   version: v1alpha1
 version: "3"

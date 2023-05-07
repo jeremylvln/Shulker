@@ -8,7 +8,7 @@ package controllerutils
 import (
 	"context"
 
-	resourceutils "github.com/iamblueslime/shulker/packages/shulker-resource-utils/src"
+	resourceutils "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
 	clientretry "k8s.io/client-go/util/retry"

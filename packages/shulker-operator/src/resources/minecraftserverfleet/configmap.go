@@ -13,7 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	minecraftserver "github.com/iamblueslime/shulker/packages/shulker-operator/src/resources/minecraftserver"
+	minecraftserver "github.com/jeremylvln/shulker/packages/shulker-operator/src/resources/minecraftserver"
 )
 
 type MinecraftServerFleetResourceConfigMapBuilder struct {

@@ -41,7 +41,7 @@ spec:
         - /shulker-operator
         args:
         - --leader-elect
-        image: ghcr.io/iamblueslime/shulker-operator
+        image: ghcr.io/jeremylvln/shulker-operator
         name: manager
         ports:
         - containerPort: 8080

@@ -15,8 +15,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	shulkermciov1alpha1 "github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1"
-	resources "github.com/iamblueslime/shulker/packages/shulker-resource-utils/src"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	resources "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 )
 
 const minecraftServerShulkerConfigDir = "/mnt/shulker/config"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:agones-java-sdk:test" external.linked.project.path="$MODULE_DIR$/../../../../packages/agones-java-sdk" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.1.0" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-agones-java-sdk:main" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-agones-java-sdk" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.1.0" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet external-system-id="GRADLE" type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 17" allPlatforms="JVM [17]" useProjectSettings="false">
-        <additionalVisibleModuleNames>:packages:agones-java-sdk:main</additionalVisibleModuleNames>
         <compilerSettings>
-          <option name="additionalArguments" value="-Xallow-no-source-files" />
+          <option name="additionalArguments" value="-Xallow-no-source-files -Werror" />
         </compilerSettings>
         <compilerArguments>
           <flagArguments>
@@ -15,17 +14,12 @@
           <stringArguments>
             <stringArg name="classpath">
               <args>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/java/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/kotlin/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/resources/main</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.54.1/3af888f22f0242a4b1272954166173f96db47a79/grpc-protobuf-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.9.0/e4ada41aaaf6ecdedf132f44251d0d50813f7f90/proto-google-common-protos-2.9.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.22.2/fdee98b8f6abab73f146a4edb4c09e56f8278d03/protobuf-java-3.22.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-stub/1.54.1/6f2267abcdf55223a315b1df8348c94820ba3d7a/grpc-stub-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.3.2/934c04d3cfef185a8008e7bf34331b79730a9d43/javax.annotation-api-1.3.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.0/ed04f49e186a116753ad70d34f0ac2925d1d8020/kotlin-stdlib-jdk8-1.8.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-junit/1.8.0/d2f0489c492f06152eac8a7c4029e92e05205153/kotlin-test-junit-1.8.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test/1.8.0/cbc4be6bae290df37622e1b3221281d14ba24aa/kotlin-test-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf-lite/1.54.1/865388468541fc52f1375f93a89864272e335cb3/grpc-protobuf-lite-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.54.1/246ee0cafff9104aba6edd5c4423d4a43216c620/grpc-api-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.1-android/9222c47cc3ae890f07f7c961bbb3cb69050fe4aa/guava-31.1-android.jar</arg>
@@ -40,24 +34,16 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar</arg>
               </args>
             </stringArg>
-            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/kotlin/test" />
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/classes/kotlin/main" />
             <stringArg name="jvmTarget" arg="17" />
-            <stringArg name="moduleName" arg="agones-java-sdk" />
+            <stringArg name="moduleName" arg="shulker-agones-java-sdk" />
             <stringArg name="apiVersion" arg="1.8" />
             <stringArg name="languageVersion" arg="1.8" />
           </stringArguments>
           <arrayArguments>
-            <arrayArg name="friendPaths">
-              <args>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/java/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/kotlin/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/libs/agones-java-sdk-0.1.0.jar</arg>
-              </args>
-            </arrayArg>
+            <arrayArg name="friendPaths" />
             <arrayArg name="pluginClasspaths">
               <args>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.8.0/1f7345b3fc46786c1f36a4ba0728a95990d05929/kotlin-scripting-jvm-1.8.0.jar</arg>
@@ -75,26 +61,23 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output-test url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/java/test" />
+    <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/classes/kotlin/main" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/extracted-include-protos/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/extracted-include-protos/test" isTestSource="true" generated="true" />
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-include-protos/main" />
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-protos/main" />
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/generated/source/proto/main/grpc" />
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/generated/source/proto/main/java" />
+    <content url="file://$MODULE_DIR$/../../../../packages/shulker-agones-java-sdk/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-agones-java-sdk/src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-agones-java-sdk/src/main/proto" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/extracted-protos/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/extracted-protos/test" isTestSource="true" generated="true" />
-    </content>
-    <content url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/generated/source/proto/test/grpc" />
-    <content url="file://$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/generated/source/proto/test/java" />
-    <content url="file://$MODULE_DIR$/../../../../packages/agones-java-sdk/src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="shulker.packages.agones-java-sdk.main" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.54.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.22.2" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-stub:1.54.1" level="project" />
     <orderEntry type="library" name="Gradle: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api.grpc:proto-google-common-protos:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf-lite:1.54.1" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-api:1.54.1" level="project" />
@@ -102,7 +85,6 @@
     <orderEntry type="library" name="Gradle: com.google.guava:guava:31.1-android" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-junit:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-context:1.54.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.18.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
@@ -111,8 +93,6 @@
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-netty:1.54.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-core:1.54.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-http2:4.1.87.Final" level="project" />
@@ -131,5 +111,4 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-codec-socks:4.1.87.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.netty:netty-resolver:4.1.87.Final" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="shulker.packages.agones-java-sdk.main" />
 </module>

@@ -79,7 +79,7 @@ configure(subprojects.findAll {
 
                         developers {
                             developer {
-                                id = 'iamblueslime'
+                                id = 'jeremylvln'
                                 name = 'Jérémy Levilain'
                                 email = 'jeremy@jeremylvln.fr'
                             }

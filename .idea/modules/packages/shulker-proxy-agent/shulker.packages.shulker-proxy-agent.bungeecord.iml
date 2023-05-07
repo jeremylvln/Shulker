@@ -23,8 +23,6 @@
             <stringArg name="classpath">
               <args>
                 <arg>$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/kotlin/main</arg>
-                <arg>$MODULE_DIR$/../../../../dist/packages/agones-java-sdk/classes/java/main</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.0/ed04f49e186a116753ad70d34f0ac2925d1d8020/kotlin-stdlib-jdk8-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-api/1.19-R0.1-SNAPSHOT/335bf204ac343a581a98e8fe7427883029dbf45d/bungeecord-api-1.19-R0.1-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-bungeecord/4.1.2/9dc995f6a38fef5405268f39fa91c351e1a77a97/adventure-platform-bungeecord-4.1.2.jar</arg>
@@ -163,7 +161,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
-    <orderEntry type="module" module-name="shulker.packages.agones-java-sdk.main" />
+    <orderEntry type="module" module-name="shulker.packages.shulker-agones-java-sdk.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: net.kyori:adventure-platform-bungeecord:4.1.2" level="project" />

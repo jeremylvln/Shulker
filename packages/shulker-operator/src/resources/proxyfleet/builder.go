@@ -9,8 +9,8 @@ import (
 	"context"
 	"fmt"
 
-	shulkermciov1alpha1 "github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1"
-	common "github.com/iamblueslime/shulker/packages/shulker-resource-utils/src"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	common "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -67,7 +67,7 @@ func (b *ProxyFleetResourceBuilder) getLabels() map[string]string {
 		if *ownerReference.Controller {
 			labels["app.kubernetes.io/name"] = ownerReference.Name
 			labels["app.kubernetes.io/instance"] = b.Instance.Name
-			labels["proxydeployment.shulkermc.io/name"] = ownerReference.Name
+			labels["proxyfleet.shulkermc.io/name"] = ownerReference.Name
 			break
 		}
 	}

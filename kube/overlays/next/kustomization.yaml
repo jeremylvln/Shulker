@@ -8,7 +8,7 @@ bases:
 - ../../resources/webhook
 
 images:
-  - name: ghcr.io/iamblueslime/shulker-operator
+  - name: ghcr.io/jeremylvln/shulker-operator
     newTag: next
 
 vars:

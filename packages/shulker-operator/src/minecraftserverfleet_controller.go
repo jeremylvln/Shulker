@@ -18,9 +18,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	ctrlutil "github.com/iamblueslime/shulker/packages/shulker-controller-utils/src"
-	shulkermciov1alpha1 "github.com/iamblueslime/shulker/packages/shulker-crds/v1alpha1"
-	resources "github.com/iamblueslime/shulker/packages/shulker-operator/src/resources/minecraftserverfleet"
+	ctrlutil "github.com/jeremylvln/shulker/packages/shulker-controller-utils/src"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	resources "github.com/jeremylvln/shulker/packages/shulker-operator/src/resources/minecraftserverfleet"
 )
 
 // MinecraftServerFleetReconciler reconciles a MinecraftServerFleet object

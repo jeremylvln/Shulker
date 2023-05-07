@@ -1,4 +1,4 @@
-module github.com/iamblueslime/shulker
+module github.com/jeremylvln/shulker
 
 go 1.19
 
@@ -9,7 +9,6 @@ require (
 	k8s.io/api v0.25.7
 	k8s.io/apimachinery v0.25.7
 	k8s.io/client-go v0.25.7
-	k8s.io/kubernetes v1.15.0-alpha.0
 	sigs.k8s.io/controller-runtime v0.13.0
 )
 

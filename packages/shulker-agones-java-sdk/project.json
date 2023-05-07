@@ -1,28 +1,28 @@
 {
-  "name": "agones-java-client",
-  "root": "packages/agones-java-client",
-  "sourceRoot": "packages/agones-java-client/src",
+  "name": "shulker-agones-java-sdk",
+  "root": "packages/shulker-agones-java-sdk",
+  "sourceRoot": "packages/shulker-agones-java-sdk/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/agones-java-client"],
+      "outputs": ["dist/packages/shulker-agones-java-sdk"],
       "options": {
-        "command": "gradle :packages:agones-java-client:build -x check"
+        "command": "gradle :packages:shulker-agones-java-sdk:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:agones-java-client:test"
+        "command": "gradle :packages:shulker-agones-java-sdk:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:agones-java-client:ktlintCheck"
+        "command": "gradle :packages:shulker-agones-java-sdk:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     }
