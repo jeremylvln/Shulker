@@ -5,7 +5,7 @@
   },
   "link.item.label.GitHub": {
     "message": "GitHub",
-    "description": "The label of footer link with label=GitHub linking to https://github.com/IamBlueSlime/Shulker"
+    "description": "The label of footer link with label=GitHub linking to https://github.com/jeremylvln/Shulker"
   },
   "copyright": {
     "message": "Copyright © 2023 Jérémy Levilain. Built with Docusaurus.",
@@ -29,6 +29,6 @@
   },
   "link.item.label.GitHub Discussions": {
     "message": "GitHub Discussions",
-    "description": "The label of footer link with label=GitHub Discussions linking to https://github.com/IamBlueSlime/Shulker/discussions"
+    "description": "The label of footer link with label=GitHub Discussions linking to https://github.com/jeremylvln/Shulker/discussions"
   }
 }

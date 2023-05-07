@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Feature Submission
-    url: https://github.com/IamBlueSlime/Shulker/discussions/categories/ideas
+    url: https://github.com/jeremylvln/Shulker/discussions/categories/ideas
     about: Post your Feature / Ideas to the dedicated GitHub Discussions category
   - name: General Question
-    url: https://github.com/IamBlueSlime/Shulker/discussions/categories/q-a
+    url: https://github.com/jeremylvln/Shulker/discussions/categories/q-a
     about: Please ask and answer questions directly in the dedicated GitHub Discussions category

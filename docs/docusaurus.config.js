@@ -12,7 +12,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'IamBlueSlime',
+  organizationName: 'jeremylvln',
   projectName: 'Shulker',
   i18n: {
     defaultLocale: 'en',
@@ -27,7 +27,7 @@ const config = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: ({locale, docPath}) => locale === 'en'
-            ? `https://github.com/IamBlueSlime/Shulker/edit/main/docs/docs/${docPath}`
+            ? `https://github.com/jeremylvln/Shulker/edit/main/docs/docs/${docPath}`
             : `https://crowdin.com/project/shulker/${locale}`,
         },
         blog: false,
@@ -64,7 +64,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/IamBlueSlime/Shulker',
+            href: 'https://github.com/jeremylvln/Shulker',
             label: 'GitHub',
             position: 'right',
           },
@@ -91,7 +91,7 @@ const config = {
             items: [
               {
                 label: 'GitHub Discussions',
-                href: 'https://github.com/IamBlueSlime/Shulker/discussions',
+                href: 'https://github.com/jeremylvln/Shulker/discussions',
               },
             ],
           },
@@ -100,7 +100,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/IamBlueSlime/Shulker',
+                href: 'https://github.com/jeremylvln/Shulker',
               },
             ],
           },

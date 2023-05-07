@@ -4,29 +4,29 @@
   <p>Put Minecraft in a <i>box</i> :package:</p>
   
   <p>
-    <a href="https://github.com/IamBlueSlime/Shulker/issues/">
-      <img src="https://img.shields.io/github/issues/IamBlueSlime/Shulker" alt="Open Issues" />
+    <a href="https://github.com/jeremylvln/Shulker/issues/">
+      <img src="https://img.shields.io/github/issues/jeremylvln/Shulker" alt="Open Issues" />
     </a>
-    <a href="https://github.com/IamBlueSlime/Shulker/stargazers">
-      <img src="https://img.shields.io/github/stars/IamBlueSlime/Shulker" alt="stars" />
+    <a href="https://github.com/jeremylvln/Shulker/stargazers">
+      <img src="https://img.shields.io/github/stars/jeremylvln/Shulker" alt="stars" />
     </a>
-    <a href="https://github.com/IamBlueSlime/Shulker/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/IamBlueSlime/Shulker.svg" alt="License" />
+    <a href="https://github.com/jeremylvln/Shulker/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/jeremylvln/Shulker.svg" alt="License" />
     </a>
     <br />
-    <a href="https://github.com/sponsors/IamBlueSlime">
-      <img src="https://img.shields.io/github/sponsors/IamBlueSlime" alt="GitHub Sponsors" />
+    <a href="https://github.com/sponsors/jeremylvln">
+      <img src="https://img.shields.io/github/sponsors/jeremylvln" alt="GitHub Sponsors" />
     </a>
   </p>
    
   <h4>
     <a href="https://shulker.jeremylvln.fr">Documentation</a>
     <span> · </span>
-    <a href="https://github.com/IamBlueSlime/Shulker/issues">Report Bug</a>
+    <a href="https://github.com/jeremylvln/Shulker/issues">Report Bug</a>
     <span> · </span>
-    <a href="https://github.com/users/IamBlueSlime/projects/2">Roadmap</a>
+    <a href="https://github.com/users/jeremylvln/projects/2">Roadmap</a>
     <span> · </span>
-    <a href="https://github.com/IamBlueSlime/Shulker/discussions">Discussions</a>
+    <a href="https://github.com/jeremylvln/Shulker/discussions">Discussions</a>
   </h4>
 </div>
 

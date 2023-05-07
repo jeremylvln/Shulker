@@ -9,7 +9,7 @@ to be installed as it contains the core logic.
 The **Shulker Operator** can be installed using **Kustomize**:
 
 ```bash
-$ git clone https://github.com/IamBlueSlime/Shulker
+$ git clone https://github.com/jeremylvln/Shulker
 $ kubectl apply -k Shulker/kube/overlays/stable -n shulker-system
 ```
 

@@ -68,7 +68,7 @@ configure(subprojects.findAll {
                     pom {
                         name = project.name
                         // description = 'A concise description of my library'
-                        url = "https://github.com/IamBlueSlime/shulker"
+                        url = "https://github.com/jeremylvln/shulker"
 
                         /*licenses {
                             license {
@@ -86,9 +86,9 @@ configure(subprojects.findAll {
                         }
 
                         scm {
-                            connection = 'scm:git:git://github.com/IamBlueSlime/shulker.git'
-                            developerConnection = 'scm:git:ssh://github.com/IamBlueSlime/shulker.git'
-                            url = "https://github.com/IamBlueSlime/shulker"
+                            connection = 'scm:git:git://github.com/jeremylvln/shulker.git'
+                            developerConnection = 'scm:git:ssh://github.com/jeremylvln/shulker.git'
+                            url = "https://github.com/jeremylvln/shulker"
                         }
                     }
                 }
