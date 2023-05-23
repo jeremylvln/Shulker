@@ -135,6 +135,9 @@ type ProxyFleetPodOverridesSpec struct {
 	// Affinity scheduling rules to be applied on created Pod.
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 
+	// Tolerations to be applied on created Pod.
+	Tolarations []corev1.Toleration `json:"tolerations,omitempty"`
+
 	// Name of the ServiceAccount to use.
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
 }

@@ -132,6 +132,9 @@ type MinecraftServerPodOverridesSpec struct {
 	//+optional
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 
+	// Tolerations to be applied on created Pod.
+	Tolarations []corev1.Toleration `json:"tolerations,omitempty"`
+
 	// Name of the ServiceAccount to use.
 	//+optional
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`

@@ -223,6 +223,8 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 		if b.Instance.Spec.PodOverrides.Affinity != nil {
 			podSpec.Affinity = b.Instance.Spec.PodOverrides.Affinity
 		}
+
+		podSpec.Tolerations = b.Instance.Spec.PodOverrides.Tolarations
 	}
 
 	gameServerSpec := agonesv1.GameServerSpec{
