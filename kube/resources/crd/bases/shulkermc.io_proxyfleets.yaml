@@ -1205,6 +1205,11 @@ spec:
                         - IfNotPresent
                         type: string
                     type: object
+                  nodeSelector:
+                    additionalProperties:
+                      type: string
+                    description: Node selector to be applied on created Pod.
+                    type: object
                   resources:
                     description: The desired compute resource requirements of the
                       created Pod.

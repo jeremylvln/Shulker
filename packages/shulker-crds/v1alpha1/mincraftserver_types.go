@@ -132,6 +132,9 @@ type MinecraftServerPodOverridesSpec struct {
 	//+optional
 	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 
+	// Node selector to be applied on created Pod.
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+
 	// Tolerations to be applied on created Pod.
 	Tolarations []corev1.Toleration `json:"tolerations,omitempty"`
 

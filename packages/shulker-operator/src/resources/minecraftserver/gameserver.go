@@ -184,6 +184,7 @@ func (b *MinecraftServerResourceGameServerBuilder) GetGameServerSpec() (*agonesv
 			podSpec.Affinity = b.Instance.Spec.PodOverrides.Affinity
 		}
 
+		podSpec.NodeSelector = b.Instance.Spec.PodOverrides.NodeSelector
 		podSpec.Tolerations = b.Instance.Spec.PodOverrides.Tolarations
 	}
 
