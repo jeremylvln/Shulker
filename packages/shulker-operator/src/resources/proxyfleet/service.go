@@ -26,16 +26,16 @@ func (b *ProxyFleetResourceBuilder) ProxyFleetService() *ProxyFleetServiceBuilde
 func (b *ProxyFleetServiceBuilder) Build() (client.Object, error) {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        b.GetServiceName(),
-			Namespace:   b.Instance.Namespace,
-			Annotations: b.Instance.Spec.Service.Annotations,
-			Labels:      b.getLabels(),
+			Name:      b.GetServiceName(),
+			Namespace: b.Instance.Namespace,
+			Labels:    b.getLabels(),
 		},
 	}, nil
 }
 
 func (b *ProxyFleetServiceBuilder) Update(object client.Object) error {
 	service := object.(*corev1.Service)
+	service.ObjectMeta.Annotations = b.Instance.Spec.Service.Annotations
 
 	ports := []corev1.ServicePort{{
 		Name:       "minecraft",
