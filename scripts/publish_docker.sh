@@ -20,6 +20,7 @@ done < "$labels_path"
 docker buildx build \
   --file "packages/${app}/Dockerfile" \
   --push \
+  --platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
   "${tags_params[@]}" \
   "${labels_params[@]}" \
   .
