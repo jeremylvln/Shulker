@@ -73,7 +73,7 @@ jobs:
         uses: mansagroup/nrwl-nx-action@v3
         with:
           targets: publish-docker
-          parallel: 2
+          parallel: 1
           args: /tmp/docker-tags /tmp/docker-labels
           all: ${{ startsWith(github.ref, 'refs/tags/') == true }}
 
