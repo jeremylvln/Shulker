@@ -2,3 +2,4 @@ name: ShulkerServerAgent
 main: io.shulkermc.serveragent.ShulkerServerAgent
 version: 0.1.0
 author: Jérémy Levilain <jeremy@jeremylvln.fr>
+api-version: 1.19
