@@ -209,23 +209,23 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 		},
 	}
 
-	if b.Instance.Spec.PodOverrides != nil {
-		if b.Instance.Spec.PodOverrides.Image != nil {
-			podSpec.Containers[0].Image = b.Instance.Spec.PodOverrides.Image.Name
-			podSpec.Containers[0].ImagePullPolicy = b.Instance.Spec.PodOverrides.Image.PullPolicy
-			podSpec.ImagePullSecrets = append(podSpec.ImagePullSecrets, b.Instance.Spec.PodOverrides.Image.PullSecrets...)
+	if b.Instance.Spec.Template.Spec.PodOverrides != nil {
+		if b.Instance.Spec.Template.Spec.PodOverrides.Image != nil {
+			podSpec.Containers[0].Image = b.Instance.Spec.Template.Spec.PodOverrides.Image.Name
+			podSpec.Containers[0].ImagePullPolicy = b.Instance.Spec.Template.Spec.PodOverrides.Image.PullPolicy
+			podSpec.ImagePullSecrets = append(podSpec.ImagePullSecrets, b.Instance.Spec.Template.Spec.PodOverrides.Image.PullSecrets...)
 		}
 
-		if b.Instance.Spec.PodOverrides.Resources != nil {
-			podSpec.Containers[0].Resources = *b.Instance.Spec.PodOverrides.Resources
+		if b.Instance.Spec.Template.Spec.PodOverrides.Resources != nil {
+			podSpec.Containers[0].Resources = *b.Instance.Spec.Template.Spec.PodOverrides.Resources
 		}
 
-		if b.Instance.Spec.PodOverrides.Affinity != nil {
-			podSpec.Affinity = b.Instance.Spec.PodOverrides.Affinity
+		if b.Instance.Spec.Template.Spec.PodOverrides.Affinity != nil {
+			podSpec.Affinity = b.Instance.Spec.Template.Spec.PodOverrides.Affinity
 		}
 
-		podSpec.NodeSelector = b.Instance.Spec.PodOverrides.NodeSelector
-		podSpec.Tolerations = b.Instance.Spec.PodOverrides.Tolarations
+		podSpec.NodeSelector = b.Instance.Spec.Template.Spec.PodOverrides.NodeSelector
+		podSpec.Tolerations = b.Instance.Spec.Template.Spec.PodOverrides.Tolarations
 	}
 
 	gameServerSpec := agonesv1.GameServerSpec{
@@ -240,7 +240,7 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
-				Labels: b.getLabels(),
+				Labels: b.Instance.Spec.Template.ObjectMeta.Labels,
 			},
 			Spec: podSpec,
 		},
@@ -257,7 +257,7 @@ func (b *ProxyFleetResourceFleetBuilder) getInitEnv() ([]corev1.EnvVar, error) {
 	}
 
 	var pluginUrls []string
-	for _, ref := range b.Instance.Spec.Configuration.Plugins {
+	for _, ref := range b.Instance.Spec.Template.Spec.Configuration.Plugins {
 		pluginUrl, err := resourceRefResolver.ResolveUrl(&ref)
 		if err != nil {
 			return []corev1.EnvVar{}, nil
@@ -266,7 +266,7 @@ func (b *ProxyFleetResourceFleetBuilder) getInitEnv() ([]corev1.EnvVar, error) {
 	}
 
 	var patchesUrls []string
-	for _, ref := range b.Instance.Spec.Configuration.Patches {
+	for _, ref := range b.Instance.Spec.Template.Spec.Configuration.Patches {
 		patchUrl, err := resourceRefResolver.ResolveUrl(&ref)
 		if err != nil {
 			return []corev1.EnvVar{}, nil
@@ -285,7 +285,7 @@ func (b *ProxyFleetResourceFleetBuilder) getInitEnv() ([]corev1.EnvVar, error) {
 		},
 		{
 			Name:  "TYPE",
-			Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
+			Value: getTypeFromVersionChannel(b.Instance.Spec.Template.Spec.Version.Channel),
 		},
 		{
 			Name:  "SHULKER_PROXY_AGENT_VERSION",
@@ -324,24 +324,24 @@ func (b *ProxyFleetResourceFleetBuilder) getEnv() []corev1.EnvVar {
 		},
 		{
 			Name:  "SHULKER_PROXY_TTL_SECONDS",
-			Value: fmt.Sprintf("%d", b.Instance.Spec.Configuration.TimeToLiveSeconds),
+			Value: fmt.Sprintf("%d", b.Instance.Spec.Template.Spec.Configuration.TimeToLiveSeconds),
 		},
 		{
 			Name:  "TYPE",
-			Value: getTypeFromVersionChannel(b.Instance.Spec.Version.Channel),
+			Value: getTypeFromVersionChannel(b.Instance.Spec.Template.Spec.Version.Channel),
 		},
 		{
-			Name:  getVersionEnvFromVersionChannel(b.Instance.Spec.Version.Channel),
-			Value: b.Instance.Spec.Version.Name,
+			Name:  getVersionEnvFromVersionChannel(b.Instance.Spec.Template.Spec.Version.Channel),
+			Value: b.Instance.Spec.Template.Spec.Version.Name,
 		},
 		{
 			Name:  "HEALTH_USE_PROXY",
-			Value: strconv.FormatBool(b.Instance.Spec.Configuration.ProxyProtocol),
+			Value: strconv.FormatBool(b.Instance.Spec.Template.Spec.Configuration.ProxyProtocol),
 		},
 	}
 
-	if b.Instance.Spec.PodOverrides != nil {
-		env = append(env, b.Instance.Spec.PodOverrides.Env...)
+	if b.Instance.Spec.Template.Spec.PodOverrides != nil {
+		env = append(env, b.Instance.Spec.Template.Spec.PodOverrides.Env...)
 	}
 
 	return env
@@ -364,7 +364,7 @@ func (b *ProxyFleetResourceFleetBuilder) getSecurityContext() *corev1.SecurityCo
 	}
 }
 
-func getTypeFromVersionChannel(channel shulkermciov1alpha1.ProxyFleetVersionChannel) string {
+func getTypeFromVersionChannel(channel shulkermciov1alpha1.ProxyVersionChannel) string {
 	switch channel {
 	case shulkermciov1alpha1.ProxyFleetVersionBungeeCord:
 		return "BUNGEECORD"
@@ -377,7 +377,7 @@ func getTypeFromVersionChannel(channel shulkermciov1alpha1.ProxyFleetVersionChan
 	return ""
 }
 
-func getVersionEnvFromVersionChannel(channel shulkermciov1alpha1.ProxyFleetVersionChannel) string {
+func getVersionEnvFromVersionChannel(channel shulkermciov1alpha1.ProxyVersionChannel) string {
 	switch channel {
 	case shulkermciov1alpha1.ProxyFleetVersionBungeeCord:
 		return "BUNGEE_JOB_ID"

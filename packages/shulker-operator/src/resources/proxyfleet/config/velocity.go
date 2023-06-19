@@ -43,7 +43,7 @@ type velocityToml struct {
 	Advanced                      velocityAdvancedToml             `toml:"advanced"`
 }
 
-func GetVelocityToml(spec *shulkermciov1alpha1.ProxyFleetConfigurationSpec) (string, error) {
+func GetVelocityToml(spec *shulkermciov1alpha1.ProxyConfigurationSpec) (string, error) {
 	velocityToml := velocityToml{
 		ConfigVersion:                 "2.5",
 		Bind:                          "0.0.0.0:25577",

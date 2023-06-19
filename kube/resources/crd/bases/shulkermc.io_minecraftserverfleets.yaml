@@ -49,6 +49,133 @@ spec:
           spec:
             description: MinecraftServerFleetSpec defines the desired state of MinecraftServerFleet
             properties:
+              autoscaling:
+                description: Autoscaling configuration for this MinecraftServerFleet.
+                properties:
+                  agonesPolicy:
+                    description: Policy built-in to Agones to apply to the autoscaling
+                      target. Mutually exclusive with ShulkerPolicy.
+                    properties:
+                      buffer:
+                        description: Buffer policy config params. Present only if
+                          FleetAutoscalerPolicyType = Buffer.
+                        properties:
+                          bufferSize:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            description: 'BufferSize defines how many replicas the
+                              autoscaler tries to have ready all the time Value can
+                              be an absolute number (ex: 5) or a percentage of desired
+                              gs instances (ex: 15%) Absolute number is calculated
+                              from percentage by rounding up. Example: when this is
+                              set to 20%, the autoscaler will make sure that 20% of
+                              the fleet''s game server replicas are ready. When this
+                              is set to 20, the autoscaler will make sure that there
+                              are 20 available game servers Must be bigger than 0
+                              Note: by "ready" we understand in this case "non-allocated";
+                              this is done to ensure robustness and computation stability
+                              in different edge case (fleet just created, not enough
+                              capacity in the cluster etc)'
+                            x-kubernetes-int-or-string: true
+                          maxReplicas:
+                            description: MaxReplicas is the maximum amount of replicas
+                              that the fleet may have. It must be bigger than both
+                              MinReplicas and BufferSize
+                            format: int32
+                            type: integer
+                          minReplicas:
+                            description: MinReplicas is the minimum amount of replicas
+                              that the fleet must have If zero, it is ignored. If
+                              non zero, it must be smaller than MaxReplicas and bigger
+                              than BufferSize
+                            format: int32
+                            type: integer
+                        required:
+                        - bufferSize
+                        - maxReplicas
+                        - minReplicas
+                        type: object
+                      type:
+                        description: Type of autoscaling policy.
+                        type: string
+                      webhook:
+                        description: Webhook policy config params. Present only if
+                          FleetAutoscalerPolicyType = Webhook.
+                        properties:
+                          caBundle:
+                            description: '`caBundle` is a PEM encoded CA bundle which
+                              will be used to validate the webhook''s server certificate.
+                              If unspecified, system trust roots on the apiserver
+                              are used.'
+                            format: byte
+                            type: string
+                          service:
+                            description: "`service` is a reference to the service
+                              for this webhook. Either `service` or `url` must be
+                              specified. \n If the webhook is running within the cluster,
+                              then you should use `service`."
+                            properties:
+                              name:
+                                description: '`name` is the name of the service. Required'
+                                type: string
+                              namespace:
+                                description: '`namespace` is the namespace of the
+                                  service. Required'
+                                type: string
+                              path:
+                                description: '`path` is an optional URL path which
+                                  will be sent in any request to this service.'
+                                type: string
+                              port:
+                                description: If specified, the port on the service
+                                  that hosting webhook. Default to 443 for backward
+                                  compatibility. `port` should be a valid port number
+                                  (1-65535, inclusive).
+                                format: int32
+                                type: integer
+                            required:
+                            - name
+                            - namespace
+                            type: object
+                          url:
+                            description: "`url` gives the location of the webhook,
+                              in standard URL form (`scheme://host:port/path`). Exactly
+                              one of `url` or `service` must be specified. \n The
+                              `host` should not refer to a service running in the
+                              cluster; use the `service` field instead. The host might
+                              be resolved via external DNS in some apiservers (e.g.,
+                              `kube-apiserver` cannot resolve in-cluster DNS as that
+                              would be a layering violation). `host` may also be an
+                              IP address. \n Please note that using `localhost` or
+                              `127.0.0.1` as a `host` is risky unless you take great
+                              care to run this webhook on all hosts which run an apiserver
+                              which might need to make calls to this webhook. Such
+                              installs are likely to be non-portable, i.e., not easy
+                              to turn up in a new cluster. \n The scheme must be \"https\";
+                              the URL must begin with \"https://\". \n A path is optional,
+                              and if present may be any string permissible in a URL.
+                              You may use the path to pass an arbitrary string to
+                              the webhook, for example, a cluster identifier. \n Attempting
+                              to use a user or basic auth e.g. \"user:password@\"
+                              is not allowed. Fragments (\"#...\") and query parameters
+                              (\"?...\") are not allowed, either."
+                            type: string
+                        type: object
+                    required:
+                    - type
+                    type: object
+                  shulkerPolicy:
+                    description: Custom policy implemented by Shulker to apply to
+                      the autoscaling target. Mutually exclusive with AgonesPolicy.
+                    properties:
+                      type:
+                        description: Name of the policy to apply.
+                        enum:
+                        - SummoningWebhook
+                        type: string
+                    type: object
+                type: object
               clusterRef:
                 description: Reference to a MinecraftCluster. Adding this will enroll
                   this MinecraftServerFleet to be part of a MinecraftCluster.

@@ -24,6 +24,10 @@ type MinecraftServerFleetSpec struct {
 	// Template defining the content of the created MinecraftServers.
 	//+kubebuilder:validation:Required
 	Template MinecraftServerTemplate `json:"template"`
+
+	// Autoscaling configuration for this MinecraftServerFleet.
+	// +optional
+	Autoscaling *FleetAutoscalingSpec `json:"autoscaling,omitempty"`
 }
 
 type MinecraftServerFleetStatusCondition string

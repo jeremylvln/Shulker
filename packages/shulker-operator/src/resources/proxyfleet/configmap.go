@@ -41,7 +41,7 @@ func (b *ProxyFleetResourceConfigMapBuilder) Build() (client.Object, error) {
 func (b *ProxyFleetResourceConfigMapBuilder) Update(object client.Object) error {
 	configMap := object.(*corev1.ConfigMap)
 
-	configMapData, err := GetConfigMapDataFromConfigSpec(&b.Instance.Spec.Configuration)
+	configMapData, err := GetConfigMapDataFromConfigSpec(&b.Instance.Spec.Template.Spec.Configuration)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (b *ProxyFleetResourceConfigMapBuilder) CanBeUpdated() bool {
 	return true
 }
 
-func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyFleetConfigurationSpec) (map[string]string, error) {
+func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyConfigurationSpec) (map[string]string, error) {
 	configMapData := make(map[string]string)
 
 	configMapData["init-fs.sh"] = trimScript(`

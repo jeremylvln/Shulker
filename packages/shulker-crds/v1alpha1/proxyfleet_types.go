@@ -33,15 +33,11 @@ type ProxyFleetSpec struct {
 	// The version can come from a channel which allows the user
 	// to run a version different from the default BungeeCord.
 	//+kubebuilder:validation:Required
-	Version ProxyFleetVersionSpec `json:"version"`
+	Template ProxyTemplate `json:"template,omitempty"`
 
-	// Custom configuration flags to custom the proxy behavior.
-	//+kubebuilder:default={}
-	Configuration ProxyFleetConfigurationSpec `json:"config,omitempty"`
-
-	// Overrides for values to be injected in the created Pod
-	// of this ProxyFleet.
-	PodOverrides *ProxyFleetPodOverridesSpec `json:"podOverrides,omitempty"`
+	// Autoscaling configuration for this MinecraftServerFleet.
+	// +optional
+	Autoscaling *FleetAutoscalingSpec `json:"autoscaling,omitempty"`
 }
 
 // Configuration attributes for the Service resource.
@@ -60,28 +56,45 @@ type ProxyFleetServiceSpec struct {
 	ExternalTrafficPolicy corev1.ServiceExternalTrafficPolicyType `json:"externalTrafficPolicy,omitempty"`
 }
 
+// ProxySpec defines the desired state of Proxy
+type ProxySpec struct {
+	// Defines the version of the proxy to run.
+	// The version can come from a channel which allows the user
+	// to run a version different from the default BungeeCord.
+	//+kubebuilder:validation:Required
+	Version ProxyVersionSpec `json:"version"`
+
+	// Custom configuration flags to custom the proxy behavior.
+	//+kubebuilder:default={}
+	Configuration ProxyConfigurationSpec `json:"config,omitempty"`
+
+	// Overrides for values to be injected in the created Pod
+	// of this ProxyFleet.
+	PodOverrides *ProxyPodOverridesSpec `json:"podOverrides,omitempty"`
+}
+
 // +kubebuilder:validation:Enum=BungeeCord;Waterfall;Velocity
-type ProxyFleetVersionChannel string
+type ProxyVersionChannel string
 
 const (
-	ProxyFleetVersionBungeeCord ProxyFleetVersionChannel = "BungeeCord"
-	ProxyFleetVersionWaterfall  ProxyFleetVersionChannel = "Waterfall"
-	ProxyFleetVersionVelocity   ProxyFleetVersionChannel = "Velocity"
+	ProxyFleetVersionBungeeCord ProxyVersionChannel = "BungeeCord"
+	ProxyFleetVersionWaterfall  ProxyVersionChannel = "Waterfall"
+	ProxyFleetVersionVelocity   ProxyVersionChannel = "Velocity"
 )
 
 // Defines the version of the proxy to run.
-type ProxyFleetVersionSpec struct {
+type ProxyVersionSpec struct {
 	// Channel of the version to use. Defaults to BungeeCord.
 	//+optional
 	//+kubebuilder:default=Velocity
-	Channel ProxyFleetVersionChannel `json:"channel,omitempty"`
+	Channel ProxyVersionChannel `json:"channel,omitempty"`
 
 	// Name of the version to use.
 	//+kubebuilder:validation:Required
 	Name string `json:"name"`
 }
 
-type ProxyFleetConfigurationSpec struct {
+type ProxyConfigurationSpec struct {
 	// Name of an optional ConfigMap already containing the proxy
 	// configuration.
 	//+optional
@@ -121,7 +134,7 @@ type ProxyFleetConfigurationSpec struct {
 }
 
 // Overrides for the created Pod of the proxy.
-type ProxyFleetPodOverridesSpec struct {
+type ProxyPodOverridesSpec struct {
 	// Image to use as replacement for the built-in one.
 	//+optional
 	Image *ImageOverrideSpec `json:"image,omitempty"`
@@ -193,18 +206,18 @@ type ProxyFleet struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	ProxyFleetTemplate `json:",inline"`
-	Status             ProxyFleetStatus `json:"status,omitempty"`
+	Spec   ProxyFleetSpec   `json:"spec,inline"`
+	Status ProxyFleetStatus `json:"status,omitempty"`
 }
 
 // Template containing the metadata and spec of the
-// ProxyFleet. Will be used in ProxyFleetDeployment.
-type ProxyFleetTemplate struct {
+// Proxy. Will be used in Proxy.
+type ProxyTemplate struct {
 	//+kubebuilder:validation:Required
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	//+kubebuilder:validation:Required
-	Spec ProxyFleetSpec `json:"spec"`
+	Spec ProxySpec `json:"spec"`
 }
 
 //+kubebuilder:object:root=true
