@@ -86,7 +86,7 @@ class ProxyInterfaceBungeeCord(
         }
     }
 
-    private class BungeeCordScheduledTask(private val bungeeCordTask: ScheduledTask): ProxyInterface.ScheduledTask {
+    private class BungeeCordScheduledTask(private val bungeeCordTask: ScheduledTask) : ProxyInterface.ScheduledTask {
         override fun cancel() {
             this.bungeeCordTask.cancel()
         }

@@ -56,18 +56,22 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val 
     }
 
     override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
-        return VelocityScheduledTask(this.proxy.scheduler
-            .buildTask(this.plugin, runnable)
-            .delay(delay, timeUnit)
-            .schedule())
+        return VelocityScheduledTask(
+            this.proxy.scheduler
+                .buildTask(this.plugin, runnable)
+                .delay(delay, timeUnit)
+                .schedule()
+        )
     }
 
     override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
-        return VelocityScheduledTask(this.proxy.scheduler
-            .buildTask(this.plugin, runnable)
-            .delay(delay, timeUnit)
-            .repeat(interval, timeUnit)
-            .schedule())
+        return VelocityScheduledTask(
+            this.proxy.scheduler
+                .buildTask(this.plugin, runnable)
+                .delay(delay, timeUnit)
+                .repeat(interval, timeUnit)
+                .schedule()
+        )
     }
 
     private fun wrapPlayer(velocityPlayer: Player): io.shulkermc.proxyagent.domain.Player {
@@ -78,7 +82,7 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val 
         }
     }
 
-    private class VelocityScheduledTask(private val velocityTask: ScheduledTask): ProxyInterface.ScheduledTask {
+    private class VelocityScheduledTask(private val velocityTask: ScheduledTask) : ProxyInterface.ScheduledTask {
         override fun cancel() {
             this.velocityTask.cancel()
         }
