@@ -26,7 +26,7 @@ class DrainFeature(
         )
     }
 
-    private lateinit var ttlTask: ProxyInterface.ScheduledTask
+    private var ttlTask: ProxyInterface.ScheduledTask
     private var acceptingPlayers = true
     private var drained = false
 

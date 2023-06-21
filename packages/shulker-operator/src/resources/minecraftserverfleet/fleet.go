@@ -7,7 +7,6 @@ package resources
 
 import (
 	"fmt"
-	"strings"
 
 	agonesapis "agones.dev/agones/pkg/apis"
 	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
@@ -70,6 +69,18 @@ func (b *MinecraftServerFleetResourceFleetBuilder) Update(object client.Object) 
 		replicas = int32(b.Instance.Spec.Replicas)
 	}
 
+	if b.Instance.Spec.Template.ObjectMeta.Labels != nil {
+		for k, v := range b.Instance.Spec.Template.ObjectMeta.Labels {
+			gameServerSpec.Template.Labels[k] = v
+		}
+	}
+
+	if b.Instance.Spec.Template.ObjectMeta.Annotations != nil {
+		for k, v := range b.Instance.Spec.Template.ObjectMeta.Annotations {
+			gameServerSpec.Template.Annotations[k] = v
+		}
+	}
+
 	fleet.Spec = agonesv1.FleetSpec{
 		Replicas: replicas,
 		Strategy: appsv1.DeploymentStrategy{
@@ -88,10 +99,8 @@ func (b *MinecraftServerFleetResourceFleetBuilder) Update(object client.Object) 
 		Scheduling: agonesapis.Packed,
 		Template: agonesv1.GameServerTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
-				Labels: b.getLabels(),
-				Annotations: map[string]string{
-					"minecraftserver.shulkermc.io/tags": strings.Join(b.Instance.Spec.Template.Spec.Tags, ","),
-				},
+				Labels:      gameServerSpec.Template.Labels,
+				Annotations: gameServerSpec.Template.Annotations,
 			},
 			Spec: *gameServerSpec,
 		},

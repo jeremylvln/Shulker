@@ -164,17 +164,6 @@ spec:
                     required:
                     - type
                     type: object
-                  shulkerPolicy:
-                    description: Custom policy implemented by Shulker to apply to
-                      the autoscaling target. Mutually exclusive with AgonesPolicy.
-                    properties:
-                      type:
-                        description: Name of the policy to apply. Some policies may
-                          not be implemented depending on the target resource.
-                        enum:
-                        - ManualSummon
-                        type: string
-                    type: object
                 type: object
               clusterRef:
                 description: Reference to a MinecraftCluster. Adding this will enroll
@@ -1589,8 +1578,6 @@ spec:
                     required:
                     - version
                     type: object
-                required:
-                - spec
                 type: object
             required:
             - replicas

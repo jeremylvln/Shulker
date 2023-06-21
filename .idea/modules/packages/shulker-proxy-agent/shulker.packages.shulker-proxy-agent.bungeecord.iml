@@ -4,6 +4,7 @@
     <facet type="minecraft" name="Minecraft">
       <configuration>
         <autoDetectTypes>
+          <platformType>BUNGEECORD</platformType>
           <platformType>ADVENTURE</platformType>
         </autoDetectTypes>
       </configuration>

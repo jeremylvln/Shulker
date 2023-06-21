@@ -75,15 +75,7 @@ func (b *ProxyFleetResourceBuilder) getLabels() map[string]string {
 		"app.kubernetes.io/name":             b.Instance.Name,
 		"app.kubernetes.io/component":        "proxy",
 		"minecraftcluster.shulkermc.io/name": b.Instance.Spec.ClusterRef.Name,
-	}
-
-	for _, ownerReference := range b.Instance.OwnerReferences {
-		if *ownerReference.Controller {
-			labels["app.kubernetes.io/name"] = ownerReference.Name
-			labels["app.kubernetes.io/instance"] = b.Instance.Name
-			labels["proxyfleet.shulkermc.io/name"] = ownerReference.Name
-			break
-		}
+		"proxyfleet.shulkermc.io/name":       b.Instance.Name,
 	}
 
 	return labels

@@ -9,22 +9,17 @@ type FleetAutoscalingSpec struct {
 	// target. Mutually exclusive with ShulkerPolicy.
 	// +optional
 	AgonesPolicy *agonesautoscalingv1.FleetAutoscalerPolicy `json:"agonesPolicy,omitempty"`
-
-	// Custom policy implemented by Shulker to apply to the
-	// autoscaling target. Mutually exclusive with AgonesPolicy.
-	// +optional
-	ShulkerPolicy *FleetAutoscalingShulkerPolicySpec `json:"shulkerPolicy,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=ManualSummon
-type FleetAutoscalingShulkerPolicyType string
+// // +kubebuilder:validation:Enum=ManualSummon
+// type FleetAutoscalingShulkerPolicyType string
 
-const (
-	FleetAutoscalingShulkerPolicyManualSummon FleetAutoscalingShulkerPolicyType = "ManualSummon"
-)
+// const (
+// 	FleetAutoscalingShulkerPolicyManualSummon FleetAutoscalingShulkerPolicyType = "ManualSummon"
+// )
 
-type FleetAutoscalingShulkerPolicySpec struct {
-	// Name of the policy to apply. Some policies may not be
-	// implemented depending on the target resource.
-	Type FleetAutoscalingShulkerPolicyType `json:"type,omitempty"`
-}
+// type FleetAutoscalingShulkerPolicySpec struct {
+// 	// Name of the policy to apply. Some policies may not be
+// 	// implemented depending on the target resource.
+// 	Type FleetAutoscalingShulkerPolicyType `json:"type,omitempty"`
+// }

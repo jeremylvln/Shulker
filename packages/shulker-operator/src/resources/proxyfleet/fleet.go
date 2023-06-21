@@ -79,7 +79,8 @@ func (b *ProxyFleetResourceFleetBuilder) Update(object client.Object) error {
 		Scheduling: agonesapis.Packed,
 		Template: agonesv1.GameServerTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
-				Labels: b.getLabels(),
+				Labels:      gameServerSpec.Template.Labels,
+				Annotations: gameServerSpec.Template.Annotations,
 			},
 			Spec: *gameServerSpec,
 		},
@@ -226,6 +227,20 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 		podSpec.Tolerations = b.Instance.Spec.Template.Spec.PodOverrides.Tolarations
 	}
 
+	labels := b.getLabels()
+	if b.Instance.Spec.Template.ObjectMeta.Labels != nil {
+		for k, v := range b.Instance.Spec.Template.ObjectMeta.Labels {
+			labels[k] = v
+		}
+	}
+
+	annotations := make(map[string]string)
+	if b.Instance.Spec.Template.ObjectMeta.Annotations != nil {
+		for k, v := range b.Instance.Spec.Template.ObjectMeta.Annotations {
+			annotations[k] = v
+		}
+	}
+
 	gameServerSpec := agonesv1.GameServerSpec{
 		// Ports: []agonesv1.GameServerPort{{
 		// 	Name:          "minecraft",
@@ -244,7 +259,8 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
-				Labels: b.Instance.Spec.Template.ObjectMeta.Labels,
+				Labels:      labels,
+				Annotations: annotations,
 			},
 			Spec: podSpec,
 		},

@@ -1,5 +1,6 @@
 rootProject.name = "shulker"
 
+include ':packages:shulker-java-sdk'
 include ':packages:shulker-agones-java-sdk'
 include ':packages:shulker-proxy-api'
 include ':packages:shulker-proxy-agent'

@@ -186,6 +186,9 @@ func (b *MinecraftServerResourceGameServerBuilder) GetGameServerSpec() (*agonesv
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				Labels: b.getLabels(),
+				Annotations: map[string]string{
+					"minecraftserver.shulkermc.io/tags": strings.Join(b.Instance.Spec.Tags, ","),
+				},
 			},
 			Spec: podSpec,
 		},
