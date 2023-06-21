@@ -31,10 +31,22 @@ func (b *MinecraftServerFleetResourceBuilder) ResourceBuilders() ([]common.Resou
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
+	if b.Instance.Spec.Autoscaling != nil {
+		if b.Instance.Spec.Autoscaling.AgonesPolicy != nil {
+			builders = append(builders, b.MinecraftServerFleetFleetAutoscaler())
+		} else {
+			dirtyBuilders = append(dirtyBuilders, b.MinecraftServerFleetFleetAutoscaler())
+		}
+	}
+
 	return builders, dirtyBuilders
 }
 
 func (b *MinecraftServerFleetResourceBuilder) GetFleetName() string {
+	return b.Instance.Name
+}
+
+func (b *MinecraftServerFleetResourceBuilder) GetFleetAutoscalerName() string {
 	return b.Instance.Name
 }
 

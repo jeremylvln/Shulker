@@ -21,6 +21,7 @@ import (
 	ctrlutil "github.com/jeremylvln/shulker/packages/shulker-controller-utils/src"
 	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
 	resources "github.com/jeremylvln/shulker/packages/shulker-operator/src/resources/minecraftserverfleet"
+	resourceutils "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 )
 
 // MinecraftServerFleetReconciler reconciles a MinecraftServerFleet object
@@ -90,6 +91,34 @@ func (r *MinecraftServerFleetReconciler) Reconcile(ctx context.Context, req ctrl
 	}
 
 	return ctrl.Result{}, r.Status().Update(ctx, minecraftServerFleet)
+}
+
+func (r *MinecraftServerFleetReconciler) Summon(ctx context.Context, nsName types.NamespacedName) (agonesv1.GameServer, error) {
+	logger := log.FromContext(ctx)
+
+	logger.Info("Summonning MinecraftServer from Fleet")
+	minecraftServerFleet, err := r.getMinecraftServerFleet(ctx, nsName)
+	if err != nil {
+		return agonesv1.GameServer{}, err
+	}
+
+	resourceBuilder := resources.MinecraftServerFleetResourceBuilder{
+		Instance: minecraftServerFleet,
+		Scheme:   r.Scheme,
+		Client:   r.Client,
+		Ctx:      ctx,
+	}
+
+	fleet := agonesv1.Fleet{}
+	err = r.Get(ctx, client.ObjectKey{
+		Namespace: minecraftServerFleet.Namespace,
+		Name:      resourceBuilder.GetFleetName(),
+	}, &fleet)
+	if err != nil {
+		return agonesv1.GameServer{}, err
+	}
+
+	return resourceutils.SummonFromFleet(r.Client, ctx, &fleet)
 }
 
 func (r *MinecraftServerFleetReconciler) getMinecraftServerFleet(ctx context.Context, namespacedName types.NamespacedName) (*shulkermciov1alpha1.MinecraftServerFleet, error) {

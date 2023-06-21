@@ -47,6 +47,18 @@ rules:
   - update
   - watch
 - apiGroups:
+  - autoscaling.agones.dev
+  resources:
+  - fleetautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - shulkermc.io
   resources:
   - minecraftclusters

@@ -30,8 +30,18 @@ func (b *ProxyFleetResourceBuilder) ResourceBuilders() ([]common.ResourceBuilder
 	}
 	dirtyBuilders := []common.ResourceBuilder{}
 
-	if b.Instance.Spec.Configuration.ExistingConfigMapName == "" {
+	if b.Instance.Spec.Template.Spec.Configuration.ExistingConfigMapName == "" {
 		builders = append(builders, b.ProxyFleetConfigMap())
+	} else {
+		builders = append(builders, b.ProxyFleetConfigMap())
+	}
+
+	if b.Instance.Spec.Autoscaling != nil {
+		if b.Instance.Spec.Autoscaling.AgonesPolicy != nil {
+			builders = append(builders, b.ProxyFleetFleetAutoscaler())
+		} else {
+			dirtyBuilders = append(dirtyBuilders, b.ProxyFleetFleetAutoscaler())
+		}
 	}
 
 	return builders, dirtyBuilders
@@ -41,9 +51,13 @@ func (b *ProxyFleetResourceBuilder) GetFleetName() string {
 	return b.Instance.Name
 }
 
+func (b *ProxyFleetResourceBuilder) GetFleetAutoscalerName() string {
+	return b.Instance.Name
+}
+
 func (b *ProxyFleetResourceBuilder) GetConfigMapName() string {
-	if b.Instance.Spec.Configuration.ExistingConfigMapName != "" {
-		return b.Instance.Spec.Configuration.ExistingConfigMapName
+	if b.Instance.Spec.Template.Spec.Configuration.ExistingConfigMapName != "" {
+		return b.Instance.Spec.Template.Spec.Configuration.ExistingConfigMapName
 	}
 	return fmt.Sprintf("%s-config", b.Instance.Name)
 }

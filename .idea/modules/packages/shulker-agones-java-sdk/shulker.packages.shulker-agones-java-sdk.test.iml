@@ -15,6 +15,9 @@
           <stringArguments>
             <stringArg name="classpath">
               <args>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/classes/java/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/resources/main</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.54.1/3af888f22f0242a4b1272954166173f96db47a79/grpc-protobuf-1.54.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.9.0/e4ada41aaaf6ecdedf132f44251d0d50813f7f90/proto-google-common-protos-2.9.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.22.2/fdee98b8f6abab73f146a4edb4c09e56f8278d03/protobuf-java-3.22.2.jar</arg>
@@ -74,8 +77,12 @@
   <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-include-protos/test" />
-    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-protos/test" />
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-include-protos/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-include-protos/test" isTestSource="true" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-protos/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/extracted-protos/test" isTestSource="true" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/generated/source/proto/test/grpc" />
     <content url="file://$MODULE_DIR$/../../../../dist/packages/shulker-agones-java-sdk/generated/source/proto/test/java" />
     <content url="file://$MODULE_DIR$/../../../../packages/shulker-agones-java-sdk/src/test" />

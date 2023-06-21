@@ -24,9 +24,12 @@ body:
       multiple: true
       options:
         - Operator
+        - Addon - Matchmaking
         - Proxy API
         - Proxy Agent (BungeeCord)
         - Proxy Agent (Velocity)
+        - Server API
+        - Server Agent (Paper)
 
   - type: input
     id: version

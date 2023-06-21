@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "lint": "nx run-many --target=lint --all",
     "postinstall": "npm run tools:install",
     "tools:install": "bash scripts/download_tools.sh",
     "crd:install": "kustomize build kube/resources/crd | kubectl apply -f -",

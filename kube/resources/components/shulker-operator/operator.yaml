@@ -1,16 +1,3 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    app.kubernetes.io/name: namespace
-    app.kubernetes.io/instance: system
-    app.kubernetes.io/component: manager
-    app.kubernetes.io/created-by: shulker
-    app.kubernetes.io/part-of: shulker
-    app.kubernetes.io/managed-by: kustomize
-  name: system
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,7 +7,7 @@ metadata:
     control-plane: shulker-operator
     app.kubernetes.io/name: deployment
     app.kubernetes.io/instance: operator
-    app.kubernetes.io/component: manager
+    app.kubernetes.io/component: operator
     app.kubernetes.io/created-by: shulker
     app.kubernetes.io/part-of: shulker
     app.kubernetes.io/managed-by: kustomize
@@ -32,17 +19,43 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/default-container: manager
+        kubectl.kubernetes.io/default-container: operator
       labels:
         control-plane: shulker-operator
     spec:
       containers:
-      - command:
+      - name: kube-rbac-proxy
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.13.0
+        args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        ports:
+        - name: metrics-proxy
+          containerPort: 8443
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - "ALL"
+      - name: operator
+        image: ghcr.io/jeremylvln/shulker-operator
+        imagePullPolicy: Always
+        command:
         - /shulker-operator
         args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
-        image: ghcr.io/jeremylvln/shulker-operator
-        name: manager
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -50,6 +63,9 @@ spec:
         - containerPort: 8081
           protocol: TCP
           name: health
+        - containerPort: 9090
+          protocol: TCP
+          name: api
         - containerPort: 9443
           protocol: TCP
           name: webhooks
@@ -95,13 +111,21 @@ spec:
                   operator: In
                   values:
                     - amd64
-                    - arm64
-                    - ppc64le
-                    - s390x
+                    # - arm64
+                    # - ppc64le
+                    # - s390x
                 - key: kubernetes.io/os
                   operator: In
                   values:
                     - linux
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: node-role.shulkermc.io/control-plane
+                    operator: In
+                    values:
+                      - "true"
       securityContext:
         runAsNonRoot: true
         seccompProfile:

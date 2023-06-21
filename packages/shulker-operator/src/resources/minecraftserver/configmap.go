@@ -77,25 +77,25 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.MinecraftServerCon
 			cp "${SHULKER_CONFIG_DIR}/paper-global-config.yml" "${SERVER_CONFIG_DIR}/config/paper-global.yml"
 		fi
 
-		if [ "${SERVER_WORLD_URL}" != "" ]; then
+		if [ ! -z "${SERVER_WORLD_URL+x}" ]; then
 			(cd "${SERVER_CONFIG_DIR}" && wget "${SERVER_WORLD_URL}" -O - | tar -xzv)
 		fi
 
 		mkdir -p "${SERVER_CONFIG_DIR}/plugins"
 		if [ "${TYPE}" == "PAPER" ]; then
-			(cd "${SERVER_CONFIG_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-server-agent/${SHULKER_SERVER_AGENT_VERSION}/shulker-server-agent-${SHULKER_SERVER_AGENT_VERSION}-paper.jar)
+			(cd "${SERVER_CONFIG_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-server-agent/${SHULKER_SERVER_AGENT_VERSION}/shulker-server-agent-${SHULKER_SERVER_AGENT_VERSION}-paper.jar")
 		else
 			echo "[!] No server agent available for this server type"
 			exit 1
 		fi
 
-		if [ "${SERVER_PLUGIN_URLS}" != "" ]; then
+		if [ ! -z "${SERVER_PLUGIN_URLS+x}" ]; then
 			for plugin_url in ${SERVER_PLUGIN_URLS//;/ }; do
 				(cd "${SERVER_CONFIG_DIR}/plugins" && wget "${plugin_url}")
 			done
 		fi
 
-		if [ "${SERVER_PATCH_URLS}" != "" ]; then
+		if [ ! -z "${SERVER_PATCH_URLS+x}" ]; then
 			for patch_url in ${SERVER_PATCH_URLS//;/ }; do
 				(cd "${SERVER_CONFIG_DIR}" && wget "${patch_url}" -O - | tar -xzv)
 			done

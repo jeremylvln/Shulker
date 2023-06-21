@@ -34,7 +34,7 @@ type bungeeCordYml struct {
 	LogPings                bool                           `yaml:"log_pings"`
 }
 
-func GetBungeeCordYml(spec *shulkermciov1alpha1.ProxyFleetConfigurationSpec) (string, error) {
+func GetBungeeCordYml(spec *shulkermciov1alpha1.ProxyConfigurationSpec) (string, error) {
 	bungeeCordYml := bungeeCordYml{
 		Servers: map[string]bungeeCordServerYml{
 			"lobby": {

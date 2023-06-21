@@ -41,7 +41,7 @@ func (b *ProxyFleetResourceConfigMapBuilder) Build() (client.Object, error) {
 func (b *ProxyFleetResourceConfigMapBuilder) Update(object client.Object) error {
 	configMap := object.(*corev1.ConfigMap)
 
-	configMapData, err := GetConfigMapDataFromConfigSpec(&b.Instance.Spec.Configuration)
+	configMapData, err := GetConfigMapDataFromConfigSpec(&b.Instance.Spec.Template.Spec.Configuration)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (b *ProxyFleetResourceConfigMapBuilder) CanBeUpdated() bool {
 	return true
 }
 
-func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyFleetConfigurationSpec) (map[string]string, error) {
+func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyConfigurationSpec) (map[string]string, error) {
 	configMapData := make(map[string]string)
 
 	configMapData["init-fs.sh"] = trimScript(`
@@ -78,18 +78,18 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyFleetConfigur
 	
 		mkdir -p "${PROXY_DATA_DIR}/plugins"
 		if [ "${TYPE}" == "VELOCITY" ]; then
-			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-velocity.jar)
+			(cd "${PROXY_DATA_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-velocity.jar")
 		else
-			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-bungeecord.jar)
+			(cd "${PROXY_DATA_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-bungeecord.jar")
 		fi
 
-		if [ "${PROXY_PLUGIN_URLS}" != "" ]; then
+		if [ ! -z "${PROXY_PLUGIN_URLS+x}" ]; then
 			for plugin_url in ${PROXY_PLUGIN_URLS//;/ }; do
 				(cd "${PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
 			done
 		fi
 
-		if [ "${PROXY_PATCH_URLS}" != "" ]; then
+		if [ ! -z "${PROXY_PATCH_URLS+x}" ]; then
 			for patch_url in ${PROXY_PATCH_URLS//;/ }; do
 				(cd "${PROXY_DATA_DIR}" && wget "${patch_url}" -O - | tar -xzv)
 			done
