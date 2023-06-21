@@ -132,15 +132,6 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 					ContainerPort: 25577,
 				}},
 				Env: b.getEnv(),
-				LivenessProbe: &corev1.Probe{
-					ProbeHandler: corev1.ProbeHandler{
-						Exec: &corev1.ExecAction{
-							Command: []string{"bash", "/health.sh"},
-						},
-					},
-					InitialDelaySeconds: 10,
-					PeriodSeconds:       10,
-				},
 				ReadinessProbe: &corev1.Probe{
 					ProbeHandler: corev1.ProbeHandler{
 						Exec: &corev1.ExecAction{
@@ -245,6 +236,12 @@ func (b *ProxyFleetResourceFleetBuilder) getGameServerSpec() (*agonesv1.GameServ
 		Eviction: &agonesv1.Eviction{
 			Safe: agonesv1.EvictionSafeOnUpgrade,
 		},
+		Health: agonesv1.Health{
+			Disabled:            false,
+			InitialDelaySeconds: 30,
+			PeriodSeconds:       10,
+			FailureThreshold:    5,
+		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				Labels: b.Instance.Spec.Template.ObjectMeta.Labels,
@@ -299,13 +296,23 @@ func (b *ProxyFleetResourceFleetBuilder) getInitEnv() ([]corev1.EnvVar, error) {
 			Value: "0.1.0",
 		},
 		{
+			Name:  "SHULKER_MAVEN_REPOSITORY",
+			Value: "https://maven.jeremylvln.fr/artifactory/shulker",
+		},
+	}
+
+	if len(pluginUrls) > 0 {
+		env = append(env, corev1.EnvVar{
 			Name:  "PROXY_PLUGIN_URLS",
 			Value: strings.Join(pluginUrls, ";"),
-		},
-		{
+		})
+	}
+
+	if len(patchesUrls) > 0 {
+		env = append(env, corev1.EnvVar{
 			Name:  "PROXY_PATCH_URLS",
 			Value: strings.Join(patchesUrls, ";"),
-		},
+		})
 	}
 
 	return env, nil

@@ -94,29 +94,9 @@ func (b *MinecraftServerResourceGameServerBuilder) GetGameServerSpec() (*agonesv
 		},
 		Containers: []corev1.Container{
 			{
-				Image: "itzg/minecraft-server:2022.16.0-java17",
-				Name:  "minecraft-server",
-				Env:   b.getEnv(),
-				LivenessProbe: &corev1.Probe{
-					ProbeHandler: corev1.ProbeHandler{
-						Exec: &corev1.ExecAction{
-							Command: []string{"bash", "/health.sh"},
-						},
-					},
-					InitialDelaySeconds: 30,
-					PeriodSeconds:       5,
-					FailureThreshold:    5,
-				},
-				ReadinessProbe: &corev1.Probe{
-					ProbeHandler: corev1.ProbeHandler{
-						Exec: &corev1.ExecAction{
-							Command: []string{"bash", "/health.sh"},
-						},
-					},
-					InitialDelaySeconds: 30,
-					PeriodSeconds:       5,
-					FailureThreshold:    5,
-				},
+				Image:           "itzg/minecraft-server:2022.16.0-java17",
+				Name:            "minecraft-server",
+				Env:             b.getEnv(),
 				ImagePullPolicy: corev1.PullIfNotPresent,
 				SecurityContext: b.getSecurityContext(),
 				VolumeMounts: []corev1.VolumeMount{
@@ -197,6 +177,12 @@ func (b *MinecraftServerResourceGameServerBuilder) GetGameServerSpec() (*agonesv
 		Eviction: &agonesv1.Eviction{
 			Safe: agonesv1.EvictionSafeOnUpgrade,
 		},
+		Health: agonesv1.Health{
+			Disabled:            false,
+			InitialDelaySeconds: 30,
+			PeriodSeconds:       15,
+			FailureThreshold:    5,
+		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
 				Labels: b.getLabels(),
@@ -264,17 +250,30 @@ func (b *MinecraftServerResourceGameServerBuilder) getInitEnv() ([]corev1.EnvVar
 			Value: "0.1.0",
 		},
 		{
+			Name:  "SHULKER_MAVEN_REPOSITORY",
+			Value: "https://maven.jeremylvln.fr/artifactory/shulker",
+		},
+	}
+
+	if len(worldUrl) > 0 {
+		env = append(env, corev1.EnvVar{
 			Name:  "SERVER_WORLD_URL",
 			Value: worldUrl,
-		},
-		{
+		})
+	}
+
+	if len(pluginUrls) > 0 {
+		env = append(env, corev1.EnvVar{
 			Name:  "SERVER_PLUGIN_URLS",
 			Value: strings.Join(pluginUrls, ";"),
-		},
-		{
+		})
+	}
+
+	if len(patchesUrls) > 0 {
+		env = append(env, corev1.EnvVar{
 			Name:  "SERVER_PATCH_URLS",
 			Value: strings.Join(patchesUrls, ";"),
-		},
+		})
 	}
 
 	return env, nil

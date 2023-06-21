@@ -78,18 +78,18 @@ func GetConfigMapDataFromConfigSpec(spec *shulkermciov1alpha1.ProxyConfiguration
 	
 		mkdir -p "${PROXY_DATA_DIR}/plugins"
 		if [ "${TYPE}" == "VELOCITY" ]; then
-			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-velocity.jar)
+			(cd "${PROXY_DATA_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-velocity.jar")
 		else
-			(cd "${PROXY_DATA_DIR}/plugins" && wget https://maven.jeremylvln.fr/artifactory/shulker/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-bungeecord.jar)
+			(cd "${PROXY_DATA_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-bungeecord.jar")
 		fi
 
-		if [ "${PROXY_PLUGIN_URLS}" != "" ]; then
+		if [ ! -z "${PROXY_PLUGIN_URLS+x}" ]; then
 			for plugin_url in ${PROXY_PLUGIN_URLS//;/ }; do
 				(cd "${PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
 			done
 		fi
 
-		if [ "${PROXY_PATCH_URLS}" != "" ]; then
+		if [ ! -z "${PROXY_PATCH_URLS+x}" ]; then
 			for patch_url in ${PROXY_PATCH_URLS//;/ }; do
 				(cd "${PROXY_DATA_DIR}" && wget "${patch_url}" -O - | tar -xzv)
 			done

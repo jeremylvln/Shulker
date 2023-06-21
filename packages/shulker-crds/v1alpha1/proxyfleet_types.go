@@ -206,7 +206,7 @@ type ProxyFleet struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ProxyFleetSpec   `json:"spec,inline"`
+	Spec   ProxyFleetSpec   `json:"spec,omitempty"`
 	Status ProxyFleetStatus `json:"status,omitempty"`
 }
 
@@ -217,7 +217,7 @@ type ProxyTemplate struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	//+kubebuilder:validation:Required
-	Spec ProxySpec `json:"spec"`
+	Spec ProxySpec `json:"spec,omitempty"`
 }
 
 //+kubebuilder:object:root=true

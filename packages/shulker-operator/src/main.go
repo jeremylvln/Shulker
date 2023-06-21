@@ -13,6 +13,7 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
+	agonesautoscalingv1 "agones.dev/agones/pkg/apis/autoscaling/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -33,6 +34,7 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 	utilruntime.Must(agonesv1.AddToScheme(scheme))
+	utilruntime.Must(agonesautoscalingv1.AddToScheme(scheme))
 	utilruntime.Must(shulkermciov1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
@@ -110,6 +112,8 @@ func main() {
 		if err := http.ListenAndServe(apiAddr, httpRouter); err != nil {
 			setupLog.Error(err, "unable to set up api")
 			os.Exit(1)
+		} else {
+			setupLog.Info("api listening on " + apiAddr)
 		}
 	}()
 

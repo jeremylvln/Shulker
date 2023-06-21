@@ -9,7 +9,9 @@ spec:
   service:
     type: LoadBalancer
     externalTrafficPolicy: Local
-  version:
-    channel: Velocity
-    name: latest
-  config: {}
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config: {}

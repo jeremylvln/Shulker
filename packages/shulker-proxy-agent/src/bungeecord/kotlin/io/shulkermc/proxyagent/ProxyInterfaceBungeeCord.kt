@@ -12,6 +12,7 @@ import net.md_5.bungee.api.event.PreLoginEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
+import net.md_5.bungee.api.scheduler.ScheduledTask
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
 import java.net.InetSocketAddress
@@ -69,12 +70,12 @@ class ProxyInterfaceBungeeCord(
         return this.proxy.players.size
     }
 
-    override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable) {
-        this.proxy.scheduler.schedule(this.plugin, runnable, delay, timeUnit)
+    override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+        return BungeeCordScheduledTask(this.proxy.scheduler.schedule(this.plugin, runnable, delay, timeUnit))
     }
 
-    override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable) {
-        this.proxy.scheduler.schedule(this.plugin, runnable, delay, interval, timeUnit)
+    override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+        return BungeeCordScheduledTask(this.proxy.scheduler.schedule(this.plugin, runnable, delay, interval, timeUnit))
     }
 
     private fun wrapPlayer(bungeePlayer: ProxiedPlayer): Player {
@@ -82,6 +83,12 @@ class ProxyInterfaceBungeeCord(
             override fun disconnect(component: Component) {
                 bungeePlayer.disconnect(*BungeeComponentSerializer.get().serialize(component))
             }
+        }
+    }
+
+    private class BungeeCordScheduledTask(private val bungeeCordTask: ScheduledTask): ProxyInterface.ScheduledTask {
+        override fun cancel() {
+            this.bungeeCordTask.cancel()
         }
     }
 }

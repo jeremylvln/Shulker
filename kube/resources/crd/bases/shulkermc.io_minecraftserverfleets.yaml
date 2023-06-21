@@ -170,9 +170,10 @@ spec:
                       the autoscaling target. Mutually exclusive with AgonesPolicy.
                     properties:
                       type:
-                        description: Name of the policy to apply.
+                        description: Name of the policy to apply. Some policies may
+                          not be implemented depending on the target resource.
                         enum:
-                        - SummoningWebhook
+                        - ManualSummon
                         type: string
                     type: object
                 type: object

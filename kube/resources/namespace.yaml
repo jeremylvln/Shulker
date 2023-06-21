@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/name: namespace
+    app.kubernetes.io/instance: system
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/created-by: shulker
+    app.kubernetes.io/part-of: shulker
+    app.kubernetes.io/managed-by: kustomize
+  name: system

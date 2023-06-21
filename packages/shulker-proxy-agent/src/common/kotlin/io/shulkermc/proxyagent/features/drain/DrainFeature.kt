@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent.features.drain
 
+import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
@@ -25,6 +26,7 @@ class DrainFeature(
         )
     }
 
+    private lateinit var ttlTask: ProxyInterface.ScheduledTask
     private var acceptingPlayers = true
     private var drained = false
 
@@ -45,9 +47,13 @@ class DrainFeature(
         }
 
         this.agent.logger.info("Proxy will be force stopped in ${this.ttlSeconds} seconds")
-        this.agent.proxyInterface.scheduleDelayedTask(this.ttlSeconds, TimeUnit.SECONDS) {
-            this.agent.agonesGateway.emitProxyShutdown()
+        this.ttlTask = this.agent.proxyInterface.scheduleDelayedTask(this.ttlSeconds, TimeUnit.SECONDS) {
+            this.agent.agonesGateway.askShutdown()
         }
+    }
+
+    fun destroy() {
+        this.ttlTask.cancel()
     }
 
     private fun onPreLogin(): PlayerPreLoginHookResult {
@@ -76,7 +82,7 @@ class DrainFeature(
 
             if (playerCount == 0) {
                 this.agent.logger.info("Proxy is empty, stopping")
-                this.agent.agonesGateway.emitProxyShutdown()
+                this.agent.agonesGateway.askShutdown()
             } else {
                 this.agent.logger.info(String.format("There are still %d players connected, waiting", playerCount))
             }

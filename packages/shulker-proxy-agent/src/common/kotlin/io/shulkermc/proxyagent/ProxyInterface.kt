@@ -16,6 +16,10 @@ interface ProxyInterface {
 
     fun getPlayerCount(): Int
 
-    fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable)
-    fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable)
+    fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask
+    fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask
+
+    interface ScheduledTask {
+        fun cancel()
+    }
 }

@@ -6,6 +6,7 @@ import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
+import com.velocitypowered.api.scheduler.ScheduledTask
 import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
 import io.shulkermc.proxyagent.domain.ServerPreConnectHook
 import io.shulkermc.proxyapi.adapters.ServerName
@@ -54,19 +55,19 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val 
         return this.proxy.playerCount
     }
 
-    override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable) {
-        this.proxy.scheduler
+    override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+        return VelocityScheduledTask(this.proxy.scheduler
             .buildTask(this.plugin, runnable)
             .delay(delay, timeUnit)
-            .schedule()
+            .schedule())
     }
 
-    override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable) {
-        this.proxy.scheduler
+    override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+        return VelocityScheduledTask(this.proxy.scheduler
             .buildTask(this.plugin, runnable)
             .delay(delay, timeUnit)
             .repeat(interval, timeUnit)
-            .schedule()
+            .schedule())
     }
 
     private fun wrapPlayer(velocityPlayer: Player): io.shulkermc.proxyagent.domain.Player {
@@ -74,6 +75,12 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val 
             override fun disconnect(component: Component) {
                 velocityPlayer.disconnect(component)
             }
+        }
+    }
+
+    private class VelocityScheduledTask(private val velocityTask: ScheduledTask): ProxyInterface.ScheduledTask {
+        override fun cancel() {
+            this.velocityTask.cancel()
         }
     }
 }
