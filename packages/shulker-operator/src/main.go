@@ -7,6 +7,7 @@ package main
 
 import (
 	"flag"
+	"net/http"
 	"os"
 
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
@@ -20,6 +21,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	"github.com/julienschmidt/httprouter"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -39,8 +41,10 @@ func main() {
 	var metricsAddr string
 	var enableLeaderElection bool
 	var probeAddr string
+	var apiAddr string
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
+	flag.StringVar(&apiAddr, "api-bind-address", ":9090", "The address the API endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")
@@ -58,7 +62,7 @@ func main() {
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "b3355872.shulkermc.io",
+		LeaderElectionID:       "operator.shulkermc.io",
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
@@ -86,14 +90,28 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "MinecraftServer")
 		os.Exit(1)
 	}
-	if err = (&MinecraftServerFleetReconciler{
+	minecraftServerFleetReconciler := MinecraftServerFleetReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
+	}
+	if err = minecraftServerFleetReconciler.SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "MinecraftServerFleet")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder
+
+	httpRouter := httprouter.New()
+	fleetAutoscalerHttpController := FleetAutoscalingHttpController{
+		Reconciler: &minecraftServerFleetReconciler,
+	}
+	fleetAutoscalerHttpController.Register(httpRouter)
+
+	go func() {
+		if err := http.ListenAndServe(apiAddr, httpRouter); err != nil {
+			setupLog.Error(err, "unable to set up api")
+			os.Exit(1)
+		}
+	}()
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")

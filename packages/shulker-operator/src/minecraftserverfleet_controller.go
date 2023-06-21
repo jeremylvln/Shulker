@@ -7,6 +7,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	agonesv1 "agones.dev/agones/pkg/apis/agones/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -16,11 +17,13 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	ctrlutil "github.com/jeremylvln/shulker/packages/shulker-controller-utils/src"
 	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
 	resources "github.com/jeremylvln/shulker/packages/shulker-operator/src/resources/minecraftserverfleet"
+	resourceutils "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 )
 
 // MinecraftServerFleetReconciler reconciles a MinecraftServerFleet object
@@ -90,6 +93,61 @@ func (r *MinecraftServerFleetReconciler) Reconcile(ctx context.Context, req ctrl
 	}
 
 	return ctrl.Result{}, r.Status().Update(ctx, minecraftServerFleet)
+}
+
+func (r *MinecraftServerFleetReconciler) Summon(ctx context.Context, nsName types.NamespacedName) error {
+	logger := log.FromContext(ctx)
+
+	logger.Info("Summonning MinecraftServer from Fleet")
+	minecraftServerFleet, err := r.getMinecraftServerFleet(ctx, nsName)
+	if err != nil {
+		return err
+	}
+
+	resourceBuilder := resources.MinecraftServerFleetResourceBuilder{
+		Instance: minecraftServerFleet,
+		Scheme:   r.Scheme,
+		Client:   r.Client,
+		Ctx:      ctx,
+	}
+
+	fleet := agonesv1.Fleet{}
+	err = r.Get(ctx, client.ObjectKey{
+		Namespace: minecraftServerFleet.Namespace,
+		Name:      resourceBuilder.GetFleetName(),
+	}, &fleet)
+	if err != nil {
+		return err
+	}
+
+	gameServerSets := agonesv1.GameServerSetList{}
+	err = r.List(ctx, &gameServerSets, client.MatchingLabels{
+		"agones.dev/fleet": fleet.Name,
+	})
+	if err != nil {
+		return err
+	}
+
+	activeGameServerSet := resourceutils.GetActiveGameServerSet(&fleet, gameServerSets.Items)
+	if activeGameServerSet == nil {
+		return fmt.Errorf("no active GameServerSet found")
+	}
+
+	gameServer := agonesv1.GameServer{
+		ObjectMeta: metav1.ObjectMeta{
+			GenerateName: fmt.Sprintf("%s-", activeGameServerSet.Name),
+			Namespace:    minecraftServerFleet.Namespace,
+			Labels:       fleet.Spec.Template.ObjectMeta.Labels,
+			Annotations:  fleet.Spec.Template.ObjectMeta.Annotations,
+		},
+		Spec: fleet.Spec.Template.Spec,
+	}
+
+	if err := controllerutil.SetControllerReference(&gameServer, activeGameServerSet, r.Scheme); err != nil {
+		return fmt.Errorf("failed setting controller reference for GameServer: %v", err)
+	}
+
+	return r.Create(ctx, &gameServer)
 }
 
 func (r *MinecraftServerFleetReconciler) getMinecraftServerFleet(ctx context.Context, namespacedName types.NamespacedName) (*shulkermciov1alpha1.MinecraftServerFleet, error) {

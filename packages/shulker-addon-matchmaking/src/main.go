@@ -58,7 +58,7 @@ func main() {
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "b3355872.matchmaking.shulkermc.io",
+		LeaderElectionID:       "matchmaking.shulkermc.io",
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")

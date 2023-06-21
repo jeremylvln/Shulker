@@ -63,8 +63,15 @@ func (b *MinecraftServerFleetResourceFleetBuilder) Update(object client.Object) 
 		return err
 	}
 
+	var replicas int32
+	if b.Instance.Spec.Autoscaling != nil {
+		replicas = 0
+	} else {
+		replicas = int32(b.Instance.Spec.Replicas)
+	}
+
 	fleet.Spec = agonesv1.FleetSpec{
-		Replicas: int32(b.Instance.Spec.Replicas),
+		Replicas: replicas,
 		Strategy: appsv1.DeploymentStrategy{
 			Type: appsv1.RollingUpdateDeploymentStrategyType,
 			RollingUpdate: &appsv1.RollingUpdateDeployment{

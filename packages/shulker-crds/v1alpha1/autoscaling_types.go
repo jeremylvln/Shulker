@@ -16,14 +16,15 @@ type FleetAutoscalingSpec struct {
 	ShulkerPolicy *FleetAutoscalingShulkerPolicySpec `json:"shulkerPolicy,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=SummoningWebhook
+// +kubebuilder:validation:Enum=ManualSummon
 type FleetAutoscalingShulkerPolicyType string
 
 const (
-	FleetAutoscalingShulkerPolicySummoningWebhook FleetAutoscalingShulkerPolicyType = "SummoningWebhook"
+	FleetAutoscalingShulkerPolicyManualSummon FleetAutoscalingShulkerPolicyType = "ManualSummon"
 )
 
 type FleetAutoscalingShulkerPolicySpec struct {
-	// Name of the policy to apply.
+	// Name of the policy to apply. Some policies may not be
+	// implemented depending on the target resource.
 	Type FleetAutoscalingShulkerPolicyType `json:"type,omitempty"`
 }
