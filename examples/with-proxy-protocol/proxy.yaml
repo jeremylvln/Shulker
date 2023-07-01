@@ -1,0 +1,21 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyFleet
+metadata:
+  name: public
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    annotations:
+      service.beta.kubernetes.io/scw-loadbalancer-proxy-protocol-v2: "true"
+      service.beta.kubernetes.io/scw-loadbalancer-use-hostname: "true"
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config:
+        proxyProtocol: true

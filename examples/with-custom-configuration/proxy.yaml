@@ -1,0 +1,30 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyFleet
+metadata:
+  name: public
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config:
+        plugins:
+          - urlFrom:
+              mavenRef:
+                repository: https://example.com/maven
+                groupId: com.example
+                artifactId: myplugin
+                version: '1.0.0'
+                credentialsSecretName: example-repo-secret
+        patches:
+          - url: https://example.com/add-config-to-myplugin.tar.gz
+          - url: https://example.com/add-something-after.tar.gz
+          - url: https://example.com/remove-everything-at-the-end.tar.gz
+        maxPlayers: 100

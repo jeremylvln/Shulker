@@ -55,7 +55,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'recipes/minecraft-cluster',
+            docId: 'recipes/adding-custom-content',
             position: 'left',
             label: 'Recipes',
           },
@@ -82,7 +82,7 @@ const config = {
               },
               {
                 label: 'Recipes',
-                to: '/recipes/minecraft-cluster',
+                to: '/recipes/adding-custom-content',
               },
             ],
           },

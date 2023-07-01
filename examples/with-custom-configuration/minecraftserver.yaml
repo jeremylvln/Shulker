@@ -1,0 +1,31 @@
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: limbo
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  template:
+    spec:
+      tags:
+        - limbo
+      version:
+        channel: Paper
+        name: '1.19.3'
+      config:
+        world:
+          url: https://example.com/my-world.tar.gz
+        plugins:
+          - urlFrom:
+              mavenRef:
+                repository: https://example.com/maven
+                groupId: com.example
+                artifactId: myplugin
+                version: '1.0.0'
+                credentialsSecretName: example-repo-secret
+        patches:
+          - url: https://example.com/add-config-to-myplugin.tar.gz
+          - url: https://example.com/add-something-after.tar.gz
+          - url: https://example.com/remove-everything-at-the-end.tar.gz
+        maxPlayers: 100
