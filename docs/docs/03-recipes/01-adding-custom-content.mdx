@@ -4,8 +4,6 @@ sidebar_position: 1
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
-import Admonition from '@theme/Admonition';
 
 # Adding custom content
 
@@ -25,7 +23,9 @@ It is attended that the URL is a direct link to the file, without any
 authentication layer. Otherwise it should be specified directly in the
 URL, thus exposing the credentials to the public.
 
-<CodeBlock language="yaml" showLineNumbers={true}>{`url: https://example.com/my-file.tar.gz`}</CodeBlock>
+```yaml showLineNumbers
+url: https://example.com/my-file.tar.gz
+```
 
   </TabItem>
 
@@ -36,14 +36,15 @@ files. The URL is composed of the repository URL, the group ID, the
 artifact ID and the version. Optionally, one can specify a secret name
 containing the credentials to use to authenticate agaisnt the repository.
 
-<CodeBlock language="yaml" showLineNumbers={true}>{`urlFrom:
+```yaml showLineNumbers
+urlFrom:
   mavenRef:
     repository: https://example.com/maven
     groupId: com.example
     artifactId: myplugin
     version: '1.0.0'
     credentialsSecretName: example-repo-secret
-`}</CodeBlock>
+```
 
   </TabItem>
 </Tabs>
@@ -59,14 +60,15 @@ expected to download JAR files. They should not be packed in an archive.
 Here is how to add two plugins, one using a direct URL, the other from
 a Maven repository.
 
-<Admonition type="note">
+:::note
 
 While the following example is a `MinecraftServerFleet`, the same applies
 for a `ProxyFleet`.
 
-</Admonition>
+:::
 
-<CodeBlock language="yaml" title="server.yaml" showLineNumbers={true}>{`apiVersion: shulkermc.io/v1alpha1
+```yaml title="server.yaml" showLineNumbers
+apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServerFleet
 metadata:
   name: my-server
@@ -86,7 +88,7 @@ spec:
                 artifactId: myplugin
                 version: '1.0.0'
                 credentialsSecretName: example-repo-secret
-`}</CodeBlock>
+```
 
 ## Adding maps
 
@@ -98,7 +100,8 @@ This may be used for ephemeral servers using the same map, like minigames.
 Shulker can download a tar-gzipped archive and extract it at the server
 root directory.
 
-<CodeBlock language="yaml" title="server.yaml" showLineNumbers={true}>{`apiVersion: shulkermc.io/v1alpha1
+```yaml title="server.yaml" showLineNumbers
+apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServerFleet
 metadata:
   name: my-server
@@ -111,7 +114,7 @@ spec:
       config:
         world:
           url: https://example.com/my-worlds.tar.gz
-`}</CodeBlock>
+```
 
 ## Adding patches
 
@@ -121,7 +124,8 @@ Patches are tar-gzipped archives that are extracted at the root of the
 server, overwriting existing files. They can be used to _patch_ the server
 content. They are applied in the order specified in the configuration.
 
-<CodeBlock language="yaml" title="server.yaml" showLineNumbers={true}>{`apiVersion: shulkermc.io/v1alpha1
+```yaml title="server.yaml" showLineNumbers
+apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServerFleet
 metadata:
   name: my-server
@@ -135,7 +139,7 @@ spec:
         patches:
           - url: https://example.com/my-first-patch.tar.gz
           - url: https://example.com/my-second-patch.tar.gz
-`}</CodeBlock>
+```
 
 ## Real-world example
 
