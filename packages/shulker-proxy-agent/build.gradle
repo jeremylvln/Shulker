@@ -2,7 +2,7 @@ dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
     commonImplementation(project(":packages:shulker-agones-java-sdk"))
 
-    commonCompileOnly("io.fabric8:kubernetes-client-api:6.3.1")
+    commonCompileOnly("io.fabric8:kubernetes-client-api:6.7.2")
     commonRuntimeOnly("io.fabric8:kubernetes-client:6.3.1")
     commonImplementation("io.fabric8:kubernetes-httpclient-okhttp:6.2.0")
 }
