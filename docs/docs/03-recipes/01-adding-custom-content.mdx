@@ -1,0 +1,148 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Adding custom content
+
+Proxies and servers could need custom content like maps, plugins, mods
+or any other file.
+
+## Ways of retrieving content
+
+Additional content can be retrieved in several ways, all of them could
+by used for any content.
+
+<Tabs>
+  <TabItem value="url" label="Direct URL" default>
+
+The most straightforward way of downloading files is via a direct URL.
+It is attended that the URL is a direct link to the file, without any
+authentication layer. Otherwise it should be specified directly in the
+URL, thus exposing the credentials to the public.
+
+```yaml showLineNumbers
+url: https://example.com/my-file.tar.gz
+```
+
+  </TabItem>
+
+  <TabItem value="maven" label="Maven Repository">
+
+Most useful for JAR archives, Maven repositories can be used to download
+files. The URL is composed of the repository URL, the group ID, the
+artifact ID and the version. Optionally, one can specify a secret name
+containing the credentials to use to authenticate agaisnt the repository.
+
+```yaml showLineNumbers
+urlFrom:
+  mavenRef:
+    repository: https://example.com/maven
+    groupId: com.example
+    artifactId: myplugin
+    version: '1.0.0'
+    credentialsSecretName: example-repo-secret
+```
+
+  </TabItem>
+</Tabs>
+
+## Adding plugins
+
+> Applicable to: proxies, servers
+
+Shulker can automatically download plugins from different sources and
+place them in the `plugins` folder of your proxy or server. It is
+expected to download JAR files. They should not be packed in an archive.
+
+Here is how to add two plugins, one using a direct URL, the other from
+a Maven repository.
+
+:::note
+
+While the following example is a `MinecraftServerFleet`, the same applies
+for a `ProxyFleet`.
+
+:::
+
+```yaml title="server.yaml" showLineNumbers
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: my-server
+spec:
+  clusterRef:
+    name: my-cluster
+  replicas: 1
+  template:
+    spec:
+      config:
+        plugins:
+          - url: https://example.com/my-plugin.jar
+          - urlFrom:
+              mavenRef:
+                repository: https://example.com/maven
+                groupId: com.example
+                artifactId: myplugin
+                version: '1.0.0'
+                credentialsSecretName: example-repo-secret
+```
+
+## Adding maps
+
+> Applicable to: servers
+
+Some servers may need maps to be downloaded before the server is started.
+This may be used for ephemeral servers using the same map, like minigames.
+
+Shulker can download a tar-gzipped archive and extract it at the server
+root directory.
+
+```yaml title="server.yaml" showLineNumbers
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: my-server
+spec:
+  clusterRef:
+    name: my-cluster
+  replicas: 1
+  template:
+    spec:
+      config:
+        world:
+          url: https://example.com/my-worlds.tar.gz
+```
+
+## Adding patches
+
+> Applicable to: proxies, servers
+
+Patches are tar-gzipped archives that are extracted at the root of the
+server, overwriting existing files. They can be used to _patch_ the server
+content. They are applied in the order specified in the configuration.
+
+```yaml title="server.yaml" showLineNumbers
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: my-server
+spec:
+  clusterRef:
+    name: my-cluster
+  replicas: 1
+  template:
+    spec:
+      config:
+        patches:
+          - url: https://example.com/my-first-patch.tar.gz
+          - url: https://example.com/my-second-patch.tar.gz
+```
+
+## Real-world example
+
+You can find a real-world example of a `ProxyFleet` and `MinecraftServerFleet`
+with additional content by looking at the `with-custom-configuration` example
+**[from the repository](https://github.com/jeremylvln/Shulker/tree/main/examples/with-custom-configuration)**.
