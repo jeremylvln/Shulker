@@ -1,6 +1,6 @@
 {
   "name": "shulker-resource-utils",
-  "root": "packages/shulker-resource-utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-resource-utils/src",
   "projectType": "library",
   "targets": {

@@ -1,6 +1,6 @@
 {
   "name": "shulker-controller-utils",
-  "root": "packages/shulker-controller-utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-controller-utils/src",
   "projectType": "library",
   "targets": {

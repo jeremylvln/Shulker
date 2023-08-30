@@ -1,12 +1,12 @@
 {
   "name": "shulker-server-api",
-  "root": "packages/shulker-server-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-server-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-server-api"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-server-api"],
       "options": {
         "command": "gradle :packages:shulker-server-api:build -x check"
       },

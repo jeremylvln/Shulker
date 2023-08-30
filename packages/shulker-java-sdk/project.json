@@ -1,12 +1,12 @@
 {
   "name": "shulker-java-sdk",
-  "root": "packages/shulker-java-sdk",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-java-sdk/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-java-sdk"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-java-sdk"],
       "options": {
         "command": "gradle :packages:shulker-java-sdk:build -x check"
       },

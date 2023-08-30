@@ -1,12 +1,12 @@
 {
   "name": "shulker-proxy-api",
-  "root": "packages/shulker-proxy-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-proxy-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-proxy-api"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-proxy-api"],
       "options": {
         "command": "gradle :packages:shulker-proxy-api:build -x check"
       },
