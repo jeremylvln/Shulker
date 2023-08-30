@@ -8,28 +8,28 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/shulker-server-api"],
       "options": {
-        "command": "gradle :packages:shulker-server-api:build -x check"
+        "command": "./gradlew :packages:shulker-server-api:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-server-api:test"
+        "command": "./gradlew :packages:shulker-server-api:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-server-api:ktlintCheck"
+        "command": "./gradlew :packages:shulker-server-api:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "publish-maven": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-server-api:publish"
+        "command": "./gradlew :packages:shulker-server-api:publish"
       }
     }
   },

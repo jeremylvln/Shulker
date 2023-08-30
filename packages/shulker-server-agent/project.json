@@ -8,25 +8,25 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/shulker-server-agent"],
       "options": {
-        "command": "gradle :packages:shulker-server-agent:build -x check"
+        "command": "./gradlew :packages:shulker-server-agent:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-server-agent:test"
+        "command": "./gradlew :packages:shulker-server-agent:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-server-agent:ktlintCheck"
+        "command": "./gradlew :packages:shulker-server-agent:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     }
   },
   "tags": ["lang:java"],
-  "implicitDependencies": ["shulker-proxy-api"]
+  "implicitDependencies": ["shulker-server-api"]
 }

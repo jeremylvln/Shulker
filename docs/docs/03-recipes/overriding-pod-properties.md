@@ -10,8 +10,8 @@ to the Pod specification).
 You can find all the properties overridable by looking at the
 `shulker-crds` package of the repository:
 
--  [ProxyFleet](https://github.com/jeremylvln/Shulker/blob/main/packages/shulker-crds/v1alpha1/proxyfleet_types.go)
--  [MinecraftServerFleet](https://github.com/jeremylvln/Shulker/blob/main/packages/shulker-crds/v1alpha1/minecraftserverfleet_types.go)
+-  [ProxyFleet](https://github.com/jeremylvln/Shulker/blob/main/packages/shulker-crds/src/v1alpha1/proxyfleet_types.go)
+-  [MinecraftServerFleet](https://github.com/jeremylvln/Shulker/blob/main/packages/shulker-crds/src/v1alpha1/minecraftserverfleet_types.go)
 
 ## Add environment variables
 

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1"
 )
 
 func GetServerProperties(spec *shulkermciov1alpha1.MinecraftServerConfigurationSpec) string {

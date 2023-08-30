@@ -8,21 +8,21 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/shulker-proxy-agent"],
       "options": {
-        "command": "gradle :packages:shulker-proxy-agent:build -x check"
+        "command": "./gradlew :packages:shulker-proxy-agent:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-proxy-agent:test"
+        "command": "./gradlew :packages:shulker-proxy-agent:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-proxy-agent:ktlintCheck"
+        "command": "./gradlew :packages:shulker-proxy-agent:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     }

@@ -11,7 +11,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftCluster
-  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -19,7 +19,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: ProxyFleet
-  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -27,7 +27,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftServer
-  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -35,7 +35,7 @@ resources:
   controller: true
   domain: shulkermc.io
   kind: MinecraftServerFleet
-  path: github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -43,6 +43,6 @@ resources:
   controller: true
   domain: matchmaking.shulkermc.io
   kind: MatchmakingProfile
-  path: github.com/jeremylvln/shulker/packages/shulker-crds/matchmaking/v1alpha1
+  path: github.com/jeremylvln/shulker/packages/shulker-crds/src/matchmaking/v1alpha1
   version: v1alpha1
 version: "3"

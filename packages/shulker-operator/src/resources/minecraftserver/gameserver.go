@@ -15,7 +15,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1"
 	resources "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 )
 
