@@ -14,7 +14,7 @@
     "config:gen": "bash scripts/generate_config.sh"
   },
   "devDependencies": {
-    "nx": "16.2.2",
+    "nx": "16.7.4",
     "prettier": "2.6.2"
   },
   "workspaces": [

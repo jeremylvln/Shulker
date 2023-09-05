@@ -8,7 +8,7 @@ package resources
 import (
 	"fmt"
 
-	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1"
 	common "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 	"k8s.io/apimachinery/pkg/runtime"
 )

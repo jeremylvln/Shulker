@@ -21,7 +21,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1"
 	"github.com/julienschmidt/httprouter"
 	//+kubebuilder:scaffold:imports
 )

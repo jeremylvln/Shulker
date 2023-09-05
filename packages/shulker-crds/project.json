@@ -1,6 +1,6 @@
 {
   "name": "shulker-crds",
-  "root": "packages/shulker-crds",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-crds/src",
   "projectType": "library",
   "targets": {

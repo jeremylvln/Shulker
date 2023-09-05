@@ -1,35 +1,35 @@
 {
   "name": "shulker-proxy-api",
-  "root": "packages/shulker-proxy-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-proxy-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-proxy-api"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-proxy-api"],
       "options": {
-        "command": "gradle :packages:shulker-proxy-api:build -x check"
+        "command": "./gradlew :packages:shulker-proxy-api:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-proxy-api:test"
+        "command": "./gradlew :packages:shulker-proxy-api:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-proxy-api:ktlintCheck"
+        "command": "./gradlew :packages:shulker-proxy-api:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "publish-maven": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-proxy-api:publish"
+        "command": "./gradlew :packages:shulker-proxy-api:publish"
       }
     }
   },

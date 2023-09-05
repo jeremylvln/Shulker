@@ -1,12 +1,12 @@
 {
   "name": "shulker-operator",
-  "root": "packages/shulker-operator",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-operator/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-operator"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-operator"],
       "options": {
         "command": "go build -o ../../../dist/packages/shulker-operator/shulker-operator",
         "cwd": "packages/shulker-operator/src"
@@ -39,5 +39,9 @@
     }
   },
   "tags": ["lang:go"],
-  "implicitDependencies": ["shulker-crds", "shulker-controller-utils", "shulker-resource-utils"]
+  "implicitDependencies": [
+    "shulker-crds",
+    "shulker-controller-utils",
+    "shulker-resource-utils"
+  ]
 }

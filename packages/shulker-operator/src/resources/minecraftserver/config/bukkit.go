@@ -3,7 +3,7 @@ package resources
 import (
 	"gopkg.in/yaml.v2"
 
-	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1"
 )
 
 type bukkitYmlSettings struct {

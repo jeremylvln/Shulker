@@ -1,12 +1,12 @@
 {
   "name": "shulker-addon-matchmaking",
-  "root": "packages/shulker-addon-matchmaking",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-addon-matchmaking/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-addon-matchmaking"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-addon-matchmaking"],
       "options": {
         "command": "go build -o ../../../dist/packages/shulker-addon-matchmaking/shulker-addon-matchmaking",
         "cwd": "packages/shulker-addon-matchmaking/src"
@@ -39,5 +39,9 @@
     }
   },
   "tags": ["lang:go"],
-  "implicitDependencies": ["shulker-crds", "shulker-controller-utils", "shulker-resource-utils"]
+  "implicitDependencies": [
+    "shulker-crds",
+    "shulker-controller-utils",
+    "shulker-resource-utils"
+  ]
 }

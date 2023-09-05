@@ -1,32 +1,32 @@
 {
   "name": "shulker-agones-java-sdk",
-  "root": "packages/shulker-agones-java-sdk",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/shulker-agones-java-sdk/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["dist/packages/shulker-agones-java-sdk"],
+      "outputs": ["{workspaceRoot}/dist/packages/shulker-agones-java-sdk"],
       "options": {
-        "command": "gradle :packages:shulker-agones-java-sdk:build -x check"
+        "command": "./gradlew :packages:shulker-agones-java-sdk:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-agones-java-sdk:test"
+        "command": "./gradlew :packages:shulker-agones-java-sdk:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "gradle :packages:shulker-agones-java-sdk:ktlintCheck"
+        "command": "./gradlew :packages:shulker-agones-java-sdk:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     }
   },
   "tags": ["lang:java"],
-  "implicitDependencies": ["shulker-proxy-api"]
+  "implicitDependencies": []
 }

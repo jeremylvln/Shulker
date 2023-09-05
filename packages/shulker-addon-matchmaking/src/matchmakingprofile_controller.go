@@ -17,8 +17,8 @@ import (
 
 	resources "github.com/jeremylvln/shulker/packages/shulker-addon-matchmaking/src/resources/matchmakingProfile"
 	ctrlutil "github.com/jeremylvln/shulker/packages/shulker-controller-utils/src"
-	matchmakingshulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/matchmaking/v1alpha1"
-	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/v1alpha1"
+	matchmakingshulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/matchmaking/v1alpha1"
+	shulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/v1alpha1"
 )
 
 // MatchmakingProfileReconciler reconciles a MatchmakingProfile object

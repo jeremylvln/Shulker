@@ -1,12 +1,12 @@
 {
   "name": "docs",
-  "root": "docs",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "docs/docs",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["build"],
+      "outputs": ["{workspaceRoot}/build"],
       "options": {
         "command": "npm run build",
         "cwd": "docs"

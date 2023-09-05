@@ -8,7 +8,7 @@ package resources
 import (
 	"context"
 
-	matchmakingshulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/matchmaking/v1alpha1"
+	matchmakingshulkermciov1alpha1 "github.com/jeremylvln/shulker/packages/shulker-crds/src/matchmaking/v1alpha1"
 	common "github.com/jeremylvln/shulker/packages/shulker-resource-utils/src"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
