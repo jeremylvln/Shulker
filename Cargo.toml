@@ -1,0 +1,44 @@
+[workspace]
+resolver = "2"
+members = [
+  "packages/shulker-crds",
+  "packages/shulker-operator",
+  "packages/shulker-utils"
+]
+
+[workspace.package]
+version = "0.0.1"
+authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
+edition = "2021"
+# TODO: license = "Apache-2.0"
+publish = false
+
+[workspace.dependencies]
+actix-web = "4.3.1"
+anyhow = "1.0.75"
+async-trait = "0.1.73"
+base64 = "0.21.4"
+chrono = { version = "0.4.26", features = ["serde"] }
+futures = "0.3.28"
+hostname = "0.3.1"
+k8s-openapi = { version = "0.20.0", features = ["latest", "schemars"] }
+lazy_static = "1.4.0"
+rand = "0.8.5"
+schemars = { version = "0.8.12", features = ["chrono"] }
+serde = { version = "1.0.185", features = ["derive"] }
+serde_json = "1.0.105"
+serde_yaml = "0.9.25"
+thiserror = "1.0.47"
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
+tokio-util = "0.7.9"
+toml = "0.8.0"
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["json", "env-filter"] }
+url = "2.4.1"
+uuid = { version = "1.4.1", features = ["v4"] }
+
+# prometheus = "0.13.3"
+
+[workspace.dependencies.kube]
+features = ["runtime", "client", "derive" ]
+version = "0.86.0"

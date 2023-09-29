@@ -4,21 +4,18 @@ kind: Kustomization
 resources:
 - bases/shulkermc.io_minecraftclusters.yaml
 - bases/shulkermc.io_proxyfleets.yaml
-- bases/shulkermc.io_minecraftservers.yaml
-- bases/shulkermc.io_minecraftserverfleets.yaml
-#+kubebuilder:scaffold:crdkustomizeresource
+# - bases/shulkermc.io_minecraftservers.yaml
+# - bases/shulkermc.io_minecraftserverfleets.yaml
 
 patchesStrategicMerge:
 - patches/webhook_in_minecraftclusters.yaml
-- patches/webhook_in_minecraftserverfleets.yaml
-- patches/webhook_in_minecraftservers.yaml
+# - patches/webhook_in_minecraftserverfleets.yaml
+# - patches/webhook_in_minecraftservers.yaml
 - patches/webhook_in_proxyfleets.yaml
-#+kubebuilder:scaffold:crdkustomizewebhookpatch
 - patches/cainjection_in_minecraftclusters.yaml
-- patches/cainjection_in_minecraftserverfleets.yaml
-- patches/cainjection_in_minecraftservers.yaml
+# - patches/cainjection_in_minecraftserverfleets.yaml
+# - patches/cainjection_in_minecraftservers.yaml
 - patches/cainjection_in_proxyfleets.yaml
-#+kubebuilder:scaffold:crdkustomizecainjectionpatch
 
 configurations:
 - kustomizeconfig.yaml

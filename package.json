@@ -1,5 +1,5 @@
 {
-  "name": "shulker",
+  "name": "@shulkermc/monorepo",
   "version": "0.0.0",
   "license": "AGPL-3.0-or-later",
   "private": true,
@@ -7,11 +7,8 @@
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
-    "postinstall": "npm run tools:install",
-    "tools:install": "bash scripts/download_tools.sh",
-    "crd:install": "kustomize build kube/resources/crd | kubectl apply -f -",
-    "crd:uninstall": "kustomize build kube/resources/crd | kubectl delete -f -",
-    "config:gen": "bash scripts/generate_config.sh"
+    "crd:install": "cargo run --bin crdgen && kubectl apply -k kube/resources/crd",
+    "crd:uninstall": "cargo run --bin crdgen && kubectl delete -k kube/resources/crd"
   },
   "devDependencies": {
     "nx": "16.7.4",

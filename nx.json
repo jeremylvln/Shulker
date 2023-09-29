@@ -15,9 +15,10 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "go:dependencies": [
-      "{workspaceRoot}/go.mod",
-      "{workspaceRoot}/go.sum"
+    "rust:dependencies": [
+      "{workspaceRoot}/Cargo.toml",
+      "{workspaceRoot}/Cargo.lock",
+      "{workspaceRoot}/.cargo/"
     ],
     "java:dependencies": [
       "{workspaceRoot}/build.gradle",
