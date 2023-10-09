@@ -4,8 +4,8 @@ use kube::Client;
 use kube::ResourceExt;
 
 use crate::reconcilers::builder::ResourceBuilder;
-use shulker_crds::agones::fleet_autoscaler::FleetAutoscaler;
-use shulker_crds::agones::fleet_autoscaler::FleetAutoscalerSpec;
+use google_agones_crds::v1::fleet_autoscaler::FleetAutoscaler;
+use google_agones_crds::v1::fleet_autoscaler::FleetAutoscalerSpec;
 use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleet;
 
 use super::fleet::FleetBuilder;
@@ -81,7 +81,6 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
                 .as_ref()
                 .unwrap()
                 .clone(),
-            ..FleetAutoscalerSpec::default()
         };
         Ok(())
     }

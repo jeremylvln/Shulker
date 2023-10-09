@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use google_agones_crds::v1::fleet::FleetTemplate;
 use k8s_openapi::api::apps::v1::DeploymentStrategy;
 use k8s_openapi::api::apps::v1::RollingUpdateDeployment;
 use k8s_openapi::api::core::v1::Capabilities;
@@ -26,12 +27,11 @@ use kube::ResourceExt;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
-use shulker_crds::agones::fleet::Fleet;
-use shulker_crds::agones::fleet::FleetSpec;
-use shulker_crds::agones::game_server::GameServerEvictionSpec;
-use shulker_crds::agones::game_server::GameServerHealthSpec;
-use shulker_crds::agones::game_server::GameServerSpec;
-use shulker_crds::schemas::TemplateSpec;
+use google_agones_crds::v1::fleet::Fleet;
+use google_agones_crds::v1::fleet::FleetSpec;
+use google_agones_crds::v1::game_server::GameServerEvictionSpec;
+use google_agones_crds::v1::game_server::GameServerHealthSpec;
+use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleet;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateSpec;
 
@@ -132,7 +132,7 @@ impl ResourceBuilder for FleetBuilder {
                 }),
             }),
             scheduling: Some("Packed".to_string()),
-            template: TemplateSpec::<GameServerSpec> {
+            template: FleetTemplate {
                 metadata: game_server_spec.template.metadata.clone(),
                 spec: game_server_spec,
             },

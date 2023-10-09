@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use google_agones_crds::v1::fleet::FleetTemplate;
 use k8s_openapi::api::apps::v1::DeploymentStrategy;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
 use kube::Api;
@@ -8,10 +9,8 @@ use kube::ResourceExt;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
-use shulker_crds::agones::fleet::Fleet;
-use shulker_crds::agones::fleet::FleetSpec;
-use shulker_crds::agones::game_server::GameServerSpec;
-use shulker_crds::schemas::TemplateSpec;
+use google_agones_crds::v1::fleet::Fleet;
+use google_agones_crds::v1::fleet::FleetSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
@@ -90,7 +89,7 @@ impl ResourceBuilder for FleetBuilder {
                     .cluster_ref
                     .clone(),
                 config: MinecraftServerConfigurationSpec {
-                    existing_config_map_name: Some(ConfigMapBuilder::name(&minecraft_server_fleet)),
+                    existing_config_map_name: Some(ConfigMapBuilder::name(minecraft_server_fleet)),
                     ..MinecraftServerConfigurationSpec::default()
                 },
                 ..MinecraftServerSpec::default()
@@ -146,7 +145,7 @@ impl ResourceBuilder for FleetBuilder {
                 ..DeploymentStrategy::default()
             }),
             scheduling: Some("Packed".to_string()),
-            template: TemplateSpec::<GameServerSpec> {
+            template: FleetTemplate {
                 metadata: Some(ObjectMeta {
                     labels: Some(labels),
                     annotations: Some(annotations),

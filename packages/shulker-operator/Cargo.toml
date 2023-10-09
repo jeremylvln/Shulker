@@ -43,6 +43,7 @@ url.workspace = true
 uuid.workspace = true
 shulker-crds = { path = "../shulker-crds" }
 shulker-utils = { path = "../shulker-utils" }
+google-agones-crds = { path = "../google-agones-crds" }
 
 [dev-dependencies]
 shulker-utils = { path = "../shulker-utils", features = ["testing"] }

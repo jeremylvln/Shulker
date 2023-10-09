@@ -713,6 +713,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6fb8d784f27acf97159b40fc4db5ecd8aa23b9ad5ef69cdd136d3bc80665f0c0"
 
 [[package]]
+name = "google-agones-crds"
+version = "0.0.1"
+dependencies = [
+ "k8s-openapi",
+ "kube",
+ "schemars",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+]
+
+[[package]]
 name = "h2"
 version = "0.3.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1734,6 +1746,7 @@ name = "shulker-crds"
 version = "0.0.1"
 dependencies = [
  "base64 0.21.4",
+ "google-agones-crds",
  "k8s-openapi",
  "kube",
  "schemars",
@@ -1752,6 +1765,7 @@ dependencies = [
  "async-trait",
  "chrono",
  "futures",
+ "google-agones-crds",
  "hostname",
  "k8s-openapi",
  "kube",

@@ -1,6 +1,7 @@
 use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
 use futures::StreamExt;
+use google_agones_crds::v1::{fleet::Fleet, fleet_autoscaler::FleetAutoscaler};
 use k8s_openapi::api::core::v1::{ConfigMap, Service};
 use kube::{
     api::{ListParams, PatchParams},
@@ -15,7 +16,6 @@ use kube::{
 use tracing::*;
 
 use shulker_crds::{
-    agones::{fleet::Fleet, fleet_autoscaler::FleetAutoscaler},
     condition::{ConditionStatus, HasConditions},
     v1alpha1::proxy_fleet::{ProxyFleet, ProxyFleetStatus},
 };

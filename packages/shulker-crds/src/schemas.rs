@@ -1,8 +1,7 @@
+use google_agones_crds::v1::fleet_autoscaler::FleetAutoscalerPolicySpec;
 use kube::core::ObjectMeta;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::agones::fleet_autoscaler::FleetAutoscalerPolicySpec;
 
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]

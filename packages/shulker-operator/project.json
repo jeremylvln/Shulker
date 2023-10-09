@@ -29,6 +29,6 @@
       "inputs": ["default", "rust:dependencies"]
     }
   },
-  "implicitDependencies": ["shulker-crds", "shulker-utils"],
+  "implicitDependencies": ["shulker-crds", "shulker-utils", "google-agones-crds"],
   "tags": ["lang:rust"]
 }

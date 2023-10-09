@@ -1,9 +1,7 @@
 use k8s_openapi::api::apps::v1::DeploymentStrategy;
-use kube::CustomResource;
+use kube::{core::ObjectMeta, CustomResource};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use crate::schemas::TemplateSpec;
 
 use super::game_server::GameServerSpec;
 
@@ -20,7 +18,14 @@ pub struct FleetSpec {
     pub replicas: Option<i32>,
     pub strategy: Option<DeploymentStrategy>,
     pub scheduling: Option<String>,
-    pub template: TemplateSpec<GameServerSpec>,
+    pub template: FleetTemplate,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct FleetTemplate {
+    pub metadata: Option<ObjectMeta>,
+    pub spec: GameServerSpec,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]

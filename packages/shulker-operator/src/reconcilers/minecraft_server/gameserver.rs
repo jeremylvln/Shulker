@@ -20,11 +20,11 @@ use kube::ResourceExt;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
-use shulker_crds::agones::game_server::GameServer;
-use shulker_crds::agones::game_server::GameServerEvictionSpec;
-use shulker_crds::agones::game_server::GameServerHealthSpec;
-use shulker_crds::agones::game_server::GameServerPortSpec;
-use shulker_crds::agones::game_server::GameServerSpec;
+use google_agones_crds::v1::game_server::GameServer;
+use google_agones_crds::v1::game_server::GameServerEvictionSpec;
+use google_agones_crds::v1::game_server::GameServerHealthSpec;
+use google_agones_crds::v1::game_server::GameServerPortSpec;
+use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
 

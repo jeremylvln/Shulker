@@ -3,7 +3,8 @@ resolver = "2"
 members = [
   "packages/shulker-crds",
   "packages/shulker-operator",
-  "packages/shulker-utils"
+  "packages/shulker-utils",
+  "packages/google-agones-crds"
 ]
 
 [workspace.package]

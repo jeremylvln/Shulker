@@ -1,6 +1,7 @@
 use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
 use futures::StreamExt;
+use google_agones_crds::v1::game_server::GameServer;
 use k8s_openapi::api::core::v1::ConfigMap;
 use kube::{
     api::{DeleteParams, ListParams, PatchParams},
@@ -15,7 +16,6 @@ use kube::{
 use tracing::*;
 
 use shulker_crds::{
-    agones::game_server::GameServer,
     condition::{ConditionStatus, HasConditions},
     v1alpha1::minecraft_server::{MinecraftServer, MinecraftServerStatus},
 };
