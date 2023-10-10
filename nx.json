@@ -26,18 +26,6 @@
       "{workspaceRoot}/settings.gradle",
       "{projectRoot}/build.gradle",
       "{projectRoot}/gradle.properties"
-    ],
-    "docker:dependencies": [
-      "{workspaceRoot}/scripts/publish_docker.sh",
-      "{projectRoot}/Dockerfile"
     ]
-  },
-  "targetDefaults": {
-    "publish-docker": {
-      "inputs": [
-        "default",
-        "docker:dependencies"
-      ]
-    }
   }
 }
