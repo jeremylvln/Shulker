@@ -34,7 +34,7 @@ use super::MinecraftServerReconciler;
 const MINECRAFT_SERVER_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const MINECRAFT_SERVER_CONFIG_DIR: &str = "/config";
 const MINECRAFT_SERVER_DATA_DIR: &str = "/data";
-const MINECRAFT_SERVER_SHULKER_PROXY_AGENT_VERSION: &str = "0.1.0";
+const MINECRAFT_SERVER_SHULKER_PROXY_AGENT_VERSION: &str = env!("CARGO_PKG_VERSION");
 const MINECRAFT_SERVER_SHULKER_MAVEN_REPOSITORY: &str =
     "https://maven.jeremylvln.fr/artifactory/shulker";
 

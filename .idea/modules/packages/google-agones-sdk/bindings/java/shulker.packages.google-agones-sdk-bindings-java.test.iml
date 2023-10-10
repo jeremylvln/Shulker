@@ -12,7 +12,7 @@
             <flagArg name="noStdlib" arg="true" />
           </flagArguments>
           <stringArguments>
-            <stringArg name="destination" arg="$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/classes/kotlin/test" />
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/classes/kotlin/test" />
             <stringArg name="jvmTarget" arg="17" />
             <stringArg name="moduleName" arg="google-agones-sdk-bindings-java_test" />
             <stringArg name="apiVersion" arg="1.9" />
@@ -36,13 +36,13 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output-test url="file://$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/classes/java/test" />
+    <output-test url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/generated/source/kapt/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/generated/source/kapt/test" isTestSource="true" generated="true" />
+    <content url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kapt/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kapt/test" isTestSource="true" generated="true" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/generated/source/kaptKotlin/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/generated/source/kaptKotlin/test" isTestSource="true" generated="true" />
+    <content url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kaptKotlin/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kaptKotlin/test" isTestSource="true" generated="true" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../../../packages/google-agones-sdk/bindings/java/src/test" />
     <orderEntry type="inheritedJdk" />
@@ -51,7 +51,7 @@
     <orderEntry type="module-library">
       <library name="Gradle: kaptGeneratedClasses">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../../../../java/packages/google-agones-sdk-bindings-java/tmp/kapt3/classes/test" />
+          <root url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/tmp/kapt3/classes/test" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

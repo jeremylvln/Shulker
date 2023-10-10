@@ -13,7 +13,7 @@
             <flagArg name="noStdlib" arg="true" />
           </flagArguments>
           <stringArguments>
-            <stringArg name="destination" arg="$MODULE_DIR$/../../../java/packages/classes/kotlin/main" />
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../dist/java/packages/classes/kotlin/main" />
             <stringArg name="jvmTarget" arg="17" />
             <stringArg name="moduleName" arg="packages" />
             <stringArg name="apiVersion" arg="1.9" />
@@ -37,13 +37,13 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/../../../java/packages/classes/java/main" />
+    <output url="file://$MODULE_DIR$/../../../dist/java/packages/classes/java/main" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../java/packages/generated/source/kapt/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../java/packages/generated/source/kapt/main" isTestSource="false" generated="true" />
+    <content url="file://$MODULE_DIR$/../../../dist/java/packages/generated/source/kapt/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../dist/java/packages/generated/source/kapt/main" isTestSource="false" generated="true" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../java/packages/generated/source/kaptKotlin/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../java/packages/generated/source/kaptKotlin/main" isTestSource="false" generated="true" />
+    <content url="file://$MODULE_DIR$/../../../dist/java/packages/generated/source/kaptKotlin/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../dist/java/packages/generated/source/kaptKotlin/main" isTestSource="false" generated="true" />
     </content>
     <content url="file://$MODULE_DIR$/../../../packages/src/main" />
     <orderEntry type="inheritedJdk" />
@@ -51,7 +51,7 @@
     <orderEntry type="module-library">
       <library name="Gradle: kaptGeneratedClasses">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../java/packages/tmp/kapt3/classes/main" />
+          <root url="file://$MODULE_DIR$/../../../dist/java/packages/tmp/kapt3/classes/main" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
