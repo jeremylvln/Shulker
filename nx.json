@@ -5,12 +5,7 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e", "buf"]
       }
     }
   },
@@ -21,10 +16,10 @@
       "{workspaceRoot}/.cargo/"
     ],
     "java:dependencies": [
-      "{workspaceRoot}/build.gradle",
+      "{workspaceRoot}/build.gradle.kts",
       "{workspaceRoot}/gradle.properties",
       "{workspaceRoot}/settings.gradle",
-      "{projectRoot}/build.gradle",
+      "{projectRoot}/build.gradle.kts",
       "{projectRoot}/gradle.properties"
     ]
   }
