@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  TARGET_NODE_VERSION: '18'
+  TARGET_NODE_VERSION: '20'
 
 concurrency:
   group: docs
