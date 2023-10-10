@@ -7,6 +7,7 @@
     "url": "git@github.com:jeremylvln/Shulker.git"
   },
   "scripts": {
+    "prepare": "husky install",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
@@ -15,9 +16,14 @@
   },
   "devDependencies": {
     "@codedependant/semantic-release-docker": "^4.4.0",
+    "@commitlint/cli": "^17.7.2",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/config-nx-scopes": "^17.6.4",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "gradle-semantic-release-plugin": "1.7.7",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
     "nx": "16.10.0",
     "prettier": "2.6.2",
     "semantic-release": "21.1.2",
@@ -26,5 +32,14 @@
   "workspaces": [
     "packages/*",
     "docs"
-  ]
+  ],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional",
+      "@commitlint/config-nx-scopes"
+    ]
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
+  }
 }
