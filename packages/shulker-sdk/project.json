@@ -1,10 +1,10 @@
 {
   "name": "shulker-sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-sdk-bindings-rust/src",
-  "projectType": "application",
+  "sourceRoot": "packages/shulker-sdk/proto",
+  "projectType": "library",
   "targets": {
-    "build": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "command": "buf generate",

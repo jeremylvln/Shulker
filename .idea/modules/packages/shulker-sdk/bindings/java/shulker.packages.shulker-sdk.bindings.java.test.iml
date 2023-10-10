@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-proxy-api:main" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-api" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.1.0" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-sdk:bindings:java:test" external.linked.project.path="$MODULE_DIR$/../../../../../../packages/shulker-sdk/bindings/java" external.root.project.path="$MODULE_DIR$/../../../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.1.0" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet external-system-id="GRADLE" type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 17" allPlatforms="JVM [17]" useProjectSettings="false">
-        <compilerSettings>
-          <option name="additionalArguments" value="-Werror" />
-        </compilerSettings>
+        <additionalVisibleModuleNames>:packages:shulker-sdk:bindings:java:main</additionalVisibleModuleNames>
+        <compilerSettings />
         <compilerArguments>
           <flagArguments>
             <flagArg name="allowNoSourceFiles" arg="true" />
@@ -13,13 +12,20 @@
             <flagArg name="noStdlib" arg="true" />
           </flagArguments>
           <stringArguments>
-            <stringArg name="destination" arg="$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main" />
+            <stringArg name="destination" arg="$MODULE_DIR$/../../../../../../dist/packages/java/classes/kotlin/test" />
             <stringArg name="jvmTarget" arg="17" />
-            <stringArg name="moduleName" arg="shulker-proxy-api" />
+            <stringArg name="moduleName" arg="java" />
             <stringArg name="apiVersion" arg="1.8" />
             <stringArg name="languageVersion" arg="1.8" />
           </stringArguments>
           <arrayArguments>
+            <arrayArg name="friendPaths">
+              <args>
+                <arg>$MODULE_DIR$/../../../../../../dist/packages/java/classes/java/main</arg>
+                <arg>$MODULE_DIR$/../../../../../../dist/packages/java/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../../../../../dist/packages/java/libs/java-0.1.0.jar</arg>
+              </args>
+            </arrayArg>
             <arrayArg name="pluginClasspaths">
               <args>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.8.0/1f7345b3fc46786c1f36a4ba0728a95990d05929/kotlin-scripting-jvm-1.8.0.jar</arg>
@@ -37,18 +43,21 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/../../../../dist/packages/shulker-proxy-api/classes/kotlin/main" />
+    <output-test url="file://$MODULE_DIR$/../../../../../../dist/packages/java/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-api/src/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-api/src/main/kotlin" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-api/src/main/resources" type="java-resource" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../../../../../packages/shulker-sdk/bindings/java/src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="shulker.packages.shulker-sdk.bindings.java.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-junit:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>
+  <component name="TestModuleProperties" production-module="shulker.packages.shulker-sdk.bindings.java.main" />
 </module>

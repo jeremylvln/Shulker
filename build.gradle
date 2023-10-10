@@ -16,7 +16,7 @@ allprojects {
 }
 
 configure(subprojects.findAll {
-    !['packages'].contains(it.name)
+    !['packages', 'shulker-sdk', 'bindings'].contains(it.name)
 }) {
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
