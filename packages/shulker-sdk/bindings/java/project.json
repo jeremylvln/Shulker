@@ -8,14 +8,14 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/shulker-sdk/bindings/java"],
       "options": {
-        "command": "./gradlew :packages:shulker-sdk:bindings:java:build -x check"
+        "command": "./gradlew :packages:shulker-sdk-bindings-java:build -x check"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :packages:shulker-sdk:bindings:java:test"
+        "command": "./gradlew :packages:shulker-sdk-bindings-java:test"
       },
       "inputs": ["default", "java:dependencies"]
     }

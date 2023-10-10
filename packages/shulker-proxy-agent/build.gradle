@@ -1,6 +1,6 @@
 dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
-    commonImplementation(project(":packages:shulker-agones-java-sdk"))
+    commonImplementation(project(":packages:google-agones-sdk-bindings-java"))
 
     commonCompileOnly("io.fabric8:kubernetes-client-api:6.3.1")
     commonRuntimeOnly("io.fabric8:kubernetes-client:6.3.1")
@@ -10,13 +10,13 @@ dependencies {
 tasks {
     bungeecordJar {
         dependsOn(":packages:shulker-proxy-api:shadowJar")
-        dependsOn(":packages:shulker-agones-java-sdk:shadowJar")
+        dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
         mergeServiceFiles()
     }
 
     velocityJar {
         dependsOn(":packages:shulker-proxy-api:shadowJar")
-        dependsOn(":packages:shulker-agones-java-sdk:shadowJar")
+        dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
         mergeServiceFiles()
     }
 }

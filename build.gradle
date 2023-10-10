@@ -16,29 +16,34 @@ allprojects {
 }
 
 configure(subprojects.findAll {
-    !['packages', 'shulker-sdk', 'bindings'].contains(it.name)
+    !['packages', 'shulker-sdk-bindings-java', 'google-agones-sdk-bindings-java'].contains(it.name)
 }) {
-    apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
-    apply plugin: 'idea'
-    apply plugin: 'java-library'
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
-    apply plugin: 'com.github.johnrengelman.shadow'
-
-    group = 'io.shulkermc'
-
-    it.buildDir = "$rootDir/dist/packages/$it.name"
-
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-    compileJava.options.encoding = 'UTF-8'
-
-    dependencies {
-        testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    }
 
     compileKotlin {
         kotlinOptions.allWarningsAsErrors = true
     }
+
+    dependencies {
+        testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    }
+}
+
+configure(subprojects.findAll {
+    !['packages'].contains(it.name)
+}) {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'java-library'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    group = 'io.shulkermc'
+
+    it.buildDir = "$rootDir/dist${it.path.replaceAll(":", "/")}"
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    compileJava.options.encoding = 'UTF-8'
 
     assemble.dependsOn(shadowJar)
 

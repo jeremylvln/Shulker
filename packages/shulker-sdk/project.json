@@ -4,7 +4,7 @@
   "sourceRoot": "packages/shulker-sdk/proto",
   "projectType": "library",
   "targets": {
-    "generate": {
+    "buf": {
       "executor": "nx:run-commands",
       "options": {
         "command": "buf generate",
