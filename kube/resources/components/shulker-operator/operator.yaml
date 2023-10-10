@@ -111,7 +111,7 @@ spec:
                   operator: In
                   values:
                     - amd64
-                    # - arm64
+                    - arm64
                     # - ppc64le
                     # - s390x
                 - key: kubernetes.io/os
