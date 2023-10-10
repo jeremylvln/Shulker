@@ -27,12 +27,6 @@ jobs:
           node-version: ${{ env.TARGET_NODE_VERSION }}
           cache: npm
 
-      - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.TARGET_GOLANG_VERSION }}
-          cache: true
-
       - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
         uses: actions-rs/toolchain@v1
         with:
