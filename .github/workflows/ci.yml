@@ -4,7 +4,7 @@ on: pull_request
 
 env:
   TARGET_NODE_VERSION: '18'
-  TARGET_GOLANG_VERSION: '1.19'
+  TARGET_RUST_VERSION: 'stable'
   TARGET_JAVA_VERSION: '17'
 
 concurrency:
@@ -33,18 +33,17 @@ jobs:
           go-version: ${{ env.TARGET_GOLANG_VERSION }}
           cache: true
 
+      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.TARGET_RUST_VERSION }}
+
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
         with:
           distribution: adopt
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
-
-      - name: Cache Kubernetes tools
-        uses: actions/cache@v3
-        with:
-          path: scripts/.tools
-          key: ${{ runner.os }}-k8stools-${{ hashFiles('scripts/download_tools.sh') }}
 
       - name: Install Node.js dependencies
         run: npm ci
@@ -71,11 +70,10 @@ jobs:
           node-version: ${{ env.TARGET_NODE_VERSION }}
           cache: npm
 
-      - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
-        uses: actions/setup-go@v3
+      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
+        uses: actions-rs/toolchain@v1
         with:
-          go-version: ${{ env.TARGET_GOLANG_VERSION }}
-          cache: true
+          toolchain: ${{ env.TARGET_RUST_VERSION }}
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -115,11 +113,10 @@ jobs:
           node-version: ${{ env.TARGET_NODE_VERSION }}
           cache: npm
 
-      - name: Use Golang ${{ env.TARGET_GOLANG_VERSION }}
-        uses: actions/setup-go@v3
+      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
+        uses: actions-rs/toolchain@v1
         with:
-          go-version: ${{ env.TARGET_GOLANG_VERSION }}
-          cache: true
+          toolchain: ${{ env.TARGET_RUST_VERSION }}
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -127,12 +124,6 @@ jobs:
           distribution: adopt
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
-
-      - name: Cache Kubernetes tools
-        uses: actions/cache@v3
-        with:
-          path: scripts/.tools
-          key: ${{ runner.os }}-k8stools-${{ hashFiles('scripts/download_tools.sh') }}
 
       - name: Install Node.js dependencies
         run: npm ci

@@ -1,14 +1,18 @@
 {
-  "extends": ["config:base", ":semanticCommits"],
-  "automerge": false,
+  "extends": [
+    "config:recommended",
+    ":pinAllExceptPeerDependencies",
+    ":automergeMinor"
+  ],
   "dependencyDashboard": false,
-  "enabledManagers": ["github-actions", "gomod", "gradle"],
+  "enabledManagers": ["github-actions", "npm", "cargo", "gradle"],
   "labels": ["type:dependencies :wrench:"],
   "prCreation": "not-pending",
   "reviewersFromCodeOwners": false,
-  "stabilityDays": 3,
+  "minimumReleaseAge": "14 days",
+  "semanticCommits": "enabled",
   "updateNotScheduled": false,
   "vulnerabilityAlerts": {
-    "labels": ["type:dependencies :wrench:", "priority:critical :fire:"]
+    "addLabels": ["priority:critical :fire:"]
   }
 }

@@ -27,6 +27,12 @@
         "cwd": "packages/shulker-operator"
       },
       "inputs": ["default", "rust:dependencies"]
+    },
+    "publish-docker": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash scripts/publish_docker.sh shulker-operator"
+      }
     }
   },
   "implicitDependencies": ["shulker-crds", "shulker-utils", "google-agones-crds", "shulker-sdk-bindings-rust"],

@@ -1,4 +1,8 @@
-# More info: https://docs.docker.com/engine/reference/builder/#dockerignore-file
-# Ignore build and test binaries.
-bin/
-testbin/
+.git/
+.gradle/
+build/
+dist/
+node_modules/
+docs/.docusaurus/
+docs/build/
+docs/node_modules/
