@@ -35,6 +35,9 @@ jobs:
           node-version: ${{ env.TARGET_NODE_VERSION }}
           cache: npm
 
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
 

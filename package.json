@@ -7,10 +7,11 @@
     "url": "git@github.com:jeremylvln/Shulker.git"
   },
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky install && npm run proto:build",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
+    "proto:build": "nx run-many --target=buf --all",
     "crd:install": "cargo run --bin crdgen && kubectl apply -k kube/resources/crd",
     "crd:uninstall": "cargo run --bin crdgen && kubectl delete -k kube/resources/crd"
   },

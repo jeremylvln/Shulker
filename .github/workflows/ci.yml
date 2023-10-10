@@ -39,6 +39,9 @@ jobs:
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
 
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+
       - name: Install Node.js dependencies
         run: npm ci
 
@@ -84,6 +87,9 @@ jobs:
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
 
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+
       - name: Install Node.js dependencies
         run: npm ci
 
@@ -128,6 +134,9 @@ jobs:
           distribution: adopt
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
+
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
 
       - name: Install Node.js dependencies
         run: npm ci

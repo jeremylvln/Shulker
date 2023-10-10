@@ -40,6 +40,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Import signing GPG key
+        id: gpg-signing-key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
@@ -53,12 +60,8 @@ jobs:
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
 
-      - name: Import signing GPG key
-        id: gpg-signing-key
-        uses: crazy-max/ghaction-import-gpg@v5
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
 
       - name: Install Node.js dependencies
         run: npm ci
