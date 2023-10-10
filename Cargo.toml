@@ -4,7 +4,8 @@ members = [
   "packages/shulker-crds",
   "packages/shulker-operator",
   "packages/shulker-utils",
-  "packages/google-agones-crds"
+  "packages/google-agones-crds",
+  "packages/shulker-sdk/bindings/rust"
 ]
 
 [workspace.package]
@@ -24,12 +25,14 @@ futures = "0.3.28"
 hostname = "0.3.1"
 k8s-openapi = { version = "0.20.0", features = ["latest", "schemars"] }
 lazy_static = "1.4.0"
+prost = "0.12"
 rand = "0.8.5"
 schemars = { version = "0.8.12", features = ["chrono"] }
 serde = { version = "1.0.185", features = ["derive"] }
 serde_json = "1.0.105"
 serde_yaml = "0.9.25"
 thiserror = "1.0.47"
+tonic = { version = "0.10.2", features = ["gzip"] }
 tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
 tokio-util = "0.7.9"
 toml = "0.8.0"

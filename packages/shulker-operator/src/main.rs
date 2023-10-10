@@ -21,6 +21,7 @@ async fn main() -> anyhow::Result<()> {
         _ = reconcilers::minecraft_server::run(client.clone()) => {},
         _ = reconcilers::minecraft_server_fleet::run(client.clone()) => {},
         _ = api::create_http_server()? => {},
+        _ = api::create_grpc_server(client.clone()) => {},
     }
 
     Ok(())

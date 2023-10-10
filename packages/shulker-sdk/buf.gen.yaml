@@ -1,0 +1,21 @@
+version: v1
+managed:
+  enabled: true
+plugins:
+  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
+    out: bindings/rust/src/gen
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+      - file_descriptor_set
+  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
+    out: bindings/rust/src/gen
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+      - server_mod_attribute=.=#[cfg(feature = "server")]
+      - client_mod_attribute=.=#[cfg(feature = "client")]
+  - plugin: buf.build/protocolbuffers/java
+    out: bindings/java/src/main/generated
+  - plugin: buf.build/grpc/java:v1.58.0
+    out: bindings/java/src/main/generated

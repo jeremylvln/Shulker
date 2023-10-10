@@ -34,6 +34,7 @@ serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
 thiserror.workspace = true
+tonic.workspace = true
 tokio.workspace = true
 tokio-util.workspace = true
 toml.workspace = true
@@ -42,6 +43,7 @@ tracing-subscriber.workspace = true
 url.workspace = true
 uuid.workspace = true
 shulker-crds = { path = "../shulker-crds" }
+shulker-sdk = { path = "../shulker-sdk/bindings/rust" }
 shulker-utils = { path = "../shulker-utils" }
 google-agones-crds = { path = "../google-agones-crds" }
 
