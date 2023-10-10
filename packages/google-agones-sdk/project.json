@@ -10,7 +10,8 @@
         "command": "buf generate",
         "cwd": "packages/google-agones-sdk"
       },
-      "inputs": ["default"]
+      "inputs": ["default"],
+      "outputs": ["{projectRoot}/bindings/java/src/generated/"]
     }
   },
   "tags": []

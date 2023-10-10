@@ -3,7 +3,7 @@ name: ci
 on: pull_request
 
 env:
-  TARGET_NODE_VERSION: '18'
+  TARGET_NODE_VERSION: '20'
   TARGET_RUST_VERSION: 'stable'
   TARGET_JAVA_VERSION: '17'
 
