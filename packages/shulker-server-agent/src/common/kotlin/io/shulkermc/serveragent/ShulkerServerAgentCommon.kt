@@ -1,7 +1,7 @@
 package io.shulkermc.serveragent
 
-import agones.dev.sdk.AgonesSDK
-import agones.dev.sdk.AgonesSDKImpl
+import dev.agones.AgonesSDK
+import dev.agones.AgonesSDKImpl
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
 import java.lang.Exception
 import java.util.concurrent.TimeUnit

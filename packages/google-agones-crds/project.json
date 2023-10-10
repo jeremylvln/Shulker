@@ -1,0 +1,33 @@
+{
+  "name": "google-agones-crds",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/google-agones-crds/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo build",
+        "cwd": "packages/google-agones-crds"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo test",
+        "cwd": "packages/google-agones-crds"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo fmt",
+        "cwd": "packages/google-agones-crds"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    }
+  },
+  "tags": ["lang:rust"]
+}

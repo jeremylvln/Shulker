@@ -1,7 +1,7 @@
 package io.shulkermc.proxyagent
 
-import agones.dev.sdk.AgonesSDK
-import agones.dev.sdk.AgonesSDKImpl
+import dev.agones.AgonesSDK
+import dev.agones.AgonesSDKImpl
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapterImpl
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapterImpl

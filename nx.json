@@ -1,4 +1,6 @@
 {
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "extends": "nx/presets/npm.json",
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
@@ -12,12 +14,11 @@
       }
     }
   },
-  "extends": "nx/presets/npm.json",
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "go:dependencies": [
-      "{workspaceRoot}/go.mod",
-      "{workspaceRoot}/go.sum"
+    "rust:dependencies": [
+      "{workspaceRoot}/Cargo.toml",
+      "{workspaceRoot}/Cargo.lock",
+      "{workspaceRoot}/.cargo/"
     ],
     "java:dependencies": [
       "{workspaceRoot}/build.gradle",
@@ -25,18 +26,6 @@
       "{workspaceRoot}/settings.gradle",
       "{projectRoot}/build.gradle",
       "{projectRoot}/gradle.properties"
-    ],
-    "docker:dependencies": [
-      "{workspaceRoot}/scripts/publish_docker.sh",
-      "{projectRoot}/Dockerfile"
     ]
-  },
-  "targetDefaults": {
-    "publish-docker": {
-      "inputs": [
-        "default",
-        "docker:dependencies"
-      ]
-    }
   }
 }

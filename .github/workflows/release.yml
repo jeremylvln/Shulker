@@ -1,0 +1,76 @@
+name: release
+
+on:
+  workflow_dispatch:
+
+env:
+  TARGET_NODE_VERSION: '18'
+  TARGET_JAVA_VERSION: '17'
+
+concurrency:
+  group: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      packages: write
+      discussions: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Import signing GPG key
+        id: gpg-signing-key
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+          cache: npm
+
+      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: ${{ env.TARGET_JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Release with semantic-release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_signing.gnupg.keyName: '${{ steps.gpg-signing-key.outputs.keyid }}'
+          ORG_GRADLE_PROJECT_signing.gnupg.passphrase: '${{ secrets.GPG_PASSPHRASE }}'
+          ARTIFACTORY_USERNAME: '${{ secrets.ARTIFACTORY_USERNAME }}'
+          ARTIFACTORY_PASSWORD: '${{ secrets.ARTIFACTORY_PASSWORD }}'

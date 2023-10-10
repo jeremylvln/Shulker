@@ -4,14 +4,31 @@
   "sourceRoot": "packages/shulker-crds/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo build",
+        "cwd": "packages/shulker-crds"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo test",
+        "cwd": "packages/shulker-crds"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["go fmt ./...", "go vet ./..."],
+        "command": "cargo fmt",
         "cwd": "packages/shulker-crds"
       },
-      "inputs": ["default", "go:dependencies"]
+      "inputs": ["default", "rust:dependencies"]
     }
   },
-  "tags": ["lang:go"]
+  "implicitDependencies": ["shulker-utils", "google-agones-crds"],
+  "tags": ["lang:rust"]
 }

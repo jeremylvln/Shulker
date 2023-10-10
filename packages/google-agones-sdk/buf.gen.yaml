@@ -1,0 +1,9 @@
+version: v1
+managed:
+  enabled: true
+  java_package_prefix: dev
+plugins:
+  - plugin: buf.build/protocolbuffers/java
+    out: bindings/java/src/generated/java
+  - plugin: buf.build/grpc/java:v1.58.0
+    out: bindings/java/src/generated/grpc

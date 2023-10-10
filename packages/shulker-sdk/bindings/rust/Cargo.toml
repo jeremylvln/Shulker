@@ -1,0 +1,15 @@
+[package]
+name = "shulker-sdk"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[features]
+default = ["client", "server"]
+client = []
+server = []
+
+[dependencies]
+tonic.workspace = true
+prost.workspace = true

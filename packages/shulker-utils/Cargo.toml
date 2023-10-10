@@ -1,0 +1,17 @@
+[package]
+name = "shulker-utils"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+name = "shulker_utils"
+path = "src/lib.rs"
+
+[features]
+default = []
+testing = []
+
+[dependencies]
+chrono.workspace = true

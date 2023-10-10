@@ -1,0 +1,51 @@
+[package]
+name = "shulker-operator"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+publish.workspace = true
+default-run = "shulker-operator"
+
+[[bin]]
+name = "shulker-operator"
+path = "src/main.rs"
+doc = false
+
+[lib]
+name = "shulker_operator"
+path = "src/lib.rs"
+
+[features]
+default = []
+
+[dependencies]
+actix-web.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+chrono.workspace = true
+futures.workspace = true
+hostname.workspace = true
+k8s-openapi.workspace = true
+lazy_static.workspace = true
+kube.workspace = true
+rand.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+thiserror.workspace = true
+tonic.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+toml.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+url.workspace = true
+uuid.workspace = true
+shulker-crds = { path = "../shulker-crds" }
+shulker-sdk = { path = "../shulker-sdk/bindings/rust" }
+shulker-utils = { path = "../shulker-utils" }
+google-agones-crds = { path = "../google-agones-crds" }
+
+[dev-dependencies]
+shulker-utils = { path = "../shulker-utils", features = ["testing"] }
