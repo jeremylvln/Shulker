@@ -11,7 +11,7 @@ import java.util.logging.Logger
 @Plugin(
     id = "shulker-proxy-agent",
     name = "ShulkerProxyAgent",
-    version = "0.1.0",
+    version = VelocityBuildConfig.VERSION,
     authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 )
 class ShulkerProxyAgent @Inject constructor(

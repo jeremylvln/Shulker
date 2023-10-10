@@ -1,3 +1,7 @@
+plugins {
+    id("com.github.gmazzo.buildconfig") version "4.1.2"
+}
+
 dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
 
@@ -20,5 +24,26 @@ tasks {
         dependsOn(":packages:shulker-proxy-api:shadowJar")
         dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
         mergeServiceFiles()
+    }
+
+    processBungeecordResources {
+        inputs.property("version", project.version)
+        expand("version" to project.version)
+    }
+}
+
+ktlint {
+    filter {
+        exclude {
+            it.file.path.contains(layout.buildDirectory.dir("generated").get().toString())
+        }
+    }
+}
+
+buildConfig {
+    packageName("io.shulkermc.proxyagent")
+
+    sourceSets.getByName("velocity") {
+        buildConfigField("String", "VERSION", "\"${project.version}\"")
     }
 }

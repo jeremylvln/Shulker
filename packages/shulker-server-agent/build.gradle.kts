@@ -11,4 +11,9 @@ tasks {
         dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
         mergeServiceFiles()
     }
+
+    processPaperResources {
+        inputs.property("version", project.version)
+        expand("version" to project.version)
+    }
 }
