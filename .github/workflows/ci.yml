@@ -42,6 +42,14 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
+      - name: Restore Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: . -> dist/rust
+
+      - name: Install Rust dependencies
+        run: cargo check
+
       - name: Run build
         uses: mansagroup/nrwl-nx-action@v3
         with:
@@ -76,14 +84,16 @@ jobs:
           java-version: ${{ env.TARGET_JAVA_VERSION }}
           cache: 'gradle'
 
-      - name: Cache Kubernetes tools
-        uses: actions/cache@v3
-        with:
-          path: scripts/.tools
-          key: ${{ runner.os }}-k8stools-${{ hashFiles('scripts/download_tools.sh') }}
-
       - name: Install Node.js dependencies
         run: npm ci
+
+      - name: Restore Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: . -> dist/rust
+
+      - name: Install Rust dependencies
+        run: cargo check
 
       - name: Run tests
         uses: mansagroup/nrwl-nx-action@v3
@@ -121,6 +131,14 @@ jobs:
 
       - name: Install Node.js dependencies
         run: npm ci
+
+      - name: Restore Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: . -> dist/rust
+
+      - name: Install Rust dependencies
+        run: cargo check
 
       - name: Run lint
         uses: mansagroup/nrwl-nx-action@v3
