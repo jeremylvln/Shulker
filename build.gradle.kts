@@ -4,6 +4,7 @@ plugins {
     idea
     java
     `java-library`
+    jacoco
     `maven-publish`
     signing
     kotlin("jvm") version "1.9.0"
@@ -28,6 +29,7 @@ subprojects {
     apply(plugin = "idea")
     apply(plugin = "java")
     apply(plugin = "java-library")
+    apply(plugin = "jacoco")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -59,6 +61,17 @@ subprojects {
 
         shadowJar {
             archiveClassifier.set("")
+        }
+
+        jacocoTestReport {
+            reports {
+                csv.required = false
+                html.required = false
+            }
+        }
+
+        test {
+            finalizedBy("jacocoTestReport")
         }
     }
 

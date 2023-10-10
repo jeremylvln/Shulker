@@ -108,6 +108,16 @@ jobs:
           # parallel: 3
           parallel: 1
 
+      - name: Create coverage report with Tarpaulin
+        run: |
+          cargo install cargo-tarpaulin
+          cargo tarpaulin --out xml --output-dir coverage/rust --workspace
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
   lint:
     runs-on: ubuntu-latest
 
