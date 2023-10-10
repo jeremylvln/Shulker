@@ -31,7 +31,7 @@ const fileReplacements = [
   },
   {
     files: ['packages/shulker-proxy-agent/src/bungeecord/resources/plugin.yml'],
-    from: 'version: .*',
+    from: '^version: .*$',
     to: 'version: ${nextRelease.version}',
     results: [
       {
@@ -61,7 +61,7 @@ const fileReplacements = [
   },
   {
     files: ['packages/shulker-server-agent/src/paper/resources/plugin.yml'],
-    from: 'version: .*',
+    from: '^version: .*$',
     to: 'version: ${nextRelease.version}',
     results: [
       {
