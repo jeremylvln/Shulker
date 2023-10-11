@@ -36,7 +36,7 @@ impl LeaseLock {
             kube::Api::namespaced(client.clone(), client.default_namespace());
 
         let holder_identity = LeaseLock::get_local_identity()?;
-        let owned_patch_params = PatchParams::apply(&controller_name);
+        let owned_patch_params = PatchParams::apply(&controller_name).force();
 
         Ok(LeaseLock {
             leases_api,
@@ -100,11 +100,7 @@ impl LeaseLock {
 
                     let lease = self
                         .leases_api
-                        .patch(
-                            &self.name,
-                            &self.owned_patch_params.clone().force(),
-                            &Patch::Apply(lease),
-                        )
+                        .patch(&self.name, &self.owned_patch_params, &Patch::Apply(lease))
                         .await
                         .unwrap();
 

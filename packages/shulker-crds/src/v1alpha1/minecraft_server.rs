@@ -16,7 +16,6 @@ use crate::{condition::HasConditions, resourceref::ResourceRefSpec, schemas::Ima
     version = "v1alpha1",
     namespaced,
     status = "MinecraftServerStatus",
-    shortname = "skrpf",
     printcolumn = r#"{"name": "Ready", "type": "boolean", "jsonPath": ".status.conditions[?(@.type==\"Ready\")].status"}, {"name": "Phase", "type": "string", "jsonPath": ".status.conditions[?(@.type==\"Phase\")].reason"}, {"name": "Age", "type": "date", "jsonPath": ".metadata.creationTimestamp"}"#
 )]
 #[serde(rename_all = "camelCase")]
@@ -132,7 +131,7 @@ impl MinecraftServerConfigurationSpec {
     }
 
     fn default_proxy_forwarding_mode() -> String {
-        "Paper".to_string()
+        "Velocity".to_string()
     }
 
     fn schema_proxy_forwarding_mode(

@@ -13,8 +13,8 @@ metadata:
   namespace: shulker-system
 spec:
   ports:
-  - port: 8443
-    protocol: TCP
-    targetPort: metrics-proxy
+    - port: 8443
+      protocol: TCP
+      targetPort: metrics-proxy
   selector:
     control-plane: shulker-operator

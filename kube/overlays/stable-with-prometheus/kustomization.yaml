@@ -5,42 +5,42 @@ namespace: shulker-system
 namePrefix: shulker-
 
 resources:
-- ../../resources/crd
-- ../../resources/rbac
-- ../../resources/components/shulker-operator
-- ../../resources/webhook
-- ../../resources/components/shulker-operator/prometheus
+  - ../../resources/crd
+  - ../../resources/rbac
+  - ../../resources/components/shulker-operator
+  - ../../resources/webhook
+  - ../../resources/components/shulker-operator/prometheus
 
 images:
-- name: ghcr.io/jeremylvln/shulker-operator
-  newTag: v0.0.1
+  - name: ghcr.io/jeremylvln/shulker-operator
+    newTag: v0.0.1
 
 vars:
-- fieldref:
-    fieldPath: metadata.namespace
-  name: CERTIFICATE_NAMESPACE
-  objref:
-    group: cert-manager.io
-    kind: Certificate
-    name: serving-cert
-    version: v1
-- fieldref: {}
-  name: CERTIFICATE_NAME
-  objref:
-    group: cert-manager.io
-    kind: Certificate
-    name: serving-cert
-    version: v1
-- fieldref:
-    fieldPath: metadata.namespace
-  name: SHULKER_OPERATOR_SERVICE_NAMESPACE
-  objref:
-    kind: Service
-    name: shulker-operator-webhook-service
-    version: v1
-- fieldref: {}
-  name: SHULKER_OPERATOR_SERVICE_NAME
-  objref:
-    kind: Service
-    name: shulker-operator-webhook-service
-    version: v1
+  - fieldref:
+      fieldPath: metadata.namespace
+    name: CERTIFICATE_NAMESPACE
+    objref:
+      group: cert-manager.io
+      kind: Certificate
+      name: serving-cert
+      version: v1
+  - fieldref: {}
+    name: CERTIFICATE_NAME
+    objref:
+      group: cert-manager.io
+      kind: Certificate
+      name: serving-cert
+      version: v1
+  - fieldref:
+      fieldPath: metadata.namespace
+    name: SHULKER_OPERATOR_SERVICE_NAMESPACE
+    objref:
+      kind: Service
+      name: shulker-operator-webhook-service
+      version: v1
+  - fieldref: {}
+    name: SHULKER_OPERATOR_SERVICE_NAME
+    objref:
+      kind: Service
+      name: shulker-operator-webhook-service
+      version: v1

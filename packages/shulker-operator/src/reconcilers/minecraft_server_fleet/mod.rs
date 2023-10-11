@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
 use futures::StreamExt;
-use google_agones_crds::v1::game_server::GameServer;
+use google_agones_crds::v1::{fleet::Fleet, fleet_autoscaler::FleetAutoscaler};
 use k8s_openapi::api::core::v1::ConfigMap;
 use kube::{
     api::{ListParams, PatchParams},
@@ -86,7 +86,7 @@ impl MinecraftServerFleetReconciler {
 
                 patch_status(
                     &api,
-                    &PatchParams::apply("shulker-operator"),
+                    &PatchParams::apply("shulker-operator").force(),
                     &minecraft_server_fleet,
                 )
                 .await?;
@@ -204,7 +204,11 @@ pub async fn run(client: Client) {
         Config::default().any_semantic(),
     )
     .owns(
-        Api::<GameServer>::all(client.clone()),
+        Api::<Fleet>::all(client.clone()),
+        Config::default().any_semantic(),
+    )
+    .owns(
+        Api::<FleetAutoscaler>::all(client.clone()),
         Config::default().any_semantic(),
     )
     .shutdown_on_signal()

@@ -39,7 +39,13 @@ async fn summon_from_fleet(client: Client, fleet: &Fleet) -> Result<GameServer, 
         .push(fleet.controller_owner_ref(&()).unwrap());
 
     let created_game_server = Api::namespaced(client, fleet.namespace().as_ref().unwrap())
-        .create(&PostParams::default(), &game_server)
+        .create(
+            &PostParams {
+                dry_run: false,
+                field_manager: Some("shulker-operator".to_string()),
+            },
+            &game_server,
+        )
         .await?;
 
     Ok(created_game_server)

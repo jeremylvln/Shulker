@@ -2,20 +2,20 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- bases/shulkermc.io_minecraftclusters.yaml
-- bases/shulkermc.io_proxyfleets.yaml
-# - bases/shulkermc.io_minecraftservers.yaml
-# - bases/shulkermc.io_minecraftserverfleets.yaml
+  - bases/shulkermc.io_minecraftclusters.yaml
+  - bases/shulkermc.io_proxyfleets.yaml
+  - bases/shulkermc.io_minecraftservers.yaml
+  - bases/shulkermc.io_minecraftserverfleets.yaml
 
 patchesStrategicMerge:
-- patches/webhook_in_minecraftclusters.yaml
-# - patches/webhook_in_minecraftserverfleets.yaml
-# - patches/webhook_in_minecraftservers.yaml
-- patches/webhook_in_proxyfleets.yaml
-- patches/cainjection_in_minecraftclusters.yaml
-# - patches/cainjection_in_minecraftserverfleets.yaml
-# - patches/cainjection_in_minecraftservers.yaml
-- patches/cainjection_in_proxyfleets.yaml
+  - patches/webhook_in_minecraftclusters.yaml
+  - patches/webhook_in_minecraftserverfleets.yaml
+  - patches/webhook_in_minecraftservers.yaml
+  - patches/webhook_in_proxyfleets.yaml
+  - patches/cainjection_in_minecraftclusters.yaml
+  - patches/cainjection_in_minecraftserverfleets.yaml
+  - patches/cainjection_in_minecraftservers.yaml
+  - patches/cainjection_in_proxyfleets.yaml
 
 configurations:
-- kustomizeconfig.yaml
+  - kustomizeconfig.yaml

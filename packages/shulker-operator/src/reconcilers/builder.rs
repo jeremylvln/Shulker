@@ -110,18 +110,22 @@ pub async fn reconcile_builder<
     let updated_resource = if RB::is_updatable() && does_exists {
         api.patch(
             &name,
-            &PatchParams::apply("shulker-operator"),
+            &PatchParams::apply("shulker-operator").force(),
             &Patch::Apply(&resource),
         )
         .await
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
     } else if !does_exists {
         set_controller_reference(owner, &mut resource);
-        api.create(&PostParams::default(), &resource)
-            .await
-            .map_err(|e| {
-                super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into())
-            })?
+        api.create(
+            &PostParams {
+                dry_run: false,
+                field_manager: Some("shulker-operator".to_string()),
+            },
+            &resource,
+        )
+        .await
+        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
     } else {
         resource
     };

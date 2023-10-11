@@ -28,8 +28,8 @@ metadata:
   namespace: shulker-system
 spec:
   dnsNames:
-  - $(SHULKER_OPERATOR_SERVICE_NAME).$(SHULKER_OPERATOR_SERVICE_NAMESPACE).svc
-  - $(SHULKER_OPERATOR_SERVICE_NAME).$(SHULKER_OPERATOR_SERVICE_NAMESPACE).svc.cluster.local
+    - $(SHULKER_OPERATOR_SERVICE_NAME).$(SHULKER_OPERATOR_SERVICE_NAMESPACE).svc
+    - $(SHULKER_OPERATOR_SERVICE_NAME).$(SHULKER_OPERATOR_SERVICE_NAMESPACE).svc.cluster.local
   issuerRef:
     kind: Issuer
     name: selfsigned-issuer

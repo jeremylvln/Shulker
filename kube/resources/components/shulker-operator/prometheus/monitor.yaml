@@ -13,12 +13,12 @@ metadata:
   namespace: shulker-system
 spec:
   endpoints:
-  - path: /metrics
-    targetPort: 8443
-    scheme: https
-    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    tlsConfig:
-      insecureSkipVerify: true
+    - path: /metrics
+      targetPort: 8443
+      scheme: https
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      tlsConfig:
+        insecureSkipVerify: true
   selector:
     matchLabels:
       control-plane: shulker-operator

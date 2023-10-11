@@ -8,31 +8,30 @@ spec:
     categories: []
     kind: MinecraftCluster
     plural: minecraftclusters
-    shortNames:
-    - skrmc
+    shortNames: []
     singular: minecraftcluster
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: Auto-generated derived type for MinecraftClusterSpec via `CustomResource`
-        properties:
-          spec:
-            type: object
-          status:
-            description: The status object of `MinecraftCluster`
-            nullable: true
-            type: object
-        required:
-        - spec
-        title: MinecraftCluster
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+    - additionalPrinterColumns:
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: Auto-generated derived type for MinecraftClusterSpec via `CustomResource`
+          properties:
+            spec:
+              type: object
+            status:
+              description: The status object of `MinecraftCluster`
+              nullable: true
+              type: object
+          required:
+            - spec
+          title: MinecraftCluster
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

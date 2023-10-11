@@ -8,6 +8,8 @@ spec:
   replicas: 1
   template:
     spec:
+      clusterRef:
+        name: getting-started
       tags:
         - limbo
       version:

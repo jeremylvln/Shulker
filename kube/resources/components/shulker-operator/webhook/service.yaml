@@ -13,8 +13,8 @@ metadata:
   namespace: shulker-system
 spec:
   ports:
-  - port: 443
-    protocol: TCP
-    targetPort: webhooks
+    - port: 443
+      protocol: TCP
+      targetPort: webhooks
   selector:
     control-plane: shulker-operator

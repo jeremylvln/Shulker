@@ -84,7 +84,12 @@ impl ProxyFleetReconciler {
                     );
                 };
 
-                patch_status(&api, &PatchParams::apply("shulker-operator"), &proxy_fleet).await?;
+                patch_status(
+                    &api,
+                    &PatchParams::apply("shulker-operator").force(),
+                    &proxy_fleet,
+                )
+                .await?;
             }
         }
 

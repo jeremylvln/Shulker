@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
     version = "v1alpha1",
     namespaced,
     status = "MinecraftClusterStatus",
-    shortname = "skrmc",
     printcolumn = r#"{"name": "Age", "type": "date", "jsonPath": ".metadata.creationTimestamp"}"#
 )]
 #[serde(rename_all = "camelCase")]

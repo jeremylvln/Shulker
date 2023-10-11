@@ -429,6 +429,7 @@ impl GameServerBuilder {
                 value_from: Some(EnvVarSource {
                     secret_key_ref: Some(SecretKeySelector {
                         name: Some(format!("{}-forwarding-secret", spec.cluster_ref.name)),
+                        key: "key".to_string(),
                         ..SecretKeySelector::default()
                     }),
                     ..EnvVarSource::default()
@@ -458,9 +459,9 @@ impl GameServerBuilder {
 
     fn get_type_from_version_channel(channel: &str) -> String {
         match channel {
+            "Paper" => "PAPER".to_string(),
             "Bukkit" => "BUKKIT".to_string(),
             "Spigot" => "SPIGOT".to_string(),
-            "Paper" => "PAPER".to_string(),
             _ => unreachable!("Unknown version channel"),
         }
     }

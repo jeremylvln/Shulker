@@ -79,6 +79,7 @@ impl ResourceBuilder for FleetBuilder {
         let fake_mincraft_server = MinecraftServer {
             metadata: ObjectMeta {
                 namespace: minecraft_server_fleet.namespace(),
+                name: Some(minecraft_server_fleet.name_any()),
                 ..ObjectMeta::default()
             },
             spec: MinecraftServerSpec {
@@ -92,7 +93,7 @@ impl ResourceBuilder for FleetBuilder {
                     existing_config_map_name: Some(ConfigMapBuilder::name(minecraft_server_fleet)),
                     ..MinecraftServerConfigurationSpec::default()
                 },
-                ..MinecraftServerSpec::default()
+                ..minecraft_server_fleet.spec.template.spec.clone()
             },
             status: None,
         };

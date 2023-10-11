@@ -85,7 +85,7 @@ impl MinecraftServerReconciler {
 
                 patch_status(
                     &api,
-                    &PatchParams::apply("shulker-operator"),
+                    &PatchParams::apply("shulker-operator").force(),
                     &minecraft_server,
                 )
                 .await?;
