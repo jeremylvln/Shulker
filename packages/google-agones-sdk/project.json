@@ -11,7 +11,7 @@
         "cwd": "packages/google-agones-sdk"
       },
       "inputs": ["default"],
-      "outputs": ["{projectRoot}/bindings/java/src/generated/"]
+      "outputs": ["{projectRoot}/bindings/java/src/generated"]
     }
   },
   "tags": []

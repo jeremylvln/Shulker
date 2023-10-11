@@ -1,26 +1,20 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    idea
-    java
-    `java-library`
-    jacoco
-    `maven-publish`
-    signing
+    id("idea")
+    id("java")
+    id("java-library")
+    id("jacoco")
+    id("maven-publish")
+    id("signing")
     kotlin("jvm") version "1.9.0"
     kotlin("kapt") version "1.9.0"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.0"
 }
 
-allprojects {
-    group = "io.shulkermc"
-
-    repositories {
-        mavenCentral()
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
-        maven(url = "https://repo.papermc.io/repository/maven-public/")
-    }
+repositories {
+    mavenCentral()
 }
 
 subprojects {
@@ -37,8 +31,16 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "com.github.johnrengelman.shadow")
 
+    group = "io.shulkermc"
+
     project.layout.buildDirectory.set(File("$rootDir/dist/java${project.path.replace(":", "/")}"))
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+    repositories {
+        mavenCentral()
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+        maven(url = "https://repo.papermc.io/repository/maven-public/")
+    }
 
     dependencies {
         testImplementation(kotlin("test"))

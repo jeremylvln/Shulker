@@ -15,10 +15,11 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo test",
+        "command": "cargo tarpaulin",
         "cwd": "packages/shulker-crds"
       },
-      "inputs": ["default", "rust:dependencies"]
+      "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
+      "outputs": ["{workspaceRoot}/coverage/rust/shulker-crds"]
     },
     "lint": {
       "executor": "nx:run-commands",

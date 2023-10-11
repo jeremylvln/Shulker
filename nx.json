@@ -15,6 +15,7 @@
       "{workspaceRoot}/Cargo.lock",
       "{workspaceRoot}/.cargo/"
     ],
+    "rust:test:dependencies": ["{workspaceRoot}/.tarpaulin.toml"],
     "java:dependencies": [
       "{workspaceRoot}/build.gradle.kts",
       "{workspaceRoot}/gradle.properties",

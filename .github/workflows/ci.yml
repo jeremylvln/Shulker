@@ -1,6 +1,10 @@
 name: ci
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 
 env:
   TARGET_NODE_VERSION: '20'
@@ -99,7 +103,7 @@ jobs:
           workspaces: . -> dist/rust
 
       - name: Install Rust dependencies
-        run: cargo check
+        run: cargo install cargo-tarpaulin && cargo check
 
       - name: Run tests
         uses: mansagroup/nrwl-nx-action@v3
@@ -107,11 +111,6 @@ jobs:
           targets: test
           # parallel: 3
           parallel: 1
-
-      - name: Create coverage report with Tarpaulin
-        run: |
-          cargo install cargo-tarpaulin
-          cargo tarpaulin --out xml --output-dir coverage/rust --workspace
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
@@ -168,6 +167,8 @@ jobs:
 
   semantic:
     runs-on: ubuntu-latest
+
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Ensure semantic

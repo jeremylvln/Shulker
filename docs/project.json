@@ -6,11 +6,11 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/build"],
       "options": {
         "command": "npm run build",
         "cwd": "docs"
-      }
+      },
+      "outputs": ["{workspaceRoot}/build"]
     },
     "serve": {
       "executor": "nx:run-commands",

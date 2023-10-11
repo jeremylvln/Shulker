@@ -15,10 +15,11 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo test",
+        "command": "cargo tarpaulin",
         "cwd": "packages/shulker-operator"
       },
-      "inputs": ["default", "rust:dependencies"]
+      "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
+      "outputs": ["{workspaceRoot}/coverage/rust/shulker-operator"]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -29,6 +30,11 @@
       "inputs": ["default", "rust:dependencies"]
     }
   },
-  "implicitDependencies": ["shulker-crds", "shulker-utils", "google-agones-crds", "shulker-sdk-bindings-rust"],
+  "implicitDependencies": [
+    "shulker-crds",
+    "shulker-utils",
+    "google-agones-crds",
+    "shulker-sdk-bindings-rust"
+  ],
   "tags": ["lang:rust"]
 }
