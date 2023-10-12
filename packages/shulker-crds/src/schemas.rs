@@ -29,6 +29,7 @@ pub struct ImageOverrideSpec {
     pub image_pull_secrets: Vec<k8s_openapi::api::core::v1::LocalObjectReference>,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl ImageOverrideSpec {
     fn default_pull_policy() -> String {
         "IfNotPresent".to_string()

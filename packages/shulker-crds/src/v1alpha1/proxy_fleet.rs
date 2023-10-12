@@ -43,6 +43,7 @@ pub struct ProxyFleetSpec {
     pub autoscaling: Option<FleetAutoscalingSpec>,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl ProxyFleetSpec {
     fn default_replicas() -> u32 {
         1
@@ -77,6 +78,7 @@ pub struct ProxyFleetTemplateVersionSpec {
     pub name: String,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl ProxyFleetTemplateVersionSpec {
     fn default_channel() -> String {
         "Velocity".to_string()
@@ -134,6 +136,7 @@ pub struct ProxyFleetTemplateConfigurationSpec {
     pub ttl_seconds: u32,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl ProxyFleetTemplateConfigurationSpec {
     fn default_max_players() -> u32 {
         100
@@ -199,6 +202,7 @@ pub struct ProxyFleetServiceSpec {
     pub external_traffic_policy: String,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl ProxyFleetServiceSpec {
     fn default_type() -> String {
         "LoadBalancer".to_string()
@@ -247,6 +251,7 @@ pub struct ProxyFleetStatus {
     pub allocated_replicas: i32,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl HasConditions for ProxyFleetStatus {
     fn conditions(&self) -> &Vec<Condition> {
         &self.conditions

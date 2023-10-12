@@ -36,6 +36,7 @@ pub struct MinecraftServerFleetSpec {
     pub autoscaling: Option<FleetAutoscalingSpec>,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl MinecraftServerFleetSpec {
     fn default_replicas() -> u32 {
         1
@@ -53,6 +54,7 @@ pub struct MinecraftServerFleetStatus {
     pub allocated_replicas: i32,
 }
 
+#[cfg(not(tarpaulin_include))]
 impl HasConditions for MinecraftServerFleetStatus {
     fn conditions(&self) -> &Vec<Condition> {
         &self.conditions
