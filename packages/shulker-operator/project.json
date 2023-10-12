@@ -19,7 +19,9 @@
         "cwd": "packages/shulker-operator"
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
-      "outputs": ["{workspaceRoot}/coverage/rust/shulker-operator"]
+      "outputs": [
+        "{workspaceRoot}/coverage/rust/shulker-operator/cobertura.xml"
+      ]
     },
     "lint": {
       "executor": "nx:run-commands",

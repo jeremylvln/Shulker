@@ -16,22 +16,41 @@ Object.keys(codecovConfig.coverage.status.project)
     delete codecovConfig.coverage.status.project[name];
   });
 
-const projectsToRoot = Object.values(graph.nodes)
-  .filter((project) => !PROJECTS_TO_EXCLUDE.includes(project.name))
-  .reduce((acc, project) => {
-    acc[project.name] = project.data.root;
-    return acc;
-  }, {});
+const projects = Object.values(graph.nodes).filter(
+  (project) =>
+    !PROJECTS_TO_EXCLUDE.includes(project.name) &&
+    'test' in project.data.targets &&
+    'outputs' in project.data.targets.test,
+);
 
-Object.entries(projectsToRoot).forEach(([name, root]) => {
-  codecovConfig.coverage.status.project[name] = {
-    flags: [name],
+projects.forEach((project) => {
+  codecovConfig.coverage.status.project[project.name] = {
+    flags: [project.name],
   };
 
-  codecovConfig.flags[name] = {
-    paths: [root],
+  codecovConfig.flags[project.name] = {
+    paths: [project.data.root],
     carryforward: true,
   };
 });
 
 fs.writeFileSync(codecovConfigPath, YAML.stringify(codecovConfig));
+
+const uploadCommands = projects.map((project) => {
+  const coverageOutputs = project.data.targets.test.outputs;
+  const args = ['-t', '$CODECOV_TOKEN', '-F', project.name];
+
+  coverageOutputs.forEach((coverageOutput) => {
+    args.push('-f', coverageOutput.replace('{workspaceRoot}', '.'));
+  });
+
+  return ['$CODECOV', ...args].join(' ');
+});
+
+const uploadScript = [
+  '#!/bin/bash',
+  'CODECOV="${CODECOV:-codecov}"',
+  ...uploadCommands,
+  '',
+].join('\n');
+fs.writeFileSync(path.join(__dirname, 'upload_codecov_files.sh'), uploadScript);

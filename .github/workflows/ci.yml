@@ -115,7 +115,10 @@ jobs:
           parallel: 1
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        run: |
+          curl -o codecov https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          CODECOV=$(pwd)/codecov bash scripts/upload_codecov_files.sh
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 

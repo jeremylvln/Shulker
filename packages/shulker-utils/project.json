@@ -19,7 +19,7 @@
         "cwd": "packages/shulker-utils"
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
-      "outputs": ["{workspaceRoot}/coverage/rust/shulker-utils"]
+      "outputs": ["{workspaceRoot}/coverage/rust/shulker-utils/cobertura.xml"]
     },
     "lint": {
       "executor": "nx:run-commands",

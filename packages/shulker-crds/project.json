@@ -19,7 +19,7 @@
         "cwd": "packages/shulker-crds"
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
-      "outputs": ["{workspaceRoot}/coverage/rust/shulker-crds"]
+      "outputs": ["{workspaceRoot}/coverage/rust/shulker-crds/cobertura.xml"]
     },
     "lint": {
       "executor": "nx:run-commands",

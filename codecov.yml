@@ -10,33 +10,12 @@ coverage:
       flag_coverage_not_uploaded_behavior: exclude
     project:
       default: {}
-      google-agones-sdk-bindings-java:
-        flags:
-          - google-agones-sdk-bindings-java
       shulker-sdk-bindings-rust:
         flags:
           - shulker-sdk-bindings-rust
-      shulker-sdk-bindings-java:
-        flags:
-          - shulker-sdk-bindings-java
-      shulker-server-agent:
-        flags:
-          - shulker-server-agent
-      shulker-proxy-agent:
-        flags:
-          - shulker-proxy-agent
-      shulker-server-api:
-        flags:
-          - shulker-server-api
       google-agones-crds:
         flags:
           - google-agones-crds
-      google-agones-sdk:
-        flags:
-          - google-agones-sdk
-      shulker-proxy-api:
-        flags:
-          - shulker-proxy-api
       shulker-operator:
         flags:
           - shulker-operator
@@ -46,45 +25,14 @@ coverage:
       shulker-crds:
         flags:
           - shulker-crds
-      shulker-sdk:
-        flags:
-          - shulker-sdk
 flags:
-  google-agones-sdk-bindings-java:
-    paths:
-      - packages/google-agones-sdk/bindings/java
-    carryforward: true
   shulker-sdk-bindings-rust:
     paths:
       - packages/shulker-sdk/bindings/rust
     carryforward: true
-  shulker-sdk-bindings-java:
-    paths:
-      - packages/shulker-sdk/bindings/java
-    carryforward: true
-  shulker-server-agent:
-    paths:
-      - packages/shulker-server-agent
-    carryforward: true
-  shulker-proxy-agent:
-    paths:
-      - packages/shulker-proxy-agent
-    carryforward: true
-  shulker-server-api:
-    paths:
-      - packages/shulker-server-api
-    carryforward: true
   google-agones-crds:
     paths:
       - packages/google-agones-crds
-    carryforward: true
-  google-agones-sdk:
-    paths:
-      - packages/google-agones-sdk
-    carryforward: true
-  shulker-proxy-api:
-    paths:
-      - packages/shulker-proxy-api
     carryforward: true
   shulker-operator:
     paths:
@@ -97,8 +45,4 @@ flags:
   shulker-crds:
     paths:
       - packages/shulker-crds
-    carryforward: true
-  shulker-sdk:
-    paths:
-      - packages/shulker-sdk
     carryforward: true

@@ -19,7 +19,9 @@
         "cwd": "packages/google-agones-crds"
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
-      "outputs": ["{workspaceRoot}/coverage/rust/google-agones-sdk"]
+      "outputs": [
+        "{workspaceRoot}/coverage/rust/google-agones-sdk/cobertura.xml"
+      ]
     },
     "lint": {
       "executor": "nx:run-commands",
