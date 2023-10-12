@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+node scripts/generate_codecov_config.cjs
 npx --no -- lint-staged

@@ -23,6 +23,7 @@
     "@commitlint/cli": "17.7.2",
     "@commitlint/config-conventional": "17.7.0",
     "@commitlint/config-nx-scopes": "17.6.4",
+    "@nx/devkit": "16.10.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "gradle-semantic-release-plugin": "1.7.7",
@@ -31,7 +32,8 @@
     "nx": "16.10.0",
     "prettier": "3.0.3",
     "semantic-release": "21.1.2",
-    "semantic-release-replace-plugin": "1.2.7"
+    "semantic-release-replace-plugin": "1.2.7",
+    "yaml": "^2.3.2"
   },
   "workspaces": [
     "packages/*",
