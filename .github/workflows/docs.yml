@@ -47,10 +47,7 @@ jobs:
         run: npm ci
 
       - name: Build Docusaurus
-        uses: mansagroup/nrwl-nx-action@v3
-        with:
-          targets: build
-          projects: docs
+        run: nx build docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
