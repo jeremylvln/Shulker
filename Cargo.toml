@@ -15,7 +15,7 @@ edition = "2021"
 publish = false
 
 [workspace.dependencies]
-actix-web = "4.3.1"
+actix-web = "4.4.0"
 anyhow = "1.0.75"
 async-trait = "0.1.73"
 base64 = "0.21.4"
