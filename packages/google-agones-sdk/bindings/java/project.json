@@ -10,9 +10,7 @@
         "command": "./gradlew :packages:google-agones-sdk-bindings-java:build -x check"
       },
       "inputs": ["default", "java:dependencies"],
-      "outputs": [
-        "{workspaceRoot}/dist/packages/google-agones-sdk/bindings/java"
-      ]
+      "outputs": ["{workspaceRoot}/dist/java/google-agones-sdk-bindings-java"]
     },
     "test": {
       "executor": "nx:run-commands",

@@ -10,7 +10,7 @@
         "command": "./gradlew :packages:shulker-server-api:build -x check"
       },
       "inputs": ["default", "java:dependencies"],
-      "outputs": ["{workspaceRoot}/dist/packages/shulker-server-api"]
+      "outputs": ["{workspaceRoot}/dist/java/shulker-server-api"]
     },
     "test": {
       "executor": "nx:run-commands",

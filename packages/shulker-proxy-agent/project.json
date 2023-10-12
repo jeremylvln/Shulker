@@ -10,7 +10,7 @@
         "command": "./gradlew :packages:shulker-proxy-agent:build -x check"
       },
       "inputs": ["default", "java:dependencies"],
-      "outputs": ["{workspaceRoot}/dist/packages/shulker-proxy-agent"]
+      "outputs": ["{workspaceRoot}/dist/java/shulker-proxy-agent"]
     },
     "test": {
       "executor": "nx:run-commands",

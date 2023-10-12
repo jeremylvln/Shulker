@@ -75,6 +75,10 @@ subprojects {
         test {
             finalizedBy("jacocoTestReport")
         }
+
+        jacocoTestReport {
+            dependsOn("test")
+        }
     }
 
     publishing {
