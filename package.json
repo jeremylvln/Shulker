@@ -19,30 +19,26 @@
     "crd:uninstall": "cargo run --bin crdgen && kubectl delete -k kube/resources/crd"
   },
   "devDependencies": {
-    "@codedependant/semantic-release-docker": "^4.4.0",
-    "@commitlint/cli": "^17.7.2",
-    "@commitlint/config-conventional": "^17.7.0",
-    "@commitlint/config-nx-scopes": "^17.6.4",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
+    "@codedependant/semantic-release-docker": "4.4.0",
+    "@commitlint/cli": "17.7.2",
+    "@commitlint/config-conventional": "17.7.0",
+    "@commitlint/config-nx-scopes": "17.6.4",
+    "@nx/devkit": "16.10.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
     "gradle-semantic-release-plugin": "1.7.7",
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
+    "husky": "8.0.3",
+    "lint-staged": "14.0.1",
     "nx": "16.10.0",
-    "prettier": "2.8.8",
+    "prettier": "3.0.3",
     "semantic-release": "21.1.2",
-    "semantic-release-replace-plugin": "^1.2.7"
+    "semantic-release-replace-plugin": "1.2.7",
+    "yaml": "^2.3.2"
   },
   "workspaces": [
     "packages/*",
     "docs"
   ],
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional",
-      "@commitlint/config-nx-scopes"
-    ]
-  },
   "lint-staged": {
     "*": "prettier --ignore-unknown --write"
   }
