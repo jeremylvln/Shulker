@@ -7,7 +7,6 @@
   "dependencyDashboard": true,
   "enabledManagers": ["github-actions", "npm", "cargo", "gradle"],
   "labels": ["type:dependencies :wrench:"],
-  "prCreation": "not-pending",
   "minimumReleaseAge": "14 days",
   "semanticCommits": "enabled",
   "vulnerabilityAlerts": {
