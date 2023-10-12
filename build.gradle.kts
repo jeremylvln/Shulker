@@ -182,7 +182,7 @@ subprojects {
         dependencies {
             "commonCompileOnly"("net.kyori:adventure-api:4.12.0")
             "bungeecordCompileOnly"("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
-            "bungeecordImplementation"("net.kyori:adventure-platform-bungeecord:4.1.2")
+            "bungeecordImplementation"("net.kyori:adventure-platform-bungeecord:4.3.0")
             "velocityCompileOnly"("com.velocitypowered:velocity-api:3.1.1")
             "kaptVelocity"("com.velocitypowered:velocity-api:3.1.1")
         }
