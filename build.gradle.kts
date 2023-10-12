@@ -7,7 +7,7 @@ plugins {
     id("jacoco")
     id("maven-publish")
     id("signing")
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.10"
     kotlin("kapt") version "1.9.0"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.0"
