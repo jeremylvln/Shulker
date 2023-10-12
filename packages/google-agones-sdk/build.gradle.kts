@@ -15,12 +15,12 @@ dependencies {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.6.1"
+        artifact = "com.google.protobuf:protoc:3.24.3"
     }
 
     plugins {
         id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.54.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.58.0"
         }
     }
 
