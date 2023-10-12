@@ -4,14 +4,12 @@
     ":pinAllExceptPeerDependencies",
     ":automergeMinor"
   ],
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
   "enabledManagers": ["github-actions", "npm", "cargo", "gradle"],
   "labels": ["type:dependencies :wrench:"],
   "prCreation": "not-pending",
-  "reviewersFromCodeOwners": false,
   "minimumReleaseAge": "14 days",
   "semanticCommits": "enabled",
-  "updateNotScheduled": false,
   "vulnerabilityAlerts": {
     "addLabels": ["priority:critical :fire:"]
   }
