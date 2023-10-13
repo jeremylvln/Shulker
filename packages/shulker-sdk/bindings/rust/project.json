@@ -20,7 +20,7 @@
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
       "outputs": [
-        "{workspaceRoot}/coverage/rust/shulker-sdk-bindings/rust/cobertura.xml"
+        "{workspaceRoot}/coverage/rust/shulker-sdk-bindings-rust/cobertura.xml"
       ]
     },
     "lint": {

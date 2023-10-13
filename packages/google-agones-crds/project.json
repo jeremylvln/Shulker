@@ -20,7 +20,7 @@
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
       "outputs": [
-        "{workspaceRoot}/coverage/rust/google-agones-sdk/cobertura.xml"
+        "{workspaceRoot}/coverage/rust/google-agones-crds/cobertura.xml"
       ]
     },
     "lint": {
