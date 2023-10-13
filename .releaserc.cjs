@@ -33,7 +33,28 @@ module.exports = {
   branches: ['main'],
   plugins: [
     '@semantic-release/commit-analyzer',
-    '@semantic-release/release-notes-generator',
+    [
+      '@semantic-release/release-notes-generator',
+      {
+        preset: 'conventionalcommits',
+        parserOpts: {
+          noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES', 'BREAKING'],
+        },
+        presetConfig: {
+          types: [
+            ['feat', 'Features', ':sparkles:'],
+            ['fix', 'Bug Fixes', ':bug:'],
+            ['perf', 'Performance Improvements', ':bar_chart:'],
+            ['revert', 'Reverts', ':warning:'],
+            ['docs', 'Documentation', ':books:'],
+          ].map(([type, name, emoji]) => ({
+            type,
+            section: `${emoji} ${name} ${emoji}`,
+            hidden: false,
+          })),
+        },
+      },
+    ],
     [
       '@semantic-release/changelog',
       {
