@@ -75,8 +75,8 @@ impl ResourceBuilder for ServiceBuilder {
                     .into_iter()
                     .collect(),
             ),
-            type_: Some(service_config.type_.clone()),
-            external_traffic_policy: Some(service_config.external_traffic_policy.clone()),
+            type_: Some(service_config.type_.to_string()),
+            external_traffic_policy: Some(service_config.external_traffic_policy.to_string()),
             ports: Some(vec![ServicePort {
                 name: Some("minecraft".to_string()),
                 protocol: Some("TCP".to_string()),

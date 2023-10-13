@@ -4,6 +4,7 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use strum::{Display, IntoStaticStr};
 
 use super::minecraft_cluster::MinecraftClusterRef;
 
@@ -72,7 +73,7 @@ pub struct ProxyFleetTemplateVersionSpec {
     /// Channel of the version to use. Defaults to Velocity
     #[schemars(default = "ProxyFleetTemplateVersionSpec::default_channel")]
     #[schemars(schema_with = "ProxyFleetTemplateVersionSpec::schema_channel")]
-    pub channel: String,
+    pub channel: ProxyFleetTemplateVersion,
 
     /// Name of the version to use
     pub name: String,
@@ -80,8 +81,8 @@ pub struct ProxyFleetTemplateVersionSpec {
 
 #[cfg(not(tarpaulin_include))]
 impl ProxyFleetTemplateVersionSpec {
-    fn default_channel() -> String {
-        "Velocity".to_string()
+    fn default_channel() -> ProxyFleetTemplateVersion {
+        ProxyFleetTemplateVersion::Velocity
     }
 
     fn schema_channel(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
@@ -96,6 +97,14 @@ impl ProxyFleetTemplateVersionSpec {
         }
         .into()
     }
+}
+
+#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr)]
+pub enum ProxyFleetTemplateVersion {
+    #[default]
+    Velocity,
+    BungeeCord,
+    Waterfall,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
@@ -191,7 +200,7 @@ pub struct ProxyFleetServiceSpec {
     /// Must be one of: ClusterIP, LoadBalancer, NodePort
     #[schemars(default = "ProxyFleetServiceSpec::default_type")]
     #[schemars(schema_with = "ProxyFleetServiceSpec::schema_type")]
-    pub type_: String,
+    pub type_: ProxyFleetServiceType,
 
     // Annotations to add to the `Service`
     pub annotations: Option<BTreeMap<String, String>>,
@@ -199,13 +208,13 @@ pub struct ProxyFleetServiceSpec {
     // Describe how nodes distribute service traffic to the proxy.
     #[schemars(default = "ProxyFleetServiceSpec::default_external_traffic_policy")]
     #[schemars(schema_with = "ProxyFleetServiceSpec::schema_external_traffic_policy")]
-    pub external_traffic_policy: String,
+    pub external_traffic_policy: ProxyFleetServiceExternalTrafficPolicy,
 }
 
 #[cfg(not(tarpaulin_include))]
 impl ProxyFleetServiceSpec {
-    fn default_type() -> String {
-        "LoadBalancer".to_string()
+    fn default_type() -> ProxyFleetServiceType {
+        ProxyFleetServiceType::LoadBalancer
     }
 
     fn schema_type(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
@@ -221,8 +230,8 @@ impl ProxyFleetServiceSpec {
         .into()
     }
 
-    fn default_external_traffic_policy() -> String {
-        "Cluster".to_string()
+    fn default_external_traffic_policy() -> ProxyFleetServiceExternalTrafficPolicy {
+        ProxyFleetServiceExternalTrafficPolicy::Cluster
     }
 
     fn schema_external_traffic_policy(
@@ -238,6 +247,21 @@ impl ProxyFleetServiceSpec {
         }
         .into()
     }
+}
+
+#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr, Display)]
+pub enum ProxyFleetServiceType {
+    ClusterIP,
+    NodePort,
+    #[default]
+    LoadBalancer,
+}
+
+#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr, Display)]
+pub enum ProxyFleetServiceExternalTrafficPolicy {
+    #[default]
+    Cluster,
+    Local,
 }
 
 /// The status object of `ProxyFleet`

@@ -4,6 +4,7 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use strum::IntoStaticStr;
 
 use super::minecraft_cluster::MinecraftClusterRef;
 
@@ -47,7 +48,7 @@ pub struct MinecraftServerVersionSpec {
     /// Channel of the version to use. Defaults to Paper
     #[schemars(default = "MinecraftServerVersionSpec::default_channel")]
     #[schemars(schema_with = "MinecraftServerVersionSpec::schema_channel")]
-    pub channel: String,
+    pub channel: MinecraftServerVersion,
 
     /// Name of the version to use
     pub name: String,
@@ -55,8 +56,8 @@ pub struct MinecraftServerVersionSpec {
 
 #[cfg(not(tarpaulin_include))]
 impl MinecraftServerVersionSpec {
-    fn default_channel() -> String {
-        "Paper".to_string()
+    fn default_channel() -> MinecraftServerVersion {
+        MinecraftServerVersion::Paper
     }
 
     fn schema_channel(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
@@ -71,6 +72,14 @@ impl MinecraftServerVersionSpec {
         }
         .into()
     }
+}
+
+#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr)]
+pub enum MinecraftServerVersion {
+    #[default]
+    Paper,
+    Bukkit,
+    Spigot,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
@@ -115,7 +124,7 @@ pub struct MinecraftServerConfigurationSpec {
     /// this `MinecraftServer`
     #[schemars(default = "MinecraftServerConfigurationSpec::default_proxy_forwarding_mode")]
     #[schemars(schema_with = "MinecraftServerConfigurationSpec::schema_proxy_forwarding_mode")]
-    pub proxy_forwarding_mode: String,
+    pub proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode,
 }
 
 #[cfg(not(tarpaulin_include))]
@@ -132,8 +141,8 @@ impl MinecraftServerConfigurationSpec {
         true
     }
 
-    fn default_proxy_forwarding_mode() -> String {
-        "Velocity".to_string()
+    fn default_proxy_forwarding_mode() -> MinecraftServerConfigurationProxyForwardingMode {
+        MinecraftServerConfigurationProxyForwardingMode::Velocity
     }
 
     fn schema_proxy_forwarding_mode(
@@ -142,13 +151,20 @@ impl MinecraftServerConfigurationSpec {
         schemars::schema::SchemaObject {
             instance_type: Some(schemars::schema::InstanceType::String.into()),
             enum_values: Some(vec![
-                serde_json::Value::String("BungeeCord".to_string()),
                 serde_json::Value::String("Velocity".to_string()),
+                serde_json::Value::String("BungeeCord".to_string()),
             ]),
             ..Default::default()
         }
         .into()
     }
+}
+
+#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr)]
+pub enum MinecraftServerConfigurationProxyForwardingMode {
+    #[default]
+    Velocity,
+    BungeeCord,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]

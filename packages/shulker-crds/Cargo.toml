@@ -26,6 +26,7 @@ serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
 shulker-utils = { path = "../shulker-utils" }
+strum.workspace = true
 google-agones-crds = { path = "../google-agones-crds" }
 
 [build-dependencies]

@@ -24,6 +24,7 @@ use k8s_openapi::apimachinery::pkg::util::intstr::IntOrString;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
@@ -461,21 +462,19 @@ impl FleetBuilder {
         env
     }
 
-    fn get_type_from_version_channel(channel: &str) -> String {
+    fn get_type_from_version_channel(channel: &ProxyFleetTemplateVersion) -> String {
         match channel {
-            "Velocity" => "VELOCITY".to_string(),
-            "BungeeCord" => "BUNGEECORD".to_string(),
-            "Waterfall" => "WATERFALL".to_string(),
-            _ => unreachable!("Unknown version channel"),
+            ProxyFleetTemplateVersion::Velocity => "VELOCITY".to_string(),
+            ProxyFleetTemplateVersion::BungeeCord => "BUNGEECORD".to_string(),
+            ProxyFleetTemplateVersion::Waterfall => "WATERFALL".to_string(),
         }
     }
 
-    fn get_version_env_from_version_channel(channel: &str) -> String {
+    fn get_version_env_from_version_channel(channel: &ProxyFleetTemplateVersion) -> String {
         match channel {
-            "Velocity" => "VELOCITY_BUILD_ID".to_string(),
-            "BungeeCord" => "BUNGEE_JOB_ID".to_string(),
-            "Waterfall" => "WATERFALL_BUILD_ID".to_string(),
-            _ => unreachable!("Unknown version channel"),
+            ProxyFleetTemplateVersion::Velocity => "VELOCITY_BUILD_ID".to_string(),
+            ProxyFleetTemplateVersion::BungeeCord => "BUNGEE_JOB_ID".to_string(),
+            ProxyFleetTemplateVersion::Waterfall => "WATERFALL_BUILD_ID".to_string(),
         }
     }
 }

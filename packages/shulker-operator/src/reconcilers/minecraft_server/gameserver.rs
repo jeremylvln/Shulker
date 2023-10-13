@@ -17,6 +17,7 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
@@ -457,16 +458,15 @@ impl GameServerBuilder {
         env
     }
 
-    fn get_type_from_version_channel(channel: &str) -> String {
+    fn get_type_from_version_channel(channel: &MinecraftServerVersion) -> String {
         match channel {
-            "Paper" => "PAPER".to_string(),
-            "Bukkit" => "BUKKIT".to_string(),
-            "Spigot" => "SPIGOT".to_string(),
-            _ => unreachable!("Unknown version channel"),
+            MinecraftServerVersion::Paper => "PAPER".to_string(),
+            MinecraftServerVersion::Bukkit => "BUKKIT".to_string(),
+            MinecraftServerVersion::Spigot => "SPIGOT".to_string(),
         }
     }
 
-    fn get_version_env_from_version_channel(_channel: &str) -> String {
+    fn get_version_env_from_version_channel(_channel: &MinecraftServerVersion) -> String {
         "VERSION".to_string()
     }
 }

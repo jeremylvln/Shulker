@@ -192,7 +192,9 @@ mod bukkit {
 mod spigot {
     use serde::{Deserialize, Serialize};
 
-    use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
+    use shulker_crds::v1alpha1::minecraft_server::{
+        MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
+    };
 
     #[derive(Deserialize, Serialize, Clone, Debug)]
     #[serde(rename_all = "kebab-case")]
@@ -221,7 +223,8 @@ mod spigot {
         pub fn from_spec(spec: &MinecraftServerConfigurationSpec) -> Self {
             SpigotYml {
                 settings: SpigotSettingsYml {
-                    bungeecord: spec.proxy_forwarding_mode == "BungeeCord",
+                    bungeecord: spec.proxy_forwarding_mode
+                        == MinecraftServerConfigurationProxyForwardingMode::BungeeCord,
                     restart_on_crash: false,
                 },
                 advancements: SpigotSaveableYml {
@@ -251,7 +254,9 @@ mod spigot {
 mod paper {
     use serde::{Deserialize, Serialize};
 
-    use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
+    use shulker_crds::v1alpha1::minecraft_server::{
+        MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
+    };
 
     #[derive(Deserialize, Serialize, Clone, Debug)]
     #[serde(rename_all = "kebab-case")]
@@ -285,10 +290,12 @@ mod paper {
             PaperGlobalYml {
                 proxies: PaperGlobalProxiesYml {
                     bungee_cord: PaperGlobalProxiesBungeeCordYml {
-                        online_mode: spec.proxy_forwarding_mode == "BungeeCord",
+                        online_mode: spec.proxy_forwarding_mode
+                            == MinecraftServerConfigurationProxyForwardingMode::BungeeCord,
                     },
                     velocity: PaperGlobalProxiesVelocityYml {
-                        enabled: spec.proxy_forwarding_mode == "Velocity",
+                        enabled: spec.proxy_forwarding_mode
+                            == MinecraftServerConfigurationProxyForwardingMode::Velocity,
                         online_mode: true,
                         secret: "${CFG_VELOCITY_FORWARDING_SECRET}".to_string(),
                     },

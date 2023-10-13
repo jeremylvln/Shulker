@@ -5,6 +5,7 @@ use kube::core::ObjectMeta;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleet;
@@ -81,8 +82,8 @@ impl ResourceBuilder for ConfigMapBuilder {
             ),
         ]);
 
-        match proxy_fleet.spec.template.spec.version.channel.as_str() {
-            "Velocity" => {
+        match proxy_fleet.spec.template.spec.version.channel {
+            ProxyFleetTemplateVersion::Velocity => {
                 data.insert(
                     "velocity-config.toml".to_string(),
                     velocity::VelocityToml::from_spec(&proxy_fleet.spec.template.spec.config)
