@@ -13,6 +13,20 @@ const fileReplacements = [
     ],
     countMatches: true,
   },
+  {
+    files: ['gradle.properties'],
+    from: '^version = .*$',
+    to: 'version = ${nextRelease.version}',
+    results: [
+      {
+        file: 'gradle.properties',
+        hasChanged: true,
+        numMatches: 1,
+        numReplacements: 1,
+      },
+    ],
+    countMatches: true,
+  },
 ];
 
 module.exports = {
@@ -46,15 +60,20 @@ module.exports = {
       },
     ],
     [
+      '@semantic-release/exec',
+      {
+        publishCmd: 'gradle publish',
+      },
+    ],
+    [
       '@semantic-release/git',
       {
         assets: [
           'package.json',
           'package-lock.json',
           'CHANGELOG.md',
-          'gradle.properties',
           ...fileReplacements.flatMap((replacement) =>
-            replacement.results.map((result) => result.file)
+            replacement.results.map((result) => result.file),
           ),
         ],
       },
