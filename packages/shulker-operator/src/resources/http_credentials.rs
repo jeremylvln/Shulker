@@ -76,6 +76,16 @@ mod tests {
     }
 
     #[test]
+    #[should_panic(expected = "Secret data is empty")]
+    fn fail_if_secret_empty() {
+        // G
+        let secret = Secret::default();
+
+        // W
+        HttpCredentials::from_kubernetes_secret(&secret).unwrap();
+    }
+
+    #[test]
     #[should_panic(expected = "Missing username or password key in secret")]
     fn fail_without_username() {
         // G

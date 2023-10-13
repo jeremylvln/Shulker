@@ -1886,6 +1886,8 @@ dependencies = [
  "futures",
  "google-agones-crds",
  "hostname",
+ "http",
+ "hyper",
  "k8s-openapi",
  "kube",
  "lazy_static",
@@ -1902,6 +1904,7 @@ dependencies = [
  "tokio-util",
  "toml",
  "tonic",
+ "tower-test",
  "tracing",
  "tracing-subscriber",
  "url",
@@ -2164,6 +2167,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-test"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e89b3cbabd3ae862100094ae433e1def582cf86451b4e9bf83aa7ac1d8a7d719"
+dependencies = [
+ "async-stream",
+ "bytes",
+ "futures-core",
+ "tokio",
+ "tokio-stream",
+]
+
+[[package]]
 name = "tokio-util"
 version = "0.7.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2292,6 +2308,20 @@ name = "tower-service"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6bc1c9ce2b5135ac7f93c72918fc37feb872bdc6a5533a8b85eb4b86bfdae52"
+
+[[package]]
+name = "tower-test"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4546773ffeab9e4ea02b8872faa49bb616a80a7da66afc2f32688943f97efa7"
+dependencies = [
+ "futures-util",
+ "pin-project",
+ "tokio",
+ "tokio-test",
+ "tower-layer",
+ "tower-service",
+]
 
 [[package]]
 name = "tracing"

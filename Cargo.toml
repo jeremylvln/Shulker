@@ -22,6 +22,8 @@ base64 = "0.21.4"
 chrono = { version = "0.4.26", features = ["serde"] }
 futures = "0.3.28"
 hostname = "0.3.1"
+http = "0.2.9"
+hyper = "0.14.27"
 k8s-openapi = { version = "0.20.0", features = ["latest", "schemars"] }
 lazy_static = "1.4.0"
 prost = "0.12"
@@ -36,6 +38,7 @@ tonic = { version = "0.10.2", features = ["gzip"] }
 tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
 tokio-util = "0.7.9"
 toml = "0.8.0"
+tower-test = "0.4.0"
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["json", "env-filter"] }
 url = "2.4.1"
