@@ -62,7 +62,7 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        publishCmd: 'gradle publish',
+        publishCmd: './gradlew publish',
       },
     ],
     [
