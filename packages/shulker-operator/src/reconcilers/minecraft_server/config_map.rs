@@ -108,15 +108,15 @@ impl ConfigMapBuilder {
 }
 
 mod vanilla {
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
 
-    pub struct VanillaProperties(HashMap<String, String>);
+    pub struct VanillaProperties(BTreeMap<String, String>);
 
     impl VanillaProperties {
         pub fn from_spec(spec: &MinecraftServerConfigurationSpec) -> Self {
-            let mut properties = HashMap::new();
+            let mut properties = BTreeMap::new();
 
             properties.insert("max-players".to_string(), spec.max_players.to_string());
             properties.insert(
@@ -140,6 +140,52 @@ mod vanilla {
             }
 
             properties
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::collections::BTreeMap;
+
+        use shulker_crds::v1alpha1::minecraft_server::{
+            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
+        };
+
+        #[test]
+        fn from_spec() {
+            // G
+            let spec = MinecraftServerConfigurationSpec {
+                existing_config_map_name: None,
+                world: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                disable_nether: true,
+                disable_end: false,
+                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
+                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
+            };
+
+            // W
+            let config = super::VanillaProperties::from_spec(&spec);
+
+            // T
+            insta::assert_debug_snapshot!(config.0);
+        }
+
+        #[test]
+        fn to_string() {
+            // G
+            let config = super::VanillaProperties(BTreeMap::from([(
+                "my-str".to_string(),
+                "my-value".to_string(),
+            )]));
+
+            // W
+            let properties = config.to_string();
+
+            // T
+            insta::assert_snapshot!(properties);
         }
     }
 }
@@ -185,6 +231,52 @@ mod bukkit {
             yml.push('\n');
 
             yml
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::collections::BTreeMap;
+
+        use shulker_crds::v1alpha1::minecraft_server::{
+            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
+        };
+
+        #[test]
+        fn from_spec() {
+            // G
+            let spec = MinecraftServerConfigurationSpec {
+                existing_config_map_name: None,
+                world: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                disable_nether: true,
+                disable_end: false,
+                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
+                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
+            };
+
+            // W
+            let config = super::BukkitYml::from_spec(&spec);
+
+            // T
+            insta::assert_yaml_snapshot!(config);
+        }
+
+        #[test]
+        fn to_string() {
+            // G
+            let config = super::BukkitYml {
+                settings: super::BukkitSettingsYml { allow_end: true },
+                auto_updater: super::BukkitAutoUpdaterYml { enabled: false },
+            };
+
+            // W
+            let yml = config.to_string();
+
+            // T
+            insta::assert_snapshot!(yml);
         }
     }
 }
@@ -249,6 +341,64 @@ mod spigot {
             yml
         }
     }
+
+    #[cfg(test)]
+    mod tests {
+        use std::collections::BTreeMap;
+
+        use shulker_crds::v1alpha1::minecraft_server::{
+            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
+        };
+
+        #[test]
+        fn from_spec() {
+            // G
+            let spec = MinecraftServerConfigurationSpec {
+                existing_config_map_name: None,
+                world: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                disable_nether: true,
+                disable_end: false,
+                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
+                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
+            };
+
+            // W
+            let config = super::SpigotYml::from_spec(&spec);
+
+            // T
+            insta::assert_yaml_snapshot!(config);
+        }
+
+        #[test]
+        fn to_string() {
+            // G
+            let config = super::SpigotYml {
+                settings: super::SpigotSettingsYml {
+                    bungeecord: false,
+                    restart_on_crash: false,
+                },
+                advancements: super::SpigotSaveableYml {
+                    disable_saving: true,
+                },
+                players: super::SpigotSaveableYml {
+                    disable_saving: true,
+                },
+                stats: super::SpigotSaveableYml {
+                    disable_saving: true,
+                },
+                save_user_cache_on_stop_only: true,
+            };
+
+            // W
+            let yml = config.to_string();
+
+            // T
+            insta::assert_snapshot!(yml);
+        }
+    }
 }
 
 mod paper {
@@ -310,6 +460,58 @@ mod paper {
             yml.push('\n');
 
             yml
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::collections::BTreeMap;
+
+        use shulker_crds::v1alpha1::minecraft_server::{
+            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
+        };
+
+        #[test]
+        fn from_spec() {
+            // G
+            let spec = MinecraftServerConfigurationSpec {
+                existing_config_map_name: None,
+                world: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                disable_nether: true,
+                disable_end: false,
+                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
+                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
+            };
+
+            // W
+            let config = super::PaperGlobalYml::from_spec(&spec);
+
+            // T
+            insta::assert_yaml_snapshot!(config);
+        }
+
+        #[test]
+        fn to_string() {
+            // G
+            let config = super::PaperGlobalYml {
+                proxies: super::PaperGlobalProxiesYml {
+                    bungee_cord: super::PaperGlobalProxiesBungeeCordYml { online_mode: false },
+                    velocity: super::PaperGlobalProxiesVelocityYml {
+                        enabled: true,
+                        online_mode: true,
+                        secret: "my-secret".to_string(),
+                    },
+                },
+            };
+
+            // W
+            let yml = config.to_string();
+
+            // T
+            insta::assert_snapshot!(yml);
         }
     }
 }

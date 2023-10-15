@@ -1,0 +1,16 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_server/config_map.rs
+expression: yml
+---
+settings:
+  bungeecord: false
+  restart-on-crash: false
+advancements:
+  disable-saving: true
+players:
+  disable-saving: true
+stats:
+  disable-saving: true
+save-user-cache-on-stop-only: true
+
+

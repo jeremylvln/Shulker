@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use kube::CustomResource;
@@ -176,7 +176,7 @@ pub struct ProxyFleetTemplatePodOverridesSpec {
 
     /// Node selector to be applied on created `Pod`
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_selector: Option<HashMap<String, String>>,
+    pub node_selector: Option<BTreeMap<String, String>>,
 
     /// Tolerations to be applied on created `Pod`
     #[serde(skip_serializing_if = "Option::is_none")]

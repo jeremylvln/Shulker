@@ -1,0 +1,28 @@
+---
+source: packages/shulker-operator/src/reconcilers/proxy_fleet/config_map.rs
+expression: yml
+---
+servers:
+  lobby:
+    motd: Hello World
+    address: localhost:30000
+    restricted: false
+listeners:
+- host: 0.0.0.0:25577
+  query_port: 25577
+  motd: Hello World
+  max_players: 20
+  priorities:
+  - lobby
+  - limbo
+  ping_passthrough: false
+  force_default_server: true
+  proxy_protocol: true
+groups: {}
+online_mode: true
+ip_forward: true
+prevent_proxy_connections: true
+enforce_secure_profile: true
+log_pings: false
+
+
