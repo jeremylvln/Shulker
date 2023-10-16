@@ -103,8 +103,8 @@ pub struct MinecraftServerConfigurationSpec {
 
     /// Custom properties to set inside the server.properties file of
     /// the Pod. Note: Shulker may override some values
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub server_properties: BTreeMap<String, String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub server_properties: Option<BTreeMap<String, String>>,
 
     /// Type of forwarding the proxies are using between themselves and
     /// this `MinecraftServer`

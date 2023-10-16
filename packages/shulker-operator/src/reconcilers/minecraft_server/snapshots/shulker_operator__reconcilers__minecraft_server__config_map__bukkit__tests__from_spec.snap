@@ -3,7 +3,7 @@ source: packages/shulker-operator/src/reconcilers/minecraft_server/config_map.rs
 expression: config
 ---
 settings:
-  allow-end: true
+  allow-end: false
 auto-updater:
   enabled: false
 

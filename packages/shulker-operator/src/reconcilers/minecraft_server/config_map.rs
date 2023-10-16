@@ -107,6 +107,56 @@ impl ConfigMapBuilder {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_server::fixtures::{create_client_mock, TEST_SERVER},
+    };
+
+    #[test]
+    fn name_contains_cluster_name() {
+        // W
+        let name = super::ConfigMapBuilder::name(&TEST_SERVER);
+
+        // T
+        assert_eq!(name, "my-server-config");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+
+        // W
+        let config_map = builder
+            .create(&TEST_SERVER, "my-server-config")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_SERVER, "my-server-config")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_SERVER, &mut config_map).await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+}
+
 mod vanilla {
     use std::collections::BTreeMap;
 
@@ -147,24 +197,12 @@ mod vanilla {
     mod tests {
         use std::collections::BTreeMap;
 
-        use shulker_crds::v1alpha1::minecraft_server::{
-            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
-        };
+        use crate::reconcilers::minecraft_server::fixtures::TEST_SERVER;
 
         #[test]
         fn from_spec() {
             // G
-            let spec = MinecraftServerConfigurationSpec {
-                existing_config_map_name: None,
-                world: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                disable_nether: true,
-                disable_end: false,
-                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
-                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
-            };
+            let spec = TEST_SERVER.spec.config.clone();
 
             // W
             let config = super::VanillaProperties::from_spec(&spec);
@@ -236,26 +274,12 @@ mod bukkit {
 
     #[cfg(test)]
     mod tests {
-        use std::collections::BTreeMap;
-
-        use shulker_crds::v1alpha1::minecraft_server::{
-            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
-        };
+        use crate::reconcilers::minecraft_server::fixtures::TEST_SERVER;
 
         #[test]
         fn from_spec() {
             // G
-            let spec = MinecraftServerConfigurationSpec {
-                existing_config_map_name: None,
-                world: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                disable_nether: true,
-                disable_end: false,
-                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
-                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
-            };
+            let spec = TEST_SERVER.spec.config.clone();
 
             // W
             let config = super::BukkitYml::from_spec(&spec);
@@ -344,26 +368,12 @@ mod spigot {
 
     #[cfg(test)]
     mod tests {
-        use std::collections::BTreeMap;
-
-        use shulker_crds::v1alpha1::minecraft_server::{
-            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
-        };
+        use crate::reconcilers::minecraft_server::fixtures::TEST_SERVER;
 
         #[test]
         fn from_spec() {
             // G
-            let spec = MinecraftServerConfigurationSpec {
-                existing_config_map_name: None,
-                world: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                disable_nether: true,
-                disable_end: false,
-                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
-                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
-            };
+            let spec = TEST_SERVER.spec.config.clone();
 
             // W
             let config = super::SpigotYml::from_spec(&spec);
@@ -465,26 +475,12 @@ mod paper {
 
     #[cfg(test)]
     mod tests {
-        use std::collections::BTreeMap;
-
-        use shulker_crds::v1alpha1::minecraft_server::{
-            MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
-        };
+        use crate::reconcilers::minecraft_server::fixtures::TEST_SERVER;
 
         #[test]
         fn from_spec() {
             // G
-            let spec = MinecraftServerConfigurationSpec {
-                existing_config_map_name: None,
-                world: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                disable_nether: true,
-                disable_end: false,
-                server_properties: BTreeMap::from([("my-str".to_string(), "my-value".to_string())]),
-                proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode::Velocity,
-            };
+            let spec = TEST_SERVER.spec.config.clone();
 
             // W
             let config = super::PaperGlobalYml::from_spec(&spec);

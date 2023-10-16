@@ -27,6 +27,9 @@ use super::{builder::reconcile_builder, status::patch_status, ReconcilerError, R
 pub mod config_map;
 pub mod gameserver;
 
+#[cfg(test)]
+mod fixtures;
+
 static FINALIZER: &str = "minecraftservers.shulkermc.io";
 
 struct MinecraftServerReconciler {

@@ -1,0 +1,14 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_server/config_map.rs
+expression: config_map
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: minecraftserver
+    app.kubernetes.io/name: my-server
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-server-config
+  namespace: default
+

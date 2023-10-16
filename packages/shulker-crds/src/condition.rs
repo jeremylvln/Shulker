@@ -1,10 +1,13 @@
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::{Condition, Time};
 
 use shulker_utils::time;
+use strum::{Display, IntoStaticStr};
 
+#[derive(PartialEq, Clone, Debug, Default, IntoStaticStr, Display)]
 pub enum ConditionStatus {
     True,
     False,
+    #[default]
     Unknown,
 }
 
@@ -19,15 +22,9 @@ pub trait HasConditions {
         reason: String,
         message: String,
     ) {
-        let status_str = match status {
-            ConditionStatus::True => "True".to_string(),
-            ConditionStatus::False => "False".to_string(),
-            ConditionStatus::Unknown => "Unknown".to_string(),
-        };
-
         let new_condition = Condition {
             type_,
-            status: status_str,
+            status: status.to_string(),
             reason,
             message,
             last_transition_time: Time(time::now()),
@@ -61,16 +58,16 @@ pub trait HasConditions {
     }
 
     fn is_condition_true(&self, condition_type: &str) -> bool {
-        self.has_condition_status(condition_type, "True")
+        self.has_condition_status(condition_type, ConditionStatus::True)
     }
 
     fn is_condition_false(&self, condition_type: &str) -> bool {
-        self.has_condition_status(condition_type, "False")
+        self.has_condition_status(condition_type, ConditionStatus::False)
     }
 
-    fn has_condition_status(&self, condition_type: &str, status: &str) -> bool {
+    fn has_condition_status(&self, condition_type: &str, status: ConditionStatus) -> bool {
         self.find_condition(condition_type)
-            .map(|c| c.status == status)
+            .map(|c| c.status == status.to_string())
             .unwrap_or(false)
     }
 }
@@ -79,6 +76,8 @@ pub trait HasConditions {
 mod tests {
     use k8s_openapi::apimachinery::pkg::apis::meta::v1::{Condition, Time};
     use shulker_utils::time;
+
+    use crate::condition::ConditionStatus;
 
     use super::HasConditions;
 
@@ -99,7 +98,7 @@ mod tests {
         // G
         let test_structure = TestHasConditions(vec![Condition {
             type_: "TestCondition".to_string(),
-            status: "True".to_string(),
+            status: ConditionStatus::True.to_string(),
             reason: "".to_string(),
             message: "".to_string(),
             last_transition_time: Time(time::now()),
@@ -130,7 +129,7 @@ mod tests {
         // G
         let mut test_structure = TestHasConditions(vec![Condition {
             type_: "TestCondition".to_string(),
-            status: "True".to_string(),
+            status: ConditionStatus::True.to_string(),
             reason: "".to_string(),
             message: "".to_string(),
             last_transition_time: Time(time::now()),
@@ -182,7 +181,7 @@ mod tests {
         // G
         let mut test_structure = TestHasConditions(vec![Condition {
             type_: "TestCondition".to_string(),
-            status: "True".to_string(),
+            status: ConditionStatus::True.to_string(),
             reason: "A reason".to_string(),
             message: "A message".to_string(),
             last_transition_time: Time(time::now()),
@@ -229,9 +228,9 @@ mod tests {
     }
 
     is_condition_true_tests! {
-        is_condition_true: ("TestCondition", "True", "TestCondition", true),
-        is_condition_true_while_false: ("TestCondition", "False", "TestCondition", false),
-        is_condition_true_unknown_condition: ("TestCondition", "True", "OtherCondition", false),
+        is_condition_true: ("TestCondition", ConditionStatus::True, "TestCondition", true),
+        is_condition_true_while_false: ("TestCondition", ConditionStatus::False, "TestCondition", false),
+        is_condition_true_unknown_condition: ("TestCondition", ConditionStatus::True, "OtherCondition", false),
     }
 
     macro_rules! is_condition_false_tests {
@@ -258,9 +257,9 @@ mod tests {
     }
 
     is_condition_false_tests! {
-        is_condition_false: ("TestCondition", "False", "TestCondition", true),
-        is_condition_false_while_true: ("TestCondition", "True", "TestCondition", false),
-        is_condition_false_unknown_condition: ("TestCondition", "False", "OtherCondition", false),
+        is_condition_false: ("TestCondition", ConditionStatus::False, "TestCondition", true),
+        is_condition_false_while_true: ("TestCondition", ConditionStatus::True, "TestCondition", false),
+        is_condition_false_unknown_condition: ("TestCondition", ConditionStatus::False, "OtherCondition", false),
     }
 
     macro_rules! has_condition_status_tests {
@@ -287,10 +286,10 @@ mod tests {
     }
 
     has_condition_status_tests! {
-        has_condition_status_true: ("TestCondition", "True", "TestCondition", "True", true),
-        has_condition_status_true_while_false: ("TestCondition", "False", "TestCondition", "True", false),
-        has_condition_status_false: ("TestCondition", "False", "TestCondition", "False", true),
-        has_condition_status_false_while_true: ("TestCondition", "True", "TestCondition", "False", false),
-        has_condition_status_unknown_condition: ("TestCondition", "True", "OtherCondition", "True", false),
+        has_condition_status_true: ("TestCondition", ConditionStatus::True, "TestCondition", ConditionStatus::True, true),
+        has_condition_status_true_while_false: ("TestCondition", ConditionStatus::False, "TestCondition", ConditionStatus::True, false),
+        has_condition_status_false: ("TestCondition", ConditionStatus::False, "TestCondition", ConditionStatus::False, true),
+        has_condition_status_false_while_true: ("TestCondition", ConditionStatus::True, "TestCondition", ConditionStatus::False, false),
+        has_condition_status_unknown_condition: ("TestCondition", ConditionStatus::True, "OtherCondition", ConditionStatus::True, false),
     }
 }
