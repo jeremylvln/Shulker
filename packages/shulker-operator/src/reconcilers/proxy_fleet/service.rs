@@ -76,7 +76,10 @@ impl ResourceBuilder for ServiceBuilder {
                     .collect(),
             ),
             type_: Some(service_config.type_.to_string()),
-            external_traffic_policy: Some(service_config.external_traffic_policy.to_string()),
+            external_traffic_policy: service_config
+                .external_traffic_policy
+                .as_ref()
+                .map(|x| x.to_string()),
             ports: Some(vec![ServicePort {
                 name: Some("minecraft".to_string()),
                 protocol: Some("TCP".to_string()),

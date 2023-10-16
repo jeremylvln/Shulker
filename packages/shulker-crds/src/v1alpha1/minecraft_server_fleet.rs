@@ -32,7 +32,8 @@ pub struct MinecraftServerFleetSpec {
     /// Describe how to create the underlying `MinecraftServers`
     pub template: TemplateSpec<MinecraftServerSpec>,
 
-    /// Autoscaling configuration for this `MinecraftServerFleet`.
+    /// Autoscaling configuration for this `MinecraftServerFleet`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub autoscaling: Option<FleetAutoscalingSpec>,
 }
 

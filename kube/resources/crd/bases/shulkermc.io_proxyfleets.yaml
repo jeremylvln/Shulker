@@ -27,7 +27,7 @@ spec:
             spec:
               properties:
                 autoscaling:
-                  description: Autoscaling configuration for this `ProxyFleet`.
+                  description: Autoscaling configuration for this `ProxyFleet`
                   nullable: true
                   properties:
                     agonesPolicy:
@@ -128,10 +128,10 @@ spec:
                       nullable: true
                       type: object
                     externalTrafficPolicy:
-                      default: Cluster
                       enum:
                         - Cluster
                         - Local
+                      nullable: true
                       type: string
                     type:
                       default: LoadBalancer
