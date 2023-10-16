@@ -69,3 +69,36 @@ impl ProxyServiceAccountBuilder {
         ProxyServiceAccountBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
+    };
+
+    #[test]
+    fn name_contains_cluster_name() {
+        // W
+        let name = super::ProxyServiceAccountBuilder::name(&TEST_CLUSTER);
+
+        // T
+        assert_eq!(name, "my-cluster-proxy");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ProxyServiceAccountBuilder::new(client);
+
+        // W
+        let service_account = builder
+            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(service_account);
+    }
+}

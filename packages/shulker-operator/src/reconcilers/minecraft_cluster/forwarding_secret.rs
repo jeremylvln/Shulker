@@ -86,3 +86,73 @@ impl ForwardingSecretBuilder {
         Alphanumeric.sample_string(&mut rng, 64)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
+    };
+
+    #[test]
+    fn name_contains_cluster_name() {
+        // W
+        let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
+
+        // T
+        assert_eq!(name, "my-cluster-forwarding-secret");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ForwardingSecretBuilder::new(client);
+
+        // W
+        let secret = builder
+            .create(&TEST_CLUSTER, "my-cluster-forwarding-secret")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(secret, {
+            ".stringData.key" => "[forwarding secret random redacted]"
+        });
+    }
+
+    #[tokio::test]
+    async fn create_has_secret() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ForwardingSecretBuilder::new(client);
+
+        // W
+        let secret = builder
+            .create(&TEST_CLUSTER, "my-cluster-forwarding-secret")
+            .await
+            .unwrap();
+
+        // T
+        assert!(secret
+            .string_data
+            .unwrap()
+            .get(super::SECRET_DATA_KEY)
+            .is_some());
+    }
+
+    #[test]
+    fn create_proxy_guard_key_random() {
+        // W
+        let (secret_1, secret_2, secret_3) = (
+            super::ForwardingSecretBuilder::create_proxy_guard_key(),
+            super::ForwardingSecretBuilder::create_proxy_guard_key(),
+            super::ForwardingSecretBuilder::create_proxy_guard_key(),
+        );
+
+        // T
+        assert_ne!(secret_1, secret_2);
+        assert_ne!(secret_2, secret_3);
+        assert_ne!(secret_3, secret_1);
+    }
+}
