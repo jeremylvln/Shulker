@@ -1,0 +1,19 @@
+---
+source: packages/shulker-operator/src/reconcilers/proxy_fleet/fleet.rs
+expression: fleet
+---
+apiVersion: agones.dev/v1
+kind: Fleet
+metadata:
+  labels:
+    app.kubernetes.io/component: proxy
+    app.kubernetes.io/name: my-proxy
+    minecraftcluster.shulkermc.io/name: my-cluster
+    proxyfleet.shulkermc.io/name: my-proxy
+  name: my-proxy
+  namespace: default
+spec:
+  template:
+    spec:
+      template: {}
+

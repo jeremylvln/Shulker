@@ -1,0 +1,157 @@
+---
+source: packages/shulker-operator/src/reconcilers/proxy_fleet/fleet.rs
+expression: fleet
+---
+apiVersion: agones.dev/v1
+kind: Fleet
+metadata:
+  labels:
+    app.kubernetes.io/component: proxy
+    app.kubernetes.io/name: my-proxy
+    minecraftcluster.shulkermc.io/name: my-cluster
+    proxyfleet.shulkermc.io/name: my-proxy
+  name: my-proxy
+  namespace: default
+spec:
+  replicas: 0
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  scheduling: Packed
+  template:
+    metadata:
+      annotations:
+        test-annotation/shulkermc.io: my-value
+      labels:
+        app.kubernetes.io/component: proxy
+        app.kubernetes.io/name: my-proxy
+        minecraftcluster.shulkermc.io/name: my-cluster
+        proxyfleet.shulkermc.io/name: my-proxy
+        test-label/shulkermc.io: my-value
+    spec:
+      ports: []
+      health:
+        disabled: false
+        periodSeconds: 10
+        failureThreshold: 5
+        initialDelaySeconds: 30
+      template:
+        metadata:
+          annotations:
+            test-annotation/shulkermc.io: my-value
+          labels:
+            app.kubernetes.io/component: proxy
+            app.kubernetes.io/name: my-proxy
+            minecraftcluster.shulkermc.io/name: my-cluster
+            proxyfleet.shulkermc.io/name: my-proxy
+            test-label/shulkermc.io: my-value
+        spec:
+          containers:
+            - env:
+                - name: SHULKER_PROXY_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: SHULKER_PROXY_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: SHULKER_PROXY_TTL_SECONDS
+                  value: "3600"
+                - name: TYPE
+                  value: VELOCITY
+                - name: VELOCITY_BUILD_ID
+                  value: latest
+                - name: HEALTH_USE_PROXY
+                  value: "true"
+                - name: EXTRA_ENV
+                  value: my_value
+              image: "itzg/bungeecord:java17-2022.4.1"
+              imagePullPolicy: IfNotPresent
+              name: proxy
+              ports:
+                - containerPort: 25577
+                  name: minecraft
+              readinessProbe:
+                exec:
+                  command:
+                    - bash
+                    - /server/probe-readiness.sh
+                initialDelaySeconds: 10
+                periodSeconds: 10
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 1000
+              volumeMounts:
+                - mountPath: /mnt/shulker/forwarding-secret
+                  name: shulker-forwarding-secret
+                  readOnly: true
+                - mountPath: /server
+                  name: proxy-data
+                - mountPath: /mnt/drain-lock
+                  name: proxy-drain-lock
+                  readOnly: true
+                - mountPath: /tmp
+                  name: proxy-tmp
+          initContainers:
+            - command:
+                - sh
+                - /mnt/shulker/config/init-fs.sh
+              env:
+                - name: SHULKER_CONFIG_DIR
+                  value: /mnt/shulker/config
+                - name: PROXY_DATA_DIR
+                  value: /server
+                - name: TYPE
+                  value: VELOCITY
+                - name: SHULKER_PROXY_AGENT_VERSION
+                  value: 0.1.0
+                - name: SHULKER_MAVEN_REPOSITORY
+                  value: "https://maven.jeremylvln.fr/artifactory/shulker"
+                - name: PROXY_PLUGIN_URLS
+                  value: "https://example.com/my_plugin.jar"
+                - name: PROXY_PATCH_URLS
+                  value: "https://example.com/my_patch.tar.gz"
+              image: "alpine:latest"
+              name: init-fs
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 1000
+              volumeMounts:
+                - mountPath: /mnt/shulker/config
+                  name: shulker-config
+                  readOnly: true
+                - mountPath: /server
+                  name: proxy-data
+          nodeSelector:
+            beta.kubernetes.io/os: linux
+          restartPolicy: Never
+          serviceAccountName: my-cluster-proxy
+          volumes:
+            - configMap:
+                name: my-proxy-config
+              name: shulker-config
+            - name: shulker-forwarding-secret
+              secret:
+                secretName: my-cluster-forwarding-secret
+            - emptyDir: {}
+              name: proxy-data
+            - emptyDir: {}
+              name: proxy-drain-lock
+            - emptyDir: {}
+              name: proxy-tmp
+      eviction:
+        safe: OnUpgrade
+

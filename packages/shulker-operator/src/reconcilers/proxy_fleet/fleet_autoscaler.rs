@@ -91,3 +91,78 @@ impl FleetAutoscalerBuilder {
         FleetAutoscalerBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::FleetAutoscalerBuilder::name(&TEST_PROXY_FLEET);
+
+        // T
+        assert_eq!(name, "my-proxy");
+    }
+
+    #[tokio::test]
+    async fn is_needed_with_autoscaling() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+
+        // W
+        let is_needed = builder.is_needed(&TEST_PROXY_FLEET);
+
+        // T
+        assert!(is_needed);
+    }
+
+    #[tokio::test]
+    async fn is_needed_without_autoscaling() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+        let mut fleet = TEST_PROXY_FLEET.clone();
+        fleet.spec.autoscaling = None;
+
+        // W
+        let is_needed = builder.is_needed(&fleet);
+
+        // T
+        assert!(!is_needed);
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+
+        // W
+        let fleet_autoscaler = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet_autoscaler);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+        let mut fleet_autoscaler = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut fleet_autoscaler)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet_autoscaler);
+    }
+}

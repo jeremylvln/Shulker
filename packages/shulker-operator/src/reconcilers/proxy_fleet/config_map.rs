@@ -111,6 +111,159 @@ impl ConfigMapBuilder {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
+
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
+
+        // T
+        assert_eq!(name, "my-proxy-config");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+
+        // W
+        let config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_startup_script() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        assert!(config_map.data.as_ref().unwrap().contains_key("init-fs.sh"));
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_readiness_script() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("probe-readiness.sh"));
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_velocity_configs() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("server-icon.png"));
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("velocity-config.toml"));
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_bungeecord_configs() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut fleet = TEST_PROXY_FLEET.clone();
+        fleet.spec.template.spec.version.channel = ProxyFleetTemplateVersion::BungeeCord;
+        let mut config_map = builder.create(&fleet, "my-proxy-config").await.unwrap();
+
+        // W
+        builder.update(&fleet, &mut config_map).await.unwrap();
+
+        // T
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("server-icon.png"));
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("bungeecord-config.yml"));
+    }
+}
+
 mod bungeecord {
     use serde::{Deserialize, Serialize};
     use std::collections::BTreeMap;
