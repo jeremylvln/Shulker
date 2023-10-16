@@ -13,9 +13,12 @@ use serde::{Deserialize, Serialize};
 )]
 #[serde(rename_all = "camelCase")]
 pub struct GameServerSpec {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ports: Option<Vec<GameServerPortSpec>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub health: Option<GameServerHealthSpec>,
     pub template: PodTemplateSpec,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub eviction: Option<GameServerEvictionSpec>,
 }
 
@@ -30,9 +33,13 @@ pub struct GameServerPortSpec {
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct GameServerHealthSpec {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub period_seconds: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_threshold: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_delay_seconds: Option<i32>,
 }
 

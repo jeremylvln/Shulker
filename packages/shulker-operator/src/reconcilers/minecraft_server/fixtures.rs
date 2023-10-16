@@ -32,12 +32,18 @@ lazy_static! {
             },
             config: MinecraftServerConfigurationSpec {
                 existing_config_map_name: None,
-                world: None,
+                world: Some(ResourceRefSpec {
+                    url: Some("https://example.com/my_world.tar.gz".to_string()),
+                    ..ResourceRefSpec::default()
+                }),
                 plugins: Some(vec![ResourceRefSpec {
                     url: Some("https://example.com/my_plugin.jar".to_string()),
                     ..ResourceRefSpec::default()
                 }]),
-                patches: None,
+                patches: Some(vec![ResourceRefSpec {
+                    url: Some("https://example.com/my_patch.tar.gz".to_string()),
+                    ..ResourceRefSpec::default()
+                }]),
                 max_players: 42,
                 disable_nether: false,
                 disable_end: true,

@@ -102,8 +102,12 @@ spec:
               value: 0.1.0
             - name: SHULKER_MAVEN_REPOSITORY
               value: "https://maven.jeremylvln.fr/artifactory/shulker"
+            - name: SERVER_WORLD_URL
+              value: "https://example.com/my_world.tar.gz"
             - name: SERVER_PLUGIN_URLS
               value: "https://example.com/my_plugin.jar"
+            - name: SERVER_PATCH_URLS
+              value: "https://example.com/my_patch.tar.gz"
           image: "alpine:latest"
           name: init-fs
           securityContext:

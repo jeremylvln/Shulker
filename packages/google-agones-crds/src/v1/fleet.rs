@@ -15,8 +15,11 @@ use super::game_server::GameServerSpec;
 )]
 #[serde(rename_all = "camelCase")]
 pub struct FleetSpec {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replicas: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub strategy: Option<DeploymentStrategy>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduling: Option<String>,
     pub template: FleetTemplate,
 }
@@ -24,6 +27,7 @@ pub struct FleetSpec {
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct FleetTemplate {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<ObjectMeta>,
     pub spec: GameServerSpec,
 }

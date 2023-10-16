@@ -144,6 +144,7 @@ spec:
                       additionalProperties:
                         type: string
                       description: 'Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values'
+                      nullable: true
                       type: object
                     world:
                       description: Reference to a world to download and extract. Gzipped tarball only

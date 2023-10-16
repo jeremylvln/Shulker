@@ -36,22 +36,26 @@ spec:
                         buffer:
                           nullable: true
                           properties:
-                            buffer_size:
+                            bufferSize:
                               description: IntOrString is a type that can hold an int32 or a string.  When used in JSON or YAML marshalling and unmarshalling, it produces or consumes the inner type.  This allows you to have, for example, a JSON field that can accept a name or number.
                               format: int-or-string
                               type: string
-                            max_replicas:
+                            maxReplicas:
                               format: int32
                               type: integer
-                            min_replicas:
+                            minReplicas:
                               format: int32
                               type: integer
                           required:
-                            - buffer_size
-                            - max_replicas
-                            - min_replicas
+                            - bufferSize
+                            - maxReplicas
+                            - minReplicas
                           type: object
-                        type_:
+                        type:
+                          default: Buffer
+                          enum:
+                            - Buffer
+                            - Webhook
                           type: string
                         webhook:
                           description: WebhookClientConfig contains the information to make a TLS connection with the webhook
@@ -99,8 +103,6 @@ spec:
                                 Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either.
                               type: string
                           type: object
-                      required:
-                        - type_
                       type: object
                   type: object
                 clusterRef:
@@ -372,6 +374,7 @@ spec:
                               additionalProperties:
                                 type: string
                               description: 'Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values'
+                              nullable: true
                               type: object
                             world:
                               description: Reference to a world to download and extract. Gzipped tarball only
