@@ -53,9 +53,16 @@ jobs:
         run: npm ci
 
       - name: Restore Rust cache
-        uses: Swatinem/rust-cache@v2
+        uses: actions/cache@v3
         with:
-          workspaces: . -> dist/rust
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            dist/rust/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo check
@@ -104,9 +111,16 @@ jobs:
         run: npm ci
 
       - name: Restore Rust cache
-        uses: Swatinem/rust-cache@v2
+        uses: actions/cache@v3
         with:
-          workspaces: . -> dist/rust
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            dist/rust/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo install cargo-tarpaulin && cargo check
@@ -162,9 +176,16 @@ jobs:
         run: npm ci
 
       - name: Restore Rust cache
-        uses: Swatinem/rust-cache@v2
+        uses: actions/cache@v3
         with:
-          workspaces: . -> dist/rust
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            dist/rust/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo check
@@ -217,9 +238,16 @@ jobs:
         run: npm ci
 
       - name: Restore Rust cache
-        uses: Swatinem/rust-cache@v2
+        uses: actions/cache@v3
         with:
-          workspaces: . -> dist/rust
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            dist/rust/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo install clippy-sarif sarif-fmt && cargo check
