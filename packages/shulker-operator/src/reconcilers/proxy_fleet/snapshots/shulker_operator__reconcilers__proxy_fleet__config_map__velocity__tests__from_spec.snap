@@ -1,0 +1,27 @@
+---
+source: packages/shulker-operator/src/reconcilers/proxy_fleet/config_map.rs
+expression: config
+---
+config-version = '2.5'
+bind = '0.0.0.0:25577'
+motd = 'A Motd'
+show-max-players = 100
+online-mode = true
+force-key-authentication = true
+prevent-client-proxy-connections = true
+forwarding-secret-file = '/mnt/shulker/forwarding-secret/key'
+player-info-forwarding-mode = 'modern'
+
+[servers]
+lobby = 'localhost:30000'
+limbo = 'localhost:30001'
+try = [
+    'lobby',
+    'limbo',
+]
+
+[forced-hosts]
+
+[advanced]
+haproxy-protocol = true
+tcp-fast-open = true

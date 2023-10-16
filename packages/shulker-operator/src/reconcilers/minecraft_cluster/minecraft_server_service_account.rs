@@ -69,3 +69,36 @@ impl MinecraftServerServiceAccountBuilder {
         MinecraftServerServiceAccountBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
+    };
+
+    #[test]
+    fn name_contains_cluster_name() {
+        // W
+        let name = super::MinecraftServerServiceAccountBuilder::name(&TEST_CLUSTER);
+
+        // T
+        assert_eq!(name, "my-cluster-server");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::MinecraftServerServiceAccountBuilder::new(client);
+
+        // W
+        let service_account = builder
+            .create(&TEST_CLUSTER, "my-cluster-server")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(service_account);
+    }
+}

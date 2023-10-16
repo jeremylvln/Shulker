@@ -1,0 +1,13 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_server/config_map.rs
+expression: yml
+---
+proxies:
+  bungee-cord:
+    online-mode: false
+  velocity:
+    enabled: true
+    online-mode: true
+    secret: my-secret
+
+

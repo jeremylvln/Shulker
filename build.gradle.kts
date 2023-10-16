@@ -1,4 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
     id("idea")
@@ -11,10 +14,15 @@ plugins {
     kotlin("kapt") version "1.9.10"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.1"
 }
 
 repositories {
     mavenCentral()
+}
+
+val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
+    output = layout.buildDirectory.file("reports/detekt/merge.sarif")
 }
 
 subprojects {
@@ -30,6 +38,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "com.github.johnrengelman.shadow")
+    apply(plugin = "io.gitlab.arturbosch.detekt")
 
     group = "io.shulkermc"
 
@@ -44,6 +53,12 @@ subprojects {
 
     dependencies {
         testImplementation(kotlin("test"))
+    }
+
+    detekt {
+        buildUponDefaultConfig = true
+        baseline = file("$rootDir/gradle/detekt/baseline.xml")
+        basePath = rootProject.projectDir.absolutePath
     }
 
     tasks {
@@ -79,6 +94,24 @@ subprojects {
         jacocoTestReport {
             dependsOn("test")
         }
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = "1.8"
+
+        reports {
+            sarif.required = true
+        }
+
+        finalizedBy(detektReportMergeSarif)
+    }
+
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8"
+    }
+
+    detektReportMergeSarif.configure {
+        input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
     }
 
     publishing {

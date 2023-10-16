@@ -28,3 +28,10 @@ pub struct MinecraftClusterRef {
     /// this resource
     pub name: String,
 }
+
+impl MinecraftClusterRef {
+    /// Creates a new `MinecraftClusterRef` with the given name
+    pub fn new(name: impl Into<String>) -> Self {
+        Self { name: name.into() }
+    }
+}

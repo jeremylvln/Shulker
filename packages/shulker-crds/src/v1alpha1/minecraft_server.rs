@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use kube::CustomResource;
@@ -103,8 +103,8 @@ pub struct MinecraftServerConfigurationSpec {
 
     /// Custom properties to set inside the server.properties file of
     /// the Pod. Note: Shulker may override some values
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    pub server_properties: HashMap<String, String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub server_properties: Option<BTreeMap<String, String>>,
 
     /// Type of forwarding the proxies are using between themselves and
     /// this `MinecraftServer`
@@ -157,7 +157,7 @@ pub struct MinecraftServerPodOverridesSpec {
 
     /// Node selector to be applied on created `Pod`
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_selector: Option<HashMap<String, String>>,
+    pub node_selector: Option<BTreeMap<String, String>>,
 
     /// Tolerations to be applied on created `Pod`
     #[serde(skip_serializing_if = "Option::is_none")]

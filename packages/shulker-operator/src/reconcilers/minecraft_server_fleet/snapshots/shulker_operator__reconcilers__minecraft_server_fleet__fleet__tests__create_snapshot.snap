@@ -1,0 +1,19 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_server_fleet/fleet.rs
+expression: fleet
+---
+apiVersion: agones.dev/v1
+kind: Fleet
+metadata:
+  labels:
+    app.kubernetes.io/component: minecraftserver
+    app.kubernetes.io/name: my-server
+    minecraftcluster.shulkermc.io/name: my-cluster
+    minecraftserverfleet.shulkermc.io/name: my-server
+  name: my-server
+  namespace: default
+spec:
+  template:
+    spec:
+      template: {}
+

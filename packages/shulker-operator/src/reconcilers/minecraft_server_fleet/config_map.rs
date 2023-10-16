@@ -78,3 +78,56 @@ impl ConfigMapBuilder {
         ConfigMapBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::ConfigMapBuilder::name(&TEST_SERVER_FLEET);
+
+        // T
+        assert_eq!(name, "my-server-config");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+
+        // W
+        let config_map = builder
+            .create(&TEST_SERVER_FLEET, "my-server-config")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_SERVER_FLEET, "my-server-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_SERVER_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+}

@@ -32,6 +32,9 @@ mod fleet;
 mod fleet_autoscaler;
 mod service;
 
+#[cfg(test)]
+mod fixtures;
+
 static FINALIZER: &str = "proxyfleets.shulkermc.io";
 
 struct ProxyFleetReconciler {

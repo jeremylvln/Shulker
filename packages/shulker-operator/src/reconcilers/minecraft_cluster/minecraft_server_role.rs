@@ -63,6 +63,12 @@ impl ResourceBuilder for MinecraftServerRoleBuilder {
     ) -> Result<(), anyhow::Error> {
         role.rules = Some(vec![
             PolicyRule {
+                api_groups: Some(vec!["".to_string()]),
+                resources: Some(vec!["events".to_string()]),
+                verbs: vec!["create".to_string()],
+                ..PolicyRule::default()
+            },
+            PolicyRule {
                 api_groups: Some(vec!["agones.dev".to_string()]),
                 resources: Some(vec!["gameservers".to_string()]),
                 verbs: vec![
@@ -70,12 +76,6 @@ impl ResourceBuilder for MinecraftServerRoleBuilder {
                     "watch".to_string(),
                     "update".to_string(),
                 ],
-                ..PolicyRule::default()
-            },
-            PolicyRule {
-                api_groups: Some(vec!["".to_string()]),
-                resources: Some(vec!["events".to_string()]),
-                verbs: vec!["create".to_string()],
                 ..PolicyRule::default()
             },
         ]);
@@ -87,5 +87,123 @@ impl ResourceBuilder for MinecraftServerRoleBuilder {
 impl MinecraftServerRoleBuilder {
     pub fn new(client: Client) -> Self {
         MinecraftServerRoleBuilder { client }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
+    };
+
+    #[test]
+    fn name_contains_cluster_name() {
+        // W
+        let name = super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER);
+
+        // T
+        assert_eq!(name, "my-cluster-server");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::MinecraftServerRoleBuilder::new(client);
+
+        // W
+        let role = builder
+            .create(&TEST_CLUSTER, "my-cluster-server")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(role);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::MinecraftServerRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-server")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(role);
+    }
+
+    #[tokio::test]
+    async fn update_can_create_events() {
+        // G
+        let client = create_client_mock();
+        let builder = super::MinecraftServerRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-server")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["".to_string()])
+                && rule.resources == Some(vec!["events".to_string()])
+                && rule.verbs.contains(&"create".to_string())
+        }));
+    }
+
+    #[tokio::test]
+    async fn update_can_watch_gameservers() {
+        // G
+        let client = create_client_mock();
+        let builder = super::MinecraftServerRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-server")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["agones.dev".to_string()])
+                && rule.resources == Some(vec!["gameservers".to_string()])
+                && rule.verbs.contains(&"list".to_string())
+        }));
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["agones.dev".to_string()])
+                && rule.resources == Some(vec!["gameservers".to_string()])
+                && rule.verbs.contains(&"watch".to_string())
+        }));
+    }
+
+    #[tokio::test]
+    async fn update_can_update_gameservers() {
+        // G
+        let client = create_client_mock();
+        let builder = super::MinecraftServerRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-server")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["agones.dev".to_string()])
+                && rule.resources == Some(vec!["gameservers".to_string()])
+                && rule.verbs.contains(&"update".to_string())
+        }));
     }
 }

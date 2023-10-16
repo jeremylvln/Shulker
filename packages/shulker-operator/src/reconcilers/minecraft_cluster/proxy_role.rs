@@ -89,3 +89,121 @@ impl ProxyRoleBuilder {
         ProxyRoleBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
+    };
+
+    #[test]
+    fn name_contains_cluster_name() {
+        // W
+        let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
+
+        // T
+        assert_eq!(name, "my-cluster-proxy");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ProxyRoleBuilder::new(client);
+
+        // W
+        let role = builder
+            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(role);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ProxyRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(role);
+    }
+
+    #[tokio::test]
+    async fn update_can_create_events() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ProxyRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["".to_string()])
+                && rule.resources == Some(vec!["events".to_string()])
+                && rule.verbs.contains(&"create".to_string())
+        }));
+    }
+
+    #[tokio::test]
+    async fn update_can_watch_gameservers() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ProxyRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["agones.dev".to_string()])
+                && rule.resources == Some(vec!["gameservers".to_string()])
+                && rule.verbs.contains(&"list".to_string())
+        }));
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["agones.dev".to_string()])
+                && rule.resources == Some(vec!["gameservers".to_string()])
+                && rule.verbs.contains(&"watch".to_string())
+        }));
+    }
+
+    #[tokio::test]
+    async fn update_can_update_gameservers() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ProxyRoleBuilder::new(client);
+        let mut role = builder
+            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .await
+            .unwrap();
+
+        // W
+        builder.update(&TEST_CLUSTER, &mut role).await.unwrap();
+
+        // T
+        assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
+            rule.api_groups == Some(vec!["agones.dev".to_string()])
+                && rule.resources == Some(vec!["gameservers".to_string()])
+                && rule.verbs.contains(&"update".to_string())
+        }));
+    }
+}

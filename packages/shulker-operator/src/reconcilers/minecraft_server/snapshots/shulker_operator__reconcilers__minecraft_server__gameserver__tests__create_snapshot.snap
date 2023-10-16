@@ -1,0 +1,16 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_server/gameserver.rs
+expression: game_server
+---
+apiVersion: agones.dev/v1
+kind: GameServer
+metadata:
+  labels:
+    app.kubernetes.io/component: minecraftserver
+    app.kubernetes.io/name: my-server
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-server
+  namespace: default
+spec:
+  template: {}
+

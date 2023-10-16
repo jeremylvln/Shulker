@@ -111,18 +111,171 @@ impl ConfigMapBuilder {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
+
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
+
+        // T
+        assert_eq!(name, "my-proxy-config");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+
+        // W
+        let config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(config_map);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_startup_script() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        assert!(config_map.data.as_ref().unwrap().contains_key("init-fs.sh"));
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_readiness_script() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("probe-readiness.sh"));
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_velocity_configs() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut config_map = builder
+            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut config_map)
+            .await
+            .unwrap();
+
+        // T
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("server-icon.png"));
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("velocity-config.toml"));
+    }
+
+    #[tokio::test]
+    async fn update_snapshot_has_bungeecord_configs() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ConfigMapBuilder::new(client);
+        let mut fleet = TEST_PROXY_FLEET.clone();
+        fleet.spec.template.spec.version.channel = ProxyFleetTemplateVersion::BungeeCord;
+        let mut config_map = builder.create(&fleet, "my-proxy-config").await.unwrap();
+
+        // W
+        builder.update(&fleet, &mut config_map).await.unwrap();
+
+        // T
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("server-icon.png"));
+        assert!(config_map
+            .data
+            .as_ref()
+            .unwrap()
+            .contains_key("bungeecord-config.yml"));
+    }
+}
+
 mod bungeecord {
     use serde::{Deserialize, Serialize};
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
 
     #[derive(Deserialize, Serialize, Clone, Debug)]
     #[serde(rename_all = "snake_case")]
     pub struct BungeeCordYml {
-        servers: HashMap<String, BungeeCordServerYml>,
+        servers: BTreeMap<String, BungeeCordServerYml>,
         listeners: Vec<BungeeCordListenerYml>,
-        groups: HashMap<String, ()>,
+        groups: BTreeMap<String, ()>,
         online_mode: bool,
         ip_forward: bool,
         prevent_proxy_connections: bool,
@@ -154,7 +307,7 @@ mod bungeecord {
     impl BungeeCordYml {
         pub fn from_spec(spec: &ProxyFleetTemplateConfigurationSpec) -> Self {
             BungeeCordYml {
-                servers: HashMap::from([
+                servers: BTreeMap::from([
                     (
                         "lobby".to_string(),
                         BungeeCordServerYml {
@@ -182,7 +335,7 @@ mod bungeecord {
                     force_default_server: true,
                     proxy_protocol: spec.proxy_protocol,
                 }],
-                groups: HashMap::new(),
+                groups: BTreeMap::new(),
                 online_mode: true,
                 ip_forward: true,
                 prevent_proxy_connections: true,
@@ -198,6 +351,71 @@ mod bungeecord {
             yml.push('\n');
 
             yml
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::collections::BTreeMap;
+
+        use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
+
+        #[test]
+        fn from_spec() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+
+            // W
+            let config = super::BungeeCordYml::from_spec(&spec);
+
+            // T
+            insta::assert_yaml_snapshot!(config);
+        }
+
+        #[test]
+        fn to_string() {
+            // G
+            let config = super::BungeeCordYml {
+                servers: BTreeMap::from([(
+                    "lobby".to_string(),
+                    super::BungeeCordServerYml {
+                        motd: "Hello World".to_string(),
+                        address: "localhost:30000".to_string(),
+                        restricted: false,
+                    },
+                )]),
+                listeners: vec![super::BungeeCordListenerYml {
+                    host: "0.0.0.0:25577".to_string(),
+                    query_port: 25577,
+                    motd: "Hello World".to_string(),
+                    max_players: 20,
+                    priorities: vec!["lobby".to_string(), "limbo".to_string()],
+                    ping_passthrough: false,
+                    force_default_server: true,
+                    proxy_protocol: true,
+                }],
+                groups: BTreeMap::new(),
+                online_mode: true,
+                ip_forward: true,
+                prevent_proxy_connections: true,
+                enforce_secure_profile: true,
+                log_pings: false,
+            };
+
+            // W
+            let yml = config.to_string();
+
+            // T
+            insta::assert_snapshot!(yml);
         }
     }
 }
@@ -276,6 +494,64 @@ mod velocity {
             toml.push('\n');
 
             toml
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
+
+        #[test]
+        fn from_spec() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+
+            // W
+            let config = super::VelocityToml::from_spec(&spec);
+
+            // T
+            insta::assert_toml_snapshot!(config);
+        }
+
+        #[test]
+        fn to_string() {
+            // G
+            let config = super::VelocityToml {
+                config_version: "2.5".to_string(),
+                bind: "0.0.0.0:25577".to_string(),
+                motd: "A Motd".to_string(),
+                show_max_players: 100,
+                online_mode: true,
+                force_key_authentication: true,
+                prevent_client_proxy_connections: true,
+                forwarding_secret_file: "forwarding-secret.txt".to_string(),
+                player_info_forwarding_mode: "modern".to_string(),
+                servers: super::VelocityServersToml {
+                    lobby: "localhost:30000".to_string(),
+                    limbo: "localhost:30001".to_string(),
+                    try_: vec!["lobby".to_string(), "limbo".to_string()],
+                },
+                forced_hosts: super::VelocityForcedHostsToml {},
+                advanced: super::VelocityAdvancedToml {
+                    haproxy_protocol: true,
+                    tcp_fast_open: true,
+                },
+            };
+
+            // W
+            let toml = config.to_string();
+
+            // T
+            insta::assert_snapshot!(toml);
         }
     }
 }

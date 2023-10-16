@@ -99,3 +99,78 @@ impl ServiceBuilder {
         ServiceBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::ServiceBuilder::name(&TEST_PROXY_FLEET);
+
+        // T
+        assert_eq!(name, "my-proxy");
+    }
+
+    #[tokio::test]
+    async fn is_needed_with_service() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ServiceBuilder::new(client);
+
+        // W
+        let is_needed = builder.is_needed(&TEST_PROXY_FLEET);
+
+        // T
+        assert!(is_needed);
+    }
+
+    #[tokio::test]
+    async fn is_needed_without_service() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ServiceBuilder::new(client);
+        let mut fleet = TEST_PROXY_FLEET.clone();
+        fleet.spec.service = None;
+
+        // W
+        let is_needed = builder.is_needed(&fleet);
+
+        // T
+        assert!(!is_needed);
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ServiceBuilder::new(client);
+
+        // W
+        let service = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(service);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ServiceBuilder::new(client);
+        let mut service = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // W
+        builder
+            .update(&TEST_PROXY_FLEET, &mut service)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(service);
+    }
+}

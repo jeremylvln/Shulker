@@ -478,3 +478,198 @@ impl FleetBuilder {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use k8s_openapi::api::core::v1::EnvVar;
+
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
+
+        // T
+        assert_eq!(name, "my-proxy");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+
+        // W
+        let fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // W
+        builder.update(&TEST_PROXY_FLEET, &mut fleet).await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet);
+    }
+
+    #[tokio::test]
+    async fn update_should_merge_labels() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // W
+        builder.update(&TEST_PROXY_FLEET, &mut fleet).await.unwrap();
+
+        // T
+        let additional_labels = TEST_PROXY_FLEET
+            .spec
+            .template
+            .metadata
+            .as_ref()
+            .unwrap()
+            .labels
+            .as_ref()
+            .unwrap();
+        additional_labels.iter().for_each(|(key, value)| {
+            assert_eq!(
+                fleet
+                    .spec
+                    .template
+                    .metadata
+                    .as_ref()
+                    .unwrap()
+                    .labels
+                    .as_ref()
+                    .unwrap()
+                    .get(key)
+                    .unwrap(),
+                value
+            );
+        });
+    }
+
+    #[tokio::test]
+    async fn update_should_merge_annotations() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+
+        // W
+        builder.update(&TEST_PROXY_FLEET, &mut fleet).await.unwrap();
+
+        // T
+        let additional_annotations = TEST_PROXY_FLEET
+            .spec
+            .template
+            .metadata
+            .as_ref()
+            .unwrap()
+            .annotations
+            .as_ref()
+            .unwrap();
+        additional_annotations.iter().for_each(|(key, value)| {
+            assert_eq!(
+                fleet
+                    .spec
+                    .template
+                    .metadata
+                    .as_ref()
+                    .unwrap()
+                    .annotations
+                    .as_ref()
+                    .unwrap()
+                    .get(key)
+                    .unwrap(),
+                value
+            );
+        });
+    }
+
+    #[tokio::test]
+    async fn get_init_env_contains_plugins() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let spec = TEST_PROXY_FLEET.spec.clone();
+
+        // W
+        let env = builder.get_init_env(&spec.template.spec).await.unwrap();
+
+        // T
+        let plugins_env = env
+            .iter()
+            .find(|env| env.name == "PROXY_PLUGIN_URLS")
+            .unwrap();
+        assert_eq!(
+            plugins_env,
+            &EnvVar {
+                name: "PROXY_PLUGIN_URLS".to_string(),
+                value: Some("https://example.com/my_plugin.jar".to_string()),
+                ..EnvVar::default()
+            }
+        );
+    }
+
+    #[tokio::test]
+    async fn get_init_env_contains_patches() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let spec = TEST_PROXY_FLEET.spec.clone();
+
+        // W
+        let env = builder.get_init_env(&spec.template.spec).await.unwrap();
+
+        // T
+        let patches_env = env
+            .iter()
+            .find(|env| env.name == "PROXY_PATCH_URLS")
+            .unwrap();
+        assert_eq!(
+            patches_env,
+            &EnvVar {
+                name: "PROXY_PATCH_URLS".to_string(),
+                value: Some("https://example.com/my_patch.tar.gz".to_string()),
+                ..EnvVar::default()
+            }
+        );
+    }
+
+    #[tokio::test]
+    async fn get_env_merges_env_overrides() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let spec = TEST_PROXY_FLEET.spec.clone();
+
+        // W
+        let env = builder.get_env(&spec.template.spec);
+
+        // T
+        spec.template
+            .spec
+            .pod_overrides
+            .unwrap()
+            .env
+            .unwrap()
+            .iter()
+            .for_each(|env_override| {
+                assert!(env.contains(env_override));
+            });
+    }
+}

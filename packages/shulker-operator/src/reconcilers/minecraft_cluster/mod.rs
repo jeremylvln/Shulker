@@ -37,6 +37,9 @@ mod proxy_role;
 mod proxy_role_binding;
 mod proxy_service_account;
 
+#[cfg(test)]
+mod fixtures;
+
 static FINALIZER: &str = "minecraftclusters.shulkermc.io";
 
 struct MinecraftClusterReconciler {

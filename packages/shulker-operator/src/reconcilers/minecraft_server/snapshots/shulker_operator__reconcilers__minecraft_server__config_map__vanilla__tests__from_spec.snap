@@ -1,0 +1,11 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_server/config_map.rs
+expression: config.0
+---
+{
+    "allow-nether": "true",
+    "enforce-secure-profiles": "true",
+    "max-players": "42",
+    "online-mode": "false",
+    "prevent-proxy-connections": "false",
+}

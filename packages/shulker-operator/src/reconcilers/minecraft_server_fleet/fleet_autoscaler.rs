@@ -91,3 +91,84 @@ impl FleetAutoscalerBuilder {
         FleetAutoscalerBuilder { client }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::reconcilers::{
+        builder::ResourceBuilder,
+        minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
+    };
+
+    #[test]
+    fn name_contains_fleet_name() {
+        // W
+        let name = super::FleetAutoscalerBuilder::name(&TEST_SERVER_FLEET);
+
+        // T
+        assert_eq!(name, "my-server");
+    }
+
+    #[tokio::test]
+    async fn is_needed_with_autoscaling() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+
+        // W
+        let is_needed = builder.is_needed(&TEST_SERVER_FLEET);
+
+        // T
+        assert!(is_needed);
+    }
+
+    #[tokio::test]
+    async fn is_needed_without_autoscaling() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+        let mut fleet = TEST_SERVER_FLEET.clone();
+        fleet.spec.autoscaling = None;
+
+        // W
+        let is_needed = builder.is_needed(&fleet);
+
+        // T
+        assert!(!is_needed);
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+
+        // W
+        let fleet_autoscaler = builder
+            .create(&TEST_SERVER_FLEET, "my-server")
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet_autoscaler);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetAutoscalerBuilder::new(client);
+        let mut fleet_autoscaler = builder
+            .create(&TEST_SERVER_FLEET, "my-server")
+            .await
+            .unwrap();
+
+        // W
+        builder
+            .update(&TEST_SERVER_FLEET, &mut fleet_autoscaler)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet_autoscaler);
+    }
+}

@@ -1,0 +1,18 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_cluster/minecraft_server_role_binding.rs
+expression: role_binding
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: cluster
+    app.kubernetes.io/name: my-cluster
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-cluster-server
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: my-cluster-server
+

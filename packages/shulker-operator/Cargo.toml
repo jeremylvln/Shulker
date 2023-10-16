@@ -48,4 +48,8 @@ shulker-utils = { path = "../shulker-utils" }
 google-agones-crds = { path = "../google-agones-crds" }
 
 [dev-dependencies]
+http.workspace = true
+hyper.workspace = true
+insta.workspace = true
+tower-test.workspace = true
 shulker-utils = { path = "../shulker-utils", features = ["testing"] }

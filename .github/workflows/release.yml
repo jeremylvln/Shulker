@@ -62,6 +62,8 @@ jobs:
 
       - name: Install Buf
         uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ github.token }}
 
       - name: Install Node.js dependencies
         run: npm ci

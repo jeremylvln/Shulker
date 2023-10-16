@@ -12,8 +12,10 @@ thread_local! {
 
 #[cfg(feature = "testing")]
 pub fn now() -> DateTime<Utc> {
+    use chrono::TimeZone;
+
     let seconds = UTC_TIME_SECONDS.with(|x| x.load(std::sync::atomic::Ordering::SeqCst));
-    DateTime::from_timestamp(seconds, 0).unwrap()
+    Utc.timestamp_opt(seconds, 0).unwrap()
 }
 
 #[cfg(feature = "testing")]

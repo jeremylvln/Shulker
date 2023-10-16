@@ -1,14 +1,14 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ResourceRefSpec {
     pub url: Option<String>,
     pub url_from: Option<ResourceRefFromSpec>,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ResourceRefFromSpec {
     pub maven_ref: Option<ResourceRefFromMavenSpec>,

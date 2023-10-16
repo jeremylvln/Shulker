@@ -1,5 +1,6 @@
 use super::{http_credentials::HttpCredentials, ResourceRefError, Result};
 
+#[derive(Clone, Debug, PartialEq)]
 pub enum ResourceRef {
     Url(String),
     MavenArtifact {

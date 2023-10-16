@@ -30,6 +30,9 @@ mod config_map;
 mod fleet;
 mod fleet_autoscaler;
 
+#[cfg(test)]
+mod fixtures;
+
 static FINALIZER: &str = "minecraftserverfleets.shulkermc.io";
 
 struct MinecraftServerFleetReconciler {

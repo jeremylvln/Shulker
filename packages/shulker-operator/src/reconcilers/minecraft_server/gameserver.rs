@@ -470,3 +470,155 @@ impl GameServerBuilder {
         "VERSION".to_string()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use k8s_openapi::api::core::v1::EnvVar;
+
+    use crate::{
+        reconcilers::{
+            builder::ResourceBuilder,
+            minecraft_server::fixtures::{create_client_mock, TEST_SERVER},
+        },
+        resources::resourceref_resolver::ResourceRefResolver,
+    };
+
+    #[test]
+    fn name_contains_server_name() {
+        // W
+        let name = super::GameServerBuilder::name(&TEST_SERVER);
+
+        // T
+        assert_eq!(name, "my-server");
+    }
+
+    #[tokio::test]
+    async fn create_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::GameServerBuilder::new(client);
+
+        // W
+        let game_server = builder.create(&TEST_SERVER, "my-server").await.unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(game_server);
+    }
+
+    #[tokio::test]
+    async fn update_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::GameServerBuilder::new(client);
+        let mut game_server = builder.create(&TEST_SERVER, "my-server").await.unwrap();
+
+        // W
+        builder
+            .update(&TEST_SERVER, &mut game_server)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(game_server);
+    }
+
+    #[tokio::test]
+    async fn get_init_env_contains_world() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let spec = TEST_SERVER.spec.clone();
+
+        // W
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &spec)
+            .await
+            .unwrap();
+
+        // T
+        let world_env = env
+            .iter()
+            .find(|env| env.name == "SERVER_WORLD_URL")
+            .unwrap();
+        assert_eq!(
+            world_env,
+            &EnvVar {
+                name: "SERVER_WORLD_URL".to_string(),
+                value: Some("https://example.com/my_world.tar.gz".to_string()),
+                ..EnvVar::default()
+            }
+        );
+    }
+
+    #[tokio::test]
+    async fn get_init_env_contains_plugins() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let spec = TEST_SERVER.spec.clone();
+
+        // W
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &spec)
+            .await
+            .unwrap();
+
+        // T
+        let plugins_env = env
+            .iter()
+            .find(|env| env.name == "SERVER_PLUGIN_URLS")
+            .unwrap();
+        assert_eq!(
+            plugins_env,
+            &EnvVar {
+                name: "SERVER_PLUGIN_URLS".to_string(),
+                value: Some("https://example.com/my_plugin.jar".to_string()),
+                ..EnvVar::default()
+            }
+        );
+    }
+
+    #[tokio::test]
+    async fn get_init_env_contains_patches() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let spec = TEST_SERVER.spec.clone();
+
+        // W
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &spec)
+            .await
+            .unwrap();
+
+        // T
+        let patches_env = env
+            .iter()
+            .find(|env| env.name == "SERVER_PATCH_URLS")
+            .unwrap();
+        assert_eq!(
+            patches_env,
+            &EnvVar {
+                name: "SERVER_PATCH_URLS".to_string(),
+                value: Some("https://example.com/my_patch.tar.gz".to_string()),
+                ..EnvVar::default()
+            }
+        );
+    }
+
+    #[test]
+    fn get_env_merges_env_overrides() {
+        // G
+        let spec = TEST_SERVER.spec.clone();
+
+        // W
+        let env = super::GameServerBuilder::get_env(&spec);
+
+        // T
+        spec.pod_overrides
+            .unwrap()
+            .env
+            .unwrap()
+            .iter()
+            .for_each(|env_override| {
+                assert!(env.contains(env_override));
+            });
+    }
+}
