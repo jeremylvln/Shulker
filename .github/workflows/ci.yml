@@ -61,8 +61,9 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo check
@@ -119,8 +120,10 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+            ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo install cargo-tarpaulin && cargo check
@@ -184,11 +187,10 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
-
-      - name: Install Rust dependencies
-        run: cargo check
+          key: ${{ runner.os }}-cargo-lint-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+            ${{ runner.os }}-cargo-
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -246,8 +248,10 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          key: ${{ runner.os }}-cargo-quality-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+            ${{ runner.os }}-cargo-
 
       - name: Install Rust dependencies
         run: cargo install clippy-sarif sarif-fmt && cargo check
