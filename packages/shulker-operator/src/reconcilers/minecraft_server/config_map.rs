@@ -115,7 +115,7 @@ mod tests {
     };
 
     #[test]
-    fn name_contains_cluster_name() {
+    fn name_contains_server_name() {
         // W
         let name = super::ConfigMapBuilder::name(&TEST_SERVER);
 

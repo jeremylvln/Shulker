@@ -169,6 +169,71 @@ jobs:
       - name: Run lint
         run: npx nx affected --target=lint --parallel=1
 
+  quality:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.TARGET_NODE_VERSION }}
+          cache: npm
+
+      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.TARGET_RUST_VERSION }}
+
+      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: ${{ env.TARGET_JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Restore Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: . -> dist/rust
+
+      - name: Install Rust dependencies
+        run: cargo install clippy-sarif sarif-fmt && cargo check
+
+      - name: Run clippy
+        run: cargo clippy --all-features --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+        continue-on-error: true
+
+      - name: Run detekt
+        run: ./gradlew detekt
+        continue-on-error: true
+
+      - name: Upload Clippy analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: rust-clippy-results.sarif
+          wait-for-processing: true
+
+      - name: Upload Detekt analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: build/reports/detekt/merge.sarif
+          wait-for-processing: true
+
   semantic:
     runs-on: ubuntu-latest
 
