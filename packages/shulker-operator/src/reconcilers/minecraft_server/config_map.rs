@@ -155,6 +155,33 @@ mod tests {
         // T
         insta::assert_yaml_snapshot!(config_map);
     }
+
+    #[test]
+    fn get_data_from_spec_has_startup_script() {
+        // G
+        let spec = TEST_SERVER.spec.config.clone();
+
+        // W
+        let data = super::ConfigMapBuilder::get_data_from_spec(&spec);
+
+        // T
+        assert!(data.contains_key("init-fs.sh"));
+    }
+
+    #[test]
+    fn get_data_from_spec_has_server_configs() {
+        // G
+        let spec = TEST_SERVER.spec.config.clone();
+
+        // W
+        let data = super::ConfigMapBuilder::get_data_from_spec(&spec);
+
+        // T
+        assert!(data.contains_key("server.properties"));
+        assert!(data.contains_key("bukkit-config.yml"));
+        assert!(data.contains_key("spigot-config.yml"));
+        assert!(data.contains_key("paper-global-config.yml"));
+    }
 }
 
 mod vanilla {
