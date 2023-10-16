@@ -36,6 +36,7 @@ jobs:
       - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -61,12 +62,8 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
-
-      - name: Install Rust dependencies
-        run: cargo check
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -95,6 +92,7 @@ jobs:
       - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -120,13 +118,13 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
-            ${{ runner.os }}-cargo-
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
-      - name: Install Rust dependencies
-        run: cargo install cargo-tarpaulin && cargo check
+      - name: Install Rust tools
+        run: cargo binstall -y cargo-tarpaulin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -162,6 +160,7 @@ jobs:
       - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -187,10 +186,8 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-lint-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
-            ${{ runner.os }}-cargo-
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -223,6 +220,7 @@ jobs:
       - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
       - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
         uses: actions/setup-java@v3
@@ -248,16 +246,16 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             dist/rust/
-          key: ${{ runner.os }}-cargo-quality-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
-            ${{ runner.os }}-cargo-
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
 
-      - name: Install Rust dependencies
-        run: cargo install clippy-sarif sarif-fmt && cargo check
+      - name: Install Rust tools
+        run: cargo binstall -y clippy-sarif sarif-fmt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run clippy
-        run: cargo clippy --all-features --message-format=json --deny warnings | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+        run: cargo clippy --all-features --message-format=json -- --deny warnings | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
         continue-on-error: true
 
       - name: Run detekt
