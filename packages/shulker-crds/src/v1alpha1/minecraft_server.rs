@@ -4,7 +4,7 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use strum::IntoStaticStr;
+use strum::{Display, IntoStaticStr};
 
 use super::minecraft_cluster::MinecraftClusterRef;
 
@@ -39,6 +39,7 @@ pub struct MinecraftServerSpec {
 
     /// Overrides for values to be injected in the created `Pod`
     /// of this `MinecraftServer`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pod_overrides: Option<MinecraftServerPodOverridesSpec>,
 }
 
@@ -46,35 +47,16 @@ pub struct MinecraftServerSpec {
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerVersionSpec {
     /// Channel of the version to use. Defaults to Paper
-    #[schemars(default = "MinecraftServerVersionSpec::default_channel")]
-    #[schemars(schema_with = "MinecraftServerVersionSpec::schema_channel")]
+    #[serde(default)]
     pub channel: MinecraftServerVersion,
 
     /// Name of the version to use
     pub name: String,
 }
 
-#[cfg(not(tarpaulin_include))]
-impl MinecraftServerVersionSpec {
-    fn default_channel() -> MinecraftServerVersion {
-        MinecraftServerVersion::Paper
-    }
-
-    fn schema_channel(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
-        schemars::schema::SchemaObject {
-            instance_type: Some(schemars::schema::InstanceType::String.into()),
-            enum_values: Some(vec![
-                serde_json::Value::String("Paper".to_string()),
-                serde_json::Value::String("Bukkit".to_string()),
-                serde_json::Value::String("Spigot".to_string()),
-            ]),
-            ..Default::default()
-        }
-        .into()
-    }
-}
-
-#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr)]
+#[derive(
+    PartialEq, Deserialize, Serialize, Clone, Debug, Default, JsonSchema, IntoStaticStr, Display,
+)]
 pub enum MinecraftServerVersion {
     #[default]
     Paper,
@@ -87,17 +69,21 @@ pub enum MinecraftServerVersion {
 pub struct MinecraftServerConfigurationSpec {
     /// Name of an optional ConfigMap already containing the server
     /// configuration
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub existing_config_map_name: Option<String>,
 
     /// Reference to a world to download and extract. Gzipped tarball
     /// only
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub world: Option<ResourceRefSpec>,
 
     /// List of references to plugins to download
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plugins: Option<Vec<ResourceRefSpec>>,
 
     /// List of optional references to patch archives to download
     /// and extract at the root of the server. Gzippied tarballs only
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<ResourceRefSpec>>,
 
     /// Number of maximum players that can connect to the
@@ -122,8 +108,7 @@ pub struct MinecraftServerConfigurationSpec {
 
     /// Type of forwarding the proxies are using between themselves and
     /// this `MinecraftServer`
-    #[schemars(default = "MinecraftServerConfigurationSpec::default_proxy_forwarding_mode")]
-    #[schemars(schema_with = "MinecraftServerConfigurationSpec::schema_proxy_forwarding_mode")]
+    #[serde(default)]
     pub proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode,
 }
 
@@ -140,27 +125,11 @@ impl MinecraftServerConfigurationSpec {
     fn default_disable_end() -> bool {
         true
     }
-
-    fn default_proxy_forwarding_mode() -> MinecraftServerConfigurationProxyForwardingMode {
-        MinecraftServerConfigurationProxyForwardingMode::Velocity
-    }
-
-    fn schema_proxy_forwarding_mode(
-        _: &mut schemars::gen::SchemaGenerator,
-    ) -> schemars::schema::Schema {
-        schemars::schema::SchemaObject {
-            instance_type: Some(schemars::schema::InstanceType::String.into()),
-            enum_values: Some(vec![
-                serde_json::Value::String("Velocity".to_string()),
-                serde_json::Value::String("BungeeCord".to_string()),
-            ]),
-            ..Default::default()
-        }
-        .into()
-    }
 }
 
-#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr)]
+#[derive(
+    PartialEq, Deserialize, Serialize, Clone, Debug, Default, JsonSchema, IntoStaticStr, Display,
+)]
 pub enum MinecraftServerConfigurationProxyForwardingMode {
     #[default]
     Velocity,
@@ -171,24 +140,31 @@ pub enum MinecraftServerConfigurationProxyForwardingMode {
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerPodOverridesSpec {
     /// Image to use as replacement for the built-in one
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<ImageOverrideSpec>,
 
     /// Extra environment variables to add to the crated `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub env: Option<Vec<k8s_openapi::api::core::v1::EnvVar>>,
 
     /// The desired compute resource requirements of the created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<k8s_openapi::api::core::v1::ResourceRequirements>,
 
     /// Affinity scheduling rules to be applied on created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub affinity: Option<k8s_openapi::api::core::v1::Affinity>,
 
     /// Node selector to be applied on created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_selector: Option<HashMap<String, String>>,
 
     /// Tolerations to be applied on created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tolerations: Option<Vec<k8s_openapi::api::core::v1::Toleration>>,
 
     /// Name of the ServiceAccount to use
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_name: Option<String>,
 }
 

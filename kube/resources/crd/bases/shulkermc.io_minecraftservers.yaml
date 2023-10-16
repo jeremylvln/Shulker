@@ -137,8 +137,8 @@ spec:
                       default: Velocity
                       description: Type of forwarding the proxies are using between themselves and this `MinecraftServer`
                       enum:
-                        - BungeeCord
                         - Velocity
+                        - BungeeCord
                       type: string
                     serverProperties:
                       additionalProperties:

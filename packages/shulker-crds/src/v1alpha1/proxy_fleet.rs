@@ -38,9 +38,11 @@ pub struct ProxyFleetSpec {
 
     /// The desired state of the Kubernetes `Service` to create for the
     /// Proxy Deployment
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service: Option<ProxyFleetServiceSpec>,
 
-    /// Autoscaling configuration for this `ProxyFleet`.
+    /// Autoscaling configuration for this `ProxyFleet`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub autoscaling: Option<FleetAutoscalingSpec>,
 }
 
@@ -64,6 +66,7 @@ pub struct ProxyFleetTemplateSpec {
 
     /// Overrides for values to be injected in the created `Pod`
     /// of this `ProxyFleet`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pod_overrides: Option<ProxyFleetTemplatePodOverridesSpec>,
 }
 
@@ -71,35 +74,16 @@ pub struct ProxyFleetTemplateSpec {
 #[serde(rename_all = "camelCase")]
 pub struct ProxyFleetTemplateVersionSpec {
     /// Channel of the version to use. Defaults to Velocity
-    #[schemars(default = "ProxyFleetTemplateVersionSpec::default_channel")]
-    #[schemars(schema_with = "ProxyFleetTemplateVersionSpec::schema_channel")]
+    #[serde(default)]
     pub channel: ProxyFleetTemplateVersion,
 
     /// Name of the version to use
     pub name: String,
 }
 
-#[cfg(not(tarpaulin_include))]
-impl ProxyFleetTemplateVersionSpec {
-    fn default_channel() -> ProxyFleetTemplateVersion {
-        ProxyFleetTemplateVersion::Velocity
-    }
-
-    fn schema_channel(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
-        schemars::schema::SchemaObject {
-            instance_type: Some(schemars::schema::InstanceType::String.into()),
-            enum_values: Some(vec![
-                serde_json::Value::String("Velocity".to_string()),
-                serde_json::Value::String("BungeeCord".to_string()),
-                serde_json::Value::String("Waterfall".to_string()),
-            ]),
-            ..Default::default()
-        }
-        .into()
-    }
-}
-
-#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr)]
+#[derive(
+    PartialEq, Deserialize, Serialize, Clone, Debug, Default, JsonSchema, IntoStaticStr, Display,
+)]
 pub enum ProxyFleetTemplateVersion {
     #[default]
     Velocity,
@@ -112,13 +96,16 @@ pub enum ProxyFleetTemplateVersion {
 pub struct ProxyFleetTemplateConfigurationSpec {
     /// Name of an optional ConfigMap already containing the proxy
     /// configuration
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub existing_config_map_name: Option<String>,
 
     /// List of references to plugins to download
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plugins: Option<Vec<ResourceRefSpec>>,
 
     /// List of optional references to patch archives to download
     /// and extract at the root of the proxy. Gzippied tarballs only
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<ResourceRefSpec>>,
 
     /// Number of maximum players that can connect to the
@@ -172,24 +159,31 @@ impl ProxyFleetTemplateConfigurationSpec {
 #[serde(rename_all = "camelCase")]
 pub struct ProxyFleetTemplatePodOverridesSpec {
     /// Image to use as replacement for the built-in one
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<ImageOverrideSpec>,
 
     /// Extra environment variables to add to the crated `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub env: Option<Vec<k8s_openapi::api::core::v1::EnvVar>>,
 
     /// The desired compute resource requirements of the created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<k8s_openapi::api::core::v1::ResourceRequirements>,
 
     /// Affinity scheduling rules to be applied on created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub affinity: Option<k8s_openapi::api::core::v1::Affinity>,
 
     /// Node selector to be applied on created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_selector: Option<HashMap<String, String>>,
 
     /// Tolerations to be applied on created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tolerations: Option<Vec<k8s_openapi::api::core::v1::Toleration>>,
 
     /// Name of the ServiceAccount to use
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_name: Option<String>,
 }
 
@@ -198,58 +192,22 @@ pub struct ProxyFleetTemplatePodOverridesSpec {
 pub struct ProxyFleetServiceSpec {
     /// Type of Service to create.
     /// Must be one of: ClusterIP, LoadBalancer, NodePort
-    #[schemars(default = "ProxyFleetServiceSpec::default_type")]
-    #[schemars(schema_with = "ProxyFleetServiceSpec::schema_type")]
+    #[serde(default)]
     pub type_: ProxyFleetServiceType,
 
     // Annotations to add to the `Service`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub annotations: Option<BTreeMap<String, String>>,
 
     // Describe how nodes distribute service traffic to the proxy.
-    #[schemars(default = "ProxyFleetServiceSpec::default_external_traffic_policy")]
-    #[schemars(schema_with = "ProxyFleetServiceSpec::schema_external_traffic_policy")]
-    pub external_traffic_policy: ProxyFleetServiceExternalTrafficPolicy,
+    // #[schemars(schema_with = "ProxyFleetServiceSpec::schema_external_traffic_policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_traffic_policy: Option<ProxyFleetServiceExternalTrafficPolicy>,
 }
 
-#[cfg(not(tarpaulin_include))]
-impl ProxyFleetServiceSpec {
-    fn default_type() -> ProxyFleetServiceType {
-        ProxyFleetServiceType::LoadBalancer
-    }
-
-    fn schema_type(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
-        schemars::schema::SchemaObject {
-            instance_type: Some(schemars::schema::InstanceType::String.into()),
-            enum_values: Some(vec![
-                serde_json::Value::String("ClusterIP".to_string()),
-                serde_json::Value::String("NodePort".to_string()),
-                serde_json::Value::String("LoadBalancer".to_string()),
-            ]),
-            ..Default::default()
-        }
-        .into()
-    }
-
-    fn default_external_traffic_policy() -> ProxyFleetServiceExternalTrafficPolicy {
-        ProxyFleetServiceExternalTrafficPolicy::Cluster
-    }
-
-    fn schema_external_traffic_policy(
-        _: &mut schemars::gen::SchemaGenerator,
-    ) -> schemars::schema::Schema {
-        schemars::schema::SchemaObject {
-            instance_type: Some(schemars::schema::InstanceType::String.into()),
-            enum_values: Some(vec![
-                serde_json::Value::String("Cluster".to_string()),
-                serde_json::Value::String("Local".to_string()),
-            ]),
-            ..Default::default()
-        }
-        .into()
-    }
-}
-
-#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr, Display)]
+#[derive(
+    PartialEq, Deserialize, Serialize, Clone, Debug, Default, JsonSchema, IntoStaticStr, Display,
+)]
 pub enum ProxyFleetServiceType {
     ClusterIP,
     NodePort,
@@ -257,10 +215,12 @@ pub enum ProxyFleetServiceType {
     LoadBalancer,
 }
 
-#[derive(PartialEq, Deserialize, Serialize, Clone, Debug, Default, IntoStaticStr, Display)]
+#[derive(
+    PartialEq, Deserialize, Serialize, Clone, Debug, Default, JsonSchema, IntoStaticStr, Display,
+)]
 pub enum ProxyFleetServiceExternalTrafficPolicy {
-    #[default]
     Cluster,
+    #[default]
     Local,
 }
 
