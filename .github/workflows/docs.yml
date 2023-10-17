@@ -7,11 +7,9 @@ on:
     paths:
       - docs/**
 
-env:
-  TARGET_NODE_VERSION: '20'
-
 concurrency:
   group: docs
+  cancel-in-progress: true
 
 jobs:
   publish:
@@ -31,20 +29,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
-        uses: actions/setup-node@v3
+      - name: Install tools
+        uses: ./github/actions/install-tools
         with:
-          node-version: ${{ env.TARGET_NODE_VERSION }}
-          cache: npm
-
-      - name: Install Buf
-        uses: bufbuild/buf-setup-action@v1
+          install-rust: false
+          install-java: false
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
-
-      - name: Install Node.js dependencies
-        run: npm ci
 
       - name: Build Docusaurus
         run: npx nx build docs

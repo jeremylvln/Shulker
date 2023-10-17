@@ -6,11 +6,6 @@ on:
     branches:
       - main
 
-env:
-  TARGET_NODE_VERSION: '20'
-  TARGET_RUST_VERSION: 'stable'
-  TARGET_JAVA_VERSION: '17'
-
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -25,43 +20,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.TARGET_NODE_VERSION }}
-          cache: npm
-
-      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
-          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-
-      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: adopt
-          java-version: ${{ env.TARGET_JAVA_VERSION }}
-          cache: 'gradle'
-
-      - name: Install Buf
-        uses: bufbuild/buf-setup-action@v1
-        with:
-          github_token: ${{ github.token }}
-
-      - name: Install Node.js dependencies
-        run: npm ci
-
-      - name: Restore Rust cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install tools
+        uses: ./github/actions/install-tools
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -81,48 +41,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.TARGET_NODE_VERSION }}
-          cache: npm
-
-      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
-          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-
-      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: adopt
-          java-version: ${{ env.TARGET_JAVA_VERSION }}
-          cache: 'gradle'
-
-      - name: Install Buf
-        uses: bufbuild/buf-setup-action@v1
-        with:
-          github_token: ${{ github.token }}
-
-      - name: Install Node.js dependencies
-        run: npm ci
-
-      - name: Restore Rust cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install tools
+        uses: ./github/actions/install-tools
 
       - name: Install Rust tools
         run: cargo binstall -y cargo-tarpaulin
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -147,43 +72,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.TARGET_NODE_VERSION }}
-          cache: npm
-
-      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
-          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-
-      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: adopt
-          java-version: ${{ env.TARGET_JAVA_VERSION }}
-          cache: 'gradle'
-
-      - name: Install Buf
-        uses: bufbuild/buf-setup-action@v1
-        with:
-          github_token: ${{ github.token }}
-
-      - name: Install Node.js dependencies
-        run: npm ci
-
-      - name: Restore Rust cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install tools
+        uses: ./github/actions/install-tools
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -207,48 +97,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ env.TARGET_NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.TARGET_NODE_VERSION }}
-          cache: npm
-
-      - name: Use Rust ${{ env.TARGET_RUST_VERSION }}
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain ${{ env.TARGET_RUST_VERSION }}
-          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-
-      - name: Use Java ${{ env.TARGET_JAVA_VERSION }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: adopt
-          java-version: ${{ env.TARGET_JAVA_VERSION }}
-          cache: 'gradle'
-
-      - name: Install Buf
-        uses: bufbuild/buf-setup-action@v1
-        with:
-          github_token: ${{ github.token }}
-
-      - name: Install Node.js dependencies
-        run: npm ci
-
-      - name: Restore Rust cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            dist/rust/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install tools
+        uses: ./github/actions/install-tools
 
       - name: Install Rust tools
         run: cargo binstall -y clippy-sarif sarif-fmt
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Run clippy
         run: cargo clippy --all-features --message-format=json -- --deny warnings | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
@@ -279,4 +134,4 @@ jobs:
       - name: Ensure semantic
         uses: amannn/action-semantic-pull-request@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
