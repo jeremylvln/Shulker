@@ -11,11 +11,11 @@
   },
   "namedInputs": {
     "rust:dependencies": [
+      "{workspaceRoot}/.cargo/",
       "{workspaceRoot}/Cargo.toml",
-      "{workspaceRoot}/Cargo.lock",
-      "{workspaceRoot}/.cargo/"
+      "{workspaceRoot}/Cargo.lock"
     ],
-    "rust:test:dependencies": ["{workspaceRoot}/.tarpaulin.toml"],
+    "rust:test:dependencies": ["{workspaceRoot}/tarpaulin.toml"],
     "java:dependencies": [
       "{workspaceRoot}/build.gradle.kts",
       "{workspaceRoot}/gradle.properties",

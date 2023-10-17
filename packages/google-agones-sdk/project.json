@@ -7,7 +7,7 @@
     "buf": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "buf generate",
+        "command": "npx buf generate",
         "cwd": "packages/google-agones-sdk"
       },
       "inputs": ["default"],
