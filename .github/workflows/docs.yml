@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
         with:
           install-rust: false
           install-java: false

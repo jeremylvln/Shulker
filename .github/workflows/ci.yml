@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
         with:
           install-rust: false
           install-java: false
@@ -77,7 +77,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
 
       - name: Install Rust tools
         run: cargo binstall -y cargo-tarpaulin
@@ -108,7 +108,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v3
@@ -131,7 +131,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
 
       - name: Install Rust tools
         run: cargo binstall -y clippy-sarif sarif-fmt

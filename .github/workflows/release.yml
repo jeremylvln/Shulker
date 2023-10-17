@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install tools
-        uses: ./github/actions/install-tools
+        uses: ./.github/actions/install-tools
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
