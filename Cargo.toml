@@ -19,7 +19,7 @@ actix-web = "=4.4.0"
 anyhow = "=1.0.75"
 async-trait = "=0.1.73"
 base64 = "=0.21.4"
-chrono = { version = "=0.4.26", features = ["serde"] }
+chrono = { version = "=0.4.31", features = ["serde"] }
 futures = "=0.3.28"
 hostname = "=0.3.1"
 http = "=0.2.9"
