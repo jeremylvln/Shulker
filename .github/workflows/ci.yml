@@ -26,15 +26,16 @@ jobs:
       - name: Install tools
         uses: ./.github/actions/install-tools
 
-      - name: Prepare Git boundaries for affected projects
-        uses: nrwl/nx-set-shas@v3
-
-      - uses: dorny/paths-filter@v2
+      - name: Test if a Dockerfile changed
+        uses: dorny/paths-filter@v2
         id: file-changes
         with:
           filters: |
             dockerfile:
-              - 'packages/shulker-operator/Dockerfile'
+              - 'packages/*/Dockerfile'
+
+      - name: Prepare Git boundaries for affected projects
+        uses: nrwl/nx-set-shas@v3
 
       - name: Run build
         run: npx nx affected --target=build --parallel=1
@@ -63,8 +64,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Prepare Git boundaries for affected projects
+        uses: nrwl/nx-set-shas@v3
+
       - name: Run Docker build
-        run: docker build -t test -f packages/shulker-operator/Dockerfile --platform linux/amd64,linux/arm64 .
+        run: npx nx affected --target=docker --parallel=1
 
   test:
     runs-on: ubuntu-latest

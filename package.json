@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "@bufbuild/buf": "1.27.0",
-    "@codedependant/semantic-release-docker": "4.4.0",
     "@commitlint/cli": "17.7.2",
     "@commitlint/config-conventional": "17.7.0",
     "@commitlint/config-nx-scopes": "17.6.4",

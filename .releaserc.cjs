@@ -68,16 +68,10 @@ module.exports = {
       },
     ],
     [
-      '@codedependant/semantic-release-docker',
+      '@semantic-release/exec',
       {
-        dockerRegistry: 'ghcr.io',
-        dockerProject: 'jeremylvln',
-        dockerImage: 'shulker-operator',
-        dockerFile: 'packages/shulker-operator/Dockerfile',
-        dockerBuildFlags: {
-          platform: ['linux/amd64', 'linux/arm64/v8'].join(','),
-        },
-        dockerLogin: false,
+        publishCmd:
+          'npx nx run-many --target=docker --all --parallel 1 -- ${nextRelease.version}',
       },
     ],
     [

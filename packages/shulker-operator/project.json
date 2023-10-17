@@ -30,6 +30,13 @@
         "cwd": "packages/shulker-operator"
       },
       "inputs": ["default", "rust:dependencies"]
+    },
+    "docker": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ./scripts/build_docker.cjs shulker-operator packages/shulker-operator/Dockerfile"
+      },
+      "inputs": ["default", "docker:dependencies"]
     }
   },
   "implicitDependencies": [
