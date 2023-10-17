@@ -8,13 +8,16 @@
       <img src="https://img.shields.io/github/issues/jeremylvln/Shulker" alt="Open Issues" />
     </a>
     <a href="https://github.com/jeremylvln/Shulker/stargazers">
-      <img src="https://img.shields.io/github/stars/jeremylvln/Shulker" alt="stars" />
+      <img src="https://img.shields.io/github/stars/jeremylvln/Shulker" alt="Stars" />
     </a>
     <a href="https://github.com/jeremylvln/Shulker/blob/main/LICENSE">
       <img src="https://img.shields.io/github/license/jeremylvln/Shulker.svg" alt="License" />
     </a>
+    <a href="https://github.com/jeremylvln/Shulker/blob/main/LICENSE">
+      <img src="https://img.shields.io/codecov/c/github/jeremylvln/Shulker" alt="Coverage">
+    </a>
     <br />
-    <a href="https://github.com/sponsors/jeremylvln">
+    <a href="https://app.codecov.io/github/jeremylvln/Shulker">
       <img src="https://img.shields.io/github/sponsors/jeremylvln" alt="GitHub Sponsors" />
     </a>
   </p>
