@@ -7,7 +7,7 @@ titleTemplate: The modern way of putting Minecraft in boxes
 hero:
   name: Shulker
   text: The modern way of putting Minecraft in boxes
-  tagline: A Kubernetes operator for managing complex and dynamic Minecraft infrastructures, including game servers and proxies.
+  tagline: A Kubernetes operator for managing complex and dynamic Minecraft infrastructures.
   image:
     src: /logo.svg
     alt: Shulker
