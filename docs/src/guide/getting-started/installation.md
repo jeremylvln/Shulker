@@ -13,7 +13,7 @@ $ git clone https://github.com/jeremylvln/Shulker
 $ kubectl apply -k Shulker/kube/overlays/stable -n shulker-system
 ```
 
-:::note
+:::tip
 
 If Prometheus is installed (along with its custom CRDs), you
 would prefer selecting the `stable-with-prometheus` overlay which
@@ -24,7 +24,7 @@ will create appropriate `ServiceMonitor`s resources.
 After this, a `shulker-operator` Pod should be scheduled and
 work immediately.
 
-:::note
+:::info
 
 The operator Pod requires a certificate from cert-manager to
 be provisionned, it may take some seconds/minutes to generate.

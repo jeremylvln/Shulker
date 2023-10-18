@@ -1,8 +1,3 @@
----
-slug: /
-sidebar_position: 0
----
-
 # Introduction
 
 Shulker aims to be your default choice to managing Minecraft infrastructures

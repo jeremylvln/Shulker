@@ -16,7 +16,7 @@ the proxy. It is supported by most cloud providers.
 To enable it, you need to set the `proxyProtocol` option to `true` in
 the configuration of your proxy:
 
-```yaml title="proxy.yaml" showLineNumbers
+```yaml
 apiVersion: shulkermc.io/v1alpha1
 kind: ProxyFleet
 metadata:
@@ -27,11 +27,11 @@ spec:
   replicas: 1
   template:
     spec:
-      config:
-        proxyProtocol: true
+      config: // [!code focus]
+        proxyProtocol: true // [!code focus]
 ```
 
-:::note
+:::tip
 
 You'll may need to set the `externalTrafficPolicy` of the Kubernetes
 Service created for the `ProxyFleet` to `Local`, to avoid having one of
@@ -39,9 +39,9 @@ your node forwarding traffic to another.
 
 :::
 
-:::note
+:::warning
 
-Your cloud provider *may* also expect you of adding some annotations to
+Your cloud provider _may_ also expect you of adding some annotations to
 the Service as well for them to configure properly your load balancer.
 Check out your cloud provider documentation to learn more.
 

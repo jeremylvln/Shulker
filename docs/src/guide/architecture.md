@@ -1,20 +1,10 @@
----
-sidebar_position: 1
----
-
-import ThemedImage from '@theme/ThemedImage';
-
 # Architecture
 
 <center>
-<ThemedImage
-  alt="Docusaurus themed image"
-  sources={{
-    light: '/img/basics/basics.excalidraw.png',
-    dark: '/img/basics/basics-dark.excalidraw.png'
-  }}
-  width="500px"
-/>
+   <img
+      alt="Architecture Diagram"
+      src="/basics/basics.excalidraw.png"
+   >
 </center>
 
 A **Shulker Cluster** is composed of three main _entities_:
@@ -44,7 +34,7 @@ A **Cluster** (meaning the `MinecraftCluster` CRD), is the root entity of a Mine
 Network: every proxy and server needs one to attach to. It could define global
 settings multiple sub-entities may need.
 
-:::caution
+:::warning
 
 From a Kubernetes point-of-view, you can have multiple Clusters in a same
 **Kubernetes Namespace**.
@@ -55,7 +45,7 @@ for the same resource (if two clusters want to have the same secret name, for in
 
 :::
 
-:::note
+:::info
 
 Currently, the `MinecraftCluster` do not do much things, however it is planned
 in the future to let it manage a **Limbo mechanism**. A Limbo is a piece of software
@@ -89,7 +79,7 @@ availability. Supported by a plugin agent to be installed on every proxy, the pr
 will have their server list updated immediately upon every event occurring in the
 Kubernetes Cluster.
 
-:::caution
+:::warning
 
 While servers are synchronized on each proxies, players are not. This means that,
 from one proxy, you will **not** know that another player is connected to the network

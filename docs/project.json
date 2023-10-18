@@ -7,22 +7,15 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build",
+        "command": "vitepress build src",
         "cwd": "docs"
       },
-      "outputs": ["{workspaceRoot}/build"]
+      "outputs": ["{workspaceRoot}/.vitepress/dist"]
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run start",
-        "cwd": "docs"
-      }
-    },
-    "i18n": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "npm run write-translations",
+        "command": "vitepress dev src",
         "cwd": "docs"
       }
     }
