@@ -19,7 +19,7 @@ the namespace.
 ## A _spoon_ of MinecraftCluster
 
 Everything starts by creating a `MincraftCluster`. As described in
-the **[Architecture](/architecture)** chapter, it is the most important
+the **[Architecture](/guide/architecture)** chapter, it is the most important
 entity because it is referenced in many other resources.
 
 Create a `cluster.yaml` file containing the following:
