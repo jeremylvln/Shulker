@@ -10,6 +10,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+  SCCACHE_GHA_ENABLED: 'true'
+  RUSTC_WRAPPER: 'sccache'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,6 +34,10 @@ jobs:
 
       - name: Run build
         run: npx nx affected --target=build --parallel=1
+
+      - name: Print sccache stats
+        shell: bash
+        run: ${SCCACHE_PATH} --show-stats
 
   test:
     runs-on: ubuntu-latest
@@ -61,6 +69,10 @@ jobs:
           CODECOV=$(pwd)/codecov bash scripts/upload_codecov_files.sh
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Print sccache stats
+        shell: bash
+        run: ${SCCACHE_PATH} --show-stats
 
   quality:
     runs-on: ubuntu-latest

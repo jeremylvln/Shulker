@@ -9,17 +9,17 @@ the following criterias:
 - At least one Linux node is needed for the Shulker operators to work
   (no special architecture is required)
 
-:::note
+:::info
 
 By default, any `ProxyFleet` will create automatically a Kubernetes Service
 of `LoadBalancer` kind. For this behavior to work properly, your cloud provider
 should support load balancer provisioning. While this is a non-issue for
-almost all cloud providers,  it may be one if you are self-provisioning your
+almost all cloud providers, it may be one if you are self-provisioning your
 own Kubernetes Cluster.
 
 :::
 
-:::note
+:::info
 
 The node requirements are those for the Shulker operators to work. It
 may not reflect those of containers created by Shulker. While there is

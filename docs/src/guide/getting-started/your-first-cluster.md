@@ -1,5 +1,3 @@
-import CodeBlock from '@theme/CodeBlock';
-
 # Your First Cluster
 
 In this chapter, you'll create your first Minecraft Cluster. It is
@@ -21,14 +19,12 @@ the namespace.
 ## A _spoon_ of MinecraftCluster
 
 Everything starts by creating a `MincraftCluster`. As described in
-the **[Architecture](/architecture)** chapter, it is the most important
+the **[Architecture](/guide/architecture)** chapter, it is the most important
 entity because it is referenced in many other resources.
 
 Create a `cluster.yaml` file containing the following:
 
-import ClusterSource from '!!raw-loader!../../../examples/getting-started/cluster.yaml';
-
-<CodeBlock language="yaml" title="/cluster.yaml" showLineNumbers={true}>{ClusterSource}</CodeBlock>
+<<< ../../../../examples/getting-started/cluster.yaml
 
 And then apply this file:
 
@@ -47,7 +43,7 @@ at least one **Proxy**. So let's create a `ProxyFleet`. It will handle
 replication among other things, but more importantly, it will create and
 bind a **Kubernetes Service** for us, with the `LoadBalancer` type by default.
 
-:::note
+:::info
 
 Each **ProxyDeployment** has its own, dedicated Service. This allows you
 to have a bunch of "public" proxies for your players while having a
@@ -57,9 +53,7 @@ separate entrypoint for privileged players (like a staff, etc...).
 
 Create a `proxy.yaml` file containing the following:
 
-import ProxySource from '!!raw-loader!../../../examples/getting-started/proxy.yaml';
-
-<CodeBlock language="yaml" title="/proxy.yaml" showLineNumbers={true}>{ProxySource}</CodeBlock>
+<<< ../../../../examples/getting-started/proxy.yaml
 
 And then apply this file:
 
@@ -81,7 +75,7 @@ you'll probably see some lines like this:
 This is due to Shulker injecting automatically an agent plugin to handle
 some work that cannot be only done from the infrastructure.
 
-:::note
+:::info
 
 You probably question yourself about the log line indicating that the
 proxy will be force stopped after some time. Due to players being
@@ -109,22 +103,20 @@ have created a `LoadBalancer` Service. If you add the IP to the game's
 server list, you should see an output similar to the following:
 
 <center>
-<img
-  alt="Server list screenshot"
-  src='/img/getting-started/motd.png'
-  width="750px"
-/>
+  <img
+    alt="Server List Screenshot"
+    src="/getting-started/motd.png"
+  />
 </center>
 
 However, if you try to connect, you'll be kicked out with the following
 error:
 
 <center>
-<img
-  alt="No limbo screenshot"
-  src='/img/getting-started/no-limbo.png'
-  width="750px"
-/>
+  <img
+    alt="No Limbo Screenshot"
+    src="/getting-started/no-limbo.png"
+  />
 </center>
 
 By default, the Shulker Agent will try to connect the player to the first
@@ -139,9 +131,7 @@ Kubernetes Service is created because the only entrypoints are the Proxies.
 
 Create a `minecraftserver.yaml` file containing the following:
 
-import MinecraftServerSource from '!!raw-loader!../../../examples/getting-started/minecraftserver.yaml';
-
-<CodeBlock language="yaml" title="/minecraftserver.yaml" showLineNumbers={true}>{MinecraftServerSource}</CodeBlock>
+<<< ../../../../examples/getting-started/minecraftserver.yaml
 
 And then apply this file:
 
@@ -162,14 +152,13 @@ Finally, without any surprise, if you retry to connect to the proxy, you'll
 arrive on the server you just created:
 
 <center>
-<img
-  alt="Server screenshot"
-  src='/img/getting-started/server.png'
-  width="750px"
-/>
+  <img
+    alt="Server Screenshot"
+    src="/getting-started/server.png"
+  />
 </center>
 
-:::note
+:::tip
 
 Pay attention to the `tags` field of the MinecraftServer resource you just
 created. The Shulker Agent will connect the player to the first server it
@@ -199,7 +188,7 @@ delete it without bothering deleting the resources one-by-one:
 $ kubectl delete ns shulker-tutorial
 ```
 
-:::note
+:::tip
 
 The command could block some seconds/minutes during the deletion of all
 the resources contained in the namespace.

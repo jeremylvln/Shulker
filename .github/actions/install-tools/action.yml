@@ -45,24 +45,10 @@ runs:
         java-version: ${{ inputs.java-version }}
         cache: 'gradle'
 
-    - name: Install Buf
-      uses: bufbuild/buf-setup-action@v1
-      with:
-        github_token: ${{ github.token }}
+    - name: Prepare sccache-cache
+      if: ${{ inputs.install-rust == 'true' }}
+      uses: mozilla-actions/sccache-action@v0.0.3
 
     - name: Install Node.js dependencies
       shell: bash
       run: npm ci
-
-    - name: Restore Rust cache
-      if: ${{ inputs.install-rust == 'true' }}
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/bin/
-          ~/.cargo/registry/index/
-          ~/.cargo/registry/cache/
-          ~/.cargo/git/db/
-          dist/rust/
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: ${{ runner.os }}-cargo-
