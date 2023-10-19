@@ -50,6 +50,9 @@ section of the documentation to start using Shulker!
 
 Shulker is distributed under the [AGPL 3.0](LICENSE.txt).
 
+> Want to use Shulker for commercial purposes? Contact me so we can discuss about
+> that together!
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
