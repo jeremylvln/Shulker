@@ -26,7 +26,7 @@ class LimboFeature(
 
     private fun onServerPreConnect(player: Player, originalServerName: String): ServerPreConnectHookResult {
         if (originalServerName == LIMBO_TAG) {
-            val limboServers = this.agent.api.directoryAdapter.getServersByTag(LIMBO_TAG).iterator()
+            val limboServers = this.agent.api.getServersByTag(LIMBO_TAG).iterator()
 
             if (limboServers.hasNext()) {
                 val firstLimboServer = limboServers.next()

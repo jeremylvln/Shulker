@@ -1,18 +1,23 @@
 package io.shulkermc.serveragent.api
 
 import io.shulkermc.serveragent.ShulkerServerAgentCommon
-import io.shulkermc.serveragent.api.adapters.NetworkAdapterImpl
-import io.shulkermc.serverapi.ShulkerServerAPI
-import io.shulkermc.serverapi.adapters.NetworkAdapter
+import java.util.concurrent.CompletableFuture
+import kotlin.system.exitProcess
 
-class ShulkerServerAPIImpl(agent: ShulkerServerAgentCommon) : ShulkerServerAPI() {
-    private val networkAdapter = NetworkAdapterImpl(agent)
-
+class ShulkerServerAPIImpl(private val agent: ShulkerServerAgentCommon) : ShulkerServerAPI() {
     init {
         INSTANCE = this
     }
 
-    override fun getNetworkAdapter(): NetworkAdapter {
-        return this.networkAdapter
+    override fun askShutdown() {
+        try {
+            this.agent.agonesGateway.askShutdown()
+        } catch (ex: Exception) {
+            this.agent.logger.severe("Failed to ask Agones sidecar to shutdown properly, stopping process manually")
+            exitProcess(0)
+        }
     }
+
+    override fun setAllocated(): CompletableFuture<Void> = this.agent.agonesGateway.setAllocated().thenAccept {}
+    override fun setReserved(seconds: Long): CompletableFuture<Void> = this.agent.agonesGateway.setReserved(seconds).thenAccept {}
 }

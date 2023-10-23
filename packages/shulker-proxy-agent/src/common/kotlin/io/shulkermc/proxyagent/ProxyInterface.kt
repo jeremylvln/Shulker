@@ -2,12 +2,11 @@ package io.shulkermc.proxyagent
 
 import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
 import io.shulkermc.proxyagent.domain.ServerPreConnectHook
-import io.shulkermc.proxyapi.adapters.ServerName
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
 interface ProxyInterface {
-    fun registerServer(name: ServerName, address: InetSocketAddress)
+    fun registerServer(name: String, address: InetSocketAddress)
     fun unregisterServer(name: String): Boolean
     fun hasServer(name: String): Boolean
 

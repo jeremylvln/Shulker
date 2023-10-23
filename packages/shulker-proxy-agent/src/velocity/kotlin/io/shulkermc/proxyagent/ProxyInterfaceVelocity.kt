@@ -9,14 +9,13 @@ import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
 import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
 import io.shulkermc.proxyagent.domain.ServerPreConnectHook
-import io.shulkermc.proxyapi.adapters.ServerName
 import net.kyori.adventure.text.Component
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
 
 class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val proxy: ProxyServer) : ProxyInterface {
-    override fun registerServer(name: ServerName, address: InetSocketAddress) {
+    override fun registerServer(name: String, address: InetSocketAddress) {
         this.proxy.registerServer(ServerInfo(name, address))
     }
 

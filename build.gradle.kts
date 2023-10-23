@@ -208,13 +208,44 @@ subprojects {
         }
     }
 
-    if (project.hasProperty("isProxyPlugin")) {
+    fun registerApiSourceSet(commonSourceSet: SourceSet?) {
+        val apiSourceSet = sourceSets.create("api")
+
+        if (commonSourceSet != null) {
+            dependencies {
+                "commonImplementation"(apiSourceSet.output)
+            }
+        }
+
+        val apiJar = tasks.register("apiJar", ShadowJar::class.java) {
+            archiveClassifier = "api"
+            from(apiSourceSet.output)
+            configurations = listOf(project.configurations.getByName("apiRuntimeClasspath"))
+        }
+
+        artifacts.add("archives", apiJar)
+        tasks.assemble {
+            dependsOn(apiJar)
+        }
+
+        publishing {
+            publications {
+                named<MavenPublication>("mavenJava") {
+                    artifact(apiJar)
+                }
+            }
+        }
+    }
+
+    if (project.name == "shulker-proxy-agent") {
         apply(plugin = "org.jetbrains.kotlin.kapt")
 
         val commonSourceSet = sourceSets.create("common")
         listOf("bungeecord", "velocity").forEach { providerName ->
             registerPluginProvider(providerName, commonSourceSet)
         }
+
+        registerApiSourceSet(commonSourceSet)
 
         dependencies {
             "commonCompileOnly"("net.kyori:adventure-api:4.14.0")
@@ -223,11 +254,13 @@ subprojects {
             "velocityCompileOnly"("com.velocitypowered:velocity-api:3.1.1")
             "kaptVelocity"("com.velocitypowered:velocity-api:3.1.1")
         }
-    } else if (project.hasProperty("isServerPlugin")) {
+    } else if (project.name == "shulker-server-agent") {
         val commonSourceSet = sourceSets.create("common")
         listOf("paper").forEach { providerName ->
             registerPluginProvider(providerName, commonSourceSet)
         }
+
+        registerApiSourceSet(commonSourceSet)
 
         dependencies {
             "commonCompileOnly"("net.kyori:adventure-api:4.14.0")

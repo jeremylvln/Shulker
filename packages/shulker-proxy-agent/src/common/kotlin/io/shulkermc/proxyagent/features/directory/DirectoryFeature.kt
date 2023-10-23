@@ -33,7 +33,7 @@ class DirectoryFeature(
 
         if (gameServer.status.isReady()) {
             val tags = gameServer.metadata.annotations["minecraftserver.shulkermc.io/tags"]
-            this.agent.api.directoryAdapter.registerServer(
+            this.agent.api.registerServer(
                 gameServer.metadata.name,
                 InetSocketAddress(gameServer.status.address, gameServer.status.ports!![0].port!!),
                 tags?.split(",")?.toSet() ?: emptySet()
@@ -42,6 +42,6 @@ class DirectoryFeature(
     }
 
     private fun unregisterServer(gameServer: AgonesV1GameServer) {
-        this.agent.api.directoryAdapter.unregisterServer(gameServer.metadata.name)
+        this.agent.api.unregisterServer(gameServer.metadata.name)
     }
 }

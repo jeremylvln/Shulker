@@ -28,5 +28,5 @@
     }
   },
   "tags": ["lang:java"],
-  "implicitDependencies": ["shulker-server-api"]
+  "implicitDependencies": ["google-agones-sdk-bindings-java"]
 }

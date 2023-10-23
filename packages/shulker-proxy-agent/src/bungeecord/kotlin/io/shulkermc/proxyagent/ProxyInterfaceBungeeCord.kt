@@ -3,7 +3,6 @@ package io.shulkermc.proxyagent
 import io.shulkermc.proxyagent.domain.Player
 import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
 import io.shulkermc.proxyagent.domain.ServerPreConnectHook
-import io.shulkermc.proxyapi.adapters.ServerName
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer
@@ -22,7 +21,7 @@ class ProxyInterfaceBungeeCord(
     private val plugin: Plugin,
     private val proxy: ProxyServer
 ) : ProxyInterface {
-    override fun registerServer(name: ServerName, address: InetSocketAddress) {
+    override fun registerServer(name: String, address: InetSocketAddress) {
         this.proxy.servers[name] = this.proxy.constructServerInfo(name, address, "", false)
     }
 
