@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { DefaultTheme } from 'vitepress/types/default-theme';
 
 const websiteUrl = 'https://shulker.jeremylvln.fr';
 const repositoryUrl = 'https://github.com/jeremylvln/Shulker';
@@ -8,6 +9,52 @@ const description =
   'A Kubernetes operator for managing complex and dynamic Minecraft infrastructures, including game servers and proxies.';
 
 const renderTitle = (title: string) => titleTemplate.replace(':title', title);
+
+const sidebar = {
+  '/guide/': [
+    {
+      text: 'Introduction',
+      items: [
+        { text: 'What is Shulker?', link: '/guide/' },
+        { text: 'Architecture', link: '/guide/architecture' },
+      ],
+    },
+    {
+      text: 'Getting Started',
+      items: [
+        {
+          text: 'Prerequisites',
+          link: '/guide/getting-started/prerequisites',
+        },
+        {
+          text: 'Installation',
+          link: '/guide/getting-started/installation',
+        },
+        {
+          text: 'Your First Cluster',
+          link: '/guide/getting-started/your-first-cluster',
+        },
+      ],
+    },
+    {
+      text: 'Recipes',
+      items: [
+        {
+          text: 'Adding custom content',
+          link: '/guide/recipes/adding-custom-content',
+        },
+        {
+          text: 'Enabling proxy protocol',
+          link: '/guide/recipes/enabling-proxy-protocol',
+        },
+        {
+          text: 'Overriding pod properties',
+          link: '/guide/recipes/overriding-pod-properties',
+        },
+      ],
+    },
+  ],
+} satisfies DefaultTheme.SidebarMulti;
 
 export default defineConfig({
   title: 'Shulker',
@@ -89,55 +136,11 @@ export default defineConfig({
     socialLinks: [{ icon: 'github', link: repositoryUrl }],
 
     nav: [
-      { text: 'Getting Started', link: '/guide/getting-started/prerequisites' },
+      { text: 'Getting Started', link: sidebar['/guide/'][1].items[0].link },
       { text: 'Guide', link: '/guide/' },
-      { text: 'Recipes', link: '/guide/recipes' },
+      { text: 'Recipes', link: sidebar['/guide/'][2].items[0].link },
     ],
 
-    sidebar: {
-      '/guide/': [
-        {
-          text: 'Introduction',
-          items: [
-            { text: 'What is Shulker?', link: '/guide/' },
-            { text: 'Architecture', link: '/guide/architecture' },
-          ],
-        },
-        {
-          text: 'Getting Started',
-          items: [
-            {
-              text: 'Prerequisites',
-              link: '/guide/getting-started/prerequisites',
-            },
-            {
-              text: 'Installation',
-              link: '/guide/getting-started/installation',
-            },
-            {
-              text: 'Your First Cluster',
-              link: '/guide/getting-started/your-first-cluster',
-            },
-          ],
-        },
-        {
-          text: 'Recipes',
-          items: [
-            {
-              text: 'Adding custom content',
-              link: '/guide/recipes/adding-custom-content',
-            },
-            {
-              text: 'Enabling proxy protocol',
-              link: '/guide/recipes/enabling-proxy-protocol',
-            },
-            {
-              text: 'Overriding pod properties',
-              link: '/guide/recipes/overriding-pod-properties',
-            },
-          ],
-        },
-      ],
-    },
+    sidebar,
   },
 });
