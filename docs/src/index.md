@@ -2,7 +2,6 @@
 layout: home
 
 title: Shulker
-titleTemplate: The modern way of putting Minecraft in boxes
 
 hero:
   name: Shulker

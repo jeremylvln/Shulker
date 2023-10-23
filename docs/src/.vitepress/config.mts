@@ -1,10 +1,18 @@
 import { defineConfig } from 'vitepress';
 
-const REPOSITORY_HOME = 'https://github.com/jeremylvln/Shulker';
+const websiteUrl = 'https://shulker.jeremylvln.fr';
+const repositoryUrl = 'https://github.com/jeremylvln/Shulker';
+
+const titleTemplate = ':title — The modern way of putting Minecraft in boxes';
+const description =
+  'A Kubernetes operator for managing complex and dynamic Minecraft infrastructures, including game servers and proxies.';
+
+const renderTitle = (title: string) => titleTemplate.replace(':title', title);
 
 export default defineConfig({
   title: 'Shulker',
-  description: 'Put Minecraft in a box',
+  titleTemplate,
+  description,
 
   head: [
     [
@@ -40,6 +48,26 @@ export default defineConfig({
     ],
     ['meta', { name: 'msapplication-TileColor', content: '#603cba' }],
     ['meta', { name: 'theme-color', content: '#7f00ff' }],
+
+    // Open Graph
+    ['meta', { name: 'og:type', content: 'website' }],
+    ['meta', { name: 'og:url', content: websiteUrl }],
+    [
+      'meta',
+      {
+        name: 'og:title',
+        content: renderTitle('Shulker'),
+      },
+    ],
+    ['meta', { name: 'og:description', content: description }],
+    ['meta', { name: 'og:image', content: `${websiteUrl}/banner.png` }],
+
+    // Twitter
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:url', content: websiteUrl }],
+    ['meta', { name: 'twitter:title', content: renderTitle('Shulker') }],
+    ['meta', { name: 'twitter:description', content: description }],
+    ['meta', { name: 'twitter:image', content: `${websiteUrl}/banner.png` }],
   ],
 
   markdown: {
@@ -50,7 +78,7 @@ export default defineConfig({
     logo: '/logo.png',
 
     editLink: {
-      pattern: `${REPOSITORY_HOME}/edit/main/docs/src/:path`,
+      pattern: `${repositoryUrl}/edit/main/docs/src/:path`,
     },
 
     footer: {
@@ -58,7 +86,7 @@ export default defineConfig({
       copyright: 'Copyright © 2023-present Jérémy Levilain',
     },
 
-    socialLinks: [{ icon: 'github', link: REPOSITORY_HOME }],
+    socialLinks: [{ icon: 'github', link: repositoryUrl }],
 
     nav: [
       { text: 'Getting Started', link: '/guide/getting-started/prerequisites' },

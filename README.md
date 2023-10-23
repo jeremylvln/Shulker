@@ -1,7 +1,7 @@
 <div align="center">
   <img src=".github/assets/logo.png" alt="logo" width="100" height="auto" />
   <h1>Shulker</h1>
-  <p>Put Minecraft in a <i>box</i> :package:</p>
+  <p>The modern way of putting Minecraft in <i>boxes</i> :package:</p>
   
   <p>
     <a href="https://github.com/jeremylvln/Shulker/issues/">
