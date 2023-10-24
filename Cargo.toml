@@ -20,7 +20,7 @@ anyhow = "=1.0.75"
 async-trait = "=0.1.74"
 base64 = "=0.21.5"
 chrono = { version = "=0.4.31", features = ["serde"] }
-clap = { version = "=4.4.6", features = ["derive"] }
+clap = { version = "=4.4.7", features = ["derive"] }
 futures = "=0.3.28"
 hostname = "=0.3.1"
 http = "=0.2.9"
