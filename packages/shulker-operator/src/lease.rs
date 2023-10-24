@@ -148,16 +148,16 @@ impl LeaseLock {
             name = self.name,
             "renewing lease"
         );
-        let patch = serde_json::json!({
-            "apiVersion": "coordination.k8s.io/v1",
-            "kind": "Lease",
-            "metadata": {
-                "resourceVersion": self.current_resource_version,
+        let patch = Lease {
+            metadata: ObjectMeta {
+                resource_version: self.current_resource_version.clone(),
+                ..Default::default()
             },
-            "spec": {
-                "renewTime": time::now(),
-            }
-        });
+            spec: Some(LeaseSpec {
+                renew_time: Some(MicroTime(time::now())),
+                ..Default::default()
+            }),
+        };
 
         let lease = self
             .leases_api
@@ -182,18 +182,18 @@ impl LeaseLock {
             name = self.name,
             "releasing lease"
         );
-        let patch = serde_json::json!({
-            "apiVersion": "coordination.k8s.io/v1",
-            "kind": "Lease",
-            "metadata": {
-                "resourceVersion": self.current_resource_version,
+        let patch = Lease {
+            metadata: ObjectMeta {
+                resource_version: self.current_resource_version.clone(),
+                ..Default::default()
             },
-            "spec": {
-                "renewTime": Option::<()>::None,
-                "acquireTime": Option::<()>::None,
-                "holderIdentity": Option::<()>::None
-            }
-        });
+            spec: Some(LeaseSpec {
+                renew_time: None,
+                acquire_time: None,
+                holder_identity: None,
+                ..Default::default()
+            }),
+        };
 
         let lease = self
             .leases_api

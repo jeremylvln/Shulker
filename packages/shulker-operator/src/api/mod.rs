@@ -1,29 +1,26 @@
 use std::pin::Pin;
 
-use actix_web::{get, middleware, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{middleware, App, HttpServer};
 use futures::Future;
 use shulker_sdk::minecraft_server_fleet_service_server::MinecraftServerFleetServiceServer;
 
+mod metrics_handlers;
 mod minecraft_server_fleet_grpc;
 
-#[get("/healthz")]
-async fn healthz(_: HttpRequest) -> impl Responder {
-    HttpResponse::Ok().body("ok")
-}
-
-pub fn create_http_server() -> Result<actix_web::dev::Server, anyhow::Error> {
-    // TODO: dynamic ip & port
+pub fn create_metrics_server(addr: String) -> Result<actix_web::dev::Server, anyhow::Error> {
     Ok(HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default().exclude("/healthz"))
-            .service(healthz)
+            .service(metrics_handlers::healthz)
+            .service(metrics_handlers::metrics)
     })
-    .bind("0.0.0.0:8080")?
+    .bind(addr)?
     .shutdown_timeout(5)
     .run())
 }
 
 pub fn create_grpc_server(
+    addr: String,
     client: kube::Client,
 ) -> Pin<Box<dyn Future<Output = Result<(), tonic::transport::Error>>>> {
     // TODO: dynamic ip & port
@@ -32,6 +29,6 @@ pub fn create_grpc_server(
             .add_service(MinecraftServerFleetServiceServer::new(
                 minecraft_server_fleet_grpc::MinecraftServerFleetServiceGrpc::new(client.clone()),
             ))
-            .serve("0.0.0.0:8081".parse().unwrap()),
+            .serve(addr.parse().unwrap()),
     )
 }

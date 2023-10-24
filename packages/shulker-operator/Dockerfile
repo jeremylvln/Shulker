@@ -15,4 +15,4 @@ RUN npx nx build shulker-operator
 
 FROM gcr.io/distroless/cc-debian12:nonroot
 COPY --from=builder /build/dist/rust/release/shulker-operator /
-CMD [ "/shulker-operator" ]
+ENTRYPOINT [ "/shulker-operator" ]

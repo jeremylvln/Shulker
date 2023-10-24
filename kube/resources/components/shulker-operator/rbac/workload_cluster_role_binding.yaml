@@ -1,19 +1,17 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
+  name: shulker-operator-workload
   labels:
     app.kubernetes.io/name: clusterrolebinding
-    app.kubernetes.io/instance: operator-rolebinding
-    app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: shulker
+    app.kubernetes.io/instance: shulker-operator-workload
+    app.kubernetes.io/component: shulker-operator-rbac
     app.kubernetes.io/part-of: shulker
-    app.kubernetes.io/managed-by: kustomize
-  name: operator-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: operator-role
+  name: shulker-operator-workload
 subjects:
   - kind: ServiceAccount
-    name: operator
+    name: shulker-operator
     namespace: shulker-system

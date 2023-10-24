@@ -1,24 +1,19 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
+  name: shulker-operator
   labels:
-    control-plane: shulker-operator
     app.kubernetes.io/name: servicemonitor
-    app.kubernetes.io/instance: operator-metrics-monitor
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/created-by: shulker
+    app.kubernetes.io/instance: shulker-operator
+    app.kubernetes.io/component: shulker-operator-prometheus
     app.kubernetes.io/part-of: shulker
-    app.kubernetes.io/managed-by: kustomize
-  name: operator-metrics-monitor
-  namespace: shulker-system
 spec:
-  endpoints:
-    - path: /metrics
-      targetPort: 8443
-      scheme: https
-      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-      tlsConfig:
-        insecureSkipVerify: true
   selector:
     matchLabels:
-      control-plane: shulker-operator
+      app.kubernetes.io/name: service
+      app.kubernetes.io/instance: shulker-operator-metrics
+      app.kubernetes.io/component: shulker-operator
+  endpoints:
+    - targetPort: metrics
+      path: /metrics
+      interval: 60s

@@ -31,9 +31,6 @@ const tags =
       ]
     : [`${baseTag}:next`];
 
-const platforms =
-  typeof version === 'string' ? ['linux/amd64', 'linux/arm64/v8'] : null;
-
 const command = [
   'docker',
   'build',
@@ -41,7 +38,9 @@ const command = [
   '-f',
   dockerfilePath,
   ...tags.flatMap((tag) => ['-t', tag]),
-  ...(platforms === null ? [] : ['--platform', platforms.join(' ')]),
+  ...(process.env.DOCKER_BUILD_PLATFORMS
+    ? ['--platform', process.env.DOCKER_BUILD_PLATFORMS.join(',')]
+    : []),
   '.',
 ].join(' ');
 
