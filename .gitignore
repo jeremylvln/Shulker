@@ -277,3 +277,5 @@ replay_pid*
 .DS_Store
 scripts/.tools/
 *.sarif
+
+.nx/cache

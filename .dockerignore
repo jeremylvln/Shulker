@@ -3,7 +3,8 @@
 .gradle/
 .husky/
 .idea/
-.vscod/
+.nx/
+.vscode/
 build/
 coverage/
 dist/
