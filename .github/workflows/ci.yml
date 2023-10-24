@@ -30,7 +30,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Prepare Git boundaries for affected projects
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Run build
         run: npx nx affected --target=build --parallel=1
@@ -57,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Prepare Git boundaries for affected projects
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Run tests
         run: npx nx affected --target=test --parallel=1
@@ -131,7 +131,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Prepare Git boundaries for affected projects
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Run lint
         run: npx nx affected --target=lint --parallel=1
