@@ -66,7 +66,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent.api" />
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-agent.common" />
     <orderEntry type="module-library">
       <library name="Gradle: kaptGeneratedClasses">
@@ -77,6 +76,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
     <orderEntry type="module" module-name="shulker.packages.google-agones-sdk-bindings-java.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.velocitypowered:velocity-api:3.1.1" level="project" />

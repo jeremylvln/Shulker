@@ -1,0 +1,4 @@
+configure<JavaPluginExtension> {
+    withJavadocJar()
+    withSourcesJar()
+}

@@ -1,35 +1,31 @@
 {
-  "name": "shulker-proxy-agent",
+  "name": "shulker-proxy-api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-proxy-agent/src",
+  "sourceRoot": "packages/shulker-proxy-api/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :packages:shulker-proxy-agent:build -x check"
+        "command": "./gradlew :packages:shulker-proxy-api:build -x check"
       },
       "inputs": ["default", "java:dependencies"],
-      "outputs": ["{workspaceRoot}/dist/java/shulker-proxy-agent"]
+      "outputs": ["{workspaceRoot}/dist/java/shulker-proxy-api"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :packages:shulker-proxy-agent:test"
+        "command": "./gradlew :packages:shulker-proxy-api:test"
       },
       "inputs": ["default", "java:dependencies"]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :packages:shulker-proxy-agent:ktlintCheck"
+        "command": "./gradlew :packages:shulker-proxy-api:ktlintCheck"
       },
       "inputs": ["default", "java:dependencies"]
     }
   },
-  "tags": ["lang:java"],
-  "implicitDependencies": [
-    "google-agones-sdk-bindings-java",
-    "shulker-proxy-api"
-  ]
+  "tags": ["lang:java"]
 }

@@ -5,6 +5,8 @@ plugins {
 }
 
 dependencies {
+    "commonApi"(project(":packages:shulker-proxy-api"))
+
     // Kubernetes
     "commonCompileOnly"("io.fabric8:kubernetes-client-api:6.9.0")
     "commonRuntimeOnly"("io.fabric8:kubernetes-client:6.9.0")
@@ -15,14 +17,12 @@ dependencies {
     "commonRuntimeOnly"("io.grpc:grpc-netty-shaded:1.58.0")
 }
 
-tasks.named("bungeecordJar", ShadowJar::class.java) {
-    dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
-    mergeServiceFiles()
-}
-
-tasks.named("velocityJar", ShadowJar::class.java) {
-    dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
-    mergeServiceFiles()
+setOf("bungeecordJar", "velocityJar").forEach { taskName ->
+    tasks.named(taskName, ShadowJar::class.java) {
+        dependsOn(":packages:shulker-proxy-api:shadowJar")
+        dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
+        mergeServiceFiles()
+    }
 }
 
 tasks.named("processBungeecordResources", ProcessResources::class.java) {
