@@ -101,7 +101,7 @@ jobs:
         continue-on-error: true
 
       - name: Run detekt
-        run: ./gradlew detekt
+        run: ./gradlew detektAll
         continue-on-error: true
 
       - name: Upload Clippy analysis results to GitHub

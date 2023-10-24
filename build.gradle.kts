@@ -57,8 +57,9 @@ subprojects {
 
     detekt {
         buildUponDefaultConfig = true
+        ignoreFailures = true
         baseline = file("$rootDir/gradle/detekt/baseline.xml")
-        basePath = rootProject.projectDir.absolutePath
+        basePath = rootDir.absolutePath
     }
 
     tasks {
@@ -266,5 +267,11 @@ subprojects {
             "commonCompileOnly"("net.kyori:adventure-api:4.14.0")
             "paperCompileOnly"("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
         }
+    }
+}
+
+tasks.register("detektAll") {
+    allprojects {
+        this@register.dependsOn(tasks.withType<Detekt>())
     }
 }
