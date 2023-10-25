@@ -85,7 +85,7 @@ module.exports = {
       '@semantic-release/exec',
       {
         publishCmd:
-          'npx nx run-many --target=docker --all --parallel 1 -- ${nextRelease.version}',
+          'npx nx run-many --target=docker --all --parallel 1 --output-style stream -- ${nextRelease.version}',
       },
     ],
     [
