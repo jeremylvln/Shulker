@@ -39,7 +39,7 @@ const command = [
   dockerfilePath,
   ...tags.flatMap((tag) => ['-t', tag]),
   ...(process.env.DOCKER_BUILD_PLATFORMS
-    ? ['--platform', process.env.DOCKER_BUILD_PLATFORMS.join(',')]
+    ? ['--platform', process.env.DOCKER_BUILD_PLATFORMS]
     : []),
   '.',
 ].join(' ');
