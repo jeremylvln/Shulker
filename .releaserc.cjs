@@ -15,7 +15,7 @@ const fileReplacements = [
   },
   {
     files: ['Cargo.toml'],
-    from: '^\\[workspace\\.package\\]\nversion = ".*"$',
+    from: '\\[workspace\\.package\\]\nversion = ".*"',
     to: '[workspace.package]\nversion = "${nextRelease.version}"',
     results: [
       {
@@ -29,11 +29,31 @@ const fileReplacements = [
   },
   {
     files: ['gradle.properties'],
-    from: '^version = .*$',
+    from: 'version = .*',
     to: 'version = ${nextRelease.version}',
     results: [
       {
         file: 'gradle.properties',
+        hasChanged: true,
+        numMatches: 1,
+        numReplacements: 1,
+      },
+    ],
+    countMatches: true,
+  },
+  {
+    files: ['kube/overlays/stable*/kustomization.yaml'],
+    from: 'newTag: .*',
+    to: 'newTag: ${nextRelease.version}',
+    results: [
+      {
+        file: 'kube/overlays/stable/kustomization.yaml',
+        hasChanged: true,
+        numMatches: 1,
+        numReplacements: 1,
+      },
+      {
+        file: 'kube/overlays/stable-with-prometheus/kustomization.yaml',
         hasChanged: true,
         numMatches: 1,
         numReplacements: 1,
