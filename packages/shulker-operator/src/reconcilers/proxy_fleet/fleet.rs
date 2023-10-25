@@ -43,8 +43,12 @@ const PROXY_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const PROXY_SHULKER_FORWARDING_SECRET_DIR: &str = "/mnt/shulker/forwarding-secret";
 const PROXY_DATA_DIR: &str = "/server";
 const PROXY_DRAIN_LOCK_DIR: &str = "/mnt/drain-lock";
-const PROXY_SHULKER_PROXY_AGENT_VERSION: &str = env!("CARGO_PKG_VERSION");
 const PROXY_SHULKER_MAVEN_REPOSITORY: &str = "https://maven.jeremylvln.fr/artifactory/shulker";
+
+#[cfg(not(test))]
+const PROXY_SHULKER_PROXY_AGENT_VERSION: &str = env!("CARGO_PKG_VERSION");
+#[cfg(test)]
+const PROXY_SHULKER_PROXY_AGENT_VERSION: &str = "0.0.0-test-cfg";
 
 lazy_static! {
     static ref PROXY_SECURITY_CONTEXT: SecurityContext = SecurityContext {
