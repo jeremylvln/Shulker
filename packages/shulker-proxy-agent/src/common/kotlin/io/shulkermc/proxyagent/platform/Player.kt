@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.domain
+package io.shulkermc.proxyagent.platform
 
 import net.kyori.adventure.text.Component
 

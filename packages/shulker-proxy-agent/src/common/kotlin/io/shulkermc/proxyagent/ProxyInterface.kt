@@ -1,7 +1,7 @@
 package io.shulkermc.proxyagent
 
-import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
-import io.shulkermc.proxyagent.domain.ServerPreConnectHook
+import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 

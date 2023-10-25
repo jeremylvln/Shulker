@@ -18,16 +18,15 @@ class ShulkerProxyAgent @Inject constructor(
     proxy: ProxyServer,
     logger: Logger
 ) {
-    private val proxyInterface = ProxyInterfaceVelocity(this, proxy)
-    private val common = ShulkerProxyAgentCommon(this.proxyInterface, logger)
+    private val agent = ShulkerProxyAgentCommon(ProxyInterfaceVelocity(this, proxy), logger)
 
     @Subscribe
     fun onProxyInitialization(@Suppress("UNUSED_PARAMETER") event: ProxyInitializeEvent) {
-        this.common.onProxyInitialization()
+        this.agent.onProxyInitialization()
     }
 
     @Subscribe
     fun onProxyShutdown(@Suppress("UNUSED_PARAMETER") event: ProxyShutdownEvent) {
-        this.common.onProxyShutdown()
+        this.agent.onProxyShutdown()
     }
 }

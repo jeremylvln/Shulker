@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.domain
+package io.shulkermc.proxyagent.platform
 
 import java.util.Optional
 

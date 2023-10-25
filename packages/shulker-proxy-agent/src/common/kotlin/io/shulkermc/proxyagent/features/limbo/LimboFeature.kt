@@ -1,8 +1,8 @@
 package io.shulkermc.proxyagent.features.limbo
 
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
-import io.shulkermc.proxyagent.domain.Player
-import io.shulkermc.proxyagent.domain.ServerPreConnectHookResult
+import io.shulkermc.proxyagent.platform.Player
+import io.shulkermc.proxyagent.platform.ServerPreConnectHookResult
 import io.shulkermc.proxyagent.utils.createDisconnectMessage
 import net.kyori.adventure.text.format.NamedTextColor
 import java.util.Optional

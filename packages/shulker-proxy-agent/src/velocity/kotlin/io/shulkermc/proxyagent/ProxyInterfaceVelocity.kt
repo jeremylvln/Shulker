@@ -7,8 +7,8 @@ import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
-import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
-import io.shulkermc.proxyagent.domain.ServerPreConnectHook
+import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
 import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
@@ -73,8 +73,8 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val 
         )
     }
 
-    private fun wrapPlayer(velocityPlayer: Player): io.shulkermc.proxyagent.domain.Player {
-        return object : io.shulkermc.proxyagent.domain.Player {
+    private fun wrapPlayer(velocityPlayer: Player): io.shulkermc.proxyagent.platform.Player {
+        return object : io.shulkermc.proxyagent.platform.Player {
             override fun disconnect(component: Component) {
                 velocityPlayer.disconnect(component)
             }

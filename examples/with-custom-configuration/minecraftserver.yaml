@@ -1,7 +1,7 @@
 apiVersion: shulkermc.io/v1alpha1
 kind: MinecraftServerFleet
 metadata:
-  name: limbo
+  name: lobby
 spec:
   clusterRef:
     name: getting-started
@@ -11,17 +11,17 @@ spec:
       clusterRef:
         name: getting-started
       tags:
-        - limbo
+        - lobby
       version:
         channel: Paper
-        name: '1.19.3'
+        name: '1.20.2'
       config:
         world:
           url: https://example.com/my-world.tar.gz
         plugins:
           - urlFrom:
               mavenRef:
-                repository: https://example.com/maven
+                repositoryUrl: https://example.com/maven
                 groupId: com.example
                 artifactId: myplugin
                 version: '1.0.0'

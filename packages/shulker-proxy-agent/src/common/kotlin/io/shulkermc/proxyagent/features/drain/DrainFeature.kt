@@ -5,7 +5,7 @@ import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
-import io.shulkermc.proxyagent.domain.PlayerPreLoginHookResult
+import io.shulkermc.proxyagent.platform.PlayerPreLoginHookResult
 import io.shulkermc.proxyagent.utils.createDisconnectMessage
 import net.kyori.adventure.text.format.NamedTextColor
 import java.io.IOException

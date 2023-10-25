@@ -1,8 +1,8 @@
 package io.shulkermc.proxyagent
 
-import io.shulkermc.proxyagent.domain.Player
-import io.shulkermc.proxyagent.domain.PlayerPreLoginHook
-import io.shulkermc.proxyagent.domain.ServerPreConnectHook
+import io.shulkermc.proxyagent.platform.Player
+import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer

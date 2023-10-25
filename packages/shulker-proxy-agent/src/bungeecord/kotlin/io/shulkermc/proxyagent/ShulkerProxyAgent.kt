@@ -3,14 +3,13 @@ package io.shulkermc.proxyagent
 import net.md_5.bungee.api.plugin.Plugin
 
 class ShulkerProxyAgent : Plugin() {
-    private val proxyInterface = ProxyInterfaceBungeeCord(this, this.proxy)
-    private val common = ShulkerProxyAgentCommon(this.proxyInterface, this.logger)
+    private val agent = ShulkerProxyAgentCommon(ProxyInterfaceBungeeCord(this, this.proxy), this.logger)
 
     override fun onEnable() {
-        this.common.onProxyInitialization()
+        this.agent.onProxyInitialization()
     }
 
     override fun onDisable() {
-        this.common.onProxyShutdown()
+        this.agent.onProxyShutdown()
     }
 }
