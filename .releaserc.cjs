@@ -1,5 +1,19 @@
 const fileReplacements = [
   {
+    files: ['package.json'],
+    from: '"version": ".*"',
+    to: '"version": "${nextRelease.version}"',
+    results: [
+      {
+        file: 'package.json',
+        hasChanged: true,
+        numMatches: 1,
+        numReplacements: 1,
+      },
+    ],
+    countMatches: true,
+  },
+  {
     files: ['Cargo.toml'],
     from: '^\\[workspace\\.package\\]\nversion = ".*"$',
     to: 'version = "${nextRelease.version}"',
