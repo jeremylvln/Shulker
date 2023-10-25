@@ -893,7 +893,7 @@ checksum = "6fb8d784f27acf97159b40fc4db5ecd8aa23b9ad5ef69cdd136d3bc80665f0c0"
 
 [[package]]
 name = "google-agones-crds"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "k8s-openapi",
  "kube",
@@ -2074,7 +2074,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-crds"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "base64 0.21.5",
  "google-agones-crds",
@@ -2090,7 +2090,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-operator"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -2129,7 +2129,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-sdk"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prost",
  "tonic",
@@ -2137,7 +2137,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-utils"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "chrono",
 ]
