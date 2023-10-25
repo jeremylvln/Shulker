@@ -33,6 +33,7 @@ const tags =
 
 const command = [
   'docker',
+  'buildx',
   'build',
   '--push',
   '-f',
