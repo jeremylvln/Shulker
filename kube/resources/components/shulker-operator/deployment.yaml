@@ -61,15 +61,19 @@ spec:
                 - 'ALL'
       nodeSelector:
         kubernetes.io/os: linux
-        kubernetes.io/arch: arm64
       securityContext:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
       serviceAccountName: shulker-operator
       terminationGracePeriodSeconds: 30
-      tolerations:
-        - key: devops.jeremylvln.fr/arm-only
-          operator: 'Equal'
-          value: 'true'
-          effect: 'NoSchedule'
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - arm64
