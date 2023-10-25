@@ -8,8 +8,7 @@ members = [
   "packages/shulker-sdk/bindings/rust"
 ]
 
-[workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 edition = "2021"
 publish = false
