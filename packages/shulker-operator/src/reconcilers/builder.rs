@@ -120,7 +120,7 @@ pub async fn reconcile_builder<
             api.patch(
                 &name,
                 &PatchParams::apply("shulker-operator").force(),
-                &Patch::Apply(&existing_resource),
+                &Patch::Apply(&new_resource),
             )
             .await
             .map_err(|e| {
