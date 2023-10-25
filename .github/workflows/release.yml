@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_GH_PAT }}
 
       - name: Install tools
         uses: ./.github/actions/install-tools
