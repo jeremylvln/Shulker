@@ -19,7 +19,7 @@ impl ResourceBuilder for ProxyRoleBuilder {
     type ResourceType = Role;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-proxy", cluster.name_any())
+        format!("shulker:{}:proxy", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
@@ -61,7 +61,6 @@ impl ResourceBuilder for ProxyRoleBuilder {
                     ..PolicyRule::default()
                 },
             ]),
-            ..Role::default()
         };
 
         Ok(role)
@@ -87,7 +86,7 @@ mod tests {
         let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-proxy");
+        assert_eq!(name, "shulker:my-cluster:proxy");
     }
 
     #[tokio::test]

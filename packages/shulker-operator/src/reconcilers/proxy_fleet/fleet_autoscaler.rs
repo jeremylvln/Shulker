@@ -129,12 +129,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetAutoscalerBuilder::new(client);
+        let name = super::FleetAutoscalerBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let fleet_autoscaler = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy", None)
-            .await
-            .unwrap();
+        let fleet_autoscaler = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(fleet_autoscaler);

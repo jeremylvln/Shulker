@@ -18,7 +18,7 @@ impl ResourceBuilder for MinecraftServerServiceAccountBuilder {
     type ResourceType = ServiceAccount;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-server", cluster.name_any())
+        format!("shulker-{}-server", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
@@ -68,7 +68,7 @@ mod tests {
         let name = super::MinecraftServerServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-server");
+        assert_eq!(name, "shulker-my-cluster-server");
     }
 
     #[tokio::test]
@@ -76,12 +76,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerServiceAccountBuilder::new(client);
+        let name = super::MinecraftServerServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // W
-        let service_account = builder
-            .build(&TEST_CLUSTER, "my-cluster-server", None)
-            .await
-            .unwrap();
+        let service_account = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service_account);

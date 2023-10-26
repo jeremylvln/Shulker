@@ -22,7 +22,7 @@ impl ResourceBuilder for ProxyRoleBindingBuilder {
     type ResourceType = RoleBinding;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-proxy", cluster.name_any())
+        format!("shulker:{}:proxy", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
@@ -61,7 +61,6 @@ impl ResourceBuilder for ProxyRoleBindingBuilder {
                 namespace: cluster.namespace(),
                 ..Subject::default()
             }]),
-            ..RoleBinding::default()
         };
 
         Ok(role_binding)
@@ -89,7 +88,7 @@ mod tests {
         let name = super::ProxyRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-proxy");
+        assert_eq!(name, "shulker:my-cluster:proxy");
     }
 
     #[test]
@@ -135,12 +134,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBindingBuilder::new(client);
+        let name = super::ProxyRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role_binding);
@@ -151,12 +148,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBindingBuilder::new(client);
+        let name = super::ProxyRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert_eq!(
@@ -164,7 +159,7 @@ mod tests {
             RoleRef {
                 api_group: "rbac.authorization.k8s.io".to_string(),
                 kind: "Role".to_string(),
-                name: "my-cluster-proxy".to_string(),
+                name: "shulker:my-cluster:proxy".to_string(),
             }
         );
     }
@@ -174,19 +169,17 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBindingBuilder::new(client);
+        let name = super::ProxyRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert_eq!(
             role_binding.subjects,
             Some(vec![Subject {
                 kind: "ServiceAccount".to_string(),
-                name: "my-cluster-proxy".to_string(),
+                name: "shulker-my-cluster-proxy".to_string(),
                 namespace: Some("default".to_string()),
                 ..Subject::default()
             }])

@@ -19,7 +19,7 @@ impl ResourceBuilder for MinecraftServerRoleBuilder {
     type ResourceType = Role;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-server", cluster.name_any())
+        format!("shulker:{}:server", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
@@ -61,7 +61,6 @@ impl ResourceBuilder for MinecraftServerRoleBuilder {
                     ..PolicyRule::default()
                 },
             ]),
-            ..Role::default()
         };
 
         Ok(role)
@@ -87,7 +86,7 @@ mod tests {
         let name = super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-server");
+        assert_eq!(name, "shulker:my-cluster:server");
     }
 
     #[tokio::test]
@@ -95,12 +94,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBuilder::new(client);
+        let name = super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-server", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role);
@@ -111,12 +108,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBuilder::new(client);
+        let name = super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-server", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
@@ -131,12 +126,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBuilder::new(client);
+        let name = super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-server", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
@@ -156,12 +149,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBuilder::new(client);
+        let name = super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-server", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {

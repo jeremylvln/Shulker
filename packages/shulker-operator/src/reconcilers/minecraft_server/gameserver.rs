@@ -484,12 +484,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::GameServerBuilder::new(client);
+        let name = super::GameServerBuilder::name(&TEST_SERVER);
 
         // W
-        let game_server = builder
-            .build(&TEST_SERVER, "my-server", None)
-            .await
-            .unwrap();
+        let game_server = builder.build(&TEST_SERVER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(game_server);

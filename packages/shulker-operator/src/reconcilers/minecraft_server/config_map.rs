@@ -117,12 +117,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_SERVER);
 
         // W
-        let config_map = builder
-            .build(&TEST_SERVER, "my-server-config", None)
-            .await
-            .unwrap();
+        let config_map = builder.build(&TEST_SERVER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(config_map);

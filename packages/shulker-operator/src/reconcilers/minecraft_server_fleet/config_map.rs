@@ -85,10 +85,11 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_SERVER_FLEET);
 
         // W
         let config_map = builder
-            .build(&TEST_SERVER_FLEET, "my-server-config", None)
+            .build(&TEST_SERVER_FLEET, &name, None)
             .await
             .unwrap();
 

@@ -489,12 +489,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let fleet = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy", None)
-            .await
-            .unwrap();
+        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(fleet);
@@ -505,12 +503,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let fleet = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy", None)
-            .await
-            .unwrap();
+        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         let additional_labels = TEST_PROXY_FLEET
@@ -545,12 +541,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let fleet = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy", None)
-            .await
-            .unwrap();
+        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         let additional_annotations = TEST_PROXY_FLEET

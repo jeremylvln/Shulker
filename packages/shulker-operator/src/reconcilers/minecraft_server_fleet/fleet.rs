@@ -173,10 +173,11 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, "my-server", None)
+            .build(&TEST_SERVER_FLEET, &name, None)
             .await
             .unwrap();
 

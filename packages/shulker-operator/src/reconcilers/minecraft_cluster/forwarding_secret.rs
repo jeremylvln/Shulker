@@ -129,12 +129,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ForwardingSecretBuilder::new(client);
+        let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
 
         // W
-        let secret = builder
-            .build(&TEST_CLUSTER, "my-cluster-forwarding-secret", None)
-            .await
-            .unwrap();
+        let secret = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(secret, {
@@ -147,12 +145,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ForwardingSecretBuilder::new(client);
+        let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
 
         // W
-        let secret = builder
-            .build(&TEST_CLUSTER, "my-cluster-forwarding-secret", None)
-            .await
-            .unwrap();
+        let secret = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(secret
@@ -167,18 +163,12 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ForwardingSecretBuilder::new(client);
-        let existing_secret = builder
-            .build(&TEST_CLUSTER, "my-cluster-forwarding-secret", None)
-            .await
-            .unwrap();
+        let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
+        let existing_secret = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // W
         let secret = builder
-            .build(
-                &TEST_CLUSTER,
-                "my-cluster-new-forwarding-secret",
-                Some(&existing_secret),
-            )
+            .build(&TEST_CLUSTER, &name, Some(&existing_secret))
             .await
             .unwrap();
 
@@ -203,17 +193,14 @@ mod tests {
         let key = super::ForwardingSecretBuilder::get_existing_or_new_forwarding_secret(None);
 
         // T
-        assert!(key.len() > 0);
+        assert!(!key.is_empty());
     }
 
     #[test]
     fn get_existing_or_new_forwarding_secret_missing_key() {
         // G
         let secret = Secret {
-            metadata: ObjectMeta {
-                name: Some("test-secret".to_string()),
-                ..ObjectMeta::default()
-            },
+            metadata: ObjectMeta::default(),
             data: None,
             string_data: None,
             ..Secret::default()
@@ -224,7 +211,7 @@ mod tests {
             super::ForwardingSecretBuilder::get_existing_or_new_forwarding_secret(Some(&secret));
 
         // T
-        assert!(key.len() > 0);
+        assert!(!key.is_empty());
     }
 
     #[test]
@@ -232,10 +219,7 @@ mod tests {
         // G
         let existing_forwarding_secret = "test";
         let secret = Secret {
-            metadata: ObjectMeta {
-                name: Some("test-secret".to_string()),
-                ..ObjectMeta::default()
-            },
+            metadata: ObjectMeta::default(),
             data: Some(BTreeMap::from([(
                 SECRET_DATA_KEY.to_string(),
                 ByteString(existing_forwarding_secret.as_bytes().to_vec()),
@@ -257,10 +241,7 @@ mod tests {
         // G
         let existing_forwarding_secret = "test";
         let secret = Secret {
-            metadata: ObjectMeta {
-                name: Some("test-secret".to_string()),
-                ..ObjectMeta::default()
-            },
+            metadata: ObjectMeta::default(),
             data: None,
             string_data: Some(BTreeMap::from([(
                 SECRET_DATA_KEY.to_string(),

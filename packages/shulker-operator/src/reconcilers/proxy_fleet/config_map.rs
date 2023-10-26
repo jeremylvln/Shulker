@@ -118,12 +118,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
-            .await
-            .unwrap();
+        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(config_map);
@@ -134,12 +132,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
-            .await
-            .unwrap();
+        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         assert!(config_map.data.as_ref().unwrap().contains_key("init-fs.sh"));
@@ -150,12 +146,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
-            .await
-            .unwrap();
+        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         assert!(config_map
@@ -170,12 +164,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder
-            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
-            .await
-            .unwrap();
+        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         assert!(config_map
@@ -195,14 +187,12 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
         let mut fleet = TEST_PROXY_FLEET.clone();
         fleet.spec.template.spec.version.channel = ProxyFleetTemplateVersion::BungeeCord;
 
         // W
-        let config_map = builder
-            .build(&fleet, "my-proxy-config", None)
-            .await
-            .unwrap();
+        let config_map = builder.build(&fleet, &name, None).await.unwrap();
 
         // T
         assert!(config_map

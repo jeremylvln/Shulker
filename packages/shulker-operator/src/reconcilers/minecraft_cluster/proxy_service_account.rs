@@ -18,7 +18,7 @@ impl ResourceBuilder for ProxyServiceAccountBuilder {
     type ResourceType = ServiceAccount;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-proxy", cluster.name_any())
+        format!("shulker-{}-proxy", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
@@ -68,7 +68,7 @@ mod tests {
         let name = super::ProxyServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-proxy");
+        assert_eq!(name, "shulker-my-cluster-proxy");
     }
 
     #[tokio::test]
