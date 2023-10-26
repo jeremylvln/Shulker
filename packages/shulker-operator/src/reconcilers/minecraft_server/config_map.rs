@@ -25,10 +25,6 @@ impl ResourceBuilder for ConfigMapBuilder {
         format!("{}-config", minecraft_server.name_any())
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, minecraft_server: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -44,10 +40,11 @@ impl ResourceBuilder for ConfigMapBuilder {
             .is_none()
     }
 
-    async fn create(
+    async fn build(
         &self,
         minecraft_server: &Self::OwnerType,
         name: &str,
+        _existing_config_map: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let config_map = ConfigMap {
             metadata: ObjectMeta {
@@ -60,19 +57,11 @@ impl ResourceBuilder for ConfigMapBuilder {
                 ),
                 ..ObjectMeta::default()
             },
+            data: Some(Self::get_data_from_spec(&minecraft_server.spec.config)),
             ..ConfigMap::default()
         };
 
         Ok(config_map)
-    }
-
-    async fn update(
-        &self,
-        minecraft_server: &Self::OwnerType,
-        config_map: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        config_map.data = Some(Self::get_data_from_spec(&minecraft_server.spec.config));
-        Ok(())
     }
 }
 
@@ -124,33 +113,16 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
 
         // W
         let config_map = builder
-            .create(&TEST_SERVER, "my-server-config")
+            .build(&TEST_SERVER, "my-server-config", None)
             .await
             .unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(config_map);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot() {
-        // G
-        let client = create_client_mock();
-        let builder = super::ConfigMapBuilder::new(client);
-        let mut config_map = builder
-            .create(&TEST_SERVER, "my-server-config")
-            .await
-            .unwrap();
-
-        // W
-        builder.update(&TEST_SERVER, &mut config_map).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(config_map);

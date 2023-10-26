@@ -28,22 +28,15 @@ impl ResourceBuilder for ForwardingSecretBuilder {
         format!("{}-forwarding-secret", cluster.name_any())
     }
 
-    fn is_updatable() -> bool {
-        false
-    }
-
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(self.client.clone(), cluster.namespace().as_ref().unwrap())
     }
 
-    fn is_needed(&self, _cluster: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         cluster: &Self::OwnerType,
         name: &str,
+        existing_secret: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let secret = Secret {
             metadata: ObjectMeta {
@@ -59,20 +52,12 @@ impl ResourceBuilder for ForwardingSecretBuilder {
             type_: Some("Opaque".to_string()),
             string_data: Some(BTreeMap::from([(
                 SECRET_DATA_KEY.to_string(),
-                Self::create_proxy_guard_key(),
+                Self::get_existing_or_new_forwarding_secret(existing_secret),
             )])),
             ..Secret::default()
         };
 
         Ok(secret)
-    }
-
-    async fn update(
-        &self,
-        _cluster: &Self::OwnerType,
-        _secret: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        Ok(())
     }
 }
 
@@ -81,7 +66,35 @@ impl ForwardingSecretBuilder {
         ForwardingSecretBuilder { client }
     }
 
-    fn create_proxy_guard_key() -> String {
+    fn get_existing_or_new_forwarding_secret(existing_secret: Option<&Secret>) -> String {
+        match existing_secret {
+            Some(existing_secret) => {
+                if existing_secret.data.is_some() {
+                    existing_secret
+                        .data
+                        .as_ref()
+                        .unwrap()
+                        .get(SECRET_DATA_KEY)
+                        .cloned()
+                        .map(|key| String::from_utf8(key.0).unwrap())
+                        .unwrap_or_else(ForwardingSecretBuilder::create_forwarding_secret)
+                } else if existing_secret.string_data.is_some() {
+                    existing_secret
+                        .string_data
+                        .as_ref()
+                        .unwrap()
+                        .get(SECRET_DATA_KEY)
+                        .cloned()
+                        .unwrap_or_else(ForwardingSecretBuilder::create_forwarding_secret)
+                } else {
+                    ForwardingSecretBuilder::create_forwarding_secret()
+                }
+            }
+            None => ForwardingSecretBuilder::create_forwarding_secret(),
+        }
+    }
+
+    fn create_forwarding_secret() -> String {
         let mut rng = rand::thread_rng();
         Alphanumeric.sample_string(&mut rng, 64)
     }
@@ -89,9 +102,17 @@ impl ForwardingSecretBuilder {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
+    use k8s_openapi::{api::core::v1::Secret, ByteString};
+    use kube::core::ObjectMeta;
+
     use crate::reconcilers::{
         builder::ResourceBuilder,
-        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
+        minecraft_cluster::{
+            fixtures::{create_client_mock, TEST_CLUSTER},
+            forwarding_secret::SECRET_DATA_KEY,
+        },
     };
 
     #[test]
@@ -104,14 +125,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::ForwardingSecretBuilder::new(client);
 
         // W
         let secret = builder
-            .create(&TEST_CLUSTER, "my-cluster-forwarding-secret")
+            .build(&TEST_CLUSTER, "my-cluster-forwarding-secret", None)
             .await
             .unwrap();
 
@@ -122,14 +143,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_has_secret() {
+    async fn build_has_secret() {
         // G
         let client = create_client_mock();
         let builder = super::ForwardingSecretBuilder::new(client);
 
         // W
         let secret = builder
-            .create(&TEST_CLUSTER, "my-cluster-forwarding-secret")
+            .build(&TEST_CLUSTER, "my-cluster-forwarding-secret", None)
             .await
             .unwrap();
 
@@ -141,13 +162,128 @@ mod tests {
             .is_some());
     }
 
+    #[tokio::test]
+    async fn build_reuse_existing_forwarding_secret() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ForwardingSecretBuilder::new(client);
+        let existing_secret = builder
+            .build(&TEST_CLUSTER, "my-cluster-forwarding-secret", None)
+            .await
+            .unwrap();
+
+        // W
+        let secret = builder
+            .build(
+                &TEST_CLUSTER,
+                "my-cluster-new-forwarding-secret",
+                Some(&existing_secret),
+            )
+            .await
+            .unwrap();
+
+        // T
+        assert_eq!(
+            secret
+                .string_data
+                .unwrap()
+                .get(super::SECRET_DATA_KEY)
+                .unwrap(),
+            existing_secret
+                .string_data
+                .unwrap()
+                .get(super::SECRET_DATA_KEY)
+                .unwrap()
+        );
+    }
+
     #[test]
-    fn create_proxy_guard_key_random() {
+    fn get_existing_or_new_forwarding_secret_none() {
+        // W
+        let key = super::ForwardingSecretBuilder::get_existing_or_new_forwarding_secret(None);
+
+        // T
+        assert!(key.len() > 0);
+    }
+
+    #[test]
+    fn get_existing_or_new_forwarding_secret_missing_key() {
+        // G
+        let secret = Secret {
+            metadata: ObjectMeta {
+                name: Some("test-secret".to_string()),
+                ..ObjectMeta::default()
+            },
+            data: None,
+            string_data: None,
+            ..Secret::default()
+        };
+
+        // W
+        let key =
+            super::ForwardingSecretBuilder::get_existing_or_new_forwarding_secret(Some(&secret));
+
+        // T
+        assert!(key.len() > 0);
+    }
+
+    #[test]
+    fn get_existing_or_new_forwarding_secret_exist_data() {
+        // G
+        let existing_forwarding_secret = "test";
+        let secret = Secret {
+            metadata: ObjectMeta {
+                name: Some("test-secret".to_string()),
+                ..ObjectMeta::default()
+            },
+            data: Some(BTreeMap::from([(
+                SECRET_DATA_KEY.to_string(),
+                ByteString(existing_forwarding_secret.as_bytes().to_vec()),
+            )])),
+            string_data: None,
+            ..Secret::default()
+        };
+
+        // W
+        let key =
+            super::ForwardingSecretBuilder::get_existing_or_new_forwarding_secret(Some(&secret));
+
+        // T
+        assert_eq!(key, existing_forwarding_secret);
+    }
+
+    #[test]
+    fn get_existing_or_new_forwarding_secret_exist_string_data() {
+        // G
+        let existing_forwarding_secret = "test";
+        let secret = Secret {
+            metadata: ObjectMeta {
+                name: Some("test-secret".to_string()),
+                ..ObjectMeta::default()
+            },
+            data: None,
+            string_data: Some(BTreeMap::from([(
+                SECRET_DATA_KEY.to_string(),
+                existing_forwarding_secret.to_string(),
+            )])),
+            ..Secret::default()
+        };
+
+        // W
+        let key =
+            super::ForwardingSecretBuilder::get_existing_or_new_forwarding_secret(Some(&secret));
+
+        // T
+        assert_eq!(key, existing_forwarding_secret);
+    }
+
+    #[test]
+    fn create_forwarding_secret_random() {
         // W
         let (secret_1, secret_2, secret_3) = (
-            super::ForwardingSecretBuilder::create_proxy_guard_key(),
-            super::ForwardingSecretBuilder::create_proxy_guard_key(),
-            super::ForwardingSecretBuilder::create_proxy_guard_key(),
+            super::ForwardingSecretBuilder::create_forwarding_secret(),
+            super::ForwardingSecretBuilder::create_forwarding_secret(),
+            super::ForwardingSecretBuilder::create_forwarding_secret(),
         );
 
         // T

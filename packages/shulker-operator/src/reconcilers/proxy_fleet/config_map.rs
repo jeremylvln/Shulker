@@ -25,10 +25,6 @@ impl ResourceBuilder for ConfigMapBuilder {
         format!("{}-config", proxy_fleet.name_any())
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, proxy_fleet: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -36,37 +32,12 @@ impl ResourceBuilder for ConfigMapBuilder {
         )
     }
 
-    fn is_needed(&self, _proxy_fleet: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
+        _existing_config_map: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
-        let config_map = ConfigMap {
-            metadata: ObjectMeta {
-                name: Some(name.to_string()),
-                namespace: Some(proxy_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
-                ..ObjectMeta::default()
-            },
-            ..ConfigMap::default()
-        };
-
-        Ok(config_map)
-    }
-
-    async fn update(
-        &self,
-        proxy_fleet: &Self::OwnerType,
-        config_map: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
         let mut data = BTreeMap::from([
             (
                 "init-fs.sh".to_string(),
@@ -99,9 +70,22 @@ impl ResourceBuilder for ConfigMapBuilder {
             }
         }
 
-        config_map.data = Some(data);
+        let config_map = ConfigMap {
+            metadata: ObjectMeta {
+                name: Some(name.to_string()),
+                namespace: Some(proxy_fleet.namespace().unwrap().clone()),
+                labels: Some(
+                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
+                        .into_iter()
+                        .collect(),
+                ),
+                ..ObjectMeta::default()
+            },
+            data: Some(data),
+            ..ConfigMap::default()
+        };
 
-        Ok(())
+        Ok(config_map)
     }
 }
 
@@ -130,14 +114,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
 
         // W
         let config_map = builder
-            .create(&TEST_PROXY_FLEET, "my-proxy-config")
+            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
             .await
             .unwrap();
 
@@ -146,38 +130,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_snapshot() {
+    async fn build_has_startup_script() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
-        let mut config_map = builder
-            .create(&TEST_PROXY_FLEET, "my-proxy-config")
-            .await
-            .unwrap();
 
         // W
-        builder
-            .update(&TEST_PROXY_FLEET, &mut config_map)
-            .await
-            .unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(config_map);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot_has_startup_script() {
-        // G
-        let client = create_client_mock();
-        let builder = super::ConfigMapBuilder::new(client);
-        let mut config_map = builder
-            .create(&TEST_PROXY_FLEET, "my-proxy-config")
-            .await
-            .unwrap();
-
-        // W
-        builder
-            .update(&TEST_PROXY_FLEET, &mut config_map)
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
             .await
             .unwrap();
 
@@ -186,18 +146,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_snapshot_has_readiness_script() {
+    async fn build_has_readiness_script() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
-        let mut config_map = builder
-            .create(&TEST_PROXY_FLEET, "my-proxy-config")
-            .await
-            .unwrap();
 
         // W
-        builder
-            .update(&TEST_PROXY_FLEET, &mut config_map)
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
             .await
             .unwrap();
 
@@ -210,18 +166,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_snapshot_has_velocity_configs() {
+    async fn build_has_velocity_configs() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
-        let mut config_map = builder
-            .create(&TEST_PROXY_FLEET, "my-proxy-config")
-            .await
-            .unwrap();
 
         // W
-        builder
-            .update(&TEST_PROXY_FLEET, &mut config_map)
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, "my-proxy-config", None)
             .await
             .unwrap();
 
@@ -239,16 +191,18 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_snapshot_has_bungeecord_configs() {
+    async fn build_has_bungeecord_configs() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
         let mut fleet = TEST_PROXY_FLEET.clone();
         fleet.spec.template.spec.version.channel = ProxyFleetTemplateVersion::BungeeCord;
-        let mut config_map = builder.create(&fleet, "my-proxy-config").await.unwrap();
 
         // W
-        builder.update(&fleet, &mut config_map).await.unwrap();
+        let config_map = builder
+            .build(&fleet, "my-proxy-config", None)
+            .await
+            .unwrap();
 
         // T
         assert!(config_map

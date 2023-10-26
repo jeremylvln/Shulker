@@ -24,10 +24,6 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
         proxy_fleet.name_any()
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, proxy_fleet: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -42,10 +38,11 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
         }
     }
 
-    async fn create(
+    async fn build(
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
+        _existing_fleet_autoscaler: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let fleet_autoscaler = FleetAutoscaler {
             metadata: ObjectMeta {
@@ -58,31 +55,22 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
                 ),
                 ..ObjectMeta::default()
             },
-            spec: FleetAutoscalerSpec::default(),
+            spec: FleetAutoscalerSpec {
+                fleet_name: FleetBuilder::name(proxy_fleet),
+                policy: proxy_fleet
+                    .spec
+                    .autoscaling
+                    .as_ref()
+                    .unwrap()
+                    .agones_policy
+                    .as_ref()
+                    .unwrap()
+                    .clone(),
+            },
             status: None,
         };
 
         Ok(fleet_autoscaler)
-    }
-
-    async fn update(
-        &self,
-        proxy_fleet: &Self::OwnerType,
-        fleet_autoscaler: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        fleet_autoscaler.spec = FleetAutoscalerSpec {
-            fleet_name: FleetBuilder::name(proxy_fleet),
-            policy: proxy_fleet
-                .spec
-                .autoscaling
-                .as_ref()
-                .unwrap()
-                .agones_policy
-                .as_ref()
-                .unwrap()
-                .clone(),
-        };
-        Ok(())
     }
 }
 
@@ -137,28 +125,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::FleetAutoscalerBuilder::new(client);
 
         // W
-        let fleet_autoscaler = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(fleet_autoscaler);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot() {
-        // G
-        let client = create_client_mock();
-        let builder = super::FleetAutoscalerBuilder::new(client);
-        let mut fleet_autoscaler = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
-
-        // W
-        builder
-            .update(&TEST_PROXY_FLEET, &mut fleet_autoscaler)
+        let fleet_autoscaler = builder
+            .build(&TEST_PROXY_FLEET, "my-proxy", None)
             .await
             .unwrap();
 
