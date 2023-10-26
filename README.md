@@ -43,7 +43,7 @@ in the cloud with Kubernetes.
 
 ## Getting started
 
-See the **[Getting Started](https://shulker.jeremylvln.fr/getting-started/prerequisites)**
+See the **[Getting Started](https://shulker.jeremylvln.fr/guide/getting-started/prerequisites.html)**
 section of the documentation to start using Shulker!
 
 ## License
