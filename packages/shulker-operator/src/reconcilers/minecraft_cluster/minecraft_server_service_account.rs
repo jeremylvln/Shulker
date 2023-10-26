@@ -18,25 +18,18 @@ impl ResourceBuilder for MinecraftServerServiceAccountBuilder {
     type ResourceType = ServiceAccount;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-server", cluster.name_any())
-    }
-
-    fn is_updatable() -> bool {
-        true
+        format!("shulker-{}-server", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(self.client.clone(), cluster.namespace().as_ref().unwrap())
     }
 
-    fn is_needed(&self, _cluster: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         cluster: &Self::OwnerType,
         name: &str,
+        _existing_service_account: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let service_account = ServiceAccount {
             metadata: ObjectMeta {
@@ -53,14 +46,6 @@ impl ResourceBuilder for MinecraftServerServiceAccountBuilder {
         };
 
         Ok(service_account)
-    }
-
-    async fn update(
-        &self,
-        _cluster: &Self::OwnerType,
-        _service_account: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        Ok(())
     }
 }
 
@@ -83,20 +68,18 @@ mod tests {
         let name = super::MinecraftServerServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-server");
+        assert_eq!(name, "shulker-my-cluster-server");
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerServiceAccountBuilder::new(client);
+        let name = super::MinecraftServerServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // W
-        let service_account = builder
-            .create(&TEST_CLUSTER, "my-cluster-server")
-            .await
-            .unwrap();
+        let service_account = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service_account);

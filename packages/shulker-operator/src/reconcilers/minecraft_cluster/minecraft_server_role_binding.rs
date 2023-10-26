@@ -22,25 +22,22 @@ impl ResourceBuilder for MinecraftServerRoleBindingBuilder {
     type ResourceType = RoleBinding;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-server", cluster.name_any())
-    }
-
-    fn is_updatable() -> bool {
-        true
+        format!("shulker:{}:server", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(self.client.clone(), cluster.namespace().as_ref().unwrap())
     }
 
-    fn is_needed(&self, _cluster: &Self::OwnerType) -> bool {
-        true
+    fn is_recreation_needed(cluster: &Self::OwnerType, role_binding: &Self::ResourceType) -> bool {
+        role_binding.role_ref.name != MinecraftServerRoleBuilder::name(cluster)
     }
 
-    async fn create(
+    async fn build(
         &self,
         cluster: &Self::OwnerType,
         name: &str,
+        _existing_role_binding: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let role_binding = RoleBinding {
             metadata: ObjectMeta {
@@ -58,25 +55,15 @@ impl ResourceBuilder for MinecraftServerRoleBindingBuilder {
                 kind: "Role".to_string(),
                 name: MinecraftServerRoleBuilder::name(cluster),
             },
-            ..RoleBinding::default()
+            subjects: Some(vec![Subject {
+                kind: "ServiceAccount".to_string(),
+                name: MinecraftServerServiceAccountBuilder::name(cluster),
+                namespace: cluster.namespace(),
+                ..Subject::default()
+            }]),
         };
 
         Ok(role_binding)
-    }
-
-    async fn update(
-        &self,
-        cluster: &Self::OwnerType,
-        role_binding: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        role_binding.subjects = Some(vec![Subject {
-            kind: "ServiceAccount".to_string(),
-            name: MinecraftServerServiceAccountBuilder::name(cluster),
-            namespace: cluster.namespace(),
-            ..Subject::default()
-        }]);
-
-        Ok(())
     }
 }
 
@@ -88,7 +75,7 @@ impl MinecraftServerRoleBindingBuilder {
 
 #[cfg(test)]
 mod tests {
-    use k8s_openapi::api::rbac::v1::{RoleRef, Subject};
+    use k8s_openapi::api::rbac::v1::{RoleBinding, RoleRef, Subject};
 
     use crate::reconcilers::{
         builder::ResourceBuilder,
@@ -101,36 +88,74 @@ mod tests {
         let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-server");
+        assert_eq!(name, "shulker:my-cluster:server");
+    }
+
+    #[test]
+    fn is_recreation_needed_if_role_name_changed() {
+        // G
+        let role_binding = RoleBinding {
+            role_ref: RoleRef {
+                name: "old-role".to_string(),
+                ..RoleRef::default()
+            },
+            ..RoleBinding::default()
+        };
+
+        // W
+        let is_recreation_needed = super::MinecraftServerRoleBindingBuilder::is_recreation_needed(
+            &TEST_CLUSTER,
+            &role_binding,
+        );
+
+        // T
+        assert!(is_recreation_needed);
+    }
+
+    #[test]
+    fn is_recreation_needed_if_same_role_name() {
+        // G
+        let role_binding = RoleBinding {
+            role_ref: RoleRef {
+                name: super::MinecraftServerRoleBuilder::name(&TEST_CLUSTER),
+                ..RoleRef::default()
+            },
+            ..RoleBinding::default()
+        };
+
+        // W
+        let is_recreation_needed = super::MinecraftServerRoleBindingBuilder::is_recreation_needed(
+            &TEST_CLUSTER,
+            &role_binding,
+        );
+
+        // T
+        assert!(!is_recreation_needed);
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBindingBuilder::new(client);
+        let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder
-            .create(&TEST_CLUSTER, "my-cluster-server")
-            .await
-            .unwrap();
+        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role_binding);
     }
 
     #[tokio::test]
-    async fn create_has_role() {
+    async fn build_has_role() {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBindingBuilder::new(client);
+        let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder
-            .create(&TEST_CLUSTER, "my-cluster-server")
-            .await
-            .unwrap();
+        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert_eq!(
@@ -138,53 +163,27 @@ mod tests {
             RoleRef {
                 api_group: "rbac.authorization.k8s.io".to_string(),
                 kind: "Role".to_string(),
-                name: "my-cluster-server".to_string(),
+                name: "shulker:my-cluster:server".to_string(),
             }
         );
     }
 
     #[tokio::test]
-    async fn update_snapshot() {
+    async fn build_has_subjects() {
         // G
         let client = create_client_mock();
         let builder = super::MinecraftServerRoleBindingBuilder::new(client);
-        let mut role_binding = builder
-            .create(&TEST_CLUSTER, "my-cluster-server")
-            .await
-            .unwrap();
+        let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        builder
-            .update(&TEST_CLUSTER, &mut role_binding)
-            .await
-            .unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(role_binding);
-    }
-
-    #[tokio::test]
-    async fn update_has_subjects() {
-        // G
-        let client = create_client_mock();
-        let builder = super::MinecraftServerRoleBindingBuilder::new(client);
-        let mut role_binding = builder
-            .create(&TEST_CLUSTER, "my-cluster-server")
-            .await
-            .unwrap();
-
-        // W
-        builder
-            .update(&TEST_CLUSTER, &mut role_binding)
-            .await
-            .unwrap();
+        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert_eq!(
             role_binding.subjects,
             Some(vec![Subject {
                 kind: "ServiceAccount".to_string(),
-                name: "my-cluster-server".to_string(),
+                name: "shulker-my-cluster-server".to_string(),
                 namespace: Some("default".to_string()),
                 ..Subject::default()
             }])

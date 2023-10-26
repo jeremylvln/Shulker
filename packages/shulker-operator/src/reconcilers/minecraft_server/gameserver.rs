@@ -71,10 +71,6 @@ impl ResourceBuilder for GameServerBuilder {
         minecraft_server.name_any()
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, minecraft_server: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -82,14 +78,11 @@ impl ResourceBuilder for GameServerBuilder {
         )
     }
 
-    fn is_needed(&self, _minecraft_server: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         minecraft_server: &Self::OwnerType,
         name: &str,
+        _existing_game_server: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server = GameServer {
             metadata: ObjectMeta {
@@ -102,21 +95,11 @@ impl ResourceBuilder for GameServerBuilder {
                 ),
                 ..ObjectMeta::default()
             },
-            spec: GameServerSpec::default(),
+            spec: Self::get_game_server_spec(&self.resourceref_resolver, minecraft_server).await?,
             status: None,
         };
 
         Ok(game_server)
-    }
-
-    async fn update(
-        &self,
-        minecraft_server: &Self::OwnerType,
-        game_server: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        game_server.spec =
-            Self::get_game_server_spec(&self.resourceref_resolver, minecraft_server).await?;
-        Ok(())
     }
 }
 
@@ -497,30 +480,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::GameServerBuilder::new(client);
+        let name = super::GameServerBuilder::name(&TEST_SERVER);
 
         // W
-        let game_server = builder.create(&TEST_SERVER, "my-server").await.unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(game_server);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot() {
-        // G
-        let client = create_client_mock();
-        let builder = super::GameServerBuilder::new(client);
-        let mut game_server = builder.create(&TEST_SERVER, "my-server").await.unwrap();
-
-        // W
-        builder
-            .update(&TEST_SERVER, &mut game_server)
-            .await
-            .unwrap();
+        let game_server = builder.build(&TEST_SERVER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(game_server);

@@ -17,21 +17,25 @@ pub trait ResourceBuilder {
         + Debug;
 
     fn name(owner: &Self::OwnerType) -> String;
-    fn is_updatable() -> bool;
-
     fn api(&self, owner: &Self::OwnerType) -> Api<Self::ResourceType>;
-    fn is_needed(&self, owner: &Self::OwnerType) -> bool;
 
-    async fn create(
+    fn is_needed(&self, _owner: &Self::OwnerType) -> bool {
+        true
+    }
+
+    fn is_recreation_needed(
+        _owner: &Self::OwnerType,
+        _existing_resource: &Self::ResourceType,
+    ) -> bool {
+        false
+    }
+
+    async fn build(
         &self,
         owner: &Self::OwnerType,
         name: &str,
+        existing_resource: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error>;
-    async fn update(
-        &self,
-        owner: &Self::OwnerType,
-        resource: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error>;
 }
 
 async fn get_existing<
@@ -81,55 +85,95 @@ pub async fn reconcile_builder<
         "reconciling builder",
     );
 
-    let existing_resource = get_existing(&api, &name)
+    let mut existing_resource = get_existing(&api, &name)
         .await
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 
-    if !builder.is_needed(owner) {
-        if existing_resource.is_some() {
+    if existing_resource.is_some() {
+        debug!(
+            builder = std::any::type_name::<RB>(),
+            owner = std::any::type_name::<O>(),
+            owner_name = owner.name_any(),
+            target = std::any::type_name::<R>(),
+            target_name = name,
+            "found existing resource",
+        );
+
+        let delete_existing = || async {
             api.delete(&name, &DeleteParams::default())
                 .await
                 .map_err(|e| {
                     super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into())
-                })?;
-        }
+                })
+        };
 
-        return Ok(None);
+        if !builder.is_needed(owner) {
+            debug!(
+                builder = std::any::type_name::<RB>(),
+                owner = std::any::type_name::<O>(),
+                owner_name = owner.name_any(),
+                target = std::any::type_name::<R>(),
+                target_name = name,
+                "existing resource is not needed anymore, deleting",
+            );
+
+            delete_existing().await?;
+            return Ok(None);
+        } else if RB::is_recreation_needed(owner, existing_resource.as_ref().unwrap()) {
+            debug!(
+                builder = std::any::type_name::<RB>(),
+                owner = std::any::type_name::<O>(),
+                owner_name = owner.name_any(),
+                target = std::any::type_name::<R>(),
+                target_name = name,
+                "existing resource needs to be recreated, deleting",
+            );
+
+            delete_existing().await?;
+            existing_resource = None;
+        }
     }
 
     let mut new_resource = builder
-        .create(owner, &name)
-        .await
-        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
-
-    builder
-        .update(owner, &mut new_resource)
+        .build(owner, &name, existing_resource.as_ref())
         .await
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 
     let updated_resource = if let Some(existing_resource) = existing_resource {
-        if RB::is_updatable() {
-            for (key, value) in existing_resource.annotations().iter() {
-                if !new_resource.annotations().contains_key(key) {
-                    new_resource
-                        .annotations_mut()
-                        .insert(key.clone(), value.clone());
-                }
-            }
+        debug!(
+            builder = std::any::type_name::<RB>(),
+            owner = std::any::type_name::<O>(),
+            owner_name = owner.name_any(),
+            target = std::any::type_name::<R>(),
+            target_name = name,
+            "patching existing resource",
+        );
 
-            api.patch(
-                &name,
-                &PatchParams::apply("shulker-operator").force(),
-                &Patch::Apply(&new_resource),
-            )
-            .await
-            .map_err(|e| {
-                super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into())
-            })?
-        } else {
-            existing_resource
+        for (key, value) in existing_resource.annotations().iter() {
+            if !new_resource.annotations().contains_key(key) {
+                new_resource
+                    .annotations_mut()
+                    .insert(key.clone(), value.clone());
+            }
         }
+
+        api.patch(
+            &name,
+            &PatchParams::apply("shulker-operator").force(),
+            &Patch::Apply(&new_resource),
+        )
+        .await
+        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
     } else {
+        debug!(
+            builder = std::any::type_name::<RB>(),
+            owner = std::any::type_name::<O>(),
+            owner_name = owner.name_any(),
+            target = std::any::type_name::<R>(),
+            target_name = name,
+            "creating new resource",
+        );
+
         set_controller_reference(owner, &mut new_resource);
         api.create(
             &PostParams {

@@ -33,10 +33,6 @@ impl ResourceBuilder for FleetBuilder {
         minecraft_server_fleet.name_any()
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, minecraft_server_fleet: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -44,38 +40,12 @@ impl ResourceBuilder for FleetBuilder {
         )
     }
 
-    fn is_needed(&self, _minecraft_server_fleet: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
+        _existing_fleet: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
-        let fleet = Fleet {
-            metadata: ObjectMeta {
-                name: Some(name.to_string()),
-                namespace: Some(minecraft_server_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftServerFleetReconciler::get_common_labels(minecraft_server_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
-                ..ObjectMeta::default()
-            },
-            spec: FleetSpec::default(),
-            status: None,
-        };
-
-        Ok(fleet)
-    }
-
-    async fn update(
-        &self,
-        minecraft_server_fleet: &Self::OwnerType,
-        fleet: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
         let fake_mincraft_server = MinecraftServer {
             metadata: ObjectMeta {
                 namespace: minecraft_server_fleet.namespace(),
@@ -139,24 +109,37 @@ impl ResourceBuilder for FleetBuilder {
             }
         }
 
-        fleet.spec = FleetSpec {
-            replicas: Some(replicas),
-            strategy: Some(DeploymentStrategy {
-                type_: Some("Recreate".to_string()),
-                ..DeploymentStrategy::default()
-            }),
-            scheduling: Some("Packed".to_string()),
-            template: FleetTemplate {
-                metadata: Some(ObjectMeta {
-                    labels: Some(labels),
-                    annotations: Some(annotations),
-                    ..ObjectMeta::default()
-                }),
-                spec: game_server_spec,
+        let fleet = Fleet {
+            metadata: ObjectMeta {
+                name: Some(name.to_string()),
+                namespace: Some(minecraft_server_fleet.namespace().unwrap().clone()),
+                labels: Some(
+                    MinecraftServerFleetReconciler::get_common_labels(minecraft_server_fleet)
+                        .into_iter()
+                        .collect(),
+                ),
+                ..ObjectMeta::default()
             },
+            spec: FleetSpec {
+                replicas: Some(replicas),
+                strategy: Some(DeploymentStrategy {
+                    type_: Some("Recreate".to_string()),
+                    ..DeploymentStrategy::default()
+                }),
+                scheduling: Some("Packed".to_string()),
+                template: FleetTemplate {
+                    metadata: Some(ObjectMeta {
+                        labels: Some(labels),
+                        annotations: Some(annotations),
+                        ..ObjectMeta::default()
+                    }),
+                    spec: game_server_spec,
+                },
+            },
+            status: None,
         };
 
-        Ok(())
+        Ok(fleet)
     }
 }
 
@@ -186,54 +169,31 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
+
+        // W
+        let fleet = builder
+            .build(&TEST_SERVER_FLEET, &name, None)
+            .await
+            .unwrap();
+
+        // T
+        insta::assert_yaml_snapshot!(fleet);
+    }
+
+    #[tokio::test]
+    async fn build_should_merge_labels() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
 
         // W
         let fleet = builder
-            .create(&TEST_SERVER_FLEET, "my-server")
-            .await
-            .unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(fleet);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot() {
-        // G
-        let client = create_client_mock();
-        let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder
-            .create(&TEST_SERVER_FLEET, "my-server")
-            .await
-            .unwrap();
-
-        // W
-        builder
-            .update(&TEST_SERVER_FLEET, &mut fleet)
-            .await
-            .unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(fleet);
-    }
-
-    #[tokio::test]
-    async fn update_should_merge_labels() {
-        // G
-        let client = create_client_mock();
-        let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder
-            .create(&TEST_SERVER_FLEET, "my-server")
-            .await
-            .unwrap();
-
-        // W
-        builder
-            .update(&TEST_SERVER_FLEET, &mut fleet)
+            .build(&TEST_SERVER_FLEET, "my-server", None)
             .await
             .unwrap();
 
@@ -266,18 +226,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_should_merge_annotations() {
+    async fn build_should_merge_annotations() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder
-            .create(&TEST_SERVER_FLEET, "my-server")
-            .await
-            .unwrap();
 
         // W
-        builder
-            .update(&TEST_SERVER_FLEET, &mut fleet)
+        let fleet = builder
+            .build(&TEST_SERVER_FLEET, "my-server", None)
             .await
             .unwrap();
 
@@ -310,18 +266,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_should_use_recreate_strategy() {
+    async fn build_should_use_recreate_strategy() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder
-            .create(&TEST_SERVER_FLEET, "my-server")
-            .await
-            .unwrap();
 
         // W
-        builder
-            .update(&TEST_SERVER_FLEET, &mut fleet)
+        let fleet = builder
+            .build(&TEST_SERVER_FLEET, "my-server", None)
             .await
             .unwrap();
 

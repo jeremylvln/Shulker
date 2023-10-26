@@ -78,10 +78,6 @@ impl ResourceBuilder for FleetBuilder {
         proxy_fleet.name_any()
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, proxy_fleet: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -89,15 +85,18 @@ impl ResourceBuilder for FleetBuilder {
         )
     }
 
-    fn is_needed(&self, _proxy_fleet: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
+        _existing_fleet: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
+        let game_server_spec = self.get_game_server_spec(proxy_fleet).await?;
+        let replicas = match &proxy_fleet.spec.autoscaling {
+            Some(_) => 0,
+            None => proxy_fleet.spec.replicas as i32,
+        };
+
         let fleet = Fleet {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
@@ -109,41 +108,25 @@ impl ResourceBuilder for FleetBuilder {
                 ),
                 ..ObjectMeta::default()
             },
-            spec: FleetSpec::default(),
+            spec: FleetSpec {
+                replicas: Some(replicas),
+                strategy: Some(DeploymentStrategy {
+                    type_: Some("RollingUpdate".to_string()),
+                    rolling_update: Some(RollingUpdateDeployment {
+                        max_unavailable: Some(IntOrString::String("25%".to_string())),
+                        max_surge: Some(IntOrString::String("25%".to_string())),
+                    }),
+                }),
+                scheduling: Some("Packed".to_string()),
+                template: FleetTemplate {
+                    metadata: game_server_spec.template.metadata.clone(),
+                    spec: game_server_spec,
+                },
+            },
             status: None,
         };
 
         Ok(fleet)
-    }
-
-    async fn update(
-        &self,
-        proxy_fleet: &Self::OwnerType,
-        fleet: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        let game_server_spec = self.get_game_server_spec(proxy_fleet).await?;
-        let replicas = match &proxy_fleet.spec.autoscaling {
-            Some(_) => 0,
-            None => proxy_fleet.spec.replicas as i32,
-        };
-
-        fleet.spec = FleetSpec {
-            replicas: Some(replicas),
-            strategy: Some(DeploymentStrategy {
-                type_: Some("RollingUpdate".to_string()),
-                rolling_update: Some(RollingUpdateDeployment {
-                    max_unavailable: Some(IntOrString::String("25%".to_string())),
-                    max_surge: Some(IntOrString::String("25%".to_string())),
-                }),
-            }),
-            scheduling: Some("Packed".to_string()),
-            template: FleetTemplate {
-                metadata: game_server_spec.template.metadata.clone(),
-                spec: game_server_spec,
-            },
-        };
-
-        Ok(())
     }
 }
 
@@ -502,41 +485,28 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(fleet);
     }
 
     #[tokio::test]
-    async fn update_snapshot() {
+    async fn build_should_merge_labels() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        builder.update(&TEST_PROXY_FLEET, &mut fleet).await.unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(fleet);
-    }
-
-    #[tokio::test]
-    async fn update_should_merge_labels() {
-        // G
-        let client = create_client_mock();
-        let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
-
-        // W
-        builder.update(&TEST_PROXY_FLEET, &mut fleet).await.unwrap();
+        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         let additional_labels = TEST_PROXY_FLEET
@@ -567,14 +537,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn update_should_merge_annotations() {
+    async fn build_should_merge_annotations() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let mut fleet = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
+        let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        builder.update(&TEST_PROXY_FLEET, &mut fleet).await.unwrap();
+        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         let additional_annotations = TEST_PROXY_FLEET

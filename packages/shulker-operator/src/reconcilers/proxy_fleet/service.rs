@@ -25,10 +25,6 @@ impl ResourceBuilder for ServiceBuilder {
         proxy_fleet.name_any()
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, proxy_fleet: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -40,11 +36,13 @@ impl ResourceBuilder for ServiceBuilder {
         proxy_fleet.spec.service.is_some()
     }
 
-    async fn create(
+    async fn build(
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
+        _existing_service: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
+        let service_config = proxy_fleet.spec.service.as_ref().unwrap();
         let service = Service {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
@@ -56,41 +54,30 @@ impl ResourceBuilder for ServiceBuilder {
                 ),
                 ..ObjectMeta::default()
             },
+            spec: Some(ServiceSpec {
+                selector: Some(
+                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
+                        .into_iter()
+                        .collect(),
+                ),
+                type_: Some(service_config.type_.to_string()),
+                external_traffic_policy: service_config
+                    .external_traffic_policy
+                    .as_ref()
+                    .map(|x| x.to_string()),
+                ports: Some(vec![ServicePort {
+                    name: Some("minecraft".to_string()),
+                    protocol: Some("TCP".to_string()),
+                    port: 25565,
+                    target_port: Some(IntOrString::Int(25577)),
+                    ..ServicePort::default()
+                }]),
+                ..ServiceSpec::default()
+            }),
             ..Service::default()
         };
 
         Ok(service)
-    }
-
-    async fn update(
-        &self,
-        proxy_fleet: &Self::OwnerType,
-        service: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        let service_config = proxy_fleet.spec.service.as_ref().unwrap();
-
-        service.spec = Some(ServiceSpec {
-            selector: Some(
-                ProxyFleetReconciler::get_common_labels(proxy_fleet)
-                    .into_iter()
-                    .collect(),
-            ),
-            type_: Some(service_config.type_.to_string()),
-            external_traffic_policy: service_config
-                .external_traffic_policy
-                .as_ref()
-                .map(|x| x.to_string()),
-            ports: Some(vec![ServicePort {
-                name: Some("minecraft".to_string()),
-                protocol: Some("TCP".to_string()),
-                port: 25565,
-                target_port: Some(IntOrString::Int(25577)),
-                ..ServicePort::default()
-            }]),
-            ..ServiceSpec::default()
-        });
-
-        Ok(())
     }
 }
 
@@ -145,30 +132,14 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::ServiceBuilder::new(client);
+        let name = super::ServiceBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let service = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(service);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot() {
-        // G
-        let client = create_client_mock();
-        let builder = super::ServiceBuilder::new(client);
-        let mut service = builder.create(&TEST_PROXY_FLEET, "my-proxy").await.unwrap();
-
-        // W
-        builder
-            .update(&TEST_PROXY_FLEET, &mut service)
-            .await
-            .unwrap();
+        let service = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service);

@@ -9,14 +9,14 @@ metadata:
     app.kubernetes.io/component: cluster
     app.kubernetes.io/name: my-cluster
     minecraftcluster.shulkermc.io/name: my-cluster
-  name: my-cluster-server
+  name: "shulker:my-cluster:server"
   namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: my-cluster-server
+  name: "shulker:my-cluster:server"
 subjects:
   - kind: ServiceAccount
-    name: my-cluster-server
+    name: shulker-my-cluster-server
     namespace: default
 

@@ -22,10 +22,6 @@ impl ResourceBuilder for ConfigMapBuilder {
         format!("{}-config", minecraft_server_fleet.name_any())
     }
 
-    fn is_updatable() -> bool {
-        true
-    }
-
     fn api(&self, minecraft_server_fleet: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(
             self.client.clone(),
@@ -33,14 +29,11 @@ impl ResourceBuilder for ConfigMapBuilder {
         )
     }
 
-    fn is_needed(&self, _minecraft_server_fleet: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
+        _existing_config_map: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let config_map = ConfigMap {
             metadata: ObjectMeta {
@@ -53,23 +46,15 @@ impl ResourceBuilder for ConfigMapBuilder {
                 ),
                 ..ObjectMeta::default()
             },
+            data: Some(
+                crate::reconcilers::minecraft_server::config_map::ConfigMapBuilder::get_data_from_spec(
+                    &minecraft_server_fleet.spec.template.spec.config,
+                ),
+            ),
             ..ConfigMap::default()
         };
 
         Ok(config_map)
-    }
-
-    async fn update(
-        &self,
-        minecraft_server_fleet: &Self::OwnerType,
-        config_map: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        config_map.data = Some(
-            crate::reconcilers::minecraft_server::config_map::ConfigMapBuilder::get_data_from_spec(
-                &minecraft_server_fleet.spec.template.spec.config,
-            ),
-        );
-        Ok(())
     }
 }
 
@@ -96,34 +81,15 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::ConfigMapBuilder::new(client);
+        let name = super::ConfigMapBuilder::name(&TEST_SERVER_FLEET);
 
         // W
         let config_map = builder
-            .create(&TEST_SERVER_FLEET, "my-server-config")
-            .await
-            .unwrap();
-
-        // T
-        insta::assert_yaml_snapshot!(config_map);
-    }
-
-    #[tokio::test]
-    async fn update_snapshot() {
-        // G
-        let client = create_client_mock();
-        let builder = super::ConfigMapBuilder::new(client);
-        let mut config_map = builder
-            .create(&TEST_SERVER_FLEET, "my-server-config")
-            .await
-            .unwrap();
-
-        // W
-        builder
-            .update(&TEST_SERVER_FLEET, &mut config_map)
+            .build(&TEST_SERVER_FLEET, &name, None)
             .await
             .unwrap();
 

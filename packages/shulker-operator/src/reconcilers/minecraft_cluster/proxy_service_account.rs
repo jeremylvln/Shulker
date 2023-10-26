@@ -18,25 +18,18 @@ impl ResourceBuilder for ProxyServiceAccountBuilder {
     type ResourceType = ServiceAccount;
 
     fn name(cluster: &Self::OwnerType) -> String {
-        format!("{}-proxy", cluster.name_any())
-    }
-
-    fn is_updatable() -> bool {
-        true
+        format!("shulker-{}-proxy", cluster.name_any())
     }
 
     fn api(&self, cluster: &Self::OwnerType) -> kube::Api<Self::ResourceType> {
         Api::namespaced(self.client.clone(), cluster.namespace().as_ref().unwrap())
     }
 
-    fn is_needed(&self, _cluster: &Self::OwnerType) -> bool {
-        true
-    }
-
-    async fn create(
+    async fn build(
         &self,
         cluster: &Self::OwnerType,
         name: &str,
+        _existing_service_account: Option<&Self::ResourceType>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let service_account = ServiceAccount {
             metadata: ObjectMeta {
@@ -53,14 +46,6 @@ impl ResourceBuilder for ProxyServiceAccountBuilder {
         };
 
         Ok(service_account)
-    }
-
-    async fn update(
-        &self,
-        _cluster: &Self::OwnerType,
-        _service_account: &mut Self::ResourceType,
-    ) -> Result<(), anyhow::Error> {
-        Ok(())
     }
 }
 
@@ -83,18 +68,18 @@ mod tests {
         let name = super::ProxyServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // T
-        assert_eq!(name, "my-cluster-proxy");
+        assert_eq!(name, "shulker-my-cluster-proxy");
     }
 
     #[tokio::test]
-    async fn create_snapshot() {
+    async fn build_snapshot() {
         // G
         let client = create_client_mock();
         let builder = super::ProxyServiceAccountBuilder::new(client);
 
         // W
         let service_account = builder
-            .create(&TEST_CLUSTER, "my-cluster-proxy")
+            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
             .await
             .unwrap();
 
