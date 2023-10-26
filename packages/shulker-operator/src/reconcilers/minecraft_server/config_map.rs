@@ -50,11 +50,11 @@ impl ResourceBuilder for ConfigMapBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(minecraft_server.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftServerReconciler::get_common_labels(minecraft_server)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftServerReconciler::get_labels(
+                    minecraft_server,
+                    "config".to_string(),
+                    "minecraft-server".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             data: Some(Self::get_data_from_spec(&minecraft_server.spec.config)),

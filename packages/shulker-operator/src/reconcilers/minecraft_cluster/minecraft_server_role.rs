@@ -36,11 +36,11 @@ impl ResourceBuilder for MinecraftServerRoleBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(cluster.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftClusterReconciler::get_common_labels(cluster)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftClusterReconciler::get_labels(
+                    cluster,
+                    "role".to_string(),
+                    "minecraft-server-rbac".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             rules: Some(vec![

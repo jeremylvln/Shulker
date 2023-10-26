@@ -12,8 +12,11 @@ data:
   spigot-config.yml: "settings:\n  bungeecord: false\n  restart-on-crash: false\nadvancements:\n  disable-saving: true\nplayers:\n  disable-saving: true\nstats:\n  disable-saving: true\nsave-user-cache-on-stop-only: true\n\n"
 metadata:
   labels:
-    app.kubernetes.io/component: minecraftserver
-    app.kubernetes.io/name: my-server
+    app.kubernetes.io/component: minecraft-server
+    app.kubernetes.io/instance: config-my-server
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: config
+    app.kubernetes.io/part-of: cluster-my-cluster
     minecraftcluster.shulkermc.io/name: my-cluster
     minecraftserverfleet.shulkermc.io/name: my-server
   name: my-server-config

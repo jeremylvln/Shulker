@@ -43,11 +43,11 @@ impl ResourceBuilder for MinecraftServerRoleBindingBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(cluster.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftClusterReconciler::get_common_labels(cluster)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftClusterReconciler::get_labels(
+                    cluster,
+                    "role-binding".to_string(),
+                    "mincraft-server-rbac".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             role_ref: RoleRef {

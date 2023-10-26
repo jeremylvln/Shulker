@@ -5,12 +5,7 @@ use google_agones_crds::v1::{fleet::Fleet, fleet_autoscaler::FleetAutoscaler};
 use k8s_openapi::api::core::v1::ConfigMap;
 use kube::{
     api::{ListParams, PatchParams},
-    runtime::{
-        controller::Action,
-        finalizer::{finalizer, Event as Finalizer},
-        watcher::Config,
-        Controller,
-    },
+    runtime::{controller::Action, watcher::Config, Controller},
     Api, Client, ResourceExt,
 };
 use tracing::*;
@@ -32,8 +27,6 @@ mod fleet_autoscaler;
 
 #[cfg(test)]
 mod fixtures;
-
-static FINALIZER: &str = "minecraftserverfleets.shulkermc.io";
 
 struct MinecraftServerFleetReconciler {
     client: kube::Client,
@@ -109,17 +102,28 @@ impl MinecraftServerFleetReconciler {
         Ok(Action::await_change())
     }
 
-    fn get_common_labels(
+    fn get_labels(
         minecraft_server_fleet: &MinecraftServerFleet,
+        name: String,
+        component: String,
     ) -> BTreeMap<String, String> {
         BTreeMap::from([
+            ("app.kubernetes.io/name".to_string(), name.clone()),
             (
-                "app.kubernetes.io/name".to_string(),
-                minecraft_server_fleet.name_any(),
+                "app.kubernetes.io/instance".to_string(),
+                format!("{}-{}", name, minecraft_server_fleet.name_any()),
+            ),
+            ("app.kubernetes.io/component".to_string(), component),
+            (
+                "app.kubernetes.io/part-of".to_string(),
+                format!(
+                    "cluster-{}",
+                    minecraft_server_fleet.spec.cluster_ref.name.clone()
+                ),
             ),
             (
-                "app.kubernetes.io/component".to_string(),
-                "minecraftserver".to_string(),
+                "app.kubernetes.io/managed-by".to_string(),
+                "shulker-operator".to_string(),
             ),
             (
                 "minecraftcluster.shulkermc.io/name".to_string(),
@@ -148,27 +152,15 @@ async fn reconcile(
         "reconciling MinecraftServerFleet",
     );
 
-    finalizer(
-        &minecraft_server_fleets_api,
-        FINALIZER,
-        minecraft_server_fleet,
-        |event| async {
-            match event {
-                Finalizer::Apply(minecraft_server_fleet) => {
-                    ctx.reconcile(
-                        minecraft_server_fleets_api.clone(),
-                        minecraft_server_fleet.clone(),
-                    )
-                    .await
-                }
-                Finalizer::Cleanup(minecraft_server_fleet) => {
-                    ctx.cleanup(minecraft_server_fleet.clone()).await
-                }
-            }
-        },
-    )
-    .await
-    .map_err(|e| ReconcilerError::FinalizerError(Box::new(e)))
+    if minecraft_server_fleet.metadata.deletion_timestamp.is_none() {
+        ctx.reconcile(
+            minecraft_server_fleets_api.clone(),
+            minecraft_server_fleet.clone(),
+        )
+        .await
+    } else {
+        ctx.cleanup(minecraft_server_fleet.clone()).await
+    }
 }
 
 fn error_policy(

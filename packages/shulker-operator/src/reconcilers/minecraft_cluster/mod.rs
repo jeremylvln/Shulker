@@ -2,7 +2,8 @@ use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
 use futures::StreamExt;
 use k8s_openapi::api::{
-    core::v1::{Secret, ServiceAccount},
+    apps::v1::StatefulSet,
+    core::v1::{Secret, Service, ServiceAccount},
     rbac::v1::{Role, RoleBinding},
 };
 use kube::{
@@ -24,7 +25,8 @@ use self::{
     minecraft_server_role_binding::MinecraftServerRoleBindingBuilder,
     minecraft_server_service_account::MinecraftServerServiceAccountBuilder,
     proxy_role::ProxyRoleBuilder, proxy_role_binding::ProxyRoleBindingBuilder,
-    proxy_service_account::ProxyServiceAccountBuilder,
+    proxy_service_account::ProxyServiceAccountBuilder, redis_service::RedisServiceBuilder,
+    redis_stateful_set::RedisStatefulSetBuilder,
 };
 
 use super::{builder::reconcile_builder, ReconcilerError, Result};
@@ -36,6 +38,8 @@ mod minecraft_server_service_account;
 mod proxy_role;
 mod proxy_role_binding;
 mod proxy_service_account;
+mod redis_service;
+mod redis_stateful_set;
 
 #[cfg(test)]
 mod fixtures;
@@ -53,6 +57,8 @@ struct MinecraftClusterReconciler {
     minecraft_server_service_account_builder: MinecraftServerServiceAccountBuilder,
     minecraft_server_role_builder: MinecraftServerRoleBuilder,
     minecraft_server_role_binding_builder: MinecraftServerRoleBindingBuilder,
+    redis_service_builder: RedisServiceBuilder,
+    redis_stateful_set_builder: RedisStatefulSetBuilder,
 }
 
 impl MinecraftClusterReconciler {
@@ -76,6 +82,8 @@ impl MinecraftClusterReconciler {
             cluster.as_ref(),
         )
         .await?;
+        reconcile_builder(&self.redis_service_builder, cluster.as_ref()).await?;
+        reconcile_builder(&self.redis_stateful_set_builder, cluster.as_ref()).await?;
 
         Ok(Action::requeue(Duration::from_secs(5 * 60)))
     }
@@ -90,12 +98,25 @@ impl MinecraftClusterReconciler {
         Ok(Action::await_change())
     }
 
-    fn get_common_labels(cluster: &MinecraftCluster) -> BTreeMap<String, String> {
+    fn get_labels(
+        cluster: &MinecraftCluster,
+        name: String,
+        component: String,
+    ) -> BTreeMap<String, String> {
         BTreeMap::from([
-            ("app.kubernetes.io/name".to_string(), cluster.name_any()),
+            ("app.kubernetes.io/name".to_string(), name.clone()),
             (
-                "app.kubernetes.io/component".to_string(),
-                "cluster".to_string(),
+                "app.kubernetes.io/instance".to_string(),
+                format!("{}-{}", name, cluster.name_any()),
+            ),
+            ("app.kubernetes.io/component".to_string(), component),
+            (
+                "app.kubernetes.io/part-of".to_string(),
+                format!("cluster-{}", cluster.name_any()),
+            ),
+            (
+                "app.kubernetes.io/managed-by".to_string(),
+                "shulker-operator".to_string(),
             ),
             (
                 "minecraftcluster.shulkermc.io/name".to_string(),
@@ -159,6 +180,8 @@ pub async fn run(client: Client) {
         minecraft_server_role_binding_builder: MinecraftServerRoleBindingBuilder::new(
             client.clone(),
         ),
+        redis_service_builder: RedisServiceBuilder::new(client.clone()),
+        redis_stateful_set_builder: RedisStatefulSetBuilder::new(client.clone()),
     };
 
     Controller::new(clusters_api, Config::default().any_semantic())
@@ -176,6 +199,14 @@ pub async fn run(client: Client) {
         )
         .owns(
             Api::<RoleBinding>::all(client.clone()),
+            Config::default().any_semantic(),
+        )
+        .owns(
+            Api::<Service>::all(client.clone()),
+            Config::default().any_semantic(),
+        )
+        .owns(
+            Api::<StatefulSet>::all(client.clone()),
             Config::default().any_semantic(),
         )
         .shutdown_on_signal()

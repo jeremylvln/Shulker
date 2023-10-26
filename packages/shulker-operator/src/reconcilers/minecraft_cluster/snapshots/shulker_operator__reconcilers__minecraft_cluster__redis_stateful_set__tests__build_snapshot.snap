@@ -1,0 +1,72 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_cluster/redis_stateful_set.rs
+expression: role
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/instance: redis-my-cluster
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: cluster-my-cluster
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-cluster-redis-managed
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: redis
+      app.kubernetes.io/instance: redis-my-cluster
+      app.kubernetes.io/managed-by: shulker-operator
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/part-of: cluster-my-cluster
+      minecraftcluster.shulkermc.io/name: my-cluster
+  serviceName: my-cluster-redis-managed
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: redis
+        app.kubernetes.io/instance: redis-my-cluster
+        app.kubernetes.io/managed-by: shulker-operator
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/part-of: cluster-my-cluster
+        minecraftcluster.shulkermc.io/name: my-cluster
+    spec:
+      containers:
+        - command:
+            - redis-server
+            - "--dir /data"
+          env:
+            - name: MASTER
+              value: "true"
+          image: "redis:7-alpine"
+          name: redis
+          ports:
+            - containerPort: 6379
+              name: redis
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /data
+              name: data
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+

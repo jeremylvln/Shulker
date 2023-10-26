@@ -134,6 +134,10 @@ pub async fn reconcile_builder<
         }
     }
 
+    if !builder.is_needed(owner) {
+        return Ok(None);
+    }
+
     let mut new_resource = builder
         .build(owner, &name, existing_resource.as_ref())
         .await

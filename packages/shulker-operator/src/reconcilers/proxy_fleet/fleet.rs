@@ -101,11 +101,11 @@ impl ResourceBuilder for FleetBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(proxy_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(ProxyFleetReconciler::get_labels(
+                    proxy_fleet,
+                    "proxy".to_string(),
+                    "proxy".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             spec: FleetSpec {
@@ -237,7 +237,10 @@ impl FleetBuilder {
                 ]),
                 ..Container::default()
             }],
-            service_account_name: Some(format!("{}-proxy", &proxy_fleet.spec.cluster_ref.name)),
+            service_account_name: Some(format!(
+                "shulker-{}-proxy",
+                &proxy_fleet.spec.cluster_ref.name
+            )),
             restart_policy: Some("Never".to_string()),
             volumes: Some(vec![
                 Volume {
@@ -305,22 +308,23 @@ impl FleetBuilder {
             pod_spec.tolerations = pod_overrides.tolerations.clone();
         }
 
-        let mut labels = ProxyFleetReconciler::get_common_labels(proxy_fleet);
-        let mut annotations = BTreeMap::<String, String>::new();
+        let mut pod_labels =
+            ProxyFleetReconciler::get_labels(proxy_fleet, "proxy".to_string(), "proxy".to_string());
+        let mut pod_annotations = BTreeMap::<String, String>::new();
         if let Some(metadata) = &proxy_fleet.spec.template.metadata {
             if let Some(additional_labels) = metadata.labels.clone() {
-                labels.extend(additional_labels);
+                pod_labels.extend(additional_labels);
             }
 
             if let Some(additional_annotations) = metadata.annotations.clone() {
-                annotations.extend(additional_annotations);
+                pod_annotations.extend(additional_annotations);
             }
         }
 
         Ok(PodTemplateSpec {
             metadata: Some(ObjectMeta {
-                labels: Some(labels),
-                annotations: Some(annotations),
+                labels: Some(pod_labels),
+                annotations: Some(pod_annotations),
                 ..ObjectMeta::default()
             }),
             spec: Some(pod_spec),

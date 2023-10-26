@@ -6,8 +6,11 @@ apiVersion: agones.dev/v1
 kind: Fleet
 metadata:
   labels:
-    app.kubernetes.io/component: minecraftserver
-    app.kubernetes.io/name: my-server
+    app.kubernetes.io/component: minecraft-server
+    app.kubernetes.io/instance: minecraft-server-my-server
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: minecraft-server
+    app.kubernetes.io/part-of: cluster-my-cluster
     minecraftcluster.shulkermc.io/name: my-cluster
     minecraftserverfleet.shulkermc.io/name: my-server
   name: my-server
@@ -23,8 +26,11 @@ spec:
         minecraftserver.shulkermc.io/tags: lobby
         test-annotation/shulkermc.io: my-value
       labels:
-        app.kubernetes.io/component: minecraftserver
-        app.kubernetes.io/name: my-server
+        app.kubernetes.io/component: minecraft-server
+        app.kubernetes.io/instance: minecraft-server-my-server
+        app.kubernetes.io/managed-by: shulker-operator
+        app.kubernetes.io/name: minecraft-server
+        app.kubernetes.io/part-of: cluster-my-cluster
         minecraftcluster.shulkermc.io/name: my-cluster
         minecraftserverfleet.shulkermc.io/name: my-server
         test-label/shulkermc.io: my-value
@@ -43,8 +49,11 @@ spec:
           annotations:
             minecraftserver.shulkermc.io/tags: lobby
           labels:
-            app.kubernetes.io/component: minecraftserver
-            app.kubernetes.io/name: my-server
+            app.kubernetes.io/component: minecraft-server
+            app.kubernetes.io/instance: minecraft-server-my-server
+            app.kubernetes.io/managed-by: shulker-operator
+            app.kubernetes.io/name: minecraft-server
+            app.kubernetes.io/part-of: cluster-my-cluster
             minecraftcluster.shulkermc.io/name: my-cluster
         spec:
           containers:
@@ -138,7 +147,7 @@ spec:
           nodeSelector:
             beta.kubernetes.io/os: linux
           restartPolicy: Never
-          serviceAccountName: my-cluster-server
+          serviceAccountName: shulker-my-cluster-server
           volumes:
             - configMap:
                 name: my-server-config

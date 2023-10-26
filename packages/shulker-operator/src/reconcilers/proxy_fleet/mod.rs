@@ -5,12 +5,7 @@ use google_agones_crds::v1::{fleet::Fleet, fleet_autoscaler::FleetAutoscaler};
 use k8s_openapi::api::core::v1::{ConfigMap, Service};
 use kube::{
     api::{ListParams, PatchParams},
-    runtime::{
-        controller::Action,
-        finalizer::{finalizer, Event as Finalizer},
-        watcher::Config,
-        Controller,
-    },
+    runtime::{controller::Action, watcher::Config, Controller},
     Api, Client, ResourceExt,
 };
 use tracing::*;
@@ -34,8 +29,6 @@ mod service;
 
 #[cfg(test)]
 mod fixtures;
-
-static FINALIZER: &str = "proxyfleets.shulkermc.io";
 
 struct ProxyFleetReconciler {
     client: kube::Client,
@@ -109,12 +102,25 @@ impl ProxyFleetReconciler {
         Ok(Action::await_change())
     }
 
-    fn get_common_labels(proxy_fleet: &ProxyFleet) -> BTreeMap<String, String> {
+    fn get_labels(
+        proxy_fleet: &ProxyFleet,
+        name: String,
+        component: String,
+    ) -> BTreeMap<String, String> {
         BTreeMap::from([
-            ("app.kubernetes.io/name".to_string(), proxy_fleet.name_any()),
+            ("app.kubernetes.io/name".to_string(), name.clone()),
             (
-                "app.kubernetes.io/component".to_string(),
-                "proxy".to_string(),
+                "app.kubernetes.io/instance".to_string(),
+                format!("{}-{}", name, proxy_fleet.name_any()),
+            ),
+            ("app.kubernetes.io/component".to_string(), component),
+            (
+                "app.kubernetes.io/part-of".to_string(),
+                format!("cluster-{}", proxy_fleet.spec.cluster_ref.name.clone()),
+            ),
+            (
+                "app.kubernetes.io/managed-by".to_string(),
+                "shulker-operator".to_string(),
             ),
             (
                 "minecraftcluster.shulkermc.io/name".to_string(),
@@ -139,17 +145,12 @@ async fn reconcile(proxy_fleet: Arc<ProxyFleet>, ctx: Arc<ProxyFleetReconciler>)
         "reconciling ProxyFleet",
     );
 
-    finalizer(&proxy_fleets_api, FINALIZER, proxy_fleet, |event| async {
-        match event {
-            Finalizer::Apply(proxy_fleet) => {
-                ctx.reconcile(proxy_fleets_api.clone(), proxy_fleet.clone())
-                    .await
-            }
-            Finalizer::Cleanup(proxy_fleet) => ctx.cleanup(proxy_fleet.clone()).await,
-        }
-    })
-    .await
-    .map_err(|e| ReconcilerError::FinalizerError(Box::new(e)))
+    if proxy_fleet.metadata.deletion_timestamp.is_none() {
+        ctx.reconcile(proxy_fleets_api.clone(), proxy_fleet.clone())
+            .await
+    } else {
+        ctx.cleanup(proxy_fleet.clone()).await
+    }
 }
 
 fn error_policy(

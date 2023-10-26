@@ -6,8 +6,11 @@ apiVersion: autoscaling.agones.dev/v1
 kind: FleetAutoscaler
 metadata:
   labels:
-    app.kubernetes.io/component: minecraftserver
-    app.kubernetes.io/name: my-server
+    app.kubernetes.io/component: minecraft-server
+    app.kubernetes.io/instance: fleet-autoscaler-my-server
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: fleet-autoscaler
+    app.kubernetes.io/part-of: cluster-my-cluster
     minecraftcluster.shulkermc.io/name: my-cluster
     minecraftserverfleet.shulkermc.io/name: my-server
   name: my-server

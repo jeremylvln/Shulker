@@ -74,11 +74,11 @@ impl ResourceBuilder for ConfigMapBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(proxy_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(ProxyFleetReconciler::get_labels(
+                    proxy_fleet,
+                    "config".to_string(),
+                    "proxy".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             data: Some(data),

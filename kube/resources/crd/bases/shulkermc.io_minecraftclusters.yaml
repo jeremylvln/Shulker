@@ -22,6 +22,17 @@ spec:
           description: Auto-generated derived type for MinecraftClusterSpec via `CustomResource`
           properties:
             spec:
+              properties:
+                redis:
+                  nullable: true
+                  properties:
+                    type:
+                      enum:
+                        - ManagedSingleNode
+                      type: string
+                  required:
+                    - type
+                  type: object
               type: object
             status:
               description: The status object of `MinecraftCluster`

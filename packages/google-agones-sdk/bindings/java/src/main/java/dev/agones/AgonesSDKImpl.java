@@ -34,11 +34,12 @@ public final class AgonesSDKImpl implements AgonesSDK {
         public void onCompleted() {}
     };
 
-    private final Alpha alphaSdk = new AlphaImpl();
+    private final Alpha alphaSdk;
 
     private AgonesSDKImpl(ManagedChannel channel) {
         this.channel = channel;
         this.asyncStub = SDKGrpc.newFutureStub(channel);
+        this.alphaSdk = new AlphaImpl();
     }
 
     @Override

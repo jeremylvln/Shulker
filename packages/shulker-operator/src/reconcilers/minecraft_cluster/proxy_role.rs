@@ -36,11 +36,11 @@ impl ResourceBuilder for ProxyRoleBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(cluster.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftClusterReconciler::get_common_labels(cluster)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftClusterReconciler::get_labels(
+                    cluster,
+                    "role".to_string(),
+                    "proxy-rbac".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             rules: Some(vec![
@@ -94,12 +94,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBuilder::new(client);
+        let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role);
@@ -110,12 +108,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBuilder::new(client);
+        let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
@@ -130,12 +126,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBuilder::new(client);
+        let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
@@ -155,12 +149,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyRoleBuilder::new(client);
+        let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {

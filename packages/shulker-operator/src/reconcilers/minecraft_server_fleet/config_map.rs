@@ -40,9 +40,7 @@ impl ResourceBuilder for ConfigMapBuilder {
                 name: Some(name.to_string()),
                 namespace: Some(minecraft_server_fleet.namespace().unwrap().clone()),
                 labels: Some(
-                    MinecraftServerFleetReconciler::get_common_labels(minecraft_server_fleet)
-                        .into_iter()
-                        .collect(),
+                    MinecraftServerFleetReconciler::get_labels(minecraft_server_fleet, "config".to_string(), "minecraft-server".to_string()),
                 ),
                 ..ObjectMeta::default()
             },
