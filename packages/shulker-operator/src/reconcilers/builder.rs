@@ -90,6 +90,15 @@ pub async fn reconcile_builder<
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 
     if existing_resource.is_some() {
+        debug!(
+            builder = std::any::type_name::<RB>(),
+            owner = std::any::type_name::<O>(),
+            owner_name = owner.name_any(),
+            target = std::any::type_name::<R>(),
+            target_name = name,
+            "found existing resource",
+        );
+
         let delete_existing = || async {
             api.delete(&name, &DeleteParams::default())
                 .await
@@ -99,9 +108,27 @@ pub async fn reconcile_builder<
         };
 
         if !builder.is_needed(owner) {
+            debug!(
+                builder = std::any::type_name::<RB>(),
+                owner = std::any::type_name::<O>(),
+                owner_name = owner.name_any(),
+                target = std::any::type_name::<R>(),
+                target_name = name,
+                "existing resource is not needed anymore, deleting",
+            );
+
             delete_existing().await?;
             return Ok(None);
         } else if RB::is_recreation_needed(owner, existing_resource.as_ref().unwrap()) {
+            debug!(
+                builder = std::any::type_name::<RB>(),
+                owner = std::any::type_name::<O>(),
+                owner_name = owner.name_any(),
+                target = std::any::type_name::<R>(),
+                target_name = name,
+                "existing resource needs to be recreated, deleting",
+            );
+
             delete_existing().await?;
             existing_resource = None;
         }
@@ -113,6 +140,15 @@ pub async fn reconcile_builder<
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 
     let updated_resource = if let Some(existing_resource) = existing_resource {
+        debug!(
+            builder = std::any::type_name::<RB>(),
+            owner = std::any::type_name::<O>(),
+            owner_name = owner.name_any(),
+            target = std::any::type_name::<R>(),
+            target_name = name,
+            "patching existing resource",
+        );
+
         for (key, value) in existing_resource.annotations().iter() {
             if !new_resource.annotations().contains_key(key) {
                 new_resource
@@ -129,6 +165,15 @@ pub async fn reconcile_builder<
         .await
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
     } else {
+        debug!(
+            builder = std::any::type_name::<RB>(),
+            owner = std::any::type_name::<O>(),
+            owner_name = owner.name_any(),
+            target = std::any::type_name::<R>(),
+            target_name = name,
+            "creating new resource",
+        );
+
         set_controller_reference(owner, &mut new_resource);
         api.create(
             &PostParams {
