@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 pub mod builder;
+mod cluster_ref;
 pub mod minecraft_cluster;
 pub mod minecraft_server;
 pub mod minecraft_server_fleet;
@@ -17,6 +18,9 @@ pub enum ReconcilerError {
 
     #[error("failed to delete stale resource: {0}")]
     FailedToDeleteStale(#[source] kube::Error),
+
+    #[error("failed to resolve cluster ref: {1}")]
+    InvalidClusterRef(String, #[source] kube::Error),
 
     #[error("builder {0} failed to build resource: {1}")]
     BuilderError(&'static str, #[source] anyhow::Error),
