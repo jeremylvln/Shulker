@@ -19,7 +19,10 @@ use self::{
     config_map::ConfigMapBuilder, fleet::FleetBuilder, fleet_autoscaler::FleetAutoscalerBuilder,
 };
 
-use super::{builder::reconcile_builder, status::patch_status, ReconcilerError, Result};
+use super::{
+    builder::reconcile_builder, cluster_ref::resolve_cluster_ref, status::patch_status,
+    ReconcilerError, Result,
+};
 
 mod config_map;
 mod fleet;
@@ -43,6 +46,13 @@ impl MinecraftServerFleetReconciler {
         api: Api<MinecraftServerFleet>,
         minecraft_server_fleet: Arc<MinecraftServerFleet>,
     ) -> Result<Action> {
+        resolve_cluster_ref(
+            &self.client,
+            &minecraft_server_fleet.namespace().unwrap(),
+            &minecraft_server_fleet.spec.cluster_ref,
+        )
+        .await?;
+
         reconcile_builder(&self.config_map_builder, minecraft_server_fleet.as_ref()).await?;
         let fleet = reconcile_builder(&self.fleet_builder, minecraft_server_fleet.as_ref()).await?;
         reconcile_builder(

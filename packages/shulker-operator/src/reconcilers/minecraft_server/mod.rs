@@ -17,7 +17,10 @@ use shulker_crds::{
 
 use self::{config_map::ConfigMapBuilder, gameserver::GameServerBuilder};
 
-use super::{builder::reconcile_builder, status::patch_status, ReconcilerError, Result};
+use super::{
+    builder::reconcile_builder, cluster_ref::resolve_cluster_ref, status::patch_status,
+    ReconcilerError, Result,
+};
 
 pub mod config_map;
 pub mod gameserver;
@@ -39,6 +42,13 @@ impl MinecraftServerReconciler {
         api: Api<MinecraftServer>,
         minecraft_server: Arc<MinecraftServer>,
     ) -> Result<Action> {
+        resolve_cluster_ref(
+            &self.client,
+            &minecraft_server.namespace().unwrap(),
+            &minecraft_server.spec.cluster_ref,
+        )
+        .await?;
+
         reconcile_builder(&self.config_map_builder, minecraft_server.as_ref()).await?;
         let gameserver =
             reconcile_builder(&self.gameserver_builder, minecraft_server.as_ref()).await?;

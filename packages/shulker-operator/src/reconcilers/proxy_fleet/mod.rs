@@ -20,7 +20,10 @@ use self::{
     service::ServiceBuilder,
 };
 
-use super::{builder::reconcile_builder, status::patch_status, ReconcilerError, Result};
+use super::{
+    builder::reconcile_builder, cluster_ref::resolve_cluster_ref, status::patch_status,
+    ReconcilerError, Result,
+};
 
 mod config_map;
 mod fleet;
@@ -46,6 +49,13 @@ impl ProxyFleetReconciler {
         api: Api<ProxyFleet>,
         proxy_fleet: Arc<ProxyFleet>,
     ) -> Result<Action> {
+        resolve_cluster_ref(
+            &self.client,
+            &proxy_fleet.namespace().unwrap(),
+            &proxy_fleet.spec.cluster_ref,
+        )
+        .await?;
+
         reconcile_builder(&self.config_map_builder, proxy_fleet.as_ref()).await?;
         reconcile_builder(&self.service_builder, proxy_fleet.as_ref()).await?;
         let fleet = reconcile_builder(&self.fleet_builder, proxy_fleet.as_ref()).await?;
