@@ -12,7 +12,10 @@ data:
 metadata:
   labels:
     app.kubernetes.io/component: proxy
-    app.kubernetes.io/name: my-proxy
+    app.kubernetes.io/instance: config-my-proxy
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: config
+    app.kubernetes.io/part-of: cluster-my-cluster
     minecraftcluster.shulkermc.io/name: my-cluster
     proxyfleet.shulkermc.io/name: my-proxy
   name: my-proxy-config

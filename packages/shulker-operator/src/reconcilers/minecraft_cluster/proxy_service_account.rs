@@ -35,11 +35,11 @@ impl ResourceBuilder for ProxyServiceAccountBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(cluster.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftClusterReconciler::get_common_labels(cluster)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftClusterReconciler::get_labels(
+                    cluster,
+                    "service-account".to_string(),
+                    "proxy-rbac".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             ..ServiceAccount::default()
@@ -76,12 +76,10 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::ProxyServiceAccountBuilder::new(client);
+        let name = super::ProxyServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // W
-        let service_account = builder
-            .build(&TEST_CLUSTER, "my-cluster-proxy", None)
-            .await
-            .unwrap();
+        let service_account = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service_account);

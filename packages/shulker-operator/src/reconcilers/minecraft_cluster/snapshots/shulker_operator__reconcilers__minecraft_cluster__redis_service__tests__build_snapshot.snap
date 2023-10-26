@@ -1,0 +1,31 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_cluster/redis_service.rs
+expression: service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/instance: redis-my-cluster
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: cluster-my-cluster
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-cluster-redis-managed
+  namespace: default
+spec:
+  ports:
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: redis
+  selector:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/instance: redis-my-cluster
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: cluster-my-cluster
+    minecraftcluster.shulkermc.io/name: my-cluster
+  type: ClusterIP
+

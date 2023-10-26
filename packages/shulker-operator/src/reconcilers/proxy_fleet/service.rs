@@ -47,19 +47,19 @@ impl ResourceBuilder for ServiceBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(proxy_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(ProxyFleetReconciler::get_labels(
+                    proxy_fleet,
+                    "proxy".to_string(),
+                    "proxy".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             spec: Some(ServiceSpec {
-                selector: Some(
-                    ProxyFleetReconciler::get_common_labels(proxy_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
+                selector: Some(ProxyFleetReconciler::get_labels(
+                    proxy_fleet,
+                    "proxy".to_string(),
+                    "proxy".to_string(),
+                )),
                 type_: Some(service_config.type_.to_string()),
                 external_traffic_policy: service_config
                     .external_traffic_policy
@@ -69,7 +69,7 @@ impl ResourceBuilder for ServiceBuilder {
                     name: Some("minecraft".to_string()),
                     protocol: Some("TCP".to_string()),
                     port: 25565,
-                    target_port: Some(IntOrString::Int(25577)),
+                    target_port: Some(IntOrString::String("minecraft".to_string())),
                     ..ServicePort::default()
                 }]),
                 ..ServiceSpec::default()

@@ -77,8 +77,12 @@ impl ResourceBuilder for FleetBuilder {
             None => minecraft_server_fleet.spec.replicas as i32,
         };
 
-        let mut labels = MinecraftServerFleetReconciler::get_common_labels(minecraft_server_fleet);
-        labels.extend(
+        let mut template_labels = MinecraftServerFleetReconciler::get_labels(
+            minecraft_server_fleet,
+            "minecraft-server".to_string(),
+            "minecraft-server".to_string(),
+        );
+        template_labels.extend(
             game_server_spec
                 .template
                 .metadata
@@ -88,8 +92,8 @@ impl ResourceBuilder for FleetBuilder {
                 }),
         );
 
-        let mut annotations = BTreeMap::<String, String>::new();
-        annotations.extend(
+        let mut template_annotations = BTreeMap::<String, String>::new();
+        template_annotations.extend(
             game_server_spec
                 .template
                 .metadata
@@ -101,11 +105,11 @@ impl ResourceBuilder for FleetBuilder {
 
         if let Some(metadata) = &minecraft_server_fleet.spec.template.metadata {
             if let Some(additional_labels) = metadata.labels.clone() {
-                labels.extend(additional_labels);
+                template_labels.extend(additional_labels);
             }
 
             if let Some(additional_annotations) = metadata.annotations.clone() {
-                annotations.extend(additional_annotations);
+                template_annotations.extend(additional_annotations);
             }
         }
 
@@ -113,11 +117,11 @@ impl ResourceBuilder for FleetBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(minecraft_server_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftServerFleetReconciler::get_common_labels(minecraft_server_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftServerFleetReconciler::get_labels(
+                    minecraft_server_fleet,
+                    "minecraft-server".to_string(),
+                    "minecraft-server".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             spec: FleetSpec {
@@ -129,8 +133,8 @@ impl ResourceBuilder for FleetBuilder {
                 scheduling: Some("Packed".to_string()),
                 template: FleetTemplate {
                     metadata: Some(ObjectMeta {
-                        labels: Some(labels),
-                        annotations: Some(annotations),
+                        labels: Some(template_labels),
+                        annotations: Some(template_annotations),
                         ..ObjectMeta::default()
                     }),
                     spec: game_server_spec,
@@ -190,10 +194,11 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, "my-server", None)
+            .build(&TEST_SERVER_FLEET, &name, None)
             .await
             .unwrap();
 
@@ -230,10 +235,11 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, "my-server", None)
+            .build(&TEST_SERVER_FLEET, &name, None)
             .await
             .unwrap();
 
@@ -270,10 +276,11 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, "my-server", None)
+            .build(&TEST_SERVER_FLEET, &name, None)
             .await
             .unwrap();
 

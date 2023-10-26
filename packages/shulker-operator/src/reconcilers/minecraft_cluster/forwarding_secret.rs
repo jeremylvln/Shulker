@@ -42,11 +42,11 @@ impl ResourceBuilder for ForwardingSecretBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(cluster.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftClusterReconciler::get_common_labels(cluster)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftClusterReconciler::get_labels(
+                    cluster,
+                    "forwarding-secret".to_string(),
+                    "proxy".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             type_: Some("Opaque".to_string()),

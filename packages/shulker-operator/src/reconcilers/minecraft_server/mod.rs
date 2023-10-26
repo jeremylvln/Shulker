@@ -5,12 +5,7 @@ use google_agones_crds::v1::game_server::GameServer;
 use k8s_openapi::api::core::v1::ConfigMap;
 use kube::{
     api::{DeleteParams, ListParams, PatchParams},
-    runtime::{
-        controller::Action,
-        finalizer::{finalizer, Event as Finalizer},
-        watcher::Config,
-        Controller,
-    },
+    runtime::{controller::Action, watcher::Config, Controller},
     Api, Client, ResourceExt,
 };
 use tracing::*;
@@ -29,8 +24,6 @@ pub mod gameserver;
 
 #[cfg(test)]
 mod fixtures;
-
-static FINALIZER: &str = "minecraftservers.shulkermc.io";
 
 struct MinecraftServerReconciler {
     client: kube::Client,
@@ -108,40 +101,31 @@ impl MinecraftServerReconciler {
         Ok(Action::await_change())
     }
 
-    fn get_common_labels(minecraft_server: &MinecraftServer) -> BTreeMap<String, String> {
-        let fleet_owner = minecraft_server
-            .owner_references()
-            .iter()
-            .find(|owner| owner.kind == "MinecraftServerFleet");
-
-        let mut labels = BTreeMap::from([
+    fn get_labels(
+        minecraft_server: &MinecraftServer,
+        name: String,
+        component: String,
+    ) -> BTreeMap<String, String> {
+        BTreeMap::from([
+            ("app.kubernetes.io/name".to_string(), name.to_string()),
             (
-                "app.kubernetes.io/name".to_string(),
-                minecraft_server.name_any(),
+                "app.kubernetes.io/instance".to_string(),
+                format!("{}-{}", name, minecraft_server.name_any()),
+            ),
+            ("app.kubernetes.io/component".to_string(), component),
+            (
+                "app.kubernetes.io/part-of".to_string(),
+                format!("cluster-{}", minecraft_server.spec.cluster_ref.name.clone()),
             ),
             (
-                "app.kubernetes.io/component".to_string(),
-                "minecraftserver".to_string(),
+                "app.kubernetes.io/managed-by".to_string(),
+                "shulker-operator".to_string(),
             ),
             (
                 "minecraftcluster.shulkermc.io/name".to_string(),
                 minecraft_server.spec.cluster_ref.name.clone(),
             ),
-        ]);
-
-        if let Some(owner) = &fleet_owner {
-            labels.insert("app.kubernetes.io/name".to_string(), owner.name.clone());
-            labels.insert(
-                "app.kubernetes.io/instance".to_string(),
-                minecraft_server.name_any(),
-            );
-            labels.insert(
-                "minecraftcluster.shulkermc.io/name".to_string(),
-                owner.name.clone(),
-            );
-        }
-
-        labels
+        ])
     }
 }
 
@@ -159,22 +143,12 @@ async fn reconcile(
         "reconciling MinecraftServer",
     );
 
-    finalizer(
-        &minecraft_servers_api,
-        FINALIZER,
-        minecraft_server,
-        |event| async {
-            match event {
-                Finalizer::Apply(minecraft_server) => {
-                    ctx.reconcile(minecraft_servers_api.clone(), minecraft_server.clone())
-                        .await
-                }
-                Finalizer::Cleanup(minecraft_server) => ctx.cleanup(minecraft_server.clone()).await,
-            }
-        },
-    )
-    .await
-    .map_err(|e| ReconcilerError::FinalizerError(Box::new(e)))
+    if minecraft_server.metadata.deletion_timestamp.is_none() {
+        ctx.reconcile(minecraft_servers_api.clone(), minecraft_server.clone())
+            .await
+    } else {
+        ctx.cleanup(minecraft_server.clone()).await
+    }
 }
 
 fn error_policy(

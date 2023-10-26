@@ -10,7 +10,7 @@ lazy_static! {
             name: Some("my-cluster".to_string()),
             ..ObjectMeta::default()
         },
-        spec: MinecraftClusterSpec {},
+        spec: MinecraftClusterSpec { redis: None },
         status: None,
     };
 }

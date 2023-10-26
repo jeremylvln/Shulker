@@ -48,11 +48,11 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(minecraft_server_fleet.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftServerFleetReconciler::get_common_labels(minecraft_server_fleet)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftServerFleetReconciler::get_labels(
+                    minecraft_server_fleet,
+                    "fleet-autoscaler".to_string(),
+                    "minecraft-server".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             spec: FleetAutoscalerSpec {

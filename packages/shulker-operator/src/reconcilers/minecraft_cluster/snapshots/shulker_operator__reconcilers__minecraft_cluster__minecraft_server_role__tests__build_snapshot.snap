@@ -6,8 +6,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
-    app.kubernetes.io/component: cluster
-    app.kubernetes.io/name: my-cluster
+    app.kubernetes.io/component: minecraft-server-rbac
+    app.kubernetes.io/instance: role-my-cluster
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: role
+    app.kubernetes.io/part-of: cluster-my-cluster
     minecraftcluster.shulkermc.io/name: my-cluster
   name: "shulker:my-cluster:server"
   namespace: default

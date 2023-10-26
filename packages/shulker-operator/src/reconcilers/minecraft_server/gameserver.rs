@@ -88,11 +88,11 @@ impl ResourceBuilder for GameServerBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(minecraft_server.namespace().unwrap().clone()),
-                labels: Some(
-                    MinecraftServerReconciler::get_common_labels(minecraft_server)
-                        .into_iter()
-                        .collect(),
-                ),
+                labels: Some(MinecraftServerReconciler::get_labels(
+                    minecraft_server,
+                    "minecraft-server".to_string(),
+                    "minecraft-server".to_string(),
+                )),
                 ..ObjectMeta::default()
             },
             spec: Self::get_game_server_spec(&self.resourceref_resolver, minecraft_server).await?,
@@ -194,7 +194,7 @@ impl GameServerBuilder {
                 ..Container::default()
             }],
             service_account_name: Some(format!(
-                "{}-server",
+                "shulker-{}-server",
                 &minecraft_server.spec.cluster_ref.name
             )),
             restart_policy: Some("Never".to_string()),
@@ -255,8 +255,10 @@ impl GameServerBuilder {
 
         Ok(PodTemplateSpec {
             metadata: Some(ObjectMeta {
-                labels: Some(MinecraftServerReconciler::get_common_labels(
+                labels: Some(MinecraftServerReconciler::get_labels(
                     minecraft_server,
+                    "minecraft-server".to_string(),
+                    "minecraft-server".to_string(),
                 )),
                 annotations: Some(BTreeMap::<String, String>::from([(
                     "minecraftserver.shulkermc.io/tags".to_string(),
