@@ -63,9 +63,10 @@ pub struct GameServerBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for GameServerBuilder {
+impl<'a> ResourceBuilder<'a> for GameServerBuilder {
     type OwnerType = MinecraftServer;
     type ResourceType = GameServer;
+    type Context = ();
 
     fn name(minecraft_server: &Self::OwnerType) -> String {
         minecraft_server.name_any()
@@ -83,6 +84,7 @@ impl ResourceBuilder for GameServerBuilder {
         minecraft_server: &Self::OwnerType,
         name: &str,
         _existing_game_server: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server = GameServer {
             metadata: ObjectMeta {
@@ -489,7 +491,10 @@ mod tests {
         let name = super::GameServerBuilder::name(&TEST_SERVER);
 
         // W
-        let game_server = builder.build(&TEST_SERVER, &name, None).await.unwrap();
+        let game_server = builder
+            .build(&TEST_SERVER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(game_server);

@@ -13,9 +13,10 @@ pub struct MinecraftServerServiceAccountBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for MinecraftServerServiceAccountBuilder {
+impl<'a> ResourceBuilder<'a> for MinecraftServerServiceAccountBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = ServiceAccount;
+    type Context = ();
 
     fn name(cluster: &Self::OwnerType) -> String {
         format!("shulker-{}-server", cluster.name_any())
@@ -30,6 +31,7 @@ impl ResourceBuilder for MinecraftServerServiceAccountBuilder {
         cluster: &Self::OwnerType,
         name: &str,
         _existing_service_account: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let service_account = ServiceAccount {
             metadata: ObjectMeta {
@@ -79,7 +81,10 @@ mod tests {
         let name = super::MinecraftServerServiceAccountBuilder::name(&TEST_CLUSTER);
 
         // W
-        let service_account = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let service_account = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service_account);

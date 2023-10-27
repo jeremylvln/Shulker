@@ -25,9 +25,10 @@ pub struct FleetBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for FleetBuilder {
+impl<'a> ResourceBuilder<'a> for FleetBuilder {
     type OwnerType = MinecraftServerFleet;
     type ResourceType = Fleet;
+    type Context = ();
 
     fn name(minecraft_server_fleet: &Self::OwnerType) -> String {
         minecraft_server_fleet.name_any()
@@ -45,6 +46,7 @@ impl ResourceBuilder for FleetBuilder {
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
         _existing_fleet: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let fake_mincraft_server = MinecraftServer {
             metadata: ObjectMeta {
@@ -181,7 +183,7 @@ mod tests {
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None)
+            .build(&TEST_SERVER_FLEET, &name, None, None)
             .await
             .unwrap();
 
@@ -198,7 +200,7 @@ mod tests {
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None)
+            .build(&TEST_SERVER_FLEET, &name, None, None)
             .await
             .unwrap();
 
@@ -239,7 +241,7 @@ mod tests {
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None)
+            .build(&TEST_SERVER_FLEET, &name, None, None)
             .await
             .unwrap();
 
@@ -280,7 +282,7 @@ mod tests {
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None)
+            .build(&TEST_SERVER_FLEET, &name, None, None)
             .await
             .unwrap();
 

@@ -16,9 +16,10 @@ pub struct FleetAutoscalerBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for FleetAutoscalerBuilder {
+impl<'a> ResourceBuilder<'a> for FleetAutoscalerBuilder {
     type OwnerType = MinecraftServerFleet;
     type ResourceType = FleetAutoscaler;
+    type Context = ();
 
     fn name(minecraft_server_fleet: &Self::OwnerType) -> String {
         minecraft_server_fleet.name_any()
@@ -43,6 +44,7 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
         _existing_fleet_autoscaler: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let fleet_autoscaler = FleetAutoscaler {
             metadata: ObjectMeta {
@@ -133,7 +135,7 @@ mod tests {
 
         // W
         let fleet_autoscaler = builder
-            .build(&TEST_SERVER_FLEET, &name, None)
+            .build(&TEST_SERVER_FLEET, &name, None, None)
             .await
             .unwrap();
 

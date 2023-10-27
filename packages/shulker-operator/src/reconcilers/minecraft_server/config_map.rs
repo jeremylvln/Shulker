@@ -17,9 +17,10 @@ pub struct ConfigMapBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for ConfigMapBuilder {
+impl<'a> ResourceBuilder<'a> for ConfigMapBuilder {
     type OwnerType = MinecraftServer;
     type ResourceType = ConfigMap;
+    type Context = ();
 
     fn name(minecraft_server: &Self::OwnerType) -> String {
         format!("{}-config", minecraft_server.name_any())
@@ -45,6 +46,7 @@ impl ResourceBuilder for ConfigMapBuilder {
         minecraft_server: &Self::OwnerType,
         name: &str,
         _existing_config_map: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let config_map = ConfigMap {
             metadata: ObjectMeta {
@@ -120,7 +122,10 @@ mod tests {
         let name = super::ConfigMapBuilder::name(&TEST_SERVER);
 
         // W
-        let config_map = builder.build(&TEST_SERVER, &name, None).await.unwrap();
+        let config_map = builder
+            .build(&TEST_SERVER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(config_map);

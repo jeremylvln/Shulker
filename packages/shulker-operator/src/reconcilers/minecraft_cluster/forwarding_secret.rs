@@ -20,9 +20,10 @@ pub struct ForwardingSecretBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for ForwardingSecretBuilder {
+impl<'a> ResourceBuilder<'a> for ForwardingSecretBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Secret;
+    type Context = ();
 
     fn name(cluster: &Self::OwnerType) -> String {
         format!("{}-forwarding-secret", cluster.name_any())
@@ -37,6 +38,7 @@ impl ResourceBuilder for ForwardingSecretBuilder {
         cluster: &Self::OwnerType,
         name: &str,
         existing_secret: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let secret = Secret {
             metadata: ObjectMeta {
@@ -132,7 +134,10 @@ mod tests {
         let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
 
         // W
-        let secret = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let secret = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(secret, {
@@ -148,7 +153,10 @@ mod tests {
         let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
 
         // W
-        let secret = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let secret = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(secret
@@ -164,11 +172,14 @@ mod tests {
         let client = create_client_mock();
         let builder = super::ForwardingSecretBuilder::new(client);
         let name = super::ForwardingSecretBuilder::name(&TEST_CLUSTER);
-        let existing_secret = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let existing_secret = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // W
         let secret = builder
-            .build(&TEST_CLUSTER, &name, Some(&existing_secret))
+            .build(&TEST_CLUSTER, &name, Some(&existing_secret), None)
             .await
             .unwrap();
 

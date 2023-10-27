@@ -17,9 +17,10 @@ pub struct ServiceBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for ServiceBuilder {
+impl<'a> ResourceBuilder<'a> for ServiceBuilder {
     type OwnerType = ProxyFleet;
     type ResourceType = Service;
+    type Context = ();
 
     fn name(proxy_fleet: &Self::OwnerType) -> String {
         proxy_fleet.name_any()
@@ -41,6 +42,7 @@ impl ResourceBuilder for ServiceBuilder {
         proxy_fleet: &Self::OwnerType,
         name: &str,
         _existing_service: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let service_config = proxy_fleet.spec.service.as_ref().unwrap();
         let service = Service {
@@ -139,7 +141,10 @@ mod tests {
         let name = super::ServiceBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let service = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let service = builder
+            .build(&TEST_PROXY_FLEET, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service);

@@ -17,9 +17,10 @@ pub struct ConfigMapBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for ConfigMapBuilder {
+impl<'a> ResourceBuilder<'a> for ConfigMapBuilder {
     type OwnerType = ProxyFleet;
     type ResourceType = ConfigMap;
+    type Context = ();
 
     fn name(proxy_fleet: &Self::OwnerType) -> String {
         format!("{}-config", proxy_fleet.name_any())
@@ -37,6 +38,7 @@ impl ResourceBuilder for ConfigMapBuilder {
         proxy_fleet: &Self::OwnerType,
         name: &str,
         _existing_config_map: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let mut data = BTreeMap::from([
             (
@@ -121,7 +123,10 @@ mod tests {
         let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(config_map);
@@ -135,7 +140,10 @@ mod tests {
         let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(config_map.data.as_ref().unwrap().contains_key("init-fs.sh"));
@@ -149,7 +157,10 @@ mod tests {
         let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(config_map
@@ -167,7 +178,10 @@ mod tests {
         let name = super::ConfigMapBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let config_map = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let config_map = builder
+            .build(&TEST_PROXY_FLEET, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(config_map
@@ -192,7 +206,7 @@ mod tests {
         fleet.spec.template.spec.version.channel = ProxyFleetTemplateVersion::BungeeCord;
 
         // W
-        let config_map = builder.build(&fleet, &name, None).await.unwrap();
+        let config_map = builder.build(&fleet, &name, None, None).await.unwrap();
 
         // T
         assert!(config_map

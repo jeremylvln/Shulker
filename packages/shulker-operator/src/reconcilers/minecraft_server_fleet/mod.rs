@@ -53,11 +53,18 @@ impl MinecraftServerFleetReconciler {
         )
         .await?;
 
-        reconcile_builder(&self.config_map_builder, minecraft_server_fleet.as_ref()).await?;
-        let fleet = reconcile_builder(&self.fleet_builder, minecraft_server_fleet.as_ref()).await?;
+        reconcile_builder(
+            &self.config_map_builder,
+            minecraft_server_fleet.as_ref(),
+            None,
+        )
+        .await?;
+        let fleet =
+            reconcile_builder(&self.fleet_builder, minecraft_server_fleet.as_ref(), None).await?;
         reconcile_builder(
             &self.fleet_autoscaler_builder,
             minecraft_server_fleet.as_ref(),
+            None,
         )
         .await?;
 

@@ -49,9 +49,9 @@ impl MinecraftServerReconciler {
         )
         .await?;
 
-        reconcile_builder(&self.config_map_builder, minecraft_server.as_ref()).await?;
+        reconcile_builder(&self.config_map_builder, minecraft_server.as_ref(), None).await?;
         let gameserver =
-            reconcile_builder(&self.gameserver_builder, minecraft_server.as_ref()).await?;
+            reconcile_builder(&self.gameserver_builder, minecraft_server.as_ref(), None).await?;
 
         if let Some(gameserver) = &gameserver {
             if let Some(gameserver_status) = &gameserver.status {

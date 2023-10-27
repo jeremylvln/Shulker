@@ -38,11 +38,11 @@ mod minecraft_server_service_account;
 mod proxy_role;
 mod proxy_role_binding;
 mod proxy_service_account;
-mod redis_service;
+pub mod redis_service;
 mod redis_stateful_set;
 
 #[cfg(test)]
-mod fixtures;
+pub mod fixtures;
 
 static FINALIZER: &str = "minecraftclusters.shulkermc.io";
 
@@ -67,23 +67,25 @@ impl MinecraftClusterReconciler {
         _api: Api<MinecraftCluster>,
         cluster: Arc<MinecraftCluster>,
     ) -> Result<Action> {
-        reconcile_builder(&self.forwarding_secret_builder, cluster.as_ref()).await?;
-        reconcile_builder(&self.proxy_service_account_builder, cluster.as_ref()).await?;
-        reconcile_builder(&self.proxy_role_builder, cluster.as_ref()).await?;
-        reconcile_builder(&self.proxy_role_binding_builder, cluster.as_ref()).await?;
+        reconcile_builder(&self.forwarding_secret_builder, cluster.as_ref(), None).await?;
+        reconcile_builder(&self.proxy_service_account_builder, cluster.as_ref(), None).await?;
+        reconcile_builder(&self.proxy_role_builder, cluster.as_ref(), None).await?;
+        reconcile_builder(&self.proxy_role_binding_builder, cluster.as_ref(), None).await?;
         reconcile_builder(
             &self.minecraft_server_service_account_builder,
             cluster.as_ref(),
+            None,
         )
         .await?;
-        reconcile_builder(&self.minecraft_server_role_builder, cluster.as_ref()).await?;
+        reconcile_builder(&self.minecraft_server_role_builder, cluster.as_ref(), None).await?;
         reconcile_builder(
             &self.minecraft_server_role_binding_builder,
             cluster.as_ref(),
+            None,
         )
         .await?;
-        reconcile_builder(&self.redis_service_builder, cluster.as_ref()).await?;
-        reconcile_builder(&self.redis_stateful_set_builder, cluster.as_ref()).await?;
+        reconcile_builder(&self.redis_service_builder, cluster.as_ref(), None).await?;
+        reconcile_builder(&self.redis_stateful_set_builder, cluster.as_ref(), None).await?;
 
         Ok(Action::requeue(Duration::from_secs(5 * 60)))
     }

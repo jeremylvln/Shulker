@@ -16,7 +16,9 @@ use shulker_crds::{
 };
 
 use self::{
-    config_map::ConfigMapBuilder, fleet::FleetBuilder, fleet_autoscaler::FleetAutoscalerBuilder,
+    config_map::ConfigMapBuilder,
+    fleet::{FleetBuilder, FleetBuilderContext},
+    fleet_autoscaler::FleetAutoscalerBuilder,
     service::ServiceBuilder,
 };
 
@@ -49,17 +51,22 @@ impl ProxyFleetReconciler {
         api: Api<ProxyFleet>,
         proxy_fleet: Arc<ProxyFleet>,
     ) -> Result<Action> {
-        resolve_cluster_ref(
+        let cluster = resolve_cluster_ref(
             &self.client,
             &proxy_fleet.namespace().unwrap(),
             &proxy_fleet.spec.cluster_ref,
         )
         .await?;
 
-        reconcile_builder(&self.config_map_builder, proxy_fleet.as_ref()).await?;
-        reconcile_builder(&self.service_builder, proxy_fleet.as_ref()).await?;
-        let fleet = reconcile_builder(&self.fleet_builder, proxy_fleet.as_ref()).await?;
-        reconcile_builder(&self.fleet_autoscaler_builder, proxy_fleet.as_ref()).await?;
+        reconcile_builder(&self.config_map_builder, proxy_fleet.as_ref(), None).await?;
+        reconcile_builder(&self.service_builder, proxy_fleet.as_ref(), None).await?;
+        let fleet = reconcile_builder(
+            &self.fleet_builder,
+            proxy_fleet.as_ref(),
+            Some(FleetBuilderContext { cluster: &cluster }),
+        )
+        .await?;
+        reconcile_builder(&self.fleet_autoscaler_builder, proxy_fleet.as_ref(), None).await?;
 
         if let Some(fleet) = &fleet {
             if let Some(fleet_status) = &fleet.status {

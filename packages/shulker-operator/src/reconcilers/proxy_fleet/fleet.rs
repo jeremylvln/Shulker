@@ -15,6 +15,7 @@ use k8s_openapi::api::core::v1::ObjectFieldSelector;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
 use k8s_openapi::api::core::v1::Probe;
+use k8s_openapi::api::core::v1::SecretKeySelector;
 use k8s_openapi::api::core::v1::SecretVolumeSource;
 use k8s_openapi::api::core::v1::SecurityContext;
 use k8s_openapi::api::core::v1::Volume;
@@ -24,9 +25,11 @@ use k8s_openapi::apimachinery::pkg::util::intstr::IntOrString;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 
 use crate::reconcilers::builder::ResourceBuilder;
+use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
 use google_agones_crds::v1::fleet::FleetSpec;
@@ -69,10 +72,16 @@ pub struct FleetBuilder {
     resourceref_resolver: ResourceRefResolver,
 }
 
+#[derive(Clone, Debug)]
+pub struct FleetBuilderContext<'a> {
+    pub cluster: &'a MinecraftCluster,
+}
+
 #[async_trait::async_trait]
-impl ResourceBuilder for FleetBuilder {
+impl<'a> ResourceBuilder<'a> for FleetBuilder {
     type OwnerType = ProxyFleet;
     type ResourceType = Fleet;
+    type Context = FleetBuilderContext<'a>;
 
     fn name(proxy_fleet: &Self::OwnerType) -> String {
         proxy_fleet.name_any()
@@ -90,8 +99,11 @@ impl ResourceBuilder for FleetBuilder {
         proxy_fleet: &Self::OwnerType,
         name: &str,
         _existing_fleet: Option<&Self::ResourceType>,
+        context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
-        let game_server_spec = self.get_game_server_spec(proxy_fleet).await?;
+        let game_server_spec = self
+            .get_game_server_spec(context.unwrap().cluster, proxy_fleet)
+            .await?;
         let replicas = match &proxy_fleet.spec.autoscaling {
             Some(_) => 0,
             None => proxy_fleet.spec.replicas as i32,
@@ -140,9 +152,10 @@ impl FleetBuilder {
 
     async fn get_game_server_spec(
         &self,
+        cluster: &MinecraftCluster,
         proxy_fleet: &ProxyFleet,
     ) -> Result<GameServerSpec, anyhow::Error> {
-        let pod_template_spec = self.get_pod_template_spec(proxy_fleet).await?;
+        let pod_template_spec = self.get_pod_template_spec(cluster, proxy_fleet).await?;
         let game_server_spec = GameServerSpec {
             ports: Some(vec![]),
             eviction: Some(GameServerEvictionSpec {
@@ -162,6 +175,7 @@ impl FleetBuilder {
 
     async fn get_pod_template_spec(
         &self,
+        cluster: &MinecraftCluster,
         proxy_fleet: &ProxyFleet,
     ) -> Result<PodTemplateSpec, anyhow::Error> {
         let mut pod_spec = PodSpec {
@@ -197,7 +211,7 @@ impl FleetBuilder {
                     container_port: 25577,
                     ..ContainerPort::default()
                 }]),
-                env: Some(self.get_env(&proxy_fleet.spec.template.spec)),
+                env: Some(self.get_env(cluster, &proxy_fleet.spec.template.spec)?),
                 readiness_probe: Some(Probe {
                     exec: Some(ExecAction {
                         command: Some(vec![
@@ -398,7 +412,13 @@ impl FleetBuilder {
         Ok(env)
     }
 
-    fn get_env(&self, spec: &ProxyFleetTemplateSpec) -> Vec<EnvVar> {
+    fn get_env(
+        &self,
+        cluster: &MinecraftCluster,
+        spec: &ProxyFleetTemplateSpec,
+    ) -> Result<Vec<EnvVar>, anyhow::Error> {
+        let redis_ref = RedisRef::from_cluster(cluster)?;
+
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_PROXY_NAME".to_string(),
@@ -428,6 +448,16 @@ impl FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
+                name: "SHULKER_PROXY_REDIS_HOST".to_string(),
+                value: Some(redis_ref.host),
+                ..EnvVar::default()
+            },
+            EnvVar {
+                name: "SHULKER_PROXY_REDIS_PORT".to_string(),
+                value: Some(redis_ref.port.to_string()),
+                ..EnvVar::default()
+            },
+            EnvVar {
                 name: "TYPE".to_string(),
                 value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
                 ..EnvVar::default()
@@ -444,13 +474,43 @@ impl FleetBuilder {
             },
         ];
 
+        if let Some(redis_ref_credentials_secret_name) = redis_ref.credentials_secret_name.as_ref()
+        {
+            env.append(&mut vec![
+                EnvVar {
+                    name: "SHULKER_PROXY_REDIS_USERNAME".to_string(),
+                    value_from: Some(EnvVarSource {
+                        secret_key_ref: Some(SecretKeySelector {
+                            name: Some(redis_ref_credentials_secret_name.clone()),
+                            key: "username".to_string(),
+                            ..SecretKeySelector::default()
+                        }),
+                        ..EnvVarSource::default()
+                    }),
+                    ..EnvVar::default()
+                },
+                EnvVar {
+                    name: "SHULKER_PROXY_REDIS_PASSWORD".to_string(),
+                    value_from: Some(EnvVarSource {
+                        secret_key_ref: Some(SecretKeySelector {
+                            name: Some(redis_ref_credentials_secret_name.clone()),
+                            key: "password".to_string(),
+                            ..SecretKeySelector::default()
+                        }),
+                        ..EnvVarSource::default()
+                    }),
+                    ..EnvVar::default()
+                },
+            ])
+        }
+
         if let Some(pod_overrides) = &spec.pod_overrides {
             if let Some(env_overrides) = &pod_overrides.env {
                 env.extend(env_overrides.clone());
             }
         }
 
-        env
+        Ok(env)
     }
 
     fn get_type_from_version_channel(channel: &ProxyFleetTemplateVersion) -> String {
@@ -476,6 +536,7 @@ mod tests {
 
     use crate::reconcilers::{
         builder::ResourceBuilder,
+        minecraft_cluster::fixtures::TEST_CLUSTER,
         proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
     };
 
@@ -494,9 +555,15 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
-        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let fleet = builder
+            .build(&TEST_PROXY_FLEET, &name, None, Some(context))
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(fleet);
@@ -508,9 +575,15 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
-        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let fleet = builder
+            .build(&TEST_PROXY_FLEET, &name, None, Some(context))
+            .await
+            .unwrap();
 
         // T
         let additional_labels = TEST_PROXY_FLEET
@@ -546,9 +619,15 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
-        let fleet = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let fleet = builder
+            .build(&TEST_PROXY_FLEET, &name, None, Some(context))
+            .await
+            .unwrap();
 
         // T
         let additional_annotations = TEST_PROXY_FLEET
@@ -636,7 +715,7 @@ mod tests {
         let spec = TEST_PROXY_FLEET.spec.clone();
 
         // W
-        let env = builder.get_env(&spec.template.spec);
+        let env = builder.get_env(&TEST_CLUSTER, &spec.template.spec).unwrap();
 
         // T
         spec.template

@@ -17,9 +17,10 @@ pub struct MinecraftServerRoleBindingBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for MinecraftServerRoleBindingBuilder {
+impl<'a> ResourceBuilder<'a> for MinecraftServerRoleBindingBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = RoleBinding;
+    type Context = ();
 
     fn name(cluster: &Self::OwnerType) -> String {
         format!("shulker:{}:server", cluster.name_any())
@@ -38,6 +39,7 @@ impl ResourceBuilder for MinecraftServerRoleBindingBuilder {
         cluster: &Self::OwnerType,
         name: &str,
         _existing_role_binding: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let role_binding = RoleBinding {
             metadata: ObjectMeta {
@@ -141,7 +143,10 @@ mod tests {
         let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role_binding = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role_binding);
@@ -155,7 +160,10 @@ mod tests {
         let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role_binding = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert_eq!(
@@ -176,7 +184,10 @@ mod tests {
         let name = super::MinecraftServerRoleBindingBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role_binding = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role_binding = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert_eq!(

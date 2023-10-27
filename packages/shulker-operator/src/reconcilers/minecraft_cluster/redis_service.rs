@@ -18,9 +18,10 @@ pub struct RedisServiceBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for RedisServiceBuilder {
+impl<'a> ResourceBuilder<'a> for RedisServiceBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Service;
+    type Context = ();
 
     fn name(cluster: &Self::OwnerType) -> String {
         format!("{}-redis-managed", cluster.name_any())
@@ -41,6 +42,7 @@ impl ResourceBuilder for RedisServiceBuilder {
         cluster: &Self::OwnerType,
         name: &str,
         _existing_service: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let service = Service {
             metadata: ObjectMeta {
@@ -159,7 +161,10 @@ mod tests {
         let name = super::RedisServiceBuilder::name(&TEST_CLUSTER);
 
         // W
-        let service = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let service = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(service);

@@ -8,13 +8,14 @@ use kube::{
 use serde::{de::DeserializeOwned, Serialize};
 
 #[async_trait::async_trait]
-pub trait ResourceBuilder {
+pub trait ResourceBuilder<'a> {
     type OwnerType: kube::Resource<DynamicType = ()> + Clone + Serialize + DeserializeOwned + Debug;
     type ResourceType: kube::Resource<DynamicType = ()>
         + Clone
         + Serialize
         + DeserializeOwned
         + Debug;
+    type Context: 'a + Sized + Clone + Debug;
 
     fn name(owner: &Self::OwnerType) -> String;
     fn api(&self, owner: &Self::OwnerType) -> Api<Self::ResourceType>;
@@ -35,7 +36,10 @@ pub trait ResourceBuilder {
         owner: &Self::OwnerType,
         name: &str,
         existing_resource: Option<&Self::ResourceType>,
-    ) -> Result<Self::ResourceType, anyhow::Error>;
+        context: Option<Self::Context>,
+    ) -> Result<Self::ResourceType, anyhow::Error>
+    where
+        'a: 'async_trait;
 }
 
 async fn get_existing<
@@ -66,12 +70,14 @@ fn set_controller_reference<
 }
 
 pub async fn reconcile_builder<
+    'a,
     O: kube::Resource<DynamicType = ()> + Clone + Serialize + DeserializeOwned + Debug,
     R: kube::Resource<DynamicType = ()> + Clone + Serialize + DeserializeOwned + Debug,
-    RB: ResourceBuilder<OwnerType = O, ResourceType = R>,
+    RB: ResourceBuilder<'a, OwnerType = O, ResourceType = R>,
 >(
     builder: &RB,
     owner: &O,
+    context: Option<RB::Context>,
 ) -> super::Result<Option<R>> {
     let api = builder.api(owner);
     let name = RB::name(owner);
@@ -139,7 +145,7 @@ pub async fn reconcile_builder<
     }
 
     let mut new_resource = builder
-        .build(owner, &name, existing_resource.as_ref())
+        .build(owner, &name, existing_resource.as_ref(), context)
         .await
         .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 

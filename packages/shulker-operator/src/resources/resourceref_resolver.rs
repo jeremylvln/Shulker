@@ -90,7 +90,6 @@ mod tests {
     impl ApiServerVerifier {
         pub fn run(self, scenario: Scenario) -> tokio::task::JoinHandle<()> {
             tokio::spawn(async move {
-                // moving self => one scenario per test
                 match scenario {
                     Scenario::SecretFound(secret) => self.handle_secret_found(secret).await,
                     Scenario::SecretNotFound => self.handle_secret_not_found().await,

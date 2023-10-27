@@ -16,9 +16,10 @@ pub struct FleetAutoscalerBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for FleetAutoscalerBuilder {
+impl<'a> ResourceBuilder<'a> for FleetAutoscalerBuilder {
     type OwnerType = ProxyFleet;
     type ResourceType = FleetAutoscaler;
+    type Context = ();
 
     fn name(proxy_fleet: &Self::OwnerType) -> String {
         proxy_fleet.name_any()
@@ -43,6 +44,7 @@ impl ResourceBuilder for FleetAutoscalerBuilder {
         proxy_fleet: &Self::OwnerType,
         name: &str,
         _existing_fleet_autoscaler: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let fleet_autoscaler = FleetAutoscaler {
             metadata: ObjectMeta {
@@ -132,7 +134,10 @@ mod tests {
         let name = super::FleetAutoscalerBuilder::name(&TEST_PROXY_FLEET);
 
         // W
-        let fleet_autoscaler = builder.build(&TEST_PROXY_FLEET, &name, None).await.unwrap();
+        let fleet_autoscaler = builder
+            .build(&TEST_PROXY_FLEET, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(fleet_autoscaler);

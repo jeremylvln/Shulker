@@ -48,9 +48,10 @@ pub struct RedisStatefulSetBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for RedisStatefulSetBuilder {
+impl<'a> ResourceBuilder<'a> for RedisStatefulSetBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = StatefulSet;
+    type Context = ();
 
     fn name(cluster: &Self::OwnerType) -> String {
         format!("{}-redis-managed", cluster.name_any())
@@ -71,6 +72,7 @@ impl ResourceBuilder for RedisStatefulSetBuilder {
         cluster: &Self::OwnerType,
         name: &str,
         _existing_stateful_set: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let stateful_set = StatefulSet {
             metadata: ObjectMeta {
@@ -252,7 +254,10 @@ mod tests {
         let name = super::RedisStatefulSetBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role);

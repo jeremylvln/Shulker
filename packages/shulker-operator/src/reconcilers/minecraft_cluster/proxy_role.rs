@@ -14,9 +14,10 @@ pub struct ProxyRoleBuilder {
 }
 
 #[async_trait::async_trait]
-impl ResourceBuilder for ProxyRoleBuilder {
+impl<'a> ResourceBuilder<'a> for ProxyRoleBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Role;
+    type Context = ();
 
     fn name(cluster: &Self::OwnerType) -> String {
         format!("shulker:{}:proxy", cluster.name_any())
@@ -31,6 +32,7 @@ impl ResourceBuilder for ProxyRoleBuilder {
         cluster: &Self::OwnerType,
         name: &str,
         _existing_role: Option<&Self::ResourceType>,
+        _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let role = Role {
             metadata: ObjectMeta {
@@ -97,7 +99,10 @@ mod tests {
         let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         insta::assert_yaml_snapshot!(role);
@@ -111,7 +116,10 @@ mod tests {
         let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
@@ -129,7 +137,10 @@ mod tests {
         let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
@@ -152,7 +163,10 @@ mod tests {
         let name = super::ProxyRoleBuilder::name(&TEST_CLUSTER);
 
         // W
-        let role = builder.build(&TEST_CLUSTER, &name, None).await.unwrap();
+        let role = builder
+            .build(&TEST_CLUSTER, &name, None, None)
+            .await
+            .unwrap();
 
         // T
         assert!(role.rules.as_ref().unwrap().iter().any(|rule| {
