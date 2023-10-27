@@ -175,6 +175,12 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
+    override fun countOnlinePlayers(): Int {
+        this.jedisPool.resource.use { jedis ->
+            return jedis.scard("shulker:players:online").toInt()
+        }
+    }
+
     private fun tryLock(ownerProxyName: String, key: String, ttlSeconds: Long): Optional<CacheAdapter.Lock> {
         this.jedisPool.resource.use { jedis ->
             val success = jedis.set(key, ownerProxyName, SetParams().nx().ex(ttlSeconds)) != null

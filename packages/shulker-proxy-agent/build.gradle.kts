@@ -18,6 +18,7 @@ dependencies {
 
     // Sync
     "commonImplementation"("redis.clients:jedis:5.0.2")
+    "commonImplementation"("com.google.guava:guava:32.1.3-jre")
 }
 
 setOf("bungeecordJar", "velocityJar").forEach { taskName ->

@@ -28,9 +28,10 @@ class ShulkerProxyAgentVelocity @Inject constructor(
         this.agent.onProxyInitialization()
 
         val commandManager = this.proxy.commandManager
-        commandManager.register(commandManager.metaBuilder("glist")
-            .plugin(this)
-            .build(), GlobalListCommand.create(this.agent, this.proxy))
+        commandManager.register(
+            commandManager.metaBuilder("glist").plugin(this).build(),
+            GlobalListCommand.create(this.agent, this.proxy)
+        )
     }
 
     @Subscribe

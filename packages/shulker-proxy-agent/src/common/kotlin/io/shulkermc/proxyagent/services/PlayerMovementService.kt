@@ -1,9 +1,11 @@
 package io.shulkermc.proxyagent.services
 
+import com.google.common.base.Suppliers
 import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHookResult
+import io.shulkermc.proxyagent.platform.ProxyPingHookResult
 import io.shulkermc.proxyagent.platform.ServerPreConnectHookResult
 import io.shulkermc.proxyagent.utils.createDisconnectMessage
 import net.kyori.adventure.text.format.NamedTextColor
@@ -25,9 +27,11 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         )
     }
 
+    private val onlinePlayerCountSupplier = Suppliers.memoizeWithExpiration({ this.agent.cache.countOnlinePlayers() }, 10, java.util.concurrent.TimeUnit.SECONDS)
     private var acceptingPlayers = true
 
     init {
+        this.agent.proxyInterface.addProxyPingHook(this::onProxyPing)
         this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin)
         this.agent.proxyInterface.addPlayerLoginHook(this::onPlayerLogin)
         this.agent.proxyInterface.addPlayerDisconnectHook(this::onPlayerDisconnect)
@@ -42,6 +46,10 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             this.agent.logger.info("Proxy is now accepting players")
         else
             this.agent.logger.info("Proxy is no longer accepting players")
+    }
+
+    private fun onProxyPing(): ProxyPingHookResult {
+        return ProxyPingHookResult(this.onlinePlayerCountSupplier.get())
     }
 
     private fun onPlayerPreLogin(): PlayerPreLoginHookResult {

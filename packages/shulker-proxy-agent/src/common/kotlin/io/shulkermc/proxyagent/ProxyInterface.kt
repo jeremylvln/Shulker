@@ -3,6 +3,7 @@ package io.shulkermc.proxyagent
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ProxyPingHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import java.net.InetSocketAddress
@@ -13,6 +14,7 @@ interface ProxyInterface {
     fun unregisterServer(name: String): Boolean
     fun hasServer(name: String): Boolean
 
+    fun addProxyPingHook(hook: ProxyPingHook)
     fun addPlayerPreLoginHook(hook: PlayerPreLoginHook)
     fun addPlayerLoginHook(hook: PlayerLoginHook)
     fun addPlayerDisconnectHook(hook: PlayerDisconnectHook)

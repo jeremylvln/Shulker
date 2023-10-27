@@ -24,6 +24,8 @@ interface CacheAdapter {
     fun getPlayerIdFromName(playerName: String): Optional<UUID>
     fun getPlayerNamesFromIds(playerIds: List<UUID>): Map<UUID, String>
 
+    fun countOnlinePlayers(): Int
+
     data class RegisteredProxy(val proxyName: String, val lastSeenMillis: Long)
 
     interface Lock {

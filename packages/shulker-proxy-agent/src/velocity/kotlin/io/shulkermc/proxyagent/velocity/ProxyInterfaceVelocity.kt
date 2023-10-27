@@ -6,6 +6,7 @@ import com.velocitypowered.api.event.connection.LoginEvent
 import com.velocitypowered.api.event.connection.PreLoginEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
+import com.velocitypowered.api.event.proxy.ProxyPingEvent
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
@@ -14,6 +15,7 @@ import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ProxyPingHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
@@ -36,6 +38,13 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
 
     override fun hasServer(name: String): Boolean {
         return this.proxy.getServer(name).isPresent
+    }
+
+    override fun addProxyPingHook(hook: ProxyPingHook) {
+        this.proxy.eventManager.register(this.plugin, ProxyPingEvent::class.java, PostOrder.LAST) { event ->
+            val result = hook()
+            event.ping = event.ping.asBuilder().onlinePlayers(result.playerCount).build()
+        }
     }
 
     override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {

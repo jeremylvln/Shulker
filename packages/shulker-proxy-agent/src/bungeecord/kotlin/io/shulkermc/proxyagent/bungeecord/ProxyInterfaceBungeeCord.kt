@@ -5,16 +5,17 @@ import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ProxyPingHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
-import net.md_5.bungee.api.event.LoginEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
+import net.md_5.bungee.api.event.ProxyPingEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
 import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
@@ -40,6 +41,19 @@ class ProxyInterfaceBungeeCord(
 
     override fun hasServer(name: String): Boolean {
         return this.proxy.servers.containsKey(name)
+    }
+
+    override fun addProxyPingHook(hook: ProxyPingHook) {
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.LOWEST)
+                private fun onPreLogin(event: ProxyPingEvent) {
+                    val result = hook()
+                    event.response.players.online = result.playerCount
+                }
+            }
+        )
     }
 
     override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
