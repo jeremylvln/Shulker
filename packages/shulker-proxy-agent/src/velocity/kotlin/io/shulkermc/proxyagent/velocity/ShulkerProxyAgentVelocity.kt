@@ -8,7 +8,9 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.VelocityBuildConfig
+import io.shulkermc.proxyagent.velocity.commands.GlobalFindCommand
 import io.shulkermc.proxyagent.velocity.commands.GlobalListCommand
+import io.shulkermc.proxyagent.velocity.commands.GlobalTeleportCommand
 import java.util.logging.Logger
 
 @Plugin(
@@ -31,6 +33,14 @@ class ShulkerProxyAgentVelocity @Inject constructor(
         commandManager.register(
             commandManager.metaBuilder("glist").plugin(this).build(),
             GlobalListCommand.create(this.agent, this.proxy)
+        )
+        commandManager.register(
+            commandManager.metaBuilder("gtp").plugin(this).build(),
+            GlobalTeleportCommand.create(this.agent, this.proxy)
+        )
+        commandManager.register(
+            commandManager.metaBuilder("gfind").plugin(this).build(),
+            GlobalFindCommand.create(this.agent)
         )
     }
 

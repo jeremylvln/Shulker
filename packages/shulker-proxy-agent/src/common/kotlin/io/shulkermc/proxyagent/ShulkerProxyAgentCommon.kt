@@ -8,6 +8,8 @@ import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.LocalFileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.ImplKubernetesGatewayAdapter
+import io.shulkermc.proxyagent.adapters.pubsub.PubSubAdapter
+import io.shulkermc.proxyagent.adapters.pubsub.RedisPubSubAdapter
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI
 import io.shulkermc.proxyagent.api.ShulkerProxyAPIImpl
 import io.shulkermc.proxyagent.services.PlayerMovementService
@@ -28,6 +30,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     lateinit var kubernetesGateway: KubernetesGatewayAdapter
     lateinit var fileSystem: FileSystemAdapter
     lateinit var cache: CacheAdapter
+    lateinit var pubSub: PubSubAdapter
 
     // Services
     lateinit var serverDirectoryService: ServerDirectoryService
@@ -51,6 +54,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.fileSystem = LocalFileSystemAdapter()
             this.kubernetesGateway = ImplKubernetesGatewayAdapter(Configuration.PROXY_NAMESPACE, Configuration.PROXY_NAME)
             this.cache = RedisCacheAdapter(this.jedisPool)
+            this.pubSub = RedisPubSubAdapter(this.jedisPool)
 
             this.serverDirectoryService = ServerDirectoryService(this)
             this.playerMovementService = PlayerMovementService(this)
