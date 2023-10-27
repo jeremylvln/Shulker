@@ -24,11 +24,34 @@ spec:
             spec:
               properties:
                 redis:
+                  description: Redis configuration to use as a synchronization backend for the different Shulker components
                   nullable: true
                   properties:
+                    provided:
+                      description: Configuration needed to connect to a provided Redis instance. If type is not `Provide`d, this field is ignored
+                      nullable: true
+                      properties:
+                        credentialsSecretName:
+                          description: Kubernetes Secret containing the credentials to use. It must contains a `username` and `password` keys
+                          nullable: true
+                          type: string
+                        host:
+                          description: Host of the Redis instance
+                          type: string
+                        port:
+                          default: 6379
+                          description: Port of the Redis instance
+                          format: uint16
+                          minimum: 0.0
+                          type: integer
+                      required:
+                        - host
+                      type: object
                     type:
+                      description: Type of Redis deployment to use. Shulker can provided a single-node managed Redis to use for development purposes. Production workload should use a dedicated Redis cluster. Defaults to ManagedSingleNode
                       enum:
                         - ManagedSingleNode
+                        - Provided
                       type: string
                   required:
                     - type

@@ -123,6 +123,7 @@ mod tests {
         let mut cluster = TEST_CLUSTER.clone();
         cluster.spec.redis = Some(MinecraftClusterRedisSpec {
             type_: MinecraftClusterRedisDeploymentType::ManagedSingleNode,
+            ..MinecraftClusterRedisSpec::default()
         });
 
         // W
@@ -140,6 +141,7 @@ mod tests {
         let mut cluster = TEST_CLUSTER.clone();
         cluster.spec.redis = Some(MinecraftClusterRedisSpec {
             type_: MinecraftClusterRedisDeploymentType::Provided,
+            ..MinecraftClusterRedisSpec::default()
         });
 
         // W

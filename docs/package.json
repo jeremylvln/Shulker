@@ -1,5 +1,5 @@
 {
-  "name": "@shulker/docs",
+  "name": "@shulkermc/docs",
   "private": true,
   "engines": {
     "node": "^20"
