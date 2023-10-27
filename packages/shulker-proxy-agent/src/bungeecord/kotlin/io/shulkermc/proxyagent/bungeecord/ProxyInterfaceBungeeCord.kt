@@ -2,20 +2,25 @@ package io.shulkermc.proxyagent.bungeecord
 
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.Player
+import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PreLoginEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
+import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.scheduler.ScheduledTask
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
 import java.net.InetSocketAddress
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class ProxyInterfaceBungeeCord(
@@ -34,6 +39,34 @@ class ProxyInterfaceBungeeCord(
         return this.proxy.servers.containsKey(name)
     }
 
+    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.HIGHEST)
+                private fun onPreLogin(event: PreLoginEvent) {
+                    if (event.isCancelled) return
+                    val result = hook()
+
+                    if (!result.allowed)
+                        event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                }
+            }
+        )
+    }
+
+    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook) {
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.LOWEST)
+                private fun onPlayerDisconnect(event: PlayerDisconnectEvent) {
+                    hook(wrapPlayer(event.player))
+                }
+            }
+        )
+    }
+
     override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
@@ -50,17 +83,13 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
-    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
+    override fun addServerPostConnectHook(hook: ServerPostConnectHook) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
-                @EventHandler(priority = EventPriority.HIGHEST)
-                private fun onPreLogin(event: PreLoginEvent) {
-                    if (event.isCancelled) return
-                    val result = hook()
-
-                    if (!result.allowed)
-                        event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                @EventHandler(priority = EventPriority.LOWEST)
+                private fun onServerConnected(event: ServerConnectedEvent) {
+                    hook(wrapPlayer(event.player), event.server.info.name)
                 }
             }
         )
@@ -80,6 +109,9 @@ class ProxyInterfaceBungeeCord(
 
     private fun wrapPlayer(bungeePlayer: ProxiedPlayer): Player {
         return object : Player {
+            override val uniqueId: UUID
+                get() = bungeePlayer.uniqueId
+
             override fun disconnect(component: Component) {
                 bungeePlayer.disconnect(*BungeeComponentSerializer.get().serialize(component))
             }

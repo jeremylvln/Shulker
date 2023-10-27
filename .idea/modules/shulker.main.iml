@@ -37,9 +37,24 @@
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../build/classes/java/main" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../build/generated/source/kapt/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/source/kapt/main" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../build/generated/source/kaptKotlin/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/source/kaptKotlin/main" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../src/main" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Gradle: kaptGeneratedClasses">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../build/tmp/kapt3/classes/main" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.9.10" level="project" />

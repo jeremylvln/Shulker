@@ -38,25 +38,10 @@
   <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-api/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-api/generated/source/kapt/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-api/generated/source/kapt/test" isTestSource="true" generated="true" />
-    </content>
-    <content url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-api/generated/source/kaptKotlin/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-api/generated/source/kaptKotlin/test" isTestSource="true" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../../packages/shulker-proxy-api/src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shulker.packages.shulker-proxy-api.main" />
-    <orderEntry type="module-library">
-      <library name="Gradle: kaptGeneratedClasses">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-api/tmp/kapt3/classes/test" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test:1.9.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10" level="project" />

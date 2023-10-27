@@ -39,12 +39,6 @@
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/classes/java/main" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kapt/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kapt/main" isTestSource="false" generated="true" />
-    </content>
-    <content url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kaptKotlin/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/generated/source/kaptKotlin/main" isTestSource="false" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../../../../packages/google-agones-sdk/bindings/java/src/generated">
       <sourceFolder url="file://$MODULE_DIR$/../../../../../../packages/google-agones-sdk/bindings/java/src/generated/grpc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../../../packages/google-agones-sdk/bindings/java/src/generated/java" isTestSource="false" />
@@ -54,15 +48,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="Gradle: kaptGeneratedClasses">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../../../../dist/java/packages/google-agones-sdk-bindings-java/tmp/kapt3/classes/main" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Gradle: io.grpc:grpc-services:1.58.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.58.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.24.4" level="project" />

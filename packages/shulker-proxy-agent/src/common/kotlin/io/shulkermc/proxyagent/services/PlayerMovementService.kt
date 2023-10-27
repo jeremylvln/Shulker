@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent.services
 
+import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHookResult
@@ -26,10 +27,10 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     private var acceptingPlayers = true
 
     init {
-        this.agent.proxyInterface.addPlayerPreLoginHook { this.onPlayerPreLogin() }
-        this.agent.proxyInterface.addServerPreConnectHook { player, originalServerName ->
-            this.onServerPreConnect(player, originalServerName)
-        }
+        this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin)
+        this.agent.proxyInterface.addPlayerDisconnectHook(this::onPlayerDisconnect)
+        this.agent.proxyInterface.addServerPreConnectHook(this::onServerPreConnect)
+        this.agent.proxyInterface.addServerPostConnectHook(this::onServerPostConnect)
     }
 
     fun setAcceptingPlayers(acceptingPlayers: Boolean) {
@@ -48,10 +49,18 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             PlayerPreLoginHookResult.allow()
     }
 
+    private fun onPlayerDisconnect(player: Player) {
+        this.agent.cache.unsetPlayerPosition(player.uniqueId)
+    }
+
     private fun onServerPreConnect(player: Player, originalServerName: String): ServerPreConnectHookResult {
         if (originalServerName == LIMBO_TAG)
             return this.tryConnectToLimboOrDisconnect(player)
         return ServerPreConnectHookResult(Optional.empty())
+    }
+
+    private fun onServerPostConnect(player: Player, serverName: String) {
+        this.agent.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
     }
 
     private fun tryConnectToLimboOrDisconnect(player: Player): ServerPreConnectHookResult {

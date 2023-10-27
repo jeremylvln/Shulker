@@ -1,17 +1,22 @@
 package io.shulkermc.proxyagent.velocity
 
 import com.velocitypowered.api.event.PostOrder
+import com.velocitypowered.api.event.connection.DisconnectEvent
 import com.velocitypowered.api.event.connection.PreLoginEvent
+import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
 import io.shulkermc.proxyagent.ProxyInterface
+import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
+import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
 import java.net.InetSocketAddress
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
 
@@ -31,6 +36,22 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
         return this.proxy.getServer(name).isPresent
     }
 
+    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
+        this.proxy.eventManager.register(this.plugin, PreLoginEvent::class.java, PostOrder.FIRST) { event ->
+            if (!event.result.isAllowed) return@register
+            val result = hook()
+
+            if (!result.allowed)
+                event.result = PreLoginEvent.PreLoginComponentResult.denied(result.rejectComponent)
+        }
+    }
+
+    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook) {
+        this.proxy.eventManager.register(this.plugin, DisconnectEvent::class.java, PostOrder.LAST) { event ->
+            hook(this.wrapPlayer(event.player))
+        }
+    }
+
     override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
         this.proxy.eventManager.register(this.plugin, ServerPreConnectEvent::class.java, PostOrder.LAST) { event ->
             if (!event.result.isAllowed) return@register
@@ -41,13 +62,10 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
         }
     }
 
-    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
-        this.proxy.eventManager.register(this.plugin, PreLoginEvent::class.java, PostOrder.FIRST) { event ->
-            if (!event.result.isAllowed) return@register
-            val result = hook()
-
-            if (!result.allowed)
-                event.result = PreLoginEvent.PreLoginComponentResult.denied(result.rejectComponent)
+    @Suppress("UnstableApiUsage")
+    override fun addServerPostConnectHook(hook: ServerPostConnectHook) {
+        this.proxy.eventManager.register(this.plugin, ServerPostConnectEvent::class.java, PostOrder.LAST) { event ->
+            hook(this.wrapPlayer(event.player), event.player.currentServer.get().serverInfo.name)
         }
     }
 
@@ -76,6 +94,9 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
 
     private fun wrapPlayer(velocityPlayer: Player): io.shulkermc.proxyagent.platform.Player {
         return object : io.shulkermc.proxyagent.platform.Player {
+            override val uniqueId: UUID
+                get() = velocityPlayer.uniqueId
+
             override fun disconnect(component: Component) {
                 velocityPlayer.disconnect(component)
             }

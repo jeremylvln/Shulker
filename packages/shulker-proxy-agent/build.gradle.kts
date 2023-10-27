@@ -15,6 +15,9 @@ dependencies {
     // Agones
     "commonImplementation"(project(":packages:google-agones-sdk-bindings-java"))
     "commonRuntimeOnly"("io.grpc:grpc-netty-shaded:1.58.0")
+
+    // Sync
+    "commonImplementation"("redis.clients:jedis:5.0.2")
 }
 
 setOf("bungeecordJar", "velocityJar").forEach { taskName ->

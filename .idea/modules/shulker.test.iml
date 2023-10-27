@@ -38,9 +38,24 @@
   <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../../build/generated/source/kapt/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/source/kapt/test" isTestSource="true" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../build/generated/source/kaptKotlin/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/source/kaptKotlin/test" isTestSource="true" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Gradle: kaptGeneratedClasses">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../build/tmp/kapt3/classes/test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module" module-name="shulker.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10" level="project" />

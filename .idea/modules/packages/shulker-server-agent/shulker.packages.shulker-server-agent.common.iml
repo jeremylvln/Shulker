@@ -44,27 +44,12 @@
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-server-agent/classes/kotlin/common" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-server-agent/generated/source/kapt/common">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-server-agent/generated/source/kapt/common" isTestSource="false" generated="true" />
-    </content>
-    <content url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-server-agent/generated/source/kaptKotlin/common">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-server-agent/generated/source/kaptKotlin/common" isTestSource="false" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../../packages/shulker-server-agent/src/common">
       <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-server-agent/src/common/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../packages/shulker-server-agent/src/common/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="Gradle: kaptGeneratedClasses">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-server-agent/tmp/kapt3/classes/common" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module" module-name="shulker.packages.shulker-server-api.main" />
     <orderEntry type="module" module-name="shulker.packages.google-agones-sdk-bindings-java.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />

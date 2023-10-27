@@ -9,7 +9,7 @@ import io.fabric8.kubernetes.client.okhttp.OkHttpClientFactory
 import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 import java.util.concurrent.CompletionStage
 
-class KubernetesGatewayAdapterImpl(proxyNamespace: String, proxyName: String) : KubernetesGatewayAdapter {
+class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : KubernetesGatewayAdapter {
     private val kubernetesClient: KubernetesClient = KubernetesClientBuilder()
         .withHttpClientFactory(OkHttpClientFactory())
         .build()
