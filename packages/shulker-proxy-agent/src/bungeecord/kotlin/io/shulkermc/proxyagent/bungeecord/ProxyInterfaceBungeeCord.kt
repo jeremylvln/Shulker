@@ -124,6 +124,12 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
+    override fun teleportPlayerOnServer(playerName: String, serverName: String) {
+        val server = this.proxy.getServerInfo(serverName)
+        if (server != null)
+            this.proxy.getPlayer(playerName)?.connect(server)
+    }
+
     override fun getPlayerCount(): Int {
         return this.proxy.players.size
     }

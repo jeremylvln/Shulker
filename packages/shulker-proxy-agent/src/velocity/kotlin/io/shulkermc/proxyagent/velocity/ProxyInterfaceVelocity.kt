@@ -86,6 +86,14 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
         }
     }
 
+    override fun teleportPlayerOnServer(playerName: String, serverName: String) {
+        this.proxy.getPlayer(playerName).ifPresent { player ->
+            this.proxy.getServer(serverName).ifPresent { server ->
+                player.createConnectionRequest(server).fireAndForget()
+            }
+        }
+    }
+
     override fun getPlayerCount(): Int {
         return this.proxy.playerCount
     }

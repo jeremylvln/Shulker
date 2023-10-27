@@ -21,6 +21,7 @@ interface ProxyInterface {
     fun addServerPreConnectHook(hook: ServerPreConnectHook)
     fun addServerPostConnectHook(hook: ServerPostConnectHook)
 
+    fun teleportPlayerOnServer(playerName: String, serverName: String)
     fun getPlayerCount(): Int
 
     fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask

@@ -14,21 +14,22 @@ object GlobalFindCommand {
     fun create(agent: ShulkerProxyAgentCommon): BrigadierCommand {
         val rootNode = LiteralArgumentBuilder.literal<CommandSource>("gfind")
             .requires { it.hasPermission("shulker.command.gfind") }
-            .then(RequiredArgumentBuilder.argument<CommandSource, String>("player", StringArgumentType.word())
-                .executes { context ->
-                    val source = context.source
-                    val player = context.getArgument("player", String::class.java)
-                    val playerPosition = agent.cache.getPlayerIdFromName(player)
-                        .flatMap { playerId -> agent.cache.getPlayerPosition(playerId) }
+            .then(
+                RequiredArgumentBuilder.argument<CommandSource, String>("player", StringArgumentType.word())
+                    .executes { context ->
+                        val source = context.source
+                        val player = context.getArgument("player", String::class.java)
+                        val playerPosition = agent.cache.getPlayerIdFromName(player)
+                            .flatMap { playerId -> agent.cache.getPlayerPosition(playerId) }
 
-                    if (playerPosition.isEmpty) {
-                        source.sendMessage(Component.text("Player $player not found.", NamedTextColor.RED))
+                        if (playerPosition.isEmpty) {
+                            source.sendMessage(Component.text("Player $player not found.", NamedTextColor.RED))
+                            return@executes Command.SINGLE_SUCCESS
+                        }
+
+                        source.sendMessage(Component.text("Player $player is connected on proxy ${playerPosition.get().proxyName} and located on server ${playerPosition.get().serverName}.", NamedTextColor.GREEN))
                         return@executes Command.SINGLE_SUCCESS
                     }
-
-                    source.sendMessage(Component.text("Player $player is connected on proxy ${playerPosition.get().proxyName} and located on server ${playerPosition.get().serverName}.", NamedTextColor.GREEN))
-                    return@executes Command.SINGLE_SUCCESS
-                }
             )
             .build()
 
