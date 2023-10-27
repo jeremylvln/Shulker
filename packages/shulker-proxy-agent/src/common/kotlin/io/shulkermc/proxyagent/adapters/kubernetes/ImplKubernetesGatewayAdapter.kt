@@ -28,7 +28,7 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     }
 
     override fun listMinecraftServers(): AgonesV1GameServer.List {
-        return this.gameServerApi.inNamespace(this.proxyReference.namespace).list()
+        return this.gameServerApi.inNamespace(this.proxyReference.namespace).withLabel("app.kubernetes.io/component", "minecraft-server").list()
     }
 
     override fun watchProxyEvents(callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {

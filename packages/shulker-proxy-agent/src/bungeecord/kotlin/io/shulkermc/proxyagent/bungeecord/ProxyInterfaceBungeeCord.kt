@@ -3,6 +3,7 @@ package io.shulkermc.proxyagent.bungeecord
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
+import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
@@ -10,7 +11,9 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import net.md_5.bungee.api.event.LoginEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
+import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
 import net.md_5.bungee.api.event.ServerConnectedEvent
@@ -50,6 +53,18 @@ class ProxyInterfaceBungeeCord(
 
                     if (!result.allowed)
                         event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                }
+            }
+        )
+    }
+
+    override fun addPlayerLoginHook(hook: PlayerLoginHook) {
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.HIGHEST)
+                private fun onLogin(event: PostLoginEvent) {
+                    hook(wrapPlayer(event.player))
                 }
             }
         )
@@ -111,6 +126,9 @@ class ProxyInterfaceBungeeCord(
         return object : Player {
             override val uniqueId: UUID
                 get() = bungeePlayer.uniqueId
+
+            override val name: String
+                get() = bungeePlayer.name
 
             override fun disconnect(component: Component) {
                 bungeePlayer.disconnect(*BungeeComponentSerializer.get().serialize(component))

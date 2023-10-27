@@ -1,6 +1,7 @@
 package io.shulkermc.proxyagent
 
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
+import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
@@ -13,6 +14,7 @@ interface ProxyInterface {
     fun hasServer(name: String): Boolean
 
     fun addPlayerPreLoginHook(hook: PlayerPreLoginHook)
+    fun addPlayerLoginHook(hook: PlayerLoginHook)
     fun addPlayerDisconnectHook(hook: PlayerDisconnectHook)
     fun addServerPreConnectHook(hook: ServerPreConnectHook)
     fun addServerPostConnectHook(hook: ServerPostConnectHook)

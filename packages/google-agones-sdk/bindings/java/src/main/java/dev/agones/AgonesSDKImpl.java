@@ -19,11 +19,7 @@ import java.util.concurrent.Executors;
 
 public final class AgonesSDKImpl implements AgonesSDK {
     private static final Empty EMPTY_PAYLOAD = Empty.getDefaultInstance();
-
-    private final ManagedChannel channel;
-    private final ExecutorService executor = Executors.newCachedThreadPool();
-    private final SDKGrpc.SDKFutureStub asyncStub;
-    private final StreamObserver<Empty> healthcheckObserver = new StreamObserver<Empty>() {
+    private static final StreamObserver<Empty> EMPTY_STREAM_OBSERVER = new StreamObserver<>() {
         @Override
         public void onNext(Empty value) {}
 
@@ -34,12 +30,22 @@ public final class AgonesSDKImpl implements AgonesSDK {
         public void onCompleted() {}
     };
 
+    private final ManagedChannel channel;
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final SDKGrpc.SDKStub stub;
+    private final SDKGrpc.SDKFutureStub asyncStub;
+
+    private final StreamObserver<Empty> healthcheckObserver;
+
     private final Alpha alphaSdk;
 
     private AgonesSDKImpl(ManagedChannel channel) {
         this.channel = channel;
+        this.stub = SDKGrpc.newStub(channel);
         this.asyncStub = SDKGrpc.newFutureStub(channel);
         this.alphaSdk = new AlphaImpl();
+
+        this.healthcheckObserver = this.stub.health(EMPTY_STREAM_OBSERVER);
     }
 
     @Override

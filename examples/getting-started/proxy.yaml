@@ -7,7 +7,26 @@ spec:
     name: getting-started
   replicas: 1
   service:
-    type: LoadBalancer
+    type: NodePort
+    externalTrafficPolicy: Local
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config: {}
+
+---
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyFleet
+metadata:
+  name: public2
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  service:
+    type: NodePort
     externalTrafficPolicy: Local
   template:
     spec:

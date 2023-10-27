@@ -11,6 +11,7 @@ import java.util.Optional
 
 class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     companion object {
+        private const val LOBBY_TAG = "lobby"
         private const val LIMBO_TAG = "limbo"
 
         private val MSG_NOT_ACCEPTING_PLAYERS = createDisconnectMessage(
@@ -28,6 +29,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
 
     init {
         this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin)
+        this.agent.proxyInterface.addPlayerLoginHook(this::onPlayerLogin)
         this.agent.proxyInterface.addPlayerDisconnectHook(this::onPlayerDisconnect)
         this.agent.proxyInterface.addServerPreConnectHook(this::onServerPreConnect)
         this.agent.proxyInterface.addServerPostConnectHook(this::onServerPostConnect)
@@ -43,10 +45,13 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onPlayerPreLogin(): PlayerPreLoginHookResult {
-        return if (!this.acceptingPlayers)
-            PlayerPreLoginHookResult.disallow(MSG_NOT_ACCEPTING_PLAYERS)
-        else
-            PlayerPreLoginHookResult.allow()
+        if (!this.acceptingPlayers)
+            return PlayerPreLoginHookResult.disallow(MSG_NOT_ACCEPTING_PLAYERS)
+        return PlayerPreLoginHookResult.allow()
+    }
+
+    private fun onPlayerLogin(player: Player) {
+        this.agent.cache.updateCachedPlayerName(player.uniqueId, player.name)
     }
 
     private fun onPlayerDisconnect(player: Player) {
@@ -54,21 +59,24 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onServerPreConnect(player: Player, originalServerName: String): ServerPreConnectHookResult {
-        if (originalServerName == LIMBO_TAG)
-            return this.tryConnectToLimboOrDisconnect(player)
+        if (originalServerName == LOBBY_TAG) {
+            val firstLobbyServer = this.agent.serverDirectoryService.getServersByTag(LOBBY_TAG).firstOrNull()
+            if (firstLobbyServer != null)
+                return ServerPreConnectHookResult(Optional.of(firstLobbyServer))
+        }
+
+        if (originalServerName == LIMBO_TAG) {
+            val firstLimboServer = this.agent.serverDirectoryService.getServersByTag(LIMBO_TAG).firstOrNull()
+            if (firstLimboServer != null)
+                return ServerPreConnectHookResult(Optional.of(firstLimboServer))
+
+            player.disconnect(MSG_NO_LIMBO_FOUND)
+        }
+
         return ServerPreConnectHookResult(Optional.empty())
     }
 
     private fun onServerPostConnect(player: Player, serverName: String) {
         this.agent.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
-    }
-
-    private fun tryConnectToLimboOrDisconnect(player: Player): ServerPreConnectHookResult {
-        val firstLimboServer = this.agent.serverDirectoryService.getServersByTag(LIMBO_TAG).firstOrNull()
-        if (firstLimboServer != null)
-            return ServerPreConnectHookResult(Optional.of(firstLimboServer))
-
-        player.disconnect(MSG_NO_LIMBO_FOUND)
-        return ServerPreConnectHookResult(Optional.empty())
     }
 }

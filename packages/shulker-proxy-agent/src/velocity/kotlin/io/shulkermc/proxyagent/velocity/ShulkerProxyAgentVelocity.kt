@@ -8,6 +8,7 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.VelocityBuildConfig
+import io.shulkermc.proxyagent.velocity.commands.GlobalListCommand
 import java.util.logging.Logger
 
 @Plugin(
@@ -17,7 +18,7 @@ import java.util.logging.Logger
     authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 )
 class ShulkerProxyAgentVelocity @Inject constructor(
-    proxy: ProxyServer,
+    private val proxy: ProxyServer,
     logger: Logger
 ) {
     private val agent = ShulkerProxyAgentCommon(ProxyInterfaceVelocity(this, proxy), logger)
@@ -25,6 +26,11 @@ class ShulkerProxyAgentVelocity @Inject constructor(
     @Subscribe
     fun onProxyInitialization(@Suppress("UNUSED_PARAMETER") event: ProxyInitializeEvent) {
         this.agent.onProxyInitialization()
+
+        val commandManager = this.proxy.commandManager
+        commandManager.register(commandManager.metaBuilder("glist")
+            .plugin(this)
+            .build(), GlobalListCommand.create(this.agent, this.proxy))
     }
 
     @Subscribe

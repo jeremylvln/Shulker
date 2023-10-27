@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 
 class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable {
     companion object {
-        private const val PROXY_LOST_MILLIS_THRESHOLD = 1L
+        private const val PROXY_LOST_MILLIS_THRESHOLD = 1000L * 60 * 5
     }
 
     fun schedule(): ProxyInterface.ScheduledTask {

@@ -2,45 +2,48 @@ package io.shulkermc.proxyagent.adapters.cache
 
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI.PlayerPosition
 import redis.clients.jedis.JedisPool
+import redis.clients.jedis.Response
 import redis.clients.jedis.params.SetParams
 import java.util.Optional
 import java.util.UUID
 
 class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
-    override fun registerProxy(name: String) {
+    companion object {
+        private const val PLAYER_ID_CACHE_TTL_SECONDS = 60L * 60 * 24 * 14
+    }
+
+    override fun registerProxy(proxyName: String) {
         this.jedisPool.resource.use { jedis ->
             val pipeline = jedis.pipelined()
-            pipeline.sadd("shulker:proxies", name)
-            pipeline.hset("shulker:proxies:last-seen", name, System.currentTimeMillis().toString())
+            pipeline.sadd("shulker:proxies", proxyName)
+            pipeline.hset("shulker:proxies:last-seen", proxyName, System.currentTimeMillis().toString())
             pipeline.sync()
         }
     }
 
-    override fun unregisterProxy(name: String) {
+    override fun unregisterProxy(proxyName: String) {
         this.jedisPool.resource.use { jedis ->
+            val playerIds = jedis.smembers("shulker:proxies:$proxyName:players")
+
             val pipeline = jedis.pipelined()
-            pipeline.srem("shulker:proxies", name)
-            pipeline.hdel("shulker:proxies:last-seen", name)
-            val playerIdsResponse = pipeline.smembers("shulker:proxies:$name:players")
-            pipeline.del("shulker:proxies:$name:players")
+            pipeline.srem("shulker:proxies", proxyName)
+            pipeline.hdel("shulker:proxies:last-seen", proxyName)
+            pipeline.del("shulker:proxies:$proxyName:players")
             pipeline.sync()
 
-            val playerIds = playerIdsResponse.get()
             val playerPipeline = jedis.pipelined()
-
             playerIds.forEach { playerId ->
                 playerPipeline.srem("shulker:players:online", playerId)
                 playerPipeline.hdel("shulker:players:current-proxy", playerId)
                 playerPipeline.hdel("shulker:players:current-server", playerId)
             }
-
             playerPipeline.sync()
         }
     }
 
-    override fun updateProxyLastSeen(name: String) {
+    override fun updateProxyLastSeen(proxyName: String) {
         this.jedisPool.resource.use { jedis ->
-            jedis.hset("shulker:proxies:last-seen", name, System.currentTimeMillis().toString())
+            jedis.hset("shulker:proxies:last-seen", proxyName, System.currentTimeMillis().toString())
         }
     }
 
@@ -56,19 +59,40 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
+    override fun tryLockLostProxiesPurgeTask(ownerProxyName: String, ttlSeconds: Long): Optional<CacheAdapter.Lock> =
+        this.tryLock(ownerProxyName, "shulker:lock:lost-proxies-purge", ttlSeconds)
+
+    override fun unregisterServer(serverName: String) {
+        this.jedisPool.resource.use { jedis ->
+            jedis.del("shulker:servers:$serverName:players")
+        }
+    }
+
+    override fun listPlayersInServer(serverName: String): List<UUID> {
+        this.jedisPool.resource.use { jedis ->
+            val playerIds = jedis.smembers("shulker:servers:$serverName:players")
+            return playerIds.map(UUID::fromString)
+        }
+    }
+
     override fun setPlayerPosition(playerId: UUID, proxyName: String, serverName: String) {
         this.jedisPool.resource.use { jedis ->
             val playerIdString = playerId.toString()
-            val currentProxy = jedis.hget("shulker:players:current-proxy", playerIdString)
+            val oldProxyName = jedis.hget("shulker:players:current-proxy", playerIdString)
+            val oldServerName = jedis.hget("shulker:players:current-server", playerIdString)
 
             val pipeline = jedis.pipelined()
             pipeline.sadd("shulker:players:online", playerIdString)
             pipeline.hset("shulker:players:current-proxy", playerIdString, proxyName)
             pipeline.hset("shulker:players:current-server", playerIdString, serverName)
 
-            if (currentProxy != null)
-                pipeline.srem("shulker:proxies:$currentProxy:players", playerIdString)
+            if (oldProxyName != null)
+                pipeline.srem("shulker:proxies:$oldProxyName:players", playerIdString)
             pipeline.sadd("shulker:proxies:$proxyName:players", playerIdString)
+
+            if (oldServerName != null)
+                pipeline.srem("shulker:servers:$oldServerName:players", playerIdString)
+            pipeline.sadd("shulker:servers:$serverName:players", playerIdString)
 
             pipeline.sync()
         }
@@ -77,14 +101,15 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
     override fun unsetPlayerPosition(playerId: UUID) {
         this.jedisPool.resource.use { jedis ->
             val playerIdString = playerId.toString()
-            val currentProxy = jedis.hget("shulker:players:current-proxy", playerIdString)
+            val currentProxyName = jedis.hget("shulker:players:current-proxy", playerIdString)
+            val currentServerName = jedis.hget("shulker:players:current-server", playerIdString)
 
             val pipeline = jedis.pipelined()
             pipeline.srem("shulker:players:online", playerIdString)
             pipeline.hdel("shulker:players:current-proxy", playerIdString)
             pipeline.hdel("shulker:players:current-server", playerIdString)
-            pipeline.srem("shulker:proxies:$currentProxy:players", playerIdString)
-
+            pipeline.srem("shulker:proxies:$currentProxyName:players", playerIdString)
+            pipeline.srem("shulker:servers:$currentServerName:players", playerIdString)
             pipeline.sync()
         }
     }
@@ -116,8 +141,39 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    override fun tryLockLostProxiesPurgeTask(ownerProxyName: String, ttlSeconds: Long): Optional<CacheAdapter.Lock> =
-        this.tryLock(ownerProxyName, "shulker:lock:lost-proxies-purge", ttlSeconds)
+    override fun updateCachedPlayerName(playerId: UUID, playerName: String) {
+        this.jedisPool.resource.use { jedis ->
+            val playerIdString = playerId.toString()
+            val params = SetParams().ex(PLAYER_ID_CACHE_TTL_SECONDS)
+
+            val pipeline = jedis.pipelined()
+            pipeline.set("shulker:uuid-cache:id-to-name:$playerIdString", playerName, params)
+            pipeline.set("shulker:uuid-cache:name-to-id:$playerName", playerIdString, params)
+            pipeline.sync()
+        }
+    }
+
+    override fun getPlayerNameFromId(playerId: UUID): Optional<String> {
+        this.jedisPool.resource.use { jedis ->
+            return Optional.ofNullable(jedis.get("shulker:uuid-cache:id-to-name:$playerId"))
+        }
+    }
+
+    override fun getPlayerIdFromName(playerName: String): Optional<UUID> {
+        this.jedisPool.resource.use { jedis ->
+            return Optional.ofNullable(jedis.get("shulker:uuid-cache:name-to-id:$playerName")).map(UUID::fromString)
+        }
+    }
+
+    override fun getPlayerNamesFromIds(playerIds: List<UUID>): Map<UUID, String> {
+        this.jedisPool.resource.use { jedis ->
+            val pipeline = jedis.pipelined()
+            val responses = playerIds.associateWith { uuid -> pipeline.get("shulker:uuid-cache:id-to-name:$uuid") }
+            pipeline.sync()
+
+            return responses.mapValues { (_, response) -> response.get() }
+        }
+    }
 
     private fun tryLock(ownerProxyName: String, key: String, ttlSeconds: Long): Optional<CacheAdapter.Lock> {
         this.jedisPool.resource.use { jedis ->

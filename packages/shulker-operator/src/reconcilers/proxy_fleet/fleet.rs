@@ -324,7 +324,13 @@ impl FleetBuilder {
 
         let mut pod_labels =
             ProxyFleetReconciler::get_labels(proxy_fleet, "proxy".to_string(), "proxy".to_string());
-        let mut pod_annotations = BTreeMap::<String, String>::new();
+        let mut pod_annotations = BTreeMap::<String, String>::from([
+            (
+                "kubectl.kubernetes.io/default-exec-container".to_string(),
+                "proxy".to_string(),
+            )
+        ]);
+
         if let Some(metadata) = &proxy_fleet.spec.template.metadata {
             if let Some(additional_labels) = metadata.labels.clone() {
                 pod_labels.extend(additional_labels);

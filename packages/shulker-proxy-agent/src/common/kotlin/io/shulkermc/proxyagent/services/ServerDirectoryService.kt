@@ -58,13 +58,14 @@ class ServerDirectoryService(
 
     private fun unregisterServer(name: String) {
         if (this.agent.proxyInterface.unregisterServer(name)) {
-            this.agent.logger.info("Removed server '$name' from directory")
-
             val tags = this.tagsByServer[name]
             if (tags != null) {
                 tags.forEach { tag -> this.serversByTag[tag]!!.remove(name) }
                 this.tagsByServer.remove(name)
             }
+
+            this.agent.cache.unregisterServer(name)
+            this.agent.logger.info("Removed server '$name' from directory")
         }
     }
 }

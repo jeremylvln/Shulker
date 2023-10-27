@@ -262,10 +262,16 @@ impl GameServerBuilder {
                     "minecraft-server".to_string(),
                     "minecraft-server".to_string(),
                 )),
-                annotations: Some(BTreeMap::<String, String>::from([(
-                    "minecraftserver.shulkermc.io/tags".to_string(),
-                    minecraft_server.spec.tags.join(","),
-                )])),
+                annotations: Some(BTreeMap::<String, String>::from([
+                    (
+                        "kubectl.kubernetes.io/default-exec-container".to_string(),
+                        "minecraft-server".to_string(),
+                    ),
+                    (
+                        "minecraftserver.shulkermc.io/tags".to_string(),
+                        minecraft_server.spec.tags.join(","),
+                    ),
+                ])),
                 ..ObjectMeta::default()
             }),
             spec: Some(pod_spec),

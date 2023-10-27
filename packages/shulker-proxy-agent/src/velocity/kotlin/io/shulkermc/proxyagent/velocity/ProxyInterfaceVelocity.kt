@@ -2,6 +2,7 @@ package io.shulkermc.proxyagent.velocity
 
 import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.connection.DisconnectEvent
+import com.velocitypowered.api.event.connection.LoginEvent
 import com.velocitypowered.api.event.connection.PreLoginEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
@@ -11,6 +12,7 @@ import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
+import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
@@ -43,6 +45,12 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
 
             if (!result.allowed)
                 event.result = PreLoginEvent.PreLoginComponentResult.denied(result.rejectComponent)
+        }
+    }
+
+    override fun addPlayerLoginHook(hook: PlayerLoginHook) {
+        this.proxy.eventManager.register(this.plugin, LoginEvent::class.java, PostOrder.FIRST) { event ->
+            hook(wrapPlayer(event.player))
         }
     }
 
@@ -96,6 +104,9 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
         return object : io.shulkermc.proxyagent.platform.Player {
             override val uniqueId: UUID
                 get() = velocityPlayer.uniqueId
+
+            override val name: String
+                get() = velocityPlayer.username
 
             override fun disconnect(component: Component) {
                 velocityPlayer.disconnect(component)
