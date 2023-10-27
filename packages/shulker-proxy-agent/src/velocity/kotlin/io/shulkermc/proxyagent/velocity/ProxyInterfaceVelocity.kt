@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent
+package io.shulkermc.proxyagent.velocity
 
 import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.connection.PreLoginEvent
@@ -7,6 +7,7 @@ import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
+import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
@@ -14,7 +15,7 @@ import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
 
-class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgent, private val proxy: ProxyServer) : ProxyInterface {
+class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, private val proxy: ProxyServer) : ProxyInterface {
     override fun registerServer(name: String, address: InetSocketAddress) {
         this.proxy.registerServer(ServerInfo(name, address))
     }

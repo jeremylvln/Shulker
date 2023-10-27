@@ -1,9 +1,10 @@
-package io.shulkermc.serveragent
+package io.shulkermc.serveragent.paper
 
+import io.shulkermc.serveragent.ServerInterface
 import org.bukkit.scheduler.BukkitTask
 import java.util.concurrent.TimeUnit
 
-class ServerInterfacePaper(private val plugin: ShulkerServerAgent) : ServerInterface {
+class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : ServerInterface {
     override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ServerInterface.ScheduledTask {
         val delayTicks = timeUnit.toSeconds(delay) * 20L
         return BukkitScheduledTask(this.plugin.server.scheduler.runTaskLaterAsynchronously(this.plugin, runnable, delayTicks))

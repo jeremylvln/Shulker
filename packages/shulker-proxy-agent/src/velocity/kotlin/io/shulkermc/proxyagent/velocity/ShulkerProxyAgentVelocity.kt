@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent
+package io.shulkermc.proxyagent.velocity
 
 import com.google.inject.Inject
 import com.velocitypowered.api.event.Subscribe
@@ -6,6 +6,8 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
+import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
+import io.shulkermc.proxyagent.VelocityBuildConfig
 import java.util.logging.Logger
 
 @Plugin(
@@ -14,7 +16,7 @@ import java.util.logging.Logger
     version = VelocityBuildConfig.VERSION,
     authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 )
-class ShulkerProxyAgent @Inject constructor(
+class ShulkerProxyAgentVelocity @Inject constructor(
     proxy: ProxyServer,
     logger: Logger
 ) {

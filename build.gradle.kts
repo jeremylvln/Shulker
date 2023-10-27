@@ -35,7 +35,6 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "com.github.johnrengelman.shadow")
     apply(plugin = "io.gitlab.arturbosch.detekt")

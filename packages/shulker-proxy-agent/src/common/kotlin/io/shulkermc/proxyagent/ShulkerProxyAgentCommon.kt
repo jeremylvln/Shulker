@@ -2,22 +2,29 @@ package io.shulkermc.proxyagent
 
 import dev.agones.AgonesSDK
 import dev.agones.AgonesSDKImpl
+import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapterImpl
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapterImpl
+import io.shulkermc.proxyagent.api.ShulkerProxyAPI
 import io.shulkermc.proxyagent.api.ShulkerProxyAPIImpl
-import io.shulkermc.proxyagent.features.directory.DirectoryFeature
-import io.shulkermc.proxyagent.features.drain.DrainFeature
-import io.shulkermc.proxyagent.features.limbo.LimboFeature
+import io.shulkermc.proxyagent.services.PlayerMovementService
+import io.shulkermc.proxyagent.services.ProxyLifecycleService
+import io.shulkermc.proxyagent.services.ServerDirectoryService
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
+import kotlin.system.exitProcess
 
 class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Logger) {
-    val api = ShulkerProxyAPIImpl(this)
-    lateinit var agonesGateway: AgonesSDK
-    private lateinit var kubernetesGateway: KubernetesGatewayAdapter
-    private lateinit var drainFeature: DrainFeature
+    private lateinit var agonesGateway: AgonesSDK
+    lateinit var kubernetesGateway: KubernetesGatewayAdapter
+    lateinit var fileSystem: FileSystemAdapter
+
+    lateinit var serverDirectoryService: ServerDirectoryService
+    lateinit var playerMovementService: PlayerMovementService
+    private lateinit var proxyLifecycleService: ProxyLifecycleService
+
     private lateinit var healthcheckTask: ProxyInterface.ScheduledTask
 
     fun onProxyInitialization() {
@@ -26,12 +33,14 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             val gameServer = this.agonesGateway.getGameServer().get()
             this.logger.info("Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}")
 
-            val fileSystem = FileSystemAdapterImpl()
+            ShulkerProxyAPI.INSTANCE = ShulkerProxyAPIImpl(this)
+
+            this.fileSystem = FileSystemAdapterImpl()
             this.kubernetesGateway = KubernetesGatewayAdapterImpl(Configuration.PROXY_NAMESPACE, Configuration.PROXY_NAME)
 
-            this.drainFeature = DrainFeature(this, fileSystem, this.kubernetesGateway, Configuration.PROXY_TTL_SECONDS)
-            DirectoryFeature(this, this.kubernetesGateway)
-            LimboFeature(this)
+            this.serverDirectoryService = ServerDirectoryService(this)
+            this.playerMovementService = PlayerMovementService(this)
+            this.proxyLifecycleService = ProxyLifecycleService(this)
 
             this.healthcheckTask = this.proxyInterface.scheduleRepeatingTask(0L, 5L, TimeUnit.SECONDS) {
                 this.agonesGateway.sendHealthcheck()
@@ -41,14 +50,24 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
         } catch (e: Exception) {
             this.logger.severe("Failed to parse configuration")
             e.printStackTrace()
-            this.agonesGateway.askShutdown()
+            this.shutdown()
         }
     }
 
     fun onProxyShutdown() {
         this.healthcheckTask.cancel()
-        this.drainFeature.destroy()
+        this.proxyLifecycleService.destroy()
         this.kubernetesGateway.destroy()
         this.agonesGateway.askShutdown()
+        this.agonesGateway.destroy()
+    }
+
+    fun shutdown() {
+        try {
+            this.agonesGateway.askShutdown()
+        } catch (ex: Exception) {
+            this.logger.severe("Failed to ask Agones sidecar to shutdown properly, stopping process manually")
+            exitProcess(0)
+        }
     }
 }

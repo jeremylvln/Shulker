@@ -1,5 +1,6 @@
-package io.shulkermc.proxyagent
+package io.shulkermc.proxyagent.bungeecord
 
+import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook

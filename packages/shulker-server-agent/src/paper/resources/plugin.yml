@@ -1,5 +1,5 @@
 name: ShulkerServerAgent
-main: io.shulkermc.serveragent.ShulkerServerAgent
+main: io.shulkermc.serveragent.paper.ShulkerServerAgentPaper
 version: ${version}
 author: Jérémy Levilain <jeremy@jeremylvln.fr>
 api-version: 1.19
