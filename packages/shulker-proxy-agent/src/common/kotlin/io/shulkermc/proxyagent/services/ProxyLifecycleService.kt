@@ -19,8 +19,9 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
             this.agent.logger.fine("Detected modification on Proxy '${proxy.metadata.name}'")
             if (action == WatchAction.MODIFIED) {
                 val annotations = proxy.metadata.annotations ?: return@watchProxyEvents
-                if (annotations.getOrDefault(PROXY_DRAIN_ANNOTATION, "false") == "true")
+                if (annotations.getOrDefault(PROXY_DRAIN_ANNOTATION, "false") == "true") {
                     this.drain()
+                }
             }
         }
 
@@ -35,8 +36,9 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun drain() {
-        if (this.drained)
+        if (this.drained) {
             return
+        }
         this.drained = true
 
         this.agent.fileSystem.createDrainFile()

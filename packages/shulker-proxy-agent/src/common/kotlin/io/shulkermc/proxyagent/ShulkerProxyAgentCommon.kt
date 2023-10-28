@@ -6,8 +6,8 @@ import io.shulkermc.proxyagent.adapters.cache.CacheAdapter
 import io.shulkermc.proxyagent.adapters.cache.RedisCacheAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.LocalFileSystemAdapter
-import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.ImplKubernetesGatewayAdapter
+import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.mojang.HttpMojangGatewayAdapter
 import io.shulkermc.proxyagent.adapters.mojang.MojangGatewayAdapter
 import io.shulkermc.proxyagent.adapters.pubsub.PubSubAdapter
@@ -101,8 +101,9 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     }
 
     private fun createJedisPool(): JedisPool {
-        if (Configuration.REDIS_USERNAME != null && Configuration.REDIS_PASSWORD != null)
+        if (Configuration.REDIS_USERNAME != null && Configuration.REDIS_PASSWORD != null) {
             return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT)
+        }
         return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT, Configuration.REDIS_USERNAME, Configuration.REDIS_PASSWORD)
     }
 }

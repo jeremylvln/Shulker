@@ -42,10 +42,11 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     fun setAcceptingPlayers(acceptingPlayers: Boolean) {
         this.acceptingPlayers = acceptingPlayers
 
-        if (acceptingPlayers)
+        if (acceptingPlayers) {
             this.agent.logger.info("Proxy is now accepting players")
-        else
+        } else {
             this.agent.logger.info("Proxy is no longer accepting players")
+        }
     }
 
     private fun onProxyPing(): ProxyPingHookResult {
@@ -53,8 +54,9 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onPlayerPreLogin(): PlayerPreLoginHookResult {
-        if (!this.acceptingPlayers)
+        if (!this.acceptingPlayers) {
             return PlayerPreLoginHookResult.disallow(MSG_NOT_ACCEPTING_PLAYERS)
+        }
         return PlayerPreLoginHookResult.allow()
     }
 
@@ -69,14 +71,16 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     private fun onServerPreConnect(player: Player, originalServerName: String): ServerPreConnectHookResult {
         if (originalServerName == LOBBY_TAG) {
             val firstLobbyServer = this.agent.serverDirectoryService.getServersByTag(LOBBY_TAG).firstOrNull()
-            if (firstLobbyServer != null)
+            if (firstLobbyServer != null) {
                 return ServerPreConnectHookResult(Optional.of(firstLobbyServer))
+            }
         }
 
         if (originalServerName == LIMBO_TAG) {
             val firstLimboServer = this.agent.serverDirectoryService.getServersByTag(LIMBO_TAG).firstOrNull()
-            if (firstLimboServer != null)
+            if (firstLimboServer != null) {
                 return ServerPreConnectHookResult(Optional.of(firstLimboServer))
+            }
 
             player.disconnect(MSG_NO_LIMBO_FOUND)
         }

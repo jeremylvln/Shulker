@@ -7,7 +7,8 @@ private var DRAIN_LOCK_PATH = Path.of("/tmp/drain-lock")
 
 class LocalFileSystemAdapter : FileSystemAdapter {
     override fun createDrainFile() {
-        if (!Files.exists(DRAIN_LOCK_PATH))
+        if (!Files.exists(DRAIN_LOCK_PATH)) {
             Files.createFile(DRAIN_LOCK_PATH)
+        }
     }
 }

@@ -85,12 +85,14 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
             pipeline.hset("shulker:players:current-proxy", playerIdString, proxyName)
             pipeline.hset("shulker:players:current-server", playerIdString, serverName)
 
-            if (oldProxyName != null)
+            if (oldProxyName != null) {
                 pipeline.srem("shulker:proxies:$oldProxyName:players", playerIdString)
+            }
             pipeline.sadd("shulker:proxies:$proxyName:players", playerIdString)
 
-            if (oldServerName != null)
+            if (oldServerName != null) {
                 pipeline.srem("shulker:servers:$oldServerName:players", playerIdString)
+            }
             pipeline.sadd("shulker:servers:$serverName:players", playerIdString)
 
             pipeline.sync()

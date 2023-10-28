@@ -6,7 +6,7 @@ import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 import java.net.InetSocketAddress
 
 class ServerDirectoryService(
-    private val agent: ShulkerProxyAgentCommon,
+    private val agent: ShulkerProxyAgentCommon
 ) {
     private val serversByTag = HashMap<String, MutableSet<String>>()
     private val tagsByServer = HashMap<String, Set<String>>()
@@ -32,8 +32,9 @@ class ServerDirectoryService(
     private fun registerServer(minecraftServer: AgonesV1GameServer) {
         val alreadyKnown = this.agent.proxyInterface.hasServer(minecraftServer.metadata.name)
 
-        if (alreadyKnown || minecraftServer.status == null)
+        if (alreadyKnown || minecraftServer.status == null) {
             return
+        }
 
         if (minecraftServer.status.isReady()) {
             val tags = minecraftServer.metadata.annotations["minecraftserver.shulkermc.io/tags"]
