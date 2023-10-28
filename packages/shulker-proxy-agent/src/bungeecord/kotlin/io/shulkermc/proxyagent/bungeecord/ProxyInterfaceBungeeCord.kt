@@ -65,8 +65,9 @@ class ProxyInterfaceBungeeCord(
                     if (event.isCancelled) return
                     val result = hook()
 
-                    if (!result.allowed)
+                    if (!result.allowed) {
                         event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                    }
                 }
             }
         )
@@ -105,8 +106,9 @@ class ProxyInterfaceBungeeCord(
                     if (event.isCancelled) return
                     val result = hook(wrapPlayer(event.player), event.target.name)
 
-                    if (result.newServerName.isPresent)
+                    if (result.newServerName.isPresent) {
                         event.target = proxy.servers[result.newServerName.get()]!!
+                    }
                 }
             }
         )
@@ -126,8 +128,10 @@ class ProxyInterfaceBungeeCord(
 
     override fun teleportPlayerOnServer(playerName: String, serverName: String) {
         val server = this.proxy.getServerInfo(serverName)
-        if (server != null)
+
+        if (server != null) {
             this.proxy.getPlayer(playerName)?.connect(server)
+        }
     }
 
     override fun getPlayerCount(): Int {

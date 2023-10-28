@@ -52,8 +52,9 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
             if (!event.result.isAllowed) return@register
             val result = hook()
 
-            if (!result.allowed)
+            if (!result.allowed) {
                 event.result = PreLoginEvent.PreLoginComponentResult.denied(result.rejectComponent)
+            }
         }
     }
 
@@ -74,8 +75,9 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
             if (!event.result.isAllowed) return@register
             val result = hook(this.wrapPlayer(event.player), event.originalServer.serverInfo.name)
 
-            if (result.newServerName.isPresent)
+            if (result.newServerName.isPresent) {
                 event.result = ServerPreConnectEvent.ServerResult.allowed(this.proxy.getServer(result.newServerName.get()).get())
+            }
         }
     }
 
