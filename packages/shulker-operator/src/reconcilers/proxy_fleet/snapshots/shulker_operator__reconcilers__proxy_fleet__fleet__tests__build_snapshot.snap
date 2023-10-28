@@ -26,6 +26,7 @@ spec:
   template:
     metadata:
       annotations:
+        kubectl.kubernetes.io/default-exec-container: proxy
         test-annotation/shulkermc.io: my-value
       labels:
         app.kubernetes.io/component: proxy
@@ -46,6 +47,7 @@ spec:
       template:
         metadata:
           annotations:
+            kubectl.kubernetes.io/default-exec-container: proxy
             test-annotation/shulkermc.io: my-value
           labels:
             app.kubernetes.io/component: proxy
