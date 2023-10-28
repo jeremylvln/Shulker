@@ -8,6 +8,8 @@ import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.LocalFileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.ImplKubernetesGatewayAdapter
+import io.shulkermc.proxyagent.adapters.mojang.HttpMojangGatewayAdapter
+import io.shulkermc.proxyagent.adapters.mojang.MojangGatewayAdapter
 import io.shulkermc.proxyagent.adapters.pubsub.PubSubAdapter
 import io.shulkermc.proxyagent.adapters.pubsub.RedisPubSubAdapter
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI
@@ -30,6 +32,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     // Adapters
     lateinit var kubernetesGateway: KubernetesGatewayAdapter
     lateinit var fileSystem: FileSystemAdapter
+    lateinit var mojangGateway: MojangGatewayAdapter
     lateinit var cache: CacheAdapter
     lateinit var pubSub: PubSubAdapter
 
@@ -52,8 +55,9 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.jedisPool = this.createJedisPool()
             this.jedisPool.resource.use { jedis -> jedis.ping() }
 
-            this.fileSystem = LocalFileSystemAdapter()
             this.kubernetesGateway = ImplKubernetesGatewayAdapter(Configuration.PROXY_NAMESPACE, Configuration.PROXY_NAME)
+            this.fileSystem = LocalFileSystemAdapter()
+            this.mojangGateway = HttpMojangGatewayAdapter()
             this.cache = RedisCacheAdapter(this.jedisPool)
             this.pubSub = RedisPubSubAdapter(this.jedisPool)
 
