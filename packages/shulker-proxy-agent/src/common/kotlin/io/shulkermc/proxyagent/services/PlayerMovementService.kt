@@ -27,7 +27,11 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         )
     }
 
-    private val onlinePlayerCountSupplier = Suppliers.memoizeWithExpiration({ this.agent.cache.countOnlinePlayers() }, 10, java.util.concurrent.TimeUnit.SECONDS)
+    private val onlinePlayerCountSupplier = Suppliers.memoizeWithExpiration(
+        { this.agent.cache.countOnlinePlayers() },
+        10,
+        java.util.concurrent.TimeUnit.SECONDS
+    )
     private var acceptingPlayers = true
 
     init {

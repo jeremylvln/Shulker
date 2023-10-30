@@ -24,7 +24,10 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
 
-class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, private val proxy: ProxyServer) : ProxyInterface {
+class ProxyInterfaceVelocity(
+    private val plugin: ShulkerProxyAgentVelocity,
+    private val proxy: ProxyServer
+) : ProxyInterface {
     override fun registerServer(name: String, address: InetSocketAddress) {
         this.proxy.registerServer(ServerInfo(name, address))
     }
@@ -76,7 +79,9 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
             val result = hook(this.wrapPlayer(event.player), event.originalServer.serverInfo.name)
 
             if (result.newServerName.isPresent) {
-                event.result = ServerPreConnectEvent.ServerResult.allowed(this.proxy.getServer(result.newServerName.get()).get())
+                event.result = ServerPreConnectEvent.ServerResult.allowed(
+                    this.proxy.getServer(result.newServerName.get()).get()
+                )
             }
         }
     }
@@ -100,7 +105,11 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
         return this.proxy.playerCount
     }
 
-    override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+    override fun scheduleDelayedTask(
+        delay: Long,
+        timeUnit: TimeUnit,
+        runnable: Runnable
+    ): ProxyInterface.ScheduledTask {
         return VelocityScheduledTask(
             this.proxy.scheduler
                 .buildTask(this.plugin, runnable)
@@ -109,7 +118,12 @@ class ProxyInterfaceVelocity(private val plugin: ShulkerProxyAgentVelocity, priv
         )
     }
 
-    override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+    override fun scheduleRepeatingTask(
+        delay: Long,
+        interval: Long,
+        timeUnit: TimeUnit,
+        runnable: Runnable
+    ): ProxyInterface.ScheduledTask {
         return VelocityScheduledTask(
             this.proxy.scheduler
                 .buildTask(this.plugin, runnable)

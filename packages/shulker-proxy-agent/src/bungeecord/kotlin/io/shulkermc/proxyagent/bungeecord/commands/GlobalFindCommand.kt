@@ -9,7 +9,9 @@ import net.md_5.bungee.api.plugin.Command
 class GlobalFindCommand(private val agent: ShulkerProxyAgentCommon) : Command("gfind", "shulker.command.gfind") {
     override fun execute(sender: CommandSender, args: Array<out String>) {
         if (!this.hasPermission(sender)) {
-            sender.sendMessage(*ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create())
+            sender.sendMessage(
+                *ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create()
+            )
             return
         }
 
@@ -27,6 +29,10 @@ class GlobalFindCommand(private val agent: ShulkerProxyAgentCommon) : Command("g
             return
         }
 
-        sender.sendMessage(*ComponentBuilder("Player $player is connected on proxy ${playerPosition.get().proxyName} and located on server ${playerPosition.get().serverName}.").color(ChatColor.GREEN).create())
+        sender.sendMessage(
+            *ComponentBuilder(
+                "Player $player is connected on proxy ${playerPosition.get().proxyName} and located on server ${playerPosition.get().serverName}." // ktlint-disable standard_max-line-length
+            ).color(ChatColor.GREEN).create()
+        )
     }
 }

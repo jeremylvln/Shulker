@@ -9,7 +9,9 @@ import net.md_5.bungee.api.plugin.Command
 class GlobalTeleportCommand(private val agent: ShulkerProxyAgentCommon) : Command("gtp", "shulker.command.gtp") {
     override fun execute(sender: CommandSender, args: Array<out String>) {
         if (!this.hasPermission(sender)) {
-            sender.sendMessage(*ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create())
+            sender.sendMessage(
+                *ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create()
+            )
             return
         }
 
@@ -34,7 +36,9 @@ class GlobalTeleportCommand(private val agent: ShulkerProxyAgentCommon) : Comman
         } else {
             val server = args[1]
             this.agent.pubSub.teleportPlayerOnServer(player, server)
-            sender.sendMessage(*ComponentBuilder("Teleported $player to server $server.").color(ChatColor.GREEN).create())
+            sender.sendMessage(
+                *ComponentBuilder("Teleported $player to server $server.").color(ChatColor.GREEN).create()
+            )
         }
     }
 }

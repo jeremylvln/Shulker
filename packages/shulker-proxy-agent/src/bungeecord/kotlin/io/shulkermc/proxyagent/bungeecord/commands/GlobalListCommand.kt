@@ -9,10 +9,15 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.plugin.Command
 
-class GlobalListCommand(private val agent: ShulkerProxyAgentCommon, private val proxyServer: ProxyServer) : Command("glist", "shulker.command.glist") {
+class GlobalListCommand(private val agent: ShulkerProxyAgentCommon, private val proxyServer: ProxyServer) : Command(
+    "glist",
+    "shulker.command.glist"
+) {
     override fun execute(sender: CommandSender, args: Array<out String>) {
         if (!this.hasPermission(sender)) {
-            sender.sendMessage(*ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create())
+            sender.sendMessage(
+                *ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create()
+            )
             return
         }
 
@@ -36,7 +41,9 @@ class GlobalListCommand(private val agent: ShulkerProxyAgentCommon, private val 
     }
 
     private fun createServerListMessage(serverName: String): Array<BaseComponent> {
-        val playerNames = this.agent.cache.getPlayerNamesFromIds(this.agent.cache.listPlayersInServer(serverName)).values
+        val playerNames = this.agent.cache.getPlayerNamesFromIds(
+            this.agent.cache.listPlayersInServer(serverName)
+        ).values
             .sortedBy { it.lowercase() }
             .joinToString(", ") { it }
 

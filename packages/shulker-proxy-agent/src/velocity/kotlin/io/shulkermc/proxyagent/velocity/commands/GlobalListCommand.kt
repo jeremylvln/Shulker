@@ -44,14 +44,22 @@ object GlobalListCommand {
         return BrigadierCommand(rootNode)
     }
 
-    private fun showPlayerListInServers(agent: ShulkerProxyAgentCommon, source: CommandSource, serverNames: Set<String>) {
-        source.sendMessage(Component.text("⎯".repeat(63)).color(NamedTextColor.DARK_GRAY).decorate(TextDecoration.STRIKETHROUGH))
+    private fun showPlayerListInServers(
+        agent: ShulkerProxyAgentCommon,
+        source: CommandSource,
+        serverNames: Set<String>
+    ) {
+        source.sendMessage(
+            Component.text("⎯".repeat(63)).color(NamedTextColor.DARK_GRAY).decorate(TextDecoration.STRIKETHROUGH)
+        )
         source.sendMessage(Component.empty())
         serverNames.map { serverName ->
             source.sendMessage(this.createServerListMessage(agent, serverName))
             source.sendMessage(Component.empty())
         }
-        source.sendMessage(Component.text("⎯".repeat(63)).color(NamedTextColor.DARK_GRAY).decorate(TextDecoration.STRIKETHROUGH))
+        source.sendMessage(
+            Component.text("⎯".repeat(63)).color(NamedTextColor.DARK_GRAY).decorate(TextDecoration.STRIKETHROUGH)
+        )
     }
 
     private fun createServerListMessage(agent: ShulkerProxyAgentCommon, serverName: String): Component {

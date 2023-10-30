@@ -14,7 +14,10 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
         .withHttpClientFactory(OkHttpClientFactory())
         .build()
 
-    private val gameServerApi = this.kubernetesClient.resources(AgonesV1GameServer::class.java, AgonesV1GameServer.List::class.java)
+    private val gameServerApi = this.kubernetesClient.resources(
+        AgonesV1GameServer::class.java,
+        AgonesV1GameServer.List::class.java
+    )
 
     private val proxyReference: ObjectReference = ObjectReferenceBuilder()
         .withApiVersion("${AgonesV1GameServer.GROUP}/${AgonesV1GameServer.VERSION}")
@@ -28,10 +31,15 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     }
 
     override fun listMinecraftServers(): AgonesV1GameServer.List {
-        return this.gameServerApi.inNamespace(this.proxyReference.namespace).withLabel("app.kubernetes.io/component", "minecraft-server").list()
+        return this.gameServerApi.inNamespace(this.proxyReference.namespace).withLabel(
+            "app.kubernetes.io/component",
+            "minecraft-server"
+        ).list()
     }
 
-    override fun watchProxyEvents(callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {
+    override fun watchProxyEvents(
+        callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit
+    ): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {
         val eventHandler = this.createEventHandler(callback)
         val proxyInformer = this.gameServerApi
             .inNamespace(this.proxyReference.namespace)
@@ -48,7 +56,9 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
             }
     }
 
-    override fun watchMinecraftServerEvents(callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {
+    override fun watchMinecraftServerEvents(
+        callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit
+    ): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {
         val eventHandler = this.createEventHandler(callback)
         val minecraftServerInformer = this.gameServerApi
             .inNamespace(this.proxyReference.namespace)

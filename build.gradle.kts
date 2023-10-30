@@ -54,13 +54,6 @@ subprojects {
         testImplementation(kotlin("test"))
     }
 
-    detekt {
-        buildUponDefaultConfig = true
-        ignoreFailures = true
-        baseline = file("$rootDir/gradle/detekt/baseline.xml")
-        basePath = rootDir.absolutePath
-    }
-
     tasks {
         compileJava {
             options.encoding = Charsets.UTF_8.name()
@@ -94,6 +87,13 @@ subprojects {
         jacocoTestReport {
             dependsOn("test")
         }
+    }
+
+    detekt {
+        buildUponDefaultConfig = true
+        ignoreFailures = true
+        baseline = file("$rootDir/gradle/detekt/baseline.xml")
+        basePath = rootDir.absolutePath
     }
 
     tasks.withType<Detekt>().configureEach {

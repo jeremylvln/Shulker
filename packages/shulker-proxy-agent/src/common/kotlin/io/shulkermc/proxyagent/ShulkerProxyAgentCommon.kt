@@ -48,14 +48,19 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
         try {
             this.agonesGateway = AgonesSDKImpl.createFromEnvironment()
             val gameServer = this.agonesGateway.getGameServer().get()
-            this.logger.info("Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}")
+            this.logger.info(
+                "Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}"
+            )
 
             ShulkerProxyAPI.INSTANCE = ShulkerProxyAPIImpl(this)
 
             this.jedisPool = this.createJedisPool()
             this.jedisPool.resource.use { jedis -> jedis.ping() }
 
-            this.kubernetesGateway = ImplKubernetesGatewayAdapter(Configuration.PROXY_NAMESPACE, Configuration.PROXY_NAME)
+            this.kubernetesGateway = ImplKubernetesGatewayAdapter(
+                Configuration.PROXY_NAMESPACE,
+                Configuration.PROXY_NAME
+            )
             this.fileSystem = LocalFileSystemAdapter()
             this.mojangGateway = HttpMojangGatewayAdapter()
             this.cache = RedisCacheAdapter(this.jedisPool)
@@ -104,6 +109,11 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
         if (Configuration.REDIS_USERNAME != null && Configuration.REDIS_PASSWORD != null) {
             return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT)
         }
-        return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT, Configuration.REDIS_USERNAME, Configuration.REDIS_PASSWORD)
+        return JedisPool(
+            Configuration.REDIS_HOST,
+            Configuration.REDIS_PORT,
+            Configuration.REDIS_USERNAME,
+            Configuration.REDIS_PASSWORD
+        )
     }
 }

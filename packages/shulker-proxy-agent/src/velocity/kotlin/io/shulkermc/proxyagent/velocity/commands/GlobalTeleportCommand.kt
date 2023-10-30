@@ -49,7 +49,9 @@ object GlobalTeleportCommand {
                                 val server = context.getArgument("server", String::class.java)
 
                                 agent.pubSub.teleportPlayerOnServer(player, server)
-                                source.sendMessage(Component.text("Teleported $player to server $server.", NamedTextColor.GREEN))
+                                source.sendMessage(
+                                    Component.text("Teleported $player to server $server.", NamedTextColor.GREEN)
+                                )
 
                                 return@executes Command.SINGLE_SUCCESS
                             }

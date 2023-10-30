@@ -27,7 +27,12 @@ object GlobalFindCommand {
                             return@executes Command.SINGLE_SUCCESS
                         }
 
-                        source.sendMessage(Component.text("Player $player is connected on proxy ${playerPosition.get().proxyName} and located on server ${playerPosition.get().serverName}.", NamedTextColor.GREEN))
+                        source.sendMessage(
+                            Component.text(
+                                "Player $player is connected on proxy ${playerPosition.get().proxyName} and located on server ${playerPosition.get().serverName}.", // ktlint-disable standard_max-line-length
+                                NamedTextColor.GREEN
+                            )
+                        )
                         return@executes Command.SINGLE_SUCCESS
                     }
             )

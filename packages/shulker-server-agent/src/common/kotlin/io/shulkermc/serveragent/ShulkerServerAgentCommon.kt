@@ -23,12 +23,16 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
         try {
             this.agonesGateway = AgonesSDKImpl.createFromEnvironment()
             val gameServer = this.agonesGateway.getGameServer().get()
-            this.logger.info("Identified Shulker server: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}")
+            this.logger.info(
+                "Identified Shulker server: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}"
+            )
 
             ShulkerServerAPI.INSTANCE = ShulkerServerAPIImpl(this)
 
             if (gameServer.objectMeta.containsLabels(SUMMON_LABEL_NAME)) {
-                this.logger.info("This server was summoned manually, it will be shutdown automatically in $SUMMON_TIMEOUT_MINUTES minutes")
+                this.logger.info(
+                    "This server was summoned manually, it will be shutdown automatically in $SUMMON_TIMEOUT_MINUTES minutes" // ktlint-disable standard_max-line-length
+                )
                 this.summonTimeoutTask = this.createSummonTimeoutTask()
             }
 
@@ -60,7 +64,10 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
         }
     }
 
-    private fun createSummonTimeoutTask() = this.serverInterface.scheduleDelayedTask(SUMMON_TIMEOUT_MINUTES, TimeUnit.MINUTES) {
+    private fun createSummonTimeoutTask() = this.serverInterface.scheduleDelayedTask(
+        SUMMON_TIMEOUT_MINUTES,
+        TimeUnit.MINUTES
+    ) {
         this.agonesGateway.getState().thenAccept { state ->
             if (state == "Ready") {
                 this.logger.info("Server still in Ready state after $SUMMON_TIMEOUT_MINUTES minutes, asking shutdown")

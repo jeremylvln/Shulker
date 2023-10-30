@@ -48,8 +48,10 @@
     <content url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kapt/velocity">
       <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kapt/velocity" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kapt/velocity" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kapt/velocity" isTestSource="false" generated="true" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kaptKotlin/velocity">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kaptKotlin/velocity" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kaptKotlin/velocity" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../../dist/java/packages/shulker-proxy-agent/generated/source/kaptKotlin/velocity" isTestSource="false" generated="true" />
     </content>
