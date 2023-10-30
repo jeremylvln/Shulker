@@ -8,7 +8,8 @@ import java.util.concurrent.TimeUnit
 
 class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     companion object {
-        const val PROXY_DRAIN_ANNOTATION = "proxy.shulkermc.io/drain"
+        private const val PROXY_DRAIN_ANNOTATION = "proxy.shulkermc.io/drain"
+        private const val PROXY_DRAIN_CHECK_DELAY_SECONDS = 30L
     }
 
     private val ttlTask: ProxyInterface.ScheduledTask
@@ -26,9 +27,9 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         }
 
         this.agent.logger.info("Proxy will be force stopped in ${Configuration.PROXY_TTL_SECONDS} seconds")
-        this.ttlTask = this.agent.proxyInterface.scheduleDelayedTask(Configuration.PROXY_TTL_SECONDS, TimeUnit.SECONDS) {
-            this.agent.shutdown()
-        }
+        this.ttlTask = this.agent.proxyInterface.scheduleDelayedTask(
+            Configuration.PROXY_TTL_SECONDS, TimeUnit.SECONDS
+        ) { this.agent.shutdown() }
     }
 
     fun destroy() {
@@ -44,7 +45,9 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         this.agent.fileSystem.createDrainFile()
         this.agent.playerMovementService.setAcceptingPlayers(false)
 
-        this.agent.proxyInterface.scheduleRepeatingTask(30L, 30L, TimeUnit.SECONDS) {
+        this.agent.proxyInterface.scheduleRepeatingTask(
+            PROXY_DRAIN_CHECK_DELAY_SECONDS, PROXY_DRAIN_CHECK_DELAY_SECONDS, TimeUnit.SECONDS
+        ) {
             val playerCount = this.agent.proxyInterface.getPlayerCount()
 
             if (playerCount == 0) {

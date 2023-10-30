@@ -5,12 +5,16 @@ import org.bukkit.scheduler.BukkitTask
 import java.util.concurrent.TimeUnit
 
 class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : ServerInterface {
+    companion object {
+        private const val TICKS_PER_SECONDS = 20L
+    }
+
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
         runnable: Runnable
     ): ServerInterface.ScheduledTask {
-        val delayTicks = timeUnit.toSeconds(delay) * 20L
+        val delayTicks = timeUnit.toSeconds(delay) * TICKS_PER_SECONDS
         return BukkitScheduledTask(
             this.plugin.server.scheduler.runTaskLaterAsynchronously(this.plugin, runnable, delayTicks)
         )
@@ -22,8 +26,8 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         timeUnit: TimeUnit,
         runnable: Runnable
     ): ServerInterface.ScheduledTask {
-        val delayTicks = timeUnit.toSeconds(delay) * 20L
-        val intervalTicks = timeUnit.toSeconds(interval) * 20L
+        val delayTicks = timeUnit.toSeconds(delay) * TICKS_PER_SECONDS
+        val intervalTicks = timeUnit.toSeconds(interval) * TICKS_PER_SECONDS
         return BukkitScheduledTask(
             this.plugin.server.scheduler.runTaskTimerAsynchronously(this.plugin, runnable, delayTicks, intervalTicks)
         )

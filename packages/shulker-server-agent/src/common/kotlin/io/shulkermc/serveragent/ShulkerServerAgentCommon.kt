@@ -13,6 +13,8 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
     companion object {
         private const val SUMMON_LABEL_NAME = "shulkermc.io/summoned"
         private const val SUMMON_TIMEOUT_MINUTES = 5L
+
+        private const val HEALTHCHECK_DELAY_SECONDS = 10L
     }
 
     lateinit var agonesGateway: AgonesSDK
@@ -36,7 +38,9 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
                 this.summonTimeoutTask = this.createSummonTimeoutTask()
             }
 
-            this.healthcheckTask = this.serverInterface.scheduleRepeatingTask(0L, 10L, TimeUnit.SECONDS) {
+            this.healthcheckTask = this.serverInterface.scheduleRepeatingTask(
+                0L, HEALTHCHECK_DELAY_SECONDS, TimeUnit.SECONDS
+            ) {
                 this.agonesGateway.sendHealthcheck()
             }
 
@@ -60,6 +64,7 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
             this.agonesGateway.askShutdown()
         } catch (ex: Exception) {
             this.logger.severe("Failed to ask Agones sidecar to shutdown properly, stopping process manually")
+            ex.printStackTrace()
             exitProcess(0)
         }
     }

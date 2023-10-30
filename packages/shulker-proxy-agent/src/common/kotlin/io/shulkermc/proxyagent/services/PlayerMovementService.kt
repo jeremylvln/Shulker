@@ -16,6 +16,8 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         private const val LOBBY_TAG = "lobby"
         private const val LIMBO_TAG = "limbo"
 
+        private const val ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS = 10L
+
         private val MSG_NOT_ACCEPTING_PLAYERS = createDisconnectMessage(
             "Proxy is not accepting players, try reconnect.",
             NamedTextColor.RED
@@ -29,7 +31,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
 
     private val onlinePlayerCountSupplier = Suppliers.memoizeWithExpiration(
         { this.agent.cache.countOnlinePlayers() },
-        10,
+        ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS,
         java.util.concurrent.TimeUnit.SECONDS
     )
     private var acceptingPlayers = true

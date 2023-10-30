@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit
 class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable {
     companion object {
         private const val PROXY_LOST_MILLIS_THRESHOLD = 1000L * 60 * 5
+        private const val PROXY_LOST_LOCK_SECONDS = 15L
     }
 
     fun schedule(): ProxyInterface.ScheduledTask {
@@ -15,7 +16,9 @@ class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable 
     }
 
     override fun run() {
-        val maybeLock = this.agent.cache.tryLockLostProxiesPurgeTask(Configuration.PROXY_NAME, 15L)
+        val maybeLock = this.agent.cache.tryLockLostProxiesPurgeTask(
+            Configuration.PROXY_NAME, PROXY_LOST_LOCK_SECONDS
+        )
 
         if (maybeLock.isPresent) {
             val lock = maybeLock.get()

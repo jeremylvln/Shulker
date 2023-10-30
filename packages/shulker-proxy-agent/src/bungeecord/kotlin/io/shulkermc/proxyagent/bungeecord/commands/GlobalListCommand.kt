@@ -1,3 +1,5 @@
+@file:Suppress("detekt:SpreadOperator")
+
 package io.shulkermc.proxyagent.bungeecord.commands
 
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon

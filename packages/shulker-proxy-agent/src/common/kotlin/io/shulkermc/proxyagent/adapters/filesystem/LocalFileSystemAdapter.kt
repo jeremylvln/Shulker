@@ -3,7 +3,7 @@ package io.shulkermc.proxyagent.adapters.filesystem
 import java.nio.file.Files
 import java.nio.file.Path
 
-private var DRAIN_LOCK_PATH = Path.of("/tmp/drain-lock")
+private val DRAIN_LOCK_PATH = Path.of("/tmp/drain-lock")
 
 class LocalFileSystemAdapter : FileSystemAdapter {
     override fun createDrainFile() {

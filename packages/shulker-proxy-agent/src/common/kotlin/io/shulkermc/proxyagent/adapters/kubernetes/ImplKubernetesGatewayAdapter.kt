@@ -10,6 +10,11 @@ import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 import java.util.concurrent.CompletionStage
 
 class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : KubernetesGatewayAdapter {
+    companion object {
+        private const val PROXY_INFORMER_SYNC_MS = 30L * 1000
+        private const val SERVER_INFORMER_SYNC_MS = 10L * 1000
+    }
+
     private val kubernetesClient: KubernetesClient = KubernetesClientBuilder()
         .withHttpClientFactory(OkHttpClientFactory())
         .build()
@@ -44,7 +49,7 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
         val proxyInformer = this.gameServerApi
             .inNamespace(this.proxyReference.namespace)
             .withLabel("app.kubernetes.io/component", "proxy")
-            .inform(eventHandler, 30L * 1000)
+            .inform(eventHandler, PROXY_INFORMER_SYNC_MS)
 
         return proxyInformer.start()
             .thenApply {
@@ -63,7 +68,7 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
         val minecraftServerInformer = this.gameServerApi
             .inNamespace(this.proxyReference.namespace)
             .withLabel("app.kubernetes.io/component", "minecraft-server")
-            .inform(eventHandler, 10L * 1000)
+            .inform(eventHandler, SERVER_INFORMER_SYNC_MS)
 
         return minecraftServerInformer.start().thenApply {
             object : KubernetesGatewayAdapter.EventWatcher {

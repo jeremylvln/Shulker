@@ -1,3 +1,5 @@
+@file:Suppress("detekt:SpreadOperator")
+
 package io.shulkermc.proxyagent.bungeecord
 
 import io.shulkermc.proxyagent.ProxyInterface
@@ -48,7 +50,7 @@ class ProxyInterfaceBungeeCord(
             this.plugin,
             object : Listener {
                 @EventHandler(priority = EventPriority.LOWEST)
-                private fun onPreLogin(event: ProxyPingEvent) {
+                fun onPreLogin(event: ProxyPingEvent) {
                     val result = hook()
                     event.response.players.online = result.playerCount
                 }
@@ -61,7 +63,7 @@ class ProxyInterfaceBungeeCord(
             this.plugin,
             object : Listener {
                 @EventHandler(priority = EventPriority.HIGHEST)
-                private fun onPreLogin(event: PreLoginEvent) {
+                fun onPreLogin(event: PreLoginEvent) {
                     if (event.isCancelled) return
                     val result = hook()
 
@@ -78,7 +80,7 @@ class ProxyInterfaceBungeeCord(
             this.plugin,
             object : Listener {
                 @EventHandler(priority = EventPriority.HIGHEST)
-                private fun onLogin(event: PostLoginEvent) {
+                fun onLogin(event: PostLoginEvent) {
                     hook(wrapPlayer(event.player))
                 }
             }
@@ -90,7 +92,7 @@ class ProxyInterfaceBungeeCord(
             this.plugin,
             object : Listener {
                 @EventHandler(priority = EventPriority.LOWEST)
-                private fun onPlayerDisconnect(event: PlayerDisconnectEvent) {
+                fun onPlayerDisconnect(event: PlayerDisconnectEvent) {
                     hook(wrapPlayer(event.player))
                 }
             }
@@ -102,7 +104,7 @@ class ProxyInterfaceBungeeCord(
             this.plugin,
             object : Listener {
                 @EventHandler(priority = EventPriority.LOWEST)
-                private fun onServerConnect(event: ServerConnectEvent) {
+                fun onServerConnect(event: ServerConnectEvent) {
                     if (event.isCancelled) return
                     val result = hook(wrapPlayer(event.player), event.target.name)
 
@@ -119,7 +121,7 @@ class ProxyInterfaceBungeeCord(
             this.plugin,
             object : Listener {
                 @EventHandler(priority = EventPriority.LOWEST)
-                private fun onServerConnected(event: ServerConnectedEvent) {
+                fun onServerConnected(event: ServerConnectedEvent) {
                     hook(wrapPlayer(event.player), event.server.info.name)
                 }
             }

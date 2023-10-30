@@ -41,7 +41,7 @@ class ServerDirectoryService(
             this.registerServer(
                 minecraftServer.metadata.name,
                 InetSocketAddress(minecraftServer.status.address, minecraftServer.status.ports!![0].port!!),
-                tags?.split(",")?.toSet() ?: emptySet()
+                tags?.split(",")?.toSet().orEmpty()
             )
         }
     }
