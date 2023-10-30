@@ -186,7 +186,7 @@ impl FleetBuilder {
                     "sh".to_string(),
                     format!("{}/init-fs.sh", PROXY_SHULKER_CONFIG_DIR),
                 ]),
-                env: Some(self.get_init_env(&proxy_fleet.spec.template.spec).await?),
+                env: Some(self.get_init_env(proxy_fleet).await?),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
                     VolumeMount {
@@ -324,12 +324,10 @@ impl FleetBuilder {
 
         let mut pod_labels =
             ProxyFleetReconciler::get_labels(proxy_fleet, "proxy".to_string(), "proxy".to_string());
-        let mut pod_annotations = BTreeMap::<String, String>::from([
-            (
-                "kubectl.kubernetes.io/default-exec-container".to_string(),
-                "proxy".to_string(),
-            )
-        ]);
+        let mut pod_annotations = BTreeMap::<String, String>::from([(
+            "kubectl.kubernetes.io/default-exec-container".to_string(),
+            "proxy".to_string(),
+        )]);
 
         if let Some(metadata) = &proxy_fleet.spec.template.metadata {
             if let Some(additional_labels) = metadata.labels.clone() {
@@ -351,10 +349,9 @@ impl FleetBuilder {
         })
     }
 
-    async fn get_init_env(
-        &self,
-        spec: &ProxyFleetTemplateSpec,
-    ) -> Result<Vec<EnvVar>, anyhow::Error> {
+    async fn get_init_env(&self, proxy_fleet: &ProxyFleet) -> Result<Vec<EnvVar>, anyhow::Error> {
+        let spec = &proxy_fleet.spec.template.spec;
+
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_CONFIG_DIR".to_string(),
@@ -386,7 +383,7 @@ impl FleetBuilder {
         if let Some(plugins) = &spec.config.plugins {
             let urls: Vec<String> = self
                 .resourceref_resolver
-                .resolve_all(plugins)
+                .resolve_all(proxy_fleet.namespace().as_ref().unwrap(), plugins)
                 .await?
                 .into_iter()
                 .map(|url| url.to_string())
@@ -402,7 +399,7 @@ impl FleetBuilder {
         if let Some(patches) = &spec.config.patches {
             let urls: Vec<String> = self
                 .resourceref_resolver
-                .resolve_all(patches)
+                .resolve_all(proxy_fleet.namespace().as_ref().unwrap(), patches)
                 .await?
                 .into_iter()
                 .map(|url| url.to_string())
@@ -668,10 +665,9 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let spec = TEST_PROXY_FLEET.spec.clone();
 
         // W
-        let env = builder.get_init_env(&spec.template.spec).await.unwrap();
+        let env = builder.get_init_env(&TEST_PROXY_FLEET).await.unwrap();
 
         // T
         let plugins_env = env
@@ -693,10 +689,9 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let spec = TEST_PROXY_FLEET.spec.clone();
 
         // W
-        let env = builder.get_init_env(&spec.template.spec).await.unwrap();
+        let env = builder.get_init_env(&TEST_PROXY_FLEET).await.unwrap();
 
         // T
         let patches_env = env

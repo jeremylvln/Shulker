@@ -16,8 +16,8 @@ impl ResourceRefResolver {
         ResourceRefResolver { client }
     }
 
-    pub async fn resolve_all(&self, refs: &[ResourceRefSpec]) -> Result<Vec<Url>> {
-        let futs = refs.iter().map(|resourceref| self.resolve(resourceref));
+    pub async fn resolve_all(&self, ns: &str, refs: &[ResourceRefSpec]) -> Result<Vec<Url>> {
+        let futs = refs.iter().map(|resourceref| self.resolve(ns, resourceref));
 
         futures::future::join_all(futs).await.into_iter().try_fold(
             Vec::new(),
@@ -33,7 +33,7 @@ impl ResourceRefResolver {
         )
     }
 
-    pub async fn resolve(&self, spec: &ResourceRefSpec) -> Result<ResourceRef> {
+    pub async fn resolve(&self, ns: &str, spec: &ResourceRefSpec) -> Result<ResourceRef> {
         if let Some(url) = &spec.url {
             return Ok(ResourceRef::Url(url.clone()));
         } else if let Some(url_from) = &spec.url_from {
@@ -42,7 +42,7 @@ impl ResourceRefResolver {
                     None => None,
                     Some(secret_name) => {
                         let secrets: kube::Api<k8s_openapi::api::core::v1::Secret> =
-                            kube::Api::default_namespaced(self.client.clone());
+                            kube::Api::namespaced(self.client.clone(), ns);
 
                         let secret = secrets
                             .get(secret_name)
@@ -150,7 +150,7 @@ mod tests {
 
         // W
         let resourceref = resourceref_resolver
-            .resolve_all(&[resourceref_spec])
+            .resolve_all("default", &[resourceref_spec])
             .await
             .unwrap();
 
@@ -171,7 +171,7 @@ mod tests {
 
         // W
         let resourceref = resourceref_resolver
-            .resolve(&resourceref_spec)
+            .resolve("default", &resourceref_spec)
             .await
             .unwrap();
 
@@ -207,7 +207,7 @@ mod tests {
 
         // W
         let resourceref = resourceref_resolver
-            .resolve(&resourceref_spec)
+            .resolve("default", &resourceref_spec)
             .await
             .unwrap();
 
@@ -272,7 +272,7 @@ mod tests {
 
         // W
         let resourceref = resourceref_resolver
-            .resolve(&resourceref_spec)
+            .resolve("default", &resourceref_spec)
             .await
             .unwrap();
 
@@ -324,7 +324,7 @@ mod tests {
 
         // W
         resourceref_resolver
-            .resolve(&resourceref_spec)
+            .resolve("default", &resourceref_spec)
             .await
             .unwrap();
     }

@@ -153,7 +153,7 @@ impl GameServerBuilder {
                     "sh".to_string(),
                     format!("{}/init-fs.sh", MINECRAFT_SERVER_SHULKER_CONFIG_DIR),
                 ]),
-                env: Some(Self::get_init_env(resourceref_resolver, &minecraft_server.spec).await?),
+                env: Some(Self::get_init_env(resourceref_resolver, &minecraft_server).await?),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
                     VolumeMount {
@@ -280,8 +280,10 @@ impl GameServerBuilder {
 
     async fn get_init_env(
         resourceref_resolver: &ResourceRefResolver,
-        spec: &MinecraftServerSpec,
+        minecraft_server: &MinecraftServer,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
+        let spec = &minecraft_server.spec;
+
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_CONFIG_DIR".to_string(),
@@ -316,7 +318,10 @@ impl GameServerBuilder {
         ];
 
         if let Some(world) = &spec.config.world {
-            let url = resourceref_resolver.resolve(world).await?.as_url()?;
+            let url = resourceref_resolver
+                .resolve(minecraft_server.namespace().as_ref().unwrap(), world)
+                .await?
+                .as_url()?;
 
             env.push(EnvVar {
                 name: "SERVER_WORLD_URL".to_string(),
@@ -327,7 +332,7 @@ impl GameServerBuilder {
 
         if let Some(plugins) = &spec.config.plugins {
             let urls: Vec<String> = resourceref_resolver
-                .resolve_all(plugins)
+                .resolve_all(minecraft_server.namespace().as_ref().unwrap(), plugins)
                 .await?
                 .into_iter()
                 .map(|url| url.to_string())
@@ -342,7 +347,7 @@ impl GameServerBuilder {
 
         if let Some(patches) = &spec.config.patches {
             let urls: Vec<String> = resourceref_resolver
-                .resolve_all(patches)
+                .resolve_all(minecraft_server.namespace().as_ref().unwrap(), patches)
                 .await?
                 .into_iter()
                 .map(|url| url.to_string())
@@ -511,10 +516,9 @@ mod tests {
         // G
         let client = create_client_mock();
         let resourceref_resolver = ResourceRefResolver::new(client);
-        let spec = TEST_SERVER.spec.clone();
 
         // W
-        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &spec)
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &TEST_SERVER)
             .await
             .unwrap();
 
@@ -538,10 +542,9 @@ mod tests {
         // G
         let client = create_client_mock();
         let resourceref_resolver = ResourceRefResolver::new(client);
-        let spec = TEST_SERVER.spec.clone();
 
         // W
-        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &spec)
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &TEST_SERVER)
             .await
             .unwrap();
 
@@ -565,10 +568,9 @@ mod tests {
         // G
         let client = create_client_mock();
         let resourceref_resolver = ResourceRefResolver::new(client);
-        let spec = TEST_SERVER.spec.clone();
 
         // W
-        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &spec)
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &TEST_SERVER)
             .await
             .unwrap();
 
