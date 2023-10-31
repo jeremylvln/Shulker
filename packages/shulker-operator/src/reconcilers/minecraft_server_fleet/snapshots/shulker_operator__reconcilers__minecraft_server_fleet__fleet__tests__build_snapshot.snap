@@ -95,7 +95,7 @@ spec:
                   value: "-XX:MaxRAMPercentage=75"
                 - name: EXTRA_ENV
                   value: my_value
-              image: "itzg/minecraft-server:2022.16.0-java17"
+              image: "itzg/minecraft-server:2023.10.1-java17"
               imagePullPolicy: IfNotPresent
               name: minecraft-server
               securityContext:
@@ -130,6 +130,12 @@ spec:
                   value: 0.0.0-test-cfg
                 - name: SHULKER_MAVEN_REPOSITORY
                   value: "https://maven.jeremylvln.fr/artifactory/shulker"
+                - name: SERVER_WORLD_URL
+                  value: "https://example.com/my_world.tar.gz"
+                - name: SERVER_PLUGIN_URLS
+                  value: "https://example.com/my_plugin.jar"
+                - name: SERVER_PATCH_URLS
+                  value: "https://example.com/my_patch.tar.gz"
               image: "alpine:latest"
               name: init-fs
               securityContext:
