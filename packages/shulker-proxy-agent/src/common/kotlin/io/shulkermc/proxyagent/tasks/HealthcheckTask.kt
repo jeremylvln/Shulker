@@ -12,7 +12,10 @@ class HealthcheckTask(private val agent: ShulkerProxyAgentCommon) : Runnable {
 
     fun schedule(): ProxyInterface.ScheduledTask {
         return this.agent.proxyInterface.scheduleRepeatingTask(
-            0L, HEALTHCHECK_INTERVAL_SECONDS, TimeUnit.SECONDS, this
+            0L,
+            HEALTHCHECK_INTERVAL_SECONDS,
+            TimeUnit.SECONDS,
+            this
         )
     }
 

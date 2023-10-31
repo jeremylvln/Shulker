@@ -147,11 +147,20 @@ class ProxyInterfaceBungeeCord(
         return this.proxy.players.size
     }
 
-    override fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+    override fun scheduleDelayedTask(
+        delay: Long,
+        timeUnit: TimeUnit,
+        runnable: Runnable
+    ): ProxyInterface.ScheduledTask {
         return BungeeCordScheduledTask(this.proxy.scheduler.schedule(this.plugin, runnable, delay, timeUnit))
     }
 
-    override fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ProxyInterface.ScheduledTask {
+    override fun scheduleRepeatingTask(
+        delay: Long,
+        interval: Long,
+        timeUnit: TimeUnit,
+        runnable: Runnable
+    ): ProxyInterface.ScheduledTask {
         return BungeeCordScheduledTask(this.proxy.scheduler.schedule(this.plugin, runnable, delay, interval, timeUnit))
     }
 

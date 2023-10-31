@@ -39,7 +39,9 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
             }
 
             this.healthcheckTask = this.serverInterface.scheduleRepeatingTask(
-                0L, HEALTHCHECK_DELAY_SECONDS, TimeUnit.SECONDS
+                0L,
+                HEALTHCHECK_DELAY_SECONDS,
+                TimeUnit.SECONDS
             ) {
                 this.agonesGateway.sendHealthcheck()
             }
