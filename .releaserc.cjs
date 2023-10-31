@@ -47,13 +47,13 @@ const fileReplacements = [
     to: 'newTag: ${nextRelease.version}',
     results: [
       {
-        file: 'kube/overlays/stable/kustomization.yaml',
+        file: 'kube/overlays/stable-with-prometheus/kustomization.yaml',
         hasChanged: true,
         numMatches: 1,
         numReplacements: 1,
       },
       {
-        file: 'kube/overlays/stable-with-prometheus/kustomization.yaml',
+        file: 'kube/overlays/stable/kustomization.yaml',
         hasChanged: true,
         numMatches: 1,
         numReplacements: 1,
