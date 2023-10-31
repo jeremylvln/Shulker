@@ -19,7 +19,7 @@
     "crd:uninstall": "cargo run --bin crdgen && kubectl delete -k kube/resources/crd"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.27.0",
+    "@bufbuild/buf": "1.27.1",
     "@commitlint/cli": "17.8.0",
     "@commitlint/config-conventional": "18.0.0",
     "@nx/devkit": "17.0.1",
