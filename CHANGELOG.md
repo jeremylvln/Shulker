@@ -1,3 +1,34 @@
+## [0.3.0](https://github.com/jeremylvln/Shulker/compare/v0.2.0...v0.3.0) (2023-10-31)
+
+
+### :sparkles: Features :sparkles:
+
+* **shulker-crds:** add redis provided spec to cluster ([490db51](https://github.com/jeremylvln/Shulker/commit/490db51685f025c3c8ae4833022aa037d7dd58ce))
+* **shulker-operator:** add ability to register hook with order ([76f6730](https://github.com/jeremylvln/Shulker/commit/76f673071587c9ee0e5840d3437a4e24b412870b))
+* **shulker-operator:** deploy a managed single node redis ([#183](https://github.com/jeremylvln/Shulker/issues/183)) ([3e99751](https://github.com/jeremylvln/Shulker/commit/3e9975110eae92a5cee4ebfbf84ada1996fae6cd))
+* **shulker-proxy-agent:** add glist, gtp and gfind commands ([850af26](https://github.com/jeremylvln/Shulker/commit/850af2615347fc7b0384ad1a33d7d305c7baf3d2))
+* **shulker-proxy-agent:** display global player count on ping ([c29eac1](https://github.com/jeremylvln/Shulker/commit/c29eac17501fbf8942247de8c9b4e73546a6146a))
+* **shulker-proxy-agent:** listen on teleport player pub sub ([e4f8d17](https://github.com/jeremylvln/Shulker/commit/e4f8d17804bdd4a1b08d584a461375be1cfdf576))
+* **shulker-proxy-agent:** query mojang api to get unknown player names or ids ([e7eb734](https://github.com/jeremylvln/Shulker/commit/e7eb734e52cf655459314b3d65bccb3e8df05eaf))
+* **shulker-proxy-agent:** sync proxies and players in Redis ([ec0211c](https://github.com/jeremylvln/Shulker/commit/ec0211c7a723e42b02f0c72ced46782d2bcb2b0e))
+* **shulker-sdk:** add convenient Java wrapper ([4ac0c8c](https://github.com/jeremylvln/Shulker/commit/4ac0c8c25f9a5f70515f7dcf9fad03d334609b0f))
+
+
+### :bug: Bug Fixes :bug:
+
+* publish java libraries as normal jar ([d4083d1](https://github.com/jeremylvln/Shulker/commit/d4083d1e7f82741d52a41f028b94c16e6e1f5574))
+* **shulker-operator:** assert valid cluster ref before reconciling ([#184](https://github.com/jeremylvln/Shulker/issues/184)) ([c207cce](https://github.com/jeremylvln/Shulker/commit/c207ccee0526dfc0bcebd75b47da91f81f5feeba))
+* **shulker-operator:** keep extra annotations when reconciling a resource ([229b50c](https://github.com/jeremylvln/Shulker/commit/229b50c7347fbdeb8ad63c31081e8822f8e7184f))
+* **shulker-operator:** patch existing resources with a fresh spec ([d2fcea3](https://github.com/jeremylvln/Shulker/commit/d2fcea387399679a5f09da6e7a697b017c8af65c))
+* **shulker-operator:** plugins and patches joined with bad separator ([13d142e](https://github.com/jeremylvln/Shulker/commit/13d142ee40bef5c4553e114aaf9d808e641dfd84))
+* **shulker-operator:** resolve maven secret in correct namespace ([a7b8d14](https://github.com/jeremylvln/Shulker/commit/a7b8d14ee7573646d06138616c12f5065df98670))
+* **shulker-proxy-agent:** sync players, proxies and servers in Redis ([06529f6](https://github.com/jeremylvln/Shulker/commit/06529f68d34b53ba79443b1f668d8b2d89d7eb9a))
+
+
+### :books: Documentation :books:
+
+* fix dead link in README ([048bb66](https://github.com/jeremylvln/Shulker/commit/048bb66fe4cff3302948471f8872820ebed98442))
+
 ## [0.2.0](https://github.com/jeremylvln/Shulker/compare/v0.1.0...v0.2.0) (2023-10-25)
 
 

@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: ghcr.io/jeremylvln/shulker-operator
-    newTag: v0.2.0
+    newTag: 0.3.0
