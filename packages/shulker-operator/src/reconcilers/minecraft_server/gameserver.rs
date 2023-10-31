@@ -154,7 +154,7 @@ impl GameServerBuilder {
                     "sh".to_string(),
                     format!("{}/init-fs.sh", MINECRAFT_SERVER_SHULKER_CONFIG_DIR),
                 ]),
-                env: Some(Self::get_init_env(resourceref_resolver, &minecraft_server).await?),
+                env: Some(Self::get_init_env(resourceref_resolver, minecraft_server).await?),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
                     VolumeMount {

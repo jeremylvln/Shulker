@@ -56,6 +56,8 @@ player connected to the Network while having an almost-zero performance impact.
 
 ## Keeping the proxies up-to-date
 
+### Have an up-to-date list of servers
+
 One of the core requirements of Shulker is to keep the proxies up-to-date about all
 the creation and deletion of servers. This is usually done manually using the following
 flow:
@@ -79,11 +81,33 @@ availability. Supported by a plugin agent to be installed on every proxy, the pr
 will have their server list updated immediately upon every event occurring in the
 Kubernetes Cluster.
 
-:::warning
+### Have a shared list of connected players
 
-While servers are synchronized on each proxies, players are not. This means that,
-from one proxy, you will **not** know that another player is connected to the network
-if it is not connected to the same proxy. **This feature is considered high priority.**
+If you want to work with multiple proxies, mostly to ensure high availability of
+the cluster, you'll face the challenges of state sharing. Every proxy is
+fundamentally independant, and thus, is not aware that:
+
+1. It way not be the only proxy in the cluster
+2. Players may be connected to other proxies
+
+This could create weird situations where a player may want to communicate with
+another player in a different proxy, but these two proxies being unable to
+proceed because they are not aware that the other player is actually connected
+to the cluster.
+
+To solve this problem, Shulker has a built-in proxy synchronization layer based
+on Redis that is enabled automatically. This will provide some administrative
+commands to the proxy to ease player management (TODO ADD PAGE ABOUT COMMANDS),
+but also some useful details like showing the total amount of players in all
+proxies when pinging your cluster.
+
+:::tip
+
+While Shulker provides a managed single-node Redis by default when creating a
+cluster, it is not advised to use it in production as there will be no high
+availability nor any availability guarantee. It is only meant to be used when
+testing Shulker or at least on staging infrastructure where availability is
+not a critical requirement.
 
 :::
 
