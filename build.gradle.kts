@@ -34,10 +34,6 @@ subprojects {
     apply(plugin = "jacoco")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    apply(plugin = "com.github.johnrengelman.shadow")
-    apply(plugin = "io.gitlab.arturbosch.detekt")
 
     group = "io.shulkermc"
 
@@ -50,27 +46,9 @@ subprojects {
         maven(url = "https://repo.papermc.io/repository/maven-public/")
     }
 
-    dependencies {
-        testImplementation(kotlin("test"))
-    }
-
     tasks {
         compileJava {
             options.encoding = Charsets.UTF_8.name()
-        }
-
-        compileKotlin {
-            kotlinOptions {
-                allWarningsAsErrors = true
-            }
-        }
-
-        assemble {
-            dependsOn("shadowJar")
-        }
-
-        shadowJar {
-            archiveClassifier.set("")
         }
 
         jacocoTestReport {
@@ -89,29 +67,61 @@ subprojects {
         }
     }
 
-    detekt {
-        buildUponDefaultConfig = true
-        ignoreFailures = true
-        baseline = file("$rootDir/gradle/detekt/baseline.xml")
-        basePath = rootDir.absolutePath
-    }
+    if (!project.hasProperty("javaOnly")) {
+        apply(plugin = "org.jetbrains.kotlin.jvm")
+        apply(plugin = "org.jlleitschuh.gradle.ktlint")
+        apply(plugin = "io.gitlab.arturbosch.detekt")
 
-    tasks.withType<Detekt>().configureEach {
-        jvmTarget = "1.8"
-
-        reports {
-            sarif.required = true
+        dependencies {
+            testImplementation(kotlin("test"))
         }
 
-        finalizedBy(detektReportMergeSarif)
+        tasks {
+            compileKotlin {
+                kotlinOptions {
+                    allWarningsAsErrors = true
+                }
+            }
+        }
+
+        detekt {
+            buildUponDefaultConfig = true
+            ignoreFailures = true
+            baseline = file("$rootDir/gradle/detekt/baseline.xml")
+            basePath = rootDir.absolutePath
+        }
+
+        tasks.withType<Detekt>().configureEach {
+            jvmTarget = "1.8"
+
+            reports {
+                sarif.required = true
+            }
+
+            finalizedBy(detektReportMergeSarif)
+        }
+
+        tasks.withType<DetektCreateBaselineTask>().configureEach {
+            jvmTarget = "1.8"
+        }
+
+        detektReportMergeSarif.configure {
+            input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
+        }
     }
 
-    tasks.withType<DetektCreateBaselineTask>().configureEach {
-        jvmTarget = "1.8"
-    }
+    if (!project.hasProperty("isLibrary")) {
+        apply(plugin = "com.github.johnrengelman.shadow")
 
-    detektReportMergeSarif.configure {
-        input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
+        tasks {
+            assemble {
+                dependsOn("shadowJar")
+            }
+
+            shadowJar {
+                archiveClassifier.set("")
+            }
+        }
     }
 
     publishing {

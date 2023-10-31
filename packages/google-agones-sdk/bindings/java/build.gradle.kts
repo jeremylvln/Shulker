@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 dependencies {
     api("com.google.protobuf:protobuf-java:3.24.4")
     implementation("io.grpc:grpc-protobuf:1.58.0")
@@ -11,11 +9,6 @@ dependencies {
 configure<JavaPluginExtension> {
     withJavadocJar()
     withSourcesJar()
-}
-
-tasks.withType<ShadowJar> {
-    exclude("**/*.proto")
-    includeEmptyDirs = false
 }
 
 sourceSets {

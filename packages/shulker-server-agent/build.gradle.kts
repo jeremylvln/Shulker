@@ -10,8 +10,6 @@ dependencies {
 
 setOf("paperJar").forEach { taskName ->
     tasks.named(taskName, ShadowJar::class.java) {
-        dependsOn(":packages:shulker-server-api:shadowJar")
-        dependsOn(":packages:google-agones-sdk-bindings-java:shadowJar")
         mergeServiceFiles()
     }
 }
