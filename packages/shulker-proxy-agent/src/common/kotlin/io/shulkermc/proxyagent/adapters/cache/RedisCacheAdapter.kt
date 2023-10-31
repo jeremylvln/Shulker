@@ -8,6 +8,7 @@ import java.util.UUID
 
 class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
     companion object {
+        private const val PROXY_LOST_PURGE_LOCK_SECONDS = 15L
         private const val PLAYER_ID_CACHE_TTL_SECONDS = 60L * 60 * 24 * 14
     }
 
@@ -58,8 +59,8 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    override fun tryLockLostProxiesPurgeTask(ownerProxyName: String, ttlSeconds: Long): Optional<CacheAdapter.Lock> =
-        this.tryLock(ownerProxyName, "shulker:lock:lost-proxies-purge", ttlSeconds)
+    override fun tryLockLostProxiesPurgeTask(ownerProxyName: String): Optional<CacheAdapter.Lock> =
+        this.tryLock(ownerProxyName, "shulker:lock:lost-proxies-purge", PROXY_LOST_PURGE_LOCK_SECONDS)
 
     override fun unregisterServer(serverName: String) {
         this.jedisPool.resource.use { jedis ->
@@ -188,7 +189,7 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
 
             if (success) {
                 return Optional.of(object : CacheAdapter.Lock {
-                    override fun release() {
+                    override fun close() {
                         jedisPool.resource.use { jedis -> jedis.del(key) }
                     }
                 })

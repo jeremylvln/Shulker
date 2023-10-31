@@ -14,7 +14,6 @@ import io.shulkermc.proxyagent.adapters.pubsub.PubSubAdapter
 import io.shulkermc.proxyagent.adapters.pubsub.RedisPubSubAdapter
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI
 import io.shulkermc.proxyagent.api.ShulkerProxyAPIImpl
-import io.shulkermc.proxyagent.handlers.TeleportPlayerOnServerHandler
 import io.shulkermc.proxyagent.services.PlayerMovementService
 import io.shulkermc.proxyagent.services.ProxyLifecycleService
 import io.shulkermc.proxyagent.services.ServerDirectoryService
@@ -70,7 +69,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.playerMovementService = PlayerMovementService(this)
             this.proxyLifecycleService = ProxyLifecycleService(this)
 
-            this.pubSub.onTeleportPlayerOnServer(TeleportPlayerOnServerHandler(this)::handle)
+            // this.pubSub.onTeleportPlayerOnServer(TeleportPlayerOnServerHandler(this)::handle)
 
             this.healthcheckTask = HealthcheckTask(this).schedule()
             this.lostProxyPurgeTask = LostProxyPurgeTask(this).schedule()

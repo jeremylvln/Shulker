@@ -9,7 +9,7 @@ interface CacheAdapter {
     fun unregisterProxy(proxyName: String)
     fun updateProxyLastSeen(proxyName: String)
     fun listRegisteredProxies(): List<RegisteredProxy>
-    fun tryLockLostProxiesPurgeTask(ownerProxyName: String, ttlSeconds: Long): Optional<Lock>
+    fun tryLockLostProxiesPurgeTask(ownerProxyName: String): Optional<Lock>
 
     fun unregisterServer(serverName: String)
     fun listPlayersInServer(serverName: String): List<UUID>
@@ -28,7 +28,5 @@ interface CacheAdapter {
 
     data class RegisteredProxy(val proxyName: String, val lastSeenMillis: Long)
 
-    interface Lock {
-        fun release()
-    }
+    interface Lock : AutoCloseable
 }
