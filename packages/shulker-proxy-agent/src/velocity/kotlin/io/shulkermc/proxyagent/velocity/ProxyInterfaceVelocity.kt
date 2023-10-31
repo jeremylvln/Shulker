@@ -12,6 +12,7 @@ import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
 import io.shulkermc.proxyagent.ProxyInterface
+import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerLoginHook
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
@@ -43,15 +44,23 @@ class ProxyInterfaceVelocity(
         return this.proxy.getServer(name).isPresent
     }
 
-    override fun addProxyPingHook(hook: ProxyPingHook) {
-        this.proxy.eventManager.register(this.plugin, ProxyPingEvent::class.java, PostOrder.LAST) { event ->
+    override fun addProxyPingHook(hook: ProxyPingHook, postOrder: HookPostOrder) {
+        this.proxy.eventManager.register(
+            this.plugin,
+            ProxyPingEvent::class.java,
+            this.mapPostOrder(postOrder)
+        ) { event ->
             val result = hook()
             event.ping = event.ping.asBuilder().onlinePlayers(result.playerCount).build()
         }
     }
 
-    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
-        this.proxy.eventManager.register(this.plugin, PreLoginEvent::class.java, PostOrder.FIRST) { event ->
+    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook, postOrder: HookPostOrder) {
+        this.proxy.eventManager.register(
+            this.plugin,
+            PreLoginEvent::class.java,
+            this.mapPostOrder(postOrder)
+        ) { event ->
             if (!event.result.isAllowed) return@register
             val result = hook()
 
@@ -61,20 +70,26 @@ class ProxyInterfaceVelocity(
         }
     }
 
-    override fun addPlayerLoginHook(hook: PlayerLoginHook) {
-        this.proxy.eventManager.register(this.plugin, LoginEvent::class.java, PostOrder.FIRST) { event ->
+    override fun addPlayerLoginHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
+        this.proxy.eventManager.register(this.plugin, LoginEvent::class.java, this.mapPostOrder(postOrder)) { event ->
             hook(wrapPlayer(event.player))
         }
     }
 
-    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook) {
-        this.proxy.eventManager.register(this.plugin, DisconnectEvent::class.java, PostOrder.LAST) { event ->
-            hook(this.wrapPlayer(event.player))
-        }
+    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
+        this.proxy.eventManager.register(
+            this.plugin,
+            DisconnectEvent::class.java,
+            this.mapPostOrder(postOrder)
+        ) { event -> hook(this.wrapPlayer(event.player)) }
     }
 
-    override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
-        this.proxy.eventManager.register(this.plugin, ServerPreConnectEvent::class.java, PostOrder.LAST) { event ->
+    override fun addServerPreConnectHook(hook: ServerPreConnectHook, postOrder: HookPostOrder) {
+        this.proxy.eventManager.register(
+            this.plugin,
+            ServerPreConnectEvent::class.java,
+            this.mapPostOrder(postOrder)
+        ) { event ->
             if (!event.result.isAllowed) return@register
             val result = hook(this.wrapPlayer(event.player), event.originalServer.serverInfo.name)
 
@@ -87,10 +102,12 @@ class ProxyInterfaceVelocity(
     }
 
     @Suppress("UnstableApiUsage")
-    override fun addServerPostConnectHook(hook: ServerPostConnectHook) {
-        this.proxy.eventManager.register(this.plugin, ServerPostConnectEvent::class.java, PostOrder.LAST) { event ->
-            hook(this.wrapPlayer(event.player), event.player.currentServer.get().serverInfo.name)
-        }
+    override fun addServerPostConnectHook(hook: ServerPostConnectHook, postOrder: HookPostOrder) {
+        this.proxy.eventManager.register(
+            this.plugin,
+            ServerPostConnectEvent::class.java,
+            this.mapPostOrder(postOrder)
+        ) { event -> hook(this.wrapPlayer(event.player), event.player.currentServer.get().serverInfo.name) }
     }
 
     override fun teleportPlayerOnServer(playerName: String, serverName: String) {
@@ -144,6 +161,16 @@ class ProxyInterfaceVelocity(
             override fun disconnect(component: Component) {
                 velocityPlayer.disconnect(component)
             }
+        }
+    }
+
+    private fun mapPostOrder(postOrder: HookPostOrder): PostOrder {
+        return when (postOrder) {
+            HookPostOrder.FIRST -> PostOrder.FIRST
+            HookPostOrder.EARLY -> PostOrder.EARLY
+            HookPostOrder.NORMAL -> PostOrder.NORMAL
+            HookPostOrder.LATE -> PostOrder.LATE
+            HookPostOrder.LAST -> PostOrder.LAST
         }
     }
 

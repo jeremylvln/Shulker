@@ -3,6 +3,7 @@
 package io.shulkermc.proxyagent.bungeecord
 
 import io.shulkermc.proxyagent.ProxyInterface
+import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerLoginHook
@@ -45,10 +46,11 @@ class ProxyInterfaceBungeeCord(
         return this.proxy.servers.containsKey(name)
     }
 
-    override fun addProxyPingHook(hook: ProxyPingHook) {
+    override fun addProxyPingHook(hook: ProxyPingHook, postOrder: HookPostOrder) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
+                // NOTE: BungeeCord does not support runtime event priority
                 @EventHandler(priority = EventPriority.LOWEST)
                 fun onPreLogin(event: ProxyPingEvent) {
                     val result = hook()
@@ -58,11 +60,12 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
-    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook) {
+    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook, postOrder: HookPostOrder) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
-                @EventHandler(priority = EventPriority.HIGHEST)
+                // NOTE: BungeeCord does not support runtime event priority
+                @EventHandler(priority = EventPriority.LOWEST)
                 fun onPreLogin(event: PreLoginEvent) {
                     if (event.isCancelled) return
                     val result = hook()
@@ -75,11 +78,12 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
-    override fun addPlayerLoginHook(hook: PlayerLoginHook) {
+    override fun addPlayerLoginHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
-                @EventHandler(priority = EventPriority.HIGHEST)
+                // NOTE: BungeeCord does not support runtime event priority
+                @EventHandler(priority = EventPriority.LOW)
                 fun onLogin(event: PostLoginEvent) {
                     hook(wrapPlayer(event.player))
                 }
@@ -87,11 +91,12 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
-    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook) {
+    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
-                @EventHandler(priority = EventPriority.LOWEST)
+                // NOTE: BungeeCord does not support runtime event priority
+                @EventHandler(priority = EventPriority.HIGH)
                 fun onPlayerDisconnect(event: PlayerDisconnectEvent) {
                     hook(wrapPlayer(event.player))
                 }
@@ -99,10 +104,11 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
-    override fun addServerPreConnectHook(hook: ServerPreConnectHook) {
+    override fun addServerPreConnectHook(hook: ServerPreConnectHook, postOrder: HookPostOrder) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
+                // NOTE: BungeeCord does not support runtime event priority
                 @EventHandler(priority = EventPriority.LOWEST)
                 fun onServerConnect(event: ServerConnectEvent) {
                     if (event.isCancelled) return
@@ -116,11 +122,12 @@ class ProxyInterfaceBungeeCord(
         )
     }
 
-    override fun addServerPostConnectHook(hook: ServerPostConnectHook) {
+    override fun addServerPostConnectHook(hook: ServerPostConnectHook, postOrder: HookPostOrder) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
-                @EventHandler(priority = EventPriority.LOWEST)
+                // NOTE: BungeeCord does not support runtime event priority
+                @EventHandler(priority = EventPriority.HIGH)
                 fun onServerConnected(event: ServerConnectedEvent) {
                     hook(wrapPlayer(event.player), event.server.info.name)
                 }

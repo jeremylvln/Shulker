@@ -3,6 +3,7 @@ package io.shulkermc.proxyagent.services
 import com.google.common.base.Suppliers
 import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
+import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerPreLoginHookResult
 import io.shulkermc.proxyagent.platform.ProxyPingHookResult
@@ -37,12 +38,12 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     private var acceptingPlayers = true
 
     init {
-        this.agent.proxyInterface.addProxyPingHook(this::onProxyPing)
-        this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin)
-        this.agent.proxyInterface.addPlayerLoginHook(this::onPlayerLogin)
-        this.agent.proxyInterface.addPlayerDisconnectHook(this::onPlayerDisconnect)
-        this.agent.proxyInterface.addServerPreConnectHook(this::onServerPreConnect)
-        this.agent.proxyInterface.addServerPostConnectHook(this::onServerPostConnect)
+        this.agent.proxyInterface.addProxyPingHook(this::onProxyPing, HookPostOrder.FIRST)
+        this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin, HookPostOrder.FIRST)
+        this.agent.proxyInterface.addPlayerLoginHook(this::onPlayerLogin, HookPostOrder.EARLY)
+        this.agent.proxyInterface.addPlayerDisconnectHook(this::onPlayerDisconnect, HookPostOrder.LATE)
+        this.agent.proxyInterface.addServerPreConnectHook(this::onServerPreConnect, HookPostOrder.EARLY)
+        this.agent.proxyInterface.addServerPostConnectHook(this::onServerPostConnect, HookPostOrder.LATE)
     }
 
     fun setAcceptingPlayers(acceptingPlayers: Boolean) {
