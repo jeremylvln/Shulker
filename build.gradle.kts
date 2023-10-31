@@ -26,7 +26,7 @@ val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
 }
 
 subprojects {
-    if (project.name === "packages") return@subprojects
+    if (listOf("packages").contains(project.name)) return@subprojects
 
     apply(plugin = "idea")
     apply(plugin = "java")
