@@ -12,7 +12,6 @@ use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
 use google_agones_crds::v1::fleet::FleetSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
-use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
 use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleet;
 
@@ -48,6 +47,9 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         _existing_fleet: Option<&Self::ResourceType>,
         _context: Option<Self::Context>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
+        let mut config_clone = minecraft_server_fleet.spec.template.spec.config.clone();
+        config_clone.existing_config_map_name = Some(ConfigMapBuilder::name(minecraft_server_fleet));
+
         let fake_mincraft_server = MinecraftServer {
             metadata: ObjectMeta {
                 namespace: minecraft_server_fleet.namespace(),
@@ -61,10 +63,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
                     .spec
                     .cluster_ref
                     .clone(),
-                config: MinecraftServerConfigurationSpec {
-                    existing_config_map_name: Some(ConfigMapBuilder::name(minecraft_server_fleet)),
-                    ..MinecraftServerConfigurationSpec::default()
-                },
+                config: config_clone,
                 ..minecraft_server_fleet.spec.template.spec.clone()
             },
             status: None,

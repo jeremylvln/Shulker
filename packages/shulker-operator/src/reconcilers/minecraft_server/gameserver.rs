@@ -32,6 +32,7 @@ use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
 use super::config_map::ConfigMapBuilder;
 use super::MinecraftServerReconciler;
 
+const MINECRAFT_SERVER_IMAGE: &str = "itzg/minecraft-server:2023.10.1-java17";
 const MINECRAFT_SERVER_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const MINECRAFT_SERVER_CONFIG_DIR: &str = "/config";
 const MINECRAFT_SERVER_DATA_DIR: &str = "/data";
@@ -171,7 +172,7 @@ impl GameServerBuilder {
                 ..Container::default()
             }]),
             containers: vec![Container {
-                image: Some("itzg/minecraft-server:2022.16.0-java17".to_string()),
+                image: Some(MINECRAFT_SERVER_IMAGE.to_string()),
                 name: "minecraft-server".to_string(),
                 env: Some(Self::get_env(&minecraft_server.spec)),
                 image_pull_policy: Some("IfNotPresent".to_string()),
@@ -340,7 +341,7 @@ impl GameServerBuilder {
 
             env.push(EnvVar {
                 name: "SERVER_PLUGIN_URLS".to_string(),
-                value: Some(urls.join(",")),
+                value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
         }
@@ -355,7 +356,7 @@ impl GameServerBuilder {
 
             env.push(EnvVar {
                 name: "SERVER_PATCH_URLS".to_string(),
-                value: Some(urls.join(",")),
+                value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
         }

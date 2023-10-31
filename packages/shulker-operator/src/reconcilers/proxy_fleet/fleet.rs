@@ -42,6 +42,7 @@ use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateSpec;
 use super::config_map::ConfigMapBuilder;
 use super::ProxyFleetReconciler;
 
+const PROXY_IMAGE: &str = "itzg/bungeecord:java17-2022.4.1";
 const PROXY_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const PROXY_SHULKER_FORWARDING_SECRET_DIR: &str = "/mnt/shulker/forwarding-secret";
 const PROXY_DATA_DIR: &str = "/server";
@@ -204,7 +205,7 @@ impl FleetBuilder {
                 ..Container::default()
             }]),
             containers: vec![Container {
-                image: Some("itzg/bungeecord:java17-2022.4.1".to_string()),
+                image: Some(PROXY_IMAGE.to_string()),
                 name: "proxy".to_string(),
                 ports: Some(vec![ContainerPort {
                     name: Some("minecraft".to_string()),
@@ -391,7 +392,7 @@ impl FleetBuilder {
 
             env.push(EnvVar {
                 name: "PROXY_PLUGIN_URLS".to_string(),
-                value: Some(urls.join(",")),
+                value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
         }
@@ -407,7 +408,7 @@ impl FleetBuilder {
 
             env.push(EnvVar {
                 name: "PROXY_PATCH_URLS".to_string(),
-                value: Some(urls.join(",")),
+                value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
         }
