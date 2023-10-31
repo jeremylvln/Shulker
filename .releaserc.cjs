@@ -15,7 +15,7 @@ const fileReplacements = [
   },
   {
     files: ['Cargo.toml'],
-    from: '^\\[workspace\\.package\\]\nversion = ".*"$',
+    from: /\\[workspace\\.package\\]\nversion = ".*"/gm,
     to: '[workspace.package]\nversion = "${nextRelease.version}"',
     results: [
       {
