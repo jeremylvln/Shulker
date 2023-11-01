@@ -51,4 +51,4 @@ uuid = { version = "=1.5.0", features = ["v4"] }
 
 [workspace.dependencies.kube]
 features = ["runtime", "client", "derive" ]
-version = "=0.86.0"
+version = "=0.87.1"
