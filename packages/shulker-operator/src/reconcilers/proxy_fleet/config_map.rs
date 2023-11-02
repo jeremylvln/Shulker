@@ -364,18 +364,25 @@ mod bungeecord {
         }
 
         #[test]
+        fn from_spec_prevent_proxy_connections_when_nodeport() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec::default();
+            let service_spec = Some(ProxyFleetServiceSpec {
+                type_: ProxyFleetServiceType::NodePort,
+                ..ProxyFleetServiceSpec::default()
+            });
+
+            // W
+            let config = super::BungeeCordYml::from_spec(&spec, service_spec.as_ref());
+
+            // T
+            assert!(config.prevent_proxy_connections);
+        }
+
+        #[test]
         fn from_spec_not_prevent_proxy_connections_when_clusterip() {
             // G
-            let spec = ProxyFleetTemplateConfigurationSpec {
-                existing_config_map_name: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                motd: "A Motd".to_string(),
-                server_icon: "A Server Icon".to_string(),
-                proxy_protocol: true,
-                ttl_seconds: 300,
-            };
+            let spec = ProxyFleetTemplateConfigurationSpec::default();
             let service_spec = Some(ProxyFleetServiceSpec {
                 type_: ProxyFleetServiceType::ClusterIP,
                 ..ProxyFleetServiceSpec::default()
@@ -391,16 +398,7 @@ mod bungeecord {
         #[test]
         fn from_spec_not_prevent_proxy_connections_when_no_service() {
             // G
-            let spec = ProxyFleetTemplateConfigurationSpec {
-                existing_config_map_name: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                motd: "A Motd".to_string(),
-                server_icon: "A Server Icon".to_string(),
-                proxy_protocol: true,
-                ttl_seconds: 300,
-            };
+            let spec = ProxyFleetTemplateConfigurationSpec::default();
             let service_spec = None;
 
             // W
@@ -572,16 +570,7 @@ mod velocity {
         #[test]
         fn from_spec_prevent_proxy_connections_when_nodeport() {
             // G
-            let spec = ProxyFleetTemplateConfigurationSpec {
-                existing_config_map_name: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                motd: "A Motd".to_string(),
-                server_icon: "A Server Icon".to_string(),
-                proxy_protocol: true,
-                ttl_seconds: 300,
-            };
+            let spec = ProxyFleetTemplateConfigurationSpec::default();
             let service_spec = Some(ProxyFleetServiceSpec {
                 type_: ProxyFleetServiceType::NodePort,
                 ..ProxyFleetServiceSpec::default()
@@ -597,16 +586,7 @@ mod velocity {
         #[test]
         fn from_spec_not_prevent_proxy_connections_when_clusterip() {
             // G
-            let spec = ProxyFleetTemplateConfigurationSpec {
-                existing_config_map_name: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                motd: "A Motd".to_string(),
-                server_icon: "A Server Icon".to_string(),
-                proxy_protocol: true,
-                ttl_seconds: 300,
-            };
+            let spec = ProxyFleetTemplateConfigurationSpec::default();
             let service_spec = Some(ProxyFleetServiceSpec {
                 type_: ProxyFleetServiceType::ClusterIP,
                 ..ProxyFleetServiceSpec::default()
@@ -622,16 +602,7 @@ mod velocity {
         #[test]
         fn from_spec_not_prevent_proxy_connections_when_no_service() {
             // G
-            let spec = ProxyFleetTemplateConfigurationSpec {
-                existing_config_map_name: None,
-                plugins: None,
-                patches: None,
-                max_players: 100,
-                motd: "A Motd".to_string(),
-                server_icon: "A Server Icon".to_string(),
-                proxy_protocol: true,
-                ttl_seconds: 300,
-            };
+            let spec = ProxyFleetTemplateConfigurationSpec::default();
             let service_spec = None;
 
             // W
