@@ -453,7 +453,14 @@ impl FleetBuilder {
             },
             EnvVar {
                 name: "SHULKER_NETWORK_ADMINS".to_string(),
-                value: Some(cluster.spec.network_admins.join(",")),
+                value: Some(
+                    cluster
+                        .spec
+                        .network_admins
+                        .as_ref()
+                        .map(|list| list.join(","))
+                        .unwrap_or("".to_string()),
+                ),
                 ..EnvVar::default()
             },
             EnvVar {

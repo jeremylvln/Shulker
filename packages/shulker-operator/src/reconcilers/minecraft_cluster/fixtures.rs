@@ -11,7 +11,7 @@ lazy_static! {
             ..ObjectMeta::default()
         },
         spec: MinecraftClusterSpec {
-            network_admins: Vec::new(),
+            network_admins: None,
             redis: None
         },
         status: None,
