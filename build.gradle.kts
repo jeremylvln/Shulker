@@ -241,7 +241,7 @@ subprojects {
 
         dependencies {
             "commonCompileOnly"("net.kyori:adventure-api:4.14.0")
-            "paperCompileOnly"("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
+            "paperCompileOnly"("dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
         }
     }
 }

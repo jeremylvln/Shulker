@@ -1,22 +1,17 @@
 package io.shulkermc.serveragent.paper
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import io.shulkermc.serveragent.ServerInterface
-import org.bukkit.scheduler.BukkitTask
 import java.util.concurrent.TimeUnit
 
 class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : ServerInterface {
-    companion object {
-        private const val TICKS_PER_SECONDS = 20L
-    }
-
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
         runnable: Runnable
     ): ServerInterface.ScheduledTask {
-        val delayTicks = timeUnit.toSeconds(delay) * TICKS_PER_SECONDS
-        return BukkitScheduledTask(
-            this.plugin.server.scheduler.runTaskLaterAsynchronously(this.plugin, runnable, delayTicks)
+        return PaperScheduledTask(
+            this.plugin.server.asyncScheduler.runDelayed(this.plugin, { runnable.run() }, delay, timeUnit)
         )
     }
 
@@ -26,16 +21,14 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         timeUnit: TimeUnit,
         runnable: Runnable
     ): ServerInterface.ScheduledTask {
-        val delayTicks = timeUnit.toSeconds(delay) * TICKS_PER_SECONDS
-        val intervalTicks = timeUnit.toSeconds(interval) * TICKS_PER_SECONDS
-        return BukkitScheduledTask(
-            this.plugin.server.scheduler.runTaskTimerAsynchronously(this.plugin, runnable, delayTicks, intervalTicks)
+        return PaperScheduledTask(
+            this.plugin.server.asyncScheduler.runAtFixedRate(this.plugin, { runnable.run() }, delay, interval, timeUnit)
         )
     }
 
-    private class BukkitScheduledTask(private val bukkitTask: BukkitTask) : ServerInterface.ScheduledTask {
+    private class PaperScheduledTask(private val scheduledTask: ScheduledTask) : ServerInterface.ScheduledTask {
         override fun cancel() {
-            if (!this.bukkitTask.isCancelled) this.bukkitTask.cancel()
+            if (!this.scheduledTask.isCancelled) this.scheduledTask.cancel()
         }
     }
 }

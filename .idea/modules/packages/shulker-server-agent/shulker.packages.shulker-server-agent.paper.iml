@@ -54,7 +54,7 @@
     <orderEntry type="module" module-name="shulker.packages.shulker-server-agent.common" />
     <orderEntry type="module" module-name="shulker.packages.shulker-server-api.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.14.0" level="project" />
     <orderEntry type="module" module-name="shulker.packages.google-agones-sdk-bindings-java.main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10" level="project" />
@@ -64,10 +64,11 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-gson:4.14.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-legacy:4.14.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-plain:4.14.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-chat:1.16-R0.4-deprecated+build.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-chat:1.16-R0.4-deprecated+build.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:31.1-jre" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.gson:gson:2.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.yaml:snakeyaml:1.33" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.joml:joml:1.10.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: it.unimi.dsi:fastutil:8.5.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.logging.log4j:log4j-api:2.17.1" level="project" />
