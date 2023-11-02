@@ -45,7 +45,7 @@ impl MinecraftServerFleetSpec {
 }
 
 /// The status object of `MinecraftServerFleet`
-#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftServerFleetStatus {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]

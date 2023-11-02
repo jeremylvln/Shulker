@@ -187,7 +187,7 @@ pub struct ProxyFleetTemplatePodOverridesSpec {
     pub service_account_name: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ProxyFleetServiceSpec {
     /// Type of Service to create.
@@ -225,7 +225,7 @@ pub enum ProxyFleetServiceExternalTrafficPolicy {
 }
 
 /// The status object of `ProxyFleet`
-#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ProxyFleetStatus {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]

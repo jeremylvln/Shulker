@@ -59,15 +59,21 @@ impl<'a> ResourceBuilder<'a> for ConfigMapBuilder {
             ProxyFleetTemplateVersion::Velocity => {
                 data.insert(
                     "velocity-config.toml".to_string(),
-                    velocity::VelocityToml::from_spec(&proxy_fleet.spec.template.spec.config)
-                        .to_string(),
+                    velocity::VelocityToml::from_spec(
+                        &proxy_fleet.spec.template.spec.config,
+                        proxy_fleet.spec.service.as_ref(),
+                    )
+                    .to_string(),
                 );
             }
             _ => {
                 data.insert(
                     "bungeecord-config.yml".to_string(),
-                    bungeecord::BungeeCordYml::from_spec(&proxy_fleet.spec.template.spec.config)
-                        .to_string(),
+                    bungeecord::BungeeCordYml::from_spec(
+                        &proxy_fleet.spec.template.spec.config,
+                        proxy_fleet.spec.service.as_ref(),
+                    )
+                    .to_string(),
                 );
             }
         }
@@ -226,7 +232,9 @@ mod bungeecord {
     use serde::{Deserialize, Serialize};
     use std::collections::BTreeMap;
 
-    use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
+    use shulker_crds::v1alpha1::proxy_fleet::{
+        ProxyFleetServiceSpec, ProxyFleetServiceType, ProxyFleetTemplateConfigurationSpec,
+    };
 
     #[derive(Deserialize, Serialize, Clone, Debug)]
     #[serde(rename_all = "snake_case")]
@@ -263,7 +271,17 @@ mod bungeecord {
     }
 
     impl BungeeCordYml {
-        pub fn from_spec(spec: &ProxyFleetTemplateConfigurationSpec) -> Self {
+        pub fn from_spec(
+            spec: &ProxyFleetTemplateConfigurationSpec,
+            service_spec: Option<&ProxyFleetServiceSpec>,
+        ) -> Self {
+            let disallow_proxy_connections = service_spec
+                .map(|spec| {
+                    spec.type_ == ProxyFleetServiceType::LoadBalancer
+                        || spec.type_ == ProxyFleetServiceType::NodePort
+                })
+                .unwrap_or(false);
+
             BungeeCordYml {
                 servers: BTreeMap::from([
                     (
@@ -296,7 +314,7 @@ mod bungeecord {
                 groups: BTreeMap::new(),
                 online_mode: true,
                 ip_forward: true,
-                prevent_proxy_connections: true,
+                prevent_proxy_connections: disallow_proxy_connections,
                 enforce_secure_profile: true,
                 log_pings: false,
             }
@@ -316,7 +334,9 @@ mod bungeecord {
     mod tests {
         use std::collections::BTreeMap;
 
-        use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
+        use shulker_crds::v1alpha1::proxy_fleet::{
+            ProxyFleetServiceSpec, ProxyFleetServiceType, ProxyFleetTemplateConfigurationSpec,
+        };
 
         #[test]
         fn from_spec() {
@@ -331,12 +351,63 @@ mod bungeecord {
                 proxy_protocol: true,
                 ttl_seconds: 300,
             };
+            let service_spec = Some(ProxyFleetServiceSpec {
+                type_: ProxyFleetServiceType::LoadBalancer,
+                ..ProxyFleetServiceSpec::default()
+            });
 
             // W
-            let config = super::BungeeCordYml::from_spec(&spec);
+            let config = super::BungeeCordYml::from_spec(&spec, service_spec.as_ref());
 
             // T
             insta::assert_yaml_snapshot!(config);
+        }
+
+        #[test]
+        fn from_spec_not_prevent_proxy_connections_when_clusterip() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+            let service_spec = Some(ProxyFleetServiceSpec {
+                type_: ProxyFleetServiceType::ClusterIP,
+                ..ProxyFleetServiceSpec::default()
+            });
+
+            // W
+            let config = super::BungeeCordYml::from_spec(&spec, service_spec.as_ref());
+
+            // T
+            assert!(!config.prevent_proxy_connections);
+        }
+
+        #[test]
+        fn from_spec_not_prevent_proxy_connections_when_no_service() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+            let service_spec = None;
+
+            // W
+            let config = super::BungeeCordYml::from_spec(&spec, service_spec.as_ref());
+
+            // T
+            assert!(!config.prevent_proxy_connections);
         }
 
         #[test]
@@ -381,7 +452,9 @@ mod bungeecord {
 mod velocity {
     use serde::{Deserialize, Serialize};
 
-    use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
+    use shulker_crds::v1alpha1::proxy_fleet::{
+        ProxyFleetServiceSpec, ProxyFleetServiceType, ProxyFleetTemplateConfigurationSpec,
+    };
 
     #[derive(Deserialize, Serialize, Clone, Debug)]
     #[serde(rename_all = "kebab-case")]
@@ -421,7 +494,17 @@ mod velocity {
     }
 
     impl VelocityToml {
-        pub fn from_spec(spec: &ProxyFleetTemplateConfigurationSpec) -> Self {
+        pub fn from_spec(
+            spec: &ProxyFleetTemplateConfigurationSpec,
+            service_spec: Option<&ProxyFleetServiceSpec>,
+        ) -> Self {
+            let disallow_proxy_connections = service_spec
+                .map(|spec| {
+                    spec.type_ == ProxyFleetServiceType::LoadBalancer
+                        || spec.type_ == ProxyFleetServiceType::NodePort
+                })
+                .unwrap_or(false);
+
             VelocityToml {
                 config_version: "2.5".to_string(),
                 bind: "0.0.0.0:25577".to_string(),
@@ -429,7 +512,7 @@ mod velocity {
                 show_max_players: spec.max_players,
                 online_mode: true,
                 force_key_authentication: true,
-                prevent_client_proxy_connections: true,
+                prevent_client_proxy_connections: disallow_proxy_connections,
                 player_info_forwarding_mode: "modern".to_string(),
                 forwarding_secret_file: "/mnt/shulker/forwarding-secret/key".to_string(),
                 servers: VelocityServersToml {
@@ -457,7 +540,9 @@ mod velocity {
 
     #[cfg(test)]
     mod tests {
-        use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateConfigurationSpec;
+        use shulker_crds::v1alpha1::proxy_fleet::{
+            ProxyFleetServiceSpec, ProxyFleetServiceType, ProxyFleetTemplateConfigurationSpec,
+        };
 
         #[test]
         fn from_spec() {
@@ -472,12 +557,88 @@ mod velocity {
                 proxy_protocol: true,
                 ttl_seconds: 300,
             };
+            let service_spec = Some(ProxyFleetServiceSpec {
+                type_: ProxyFleetServiceType::LoadBalancer,
+                ..ProxyFleetServiceSpec::default()
+            });
 
             // W
-            let config = super::VelocityToml::from_spec(&spec);
+            let config = super::VelocityToml::from_spec(&spec, service_spec.as_ref());
 
             // T
             insta::assert_toml_snapshot!(config);
+        }
+
+        #[test]
+        fn from_spec_prevent_proxy_connections_when_nodeport() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+            let service_spec = Some(ProxyFleetServiceSpec {
+                type_: ProxyFleetServiceType::NodePort,
+                ..ProxyFleetServiceSpec::default()
+            });
+
+            // W
+            let config = super::VelocityToml::from_spec(&spec, service_spec.as_ref());
+
+            // T
+            assert!(config.prevent_client_proxy_connections);
+        }
+
+        #[test]
+        fn from_spec_not_prevent_proxy_connections_when_clusterip() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+            let service_spec = Some(ProxyFleetServiceSpec {
+                type_: ProxyFleetServiceType::ClusterIP,
+                ..ProxyFleetServiceSpec::default()
+            });
+
+            // W
+            let config = super::VelocityToml::from_spec(&spec, service_spec.as_ref());
+
+            // T
+            assert!(!config.prevent_client_proxy_connections);
+        }
+
+        #[test]
+        fn from_spec_not_prevent_proxy_connections_when_no_service() {
+            // G
+            let spec = ProxyFleetTemplateConfigurationSpec {
+                existing_config_map_name: None,
+                plugins: None,
+                patches: None,
+                max_players: 100,
+                motd: "A Motd".to_string(),
+                server_icon: "A Server Icon".to_string(),
+                proxy_protocol: true,
+                ttl_seconds: 300,
+            };
+            let service_spec = None;
+
+            // W
+            let config = super::VelocityToml::from_spec(&spec, service_spec.as_ref());
+
+            // T
+            assert!(!config.prevent_client_proxy_connections);
         }
 
         #[test]
