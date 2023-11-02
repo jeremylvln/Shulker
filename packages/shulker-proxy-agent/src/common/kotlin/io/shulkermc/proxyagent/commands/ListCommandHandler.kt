@@ -18,6 +18,7 @@ object ListCommandHandler {
         serverNames.mapIndexed { index, serverName ->
             val boxCharacter = if (index == serverNames.size - 1) "└" else "├"
             val playerNames = agent.cache.getPlayerNamesFromIds(agent.cache.listPlayersInServer(serverName)).values
+            val playerNamesJoined = playerNames
                 .sortedBy { it.lowercase() }
                 .joinToString(", ") { it }
 
@@ -25,8 +26,9 @@ object ListCommandHandler {
                 Component.text("$boxCharacter ")
                     .color(NamedTextColor.DARK_GRAY)
                     .append(Component.text(serverName).color(NamedTextColor.YELLOW))
+                    .append(Component.text(" (${playerNames.size})").color(NamedTextColor.YELLOW))
                     .append(Component.text(": ").color(NamedTextColor.WHITE))
-                    .append(Component.text(playerNames).color(NamedTextColor.WHITE))
+                    .append(Component.text(playerNamesJoined).color(NamedTextColor.WHITE))
             )
         }
     }
