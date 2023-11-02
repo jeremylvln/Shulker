@@ -128,7 +128,7 @@ impl LeaseLock {
                 }
             }
 
-            return Err(anyhow!("failed to acquire lease"));
+            return Err(anyhow::anyhow!("failed to acquire lease"));
         };
 
         self.current_resource_version = lease.metadata.resource_version.clone();
