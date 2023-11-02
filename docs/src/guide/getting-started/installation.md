@@ -27,9 +27,9 @@ work immediately.
 :::info
 
 The operator Pod requires a certificate from cert-manager to
-be provisionned, it may take some seconds/minutes to generate.
+be provisioned, it may take some seconds/minutes to generate.
 If the certificate is still not available after some minutes,
 check your cert-manager logs. There is no special configuration
-expected, a default installation should work out-of-the-box.
+expected, a default installation should work out of the box.
 
 :::
