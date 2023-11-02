@@ -4,6 +4,7 @@ use http::{Request, Response};
 use hyper::Body;
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::{core::ObjectMeta, Client};
+use lazy_static::lazy_static;
 use shulker_crds::{
     resourceref::ResourceRefSpec,
     v1alpha1::{

@@ -1,6 +1,7 @@
 use http::{Request, Response};
 use hyper::Body;
 use kube::{core::ObjectMeta, Client};
+use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::{MinecraftCluster, MinecraftClusterSpec};
 
 lazy_static! {

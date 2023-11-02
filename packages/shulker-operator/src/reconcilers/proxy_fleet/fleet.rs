@@ -25,6 +25,7 @@ use k8s_openapi::apimachinery::pkg::util::intstr::IntOrString;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 
