@@ -11,5 +11,11 @@
   "semanticCommits": "enabled",
   "vulnerabilityAlerts": {
     "addLabels": ["priority:critical :fire:"]
-  }
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["cargo"],
+      "rangeStrategy": "auto"
+    }
+  ]
 }
