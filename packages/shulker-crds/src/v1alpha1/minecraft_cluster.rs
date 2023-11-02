@@ -14,6 +14,12 @@ use strum::{Display, IntoStaticStr};
 )]
 #[serde(rename_all = "camelCase")]
 pub struct MinecraftClusterSpec {
+    /// List of player UUIDs that are automatically promoted as
+    /// network administrators, which are granted all the permissions
+    /// by default on all the proxies and servers
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub network_admins: Vec<String>,
+
     /// Redis configuration to use as a synchronization backend
     /// for the different Shulker components
     #[serde(skip_serializing_if = "Option::is_none")]
