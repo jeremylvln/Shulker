@@ -1066,8 +1066,7 @@ spec:
                               description: Channel of the version to use. Defaults to Paper
                               enum:
                                 - Paper
-                                - Bukkit
-                                - Spigot
+                                - Folia
                               type: string
                             name:
                               description: Name of the version to use
