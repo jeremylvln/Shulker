@@ -71,6 +71,8 @@ spec:
                       fieldPath: metadata.namespace
                 - name: SHULKER_PROXY_TTL_SECONDS
                   value: "3600"
+                - name: SHULKER_NETWORK_ADMINS
+                  value: ""
                 - name: SHULKER_PROXY_REDIS_HOST
                   value: my-cluster-redis-managed
                 - name: SHULKER_PROXY_REDIS_PORT

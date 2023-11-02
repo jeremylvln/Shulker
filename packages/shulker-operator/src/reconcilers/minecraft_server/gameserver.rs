@@ -17,6 +17,7 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
 
 use crate::reconcilers::builder::ResourceBuilder;
@@ -63,11 +64,16 @@ pub struct GameServerBuilder {
     resourceref_resolver: ResourceRefResolver,
 }
 
+#[derive(Clone, Debug)]
+pub struct GameServerBuilderContext<'a> {
+    pub cluster: &'a MinecraftCluster,
+}
+
 #[async_trait::async_trait]
 impl<'a> ResourceBuilder<'a> for GameServerBuilder {
     type OwnerType = MinecraftServer;
     type ResourceType = GameServer;
-    type Context = ();
+    type Context = GameServerBuilderContext<'a>;
 
     fn name(minecraft_server: &Self::OwnerType) -> String {
         minecraft_server.name_any()
@@ -85,7 +91,7 @@ impl<'a> ResourceBuilder<'a> for GameServerBuilder {
         minecraft_server: &Self::OwnerType,
         name: &str,
         _existing_game_server: Option<&Self::ResourceType>,
-        _context: Option<Self::Context>,
+        context: Option<GameServerBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server = GameServer {
             metadata: ObjectMeta {
@@ -98,7 +104,12 @@ impl<'a> ResourceBuilder<'a> for GameServerBuilder {
                 )),
                 ..ObjectMeta::default()
             },
-            spec: Self::get_game_server_spec(&self.resourceref_resolver, minecraft_server).await?,
+            spec: Self::get_game_server_spec(
+                &self.resourceref_resolver,
+                context.unwrap().cluster,
+                minecraft_server,
+            )
+            .await?,
             status: None,
         };
 
@@ -116,10 +127,11 @@ impl GameServerBuilder {
 
     pub async fn get_game_server_spec(
         resourceref_resolver: &ResourceRefResolver,
+        cluster: &MinecraftCluster,
         minecraft_server: &MinecraftServer,
     ) -> Result<GameServerSpec, anyhow::Error> {
         let pod_template_spec =
-            Self::get_pod_template_spec(resourceref_resolver, minecraft_server).await?;
+            Self::get_pod_template_spec(resourceref_resolver, cluster, minecraft_server).await?;
 
         let game_server_spec = GameServerSpec {
             ports: Some(vec![GameServerPortSpec {
@@ -144,6 +156,7 @@ impl GameServerBuilder {
 
     async fn get_pod_template_spec(
         resourceref_resolver: &ResourceRefResolver,
+        cluster: &MinecraftCluster,
         minecraft_server: &MinecraftServer,
     ) -> Result<PodTemplateSpec, anyhow::Error> {
         let mut pod_spec = PodSpec {
@@ -174,7 +187,7 @@ impl GameServerBuilder {
             containers: vec![Container {
                 image: Some(MINECRAFT_SERVER_IMAGE.to_string()),
                 name: "minecraft-server".to_string(),
-                env: Some(Self::get_env(&minecraft_server.spec)),
+                env: Some(Self::get_env(cluster, &minecraft_server.spec)),
                 image_pull_policy: Some("IfNotPresent".to_string()),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
@@ -364,7 +377,7 @@ impl GameServerBuilder {
         Ok(env)
     }
 
-    fn get_env(spec: &MinecraftServerSpec) -> Vec<EnvVar> {
+    fn get_env(cluster: &MinecraftCluster, spec: &MinecraftServerSpec) -> Vec<EnvVar> {
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_SERVER_NAME".to_string(),
@@ -386,6 +399,11 @@ impl GameServerBuilder {
                     }),
                     ..EnvVarSource::default()
                 }),
+                ..EnvVar::default()
+            },
+            EnvVar {
+                name: "SHULKER_NETWORK_ADMINS".to_string(),
+                value: Some(cluster.spec.network_admins.join(",")),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -480,6 +498,7 @@ mod tests {
     use crate::{
         reconcilers::{
             builder::ResourceBuilder,
+            minecraft_cluster::fixtures::TEST_CLUSTER,
             minecraft_server::fixtures::{create_client_mock, TEST_SERVER},
         },
         resources::resourceref_resolver::ResourceRefResolver,
@@ -500,10 +519,13 @@ mod tests {
         let client = create_client_mock();
         let builder = super::GameServerBuilder::new(client);
         let name = super::GameServerBuilder::name(&TEST_SERVER);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
         let game_server = builder
-            .build(&TEST_SERVER, &name, None, None)
+            .build(&TEST_SERVER, &name, None, Some(context))
             .await
             .unwrap();
 
@@ -595,7 +617,7 @@ mod tests {
         let spec = TEST_SERVER.spec.clone();
 
         // W
-        let env = super::GameServerBuilder::get_env(&spec);
+        let env = super::GameServerBuilder::get_env(&TEST_CLUSTER, &spec);
 
         // T
         spec.pod_overrides

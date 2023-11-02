@@ -16,7 +16,9 @@ use shulker_crds::{
 };
 
 use self::{
-    config_map::ConfigMapBuilder, fleet::FleetBuilder, fleet_autoscaler::FleetAutoscalerBuilder,
+    config_map::ConfigMapBuilder,
+    fleet::{FleetBuilder, FleetBuilderContext},
+    fleet_autoscaler::FleetAutoscalerBuilder,
 };
 
 use super::{
@@ -46,7 +48,7 @@ impl MinecraftServerFleetReconciler {
         api: Api<MinecraftServerFleet>,
         minecraft_server_fleet: Arc<MinecraftServerFleet>,
     ) -> Result<Action> {
-        resolve_cluster_ref(
+        let cluster = resolve_cluster_ref(
             &self.client,
             &minecraft_server_fleet.namespace().unwrap(),
             &minecraft_server_fleet.spec.cluster_ref,
@@ -59,8 +61,12 @@ impl MinecraftServerFleetReconciler {
             None,
         )
         .await?;
-        let fleet =
-            reconcile_builder(&self.fleet_builder, minecraft_server_fleet.as_ref(), None).await?;
+        let fleet = reconcile_builder(
+            &self.fleet_builder,
+            minecraft_server_fleet.as_ref(),
+            Some(FleetBuilderContext { cluster: &cluster }),
+        )
+        .await?;
         reconcile_builder(
             &self.fleet_autoscaler_builder,
             minecraft_server_fleet.as_ref(),

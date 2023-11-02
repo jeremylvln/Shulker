@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use http::{Request, Response};
 use hyper::Body;
 use kube::{core::ObjectMeta, Client};
@@ -13,7 +11,7 @@ lazy_static! {
             ..ObjectMeta::default()
         },
         spec: MinecraftClusterSpec {
-            network_admins: HashSet::new(),
+            network_admins: Vec::new(),
             redis: None
         },
         status: None,

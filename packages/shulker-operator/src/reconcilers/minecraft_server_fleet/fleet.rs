@@ -6,6 +6,7 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
+use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 
 use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
@@ -23,11 +24,16 @@ pub struct FleetBuilder {
     resourceref_resolver: ResourceRefResolver,
 }
 
+#[derive(Clone, Debug)]
+pub struct FleetBuilderContext<'a> {
+    pub cluster: &'a MinecraftCluster,
+}
+
 #[async_trait::async_trait]
 impl<'a> ResourceBuilder<'a> for FleetBuilder {
     type OwnerType = MinecraftServerFleet;
     type ResourceType = Fleet;
-    type Context = ();
+    type Context = FleetBuilderContext<'a>;
 
     fn name(minecraft_server_fleet: &Self::OwnerType) -> String {
         minecraft_server_fleet.name_any()
@@ -45,10 +51,11 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
         _existing_fleet: Option<&Self::ResourceType>,
-        _context: Option<Self::Context>,
+        context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let mut config_clone = minecraft_server_fleet.spec.template.spec.config.clone();
-        config_clone.existing_config_map_name = Some(ConfigMapBuilder::name(minecraft_server_fleet));
+        config_clone.existing_config_map_name =
+            Some(ConfigMapBuilder::name(minecraft_server_fleet));
 
         let fake_mincraft_server = MinecraftServer {
             metadata: ObjectMeta {
@@ -71,6 +78,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
 
         let game_server_spec = crate::reconcilers::minecraft_server::gameserver::GameServerBuilder::get_game_server_spec(
             &self.resourceref_resolver,
+            context.unwrap().cluster,
             &fake_mincraft_server,
         ).await?;
         let replicas = match &minecraft_server_fleet.spec.autoscaling {
@@ -161,6 +169,7 @@ impl FleetBuilder {
 mod tests {
     use crate::reconcilers::{
         builder::ResourceBuilder,
+        minecraft_cluster::fixtures::TEST_CLUSTER,
         minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
     };
 
@@ -179,10 +188,13 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None, None)
+            .build(&TEST_SERVER_FLEET, &name, None, Some(context))
             .await
             .unwrap();
 
@@ -196,10 +208,13 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None, None)
+            .build(&TEST_SERVER_FLEET, &name, None, Some(context))
             .await
             .unwrap();
 
@@ -237,10 +252,13 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None, None)
+            .build(&TEST_SERVER_FLEET, &name, None, Some(context))
             .await
             .unwrap();
 
@@ -278,10 +296,13 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+        };
 
         // W
         let fleet = builder
-            .build(&TEST_SERVER_FLEET, &name, None, None)
+            .build(&TEST_SERVER_FLEET, &name, None, Some(context))
             .await
             .unwrap();
 

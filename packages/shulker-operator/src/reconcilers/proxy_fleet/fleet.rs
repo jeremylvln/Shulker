@@ -452,6 +452,11 @@ impl FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
+                name: "SHULKER_NETWORK_ADMINS".to_string(),
+                value: Some(cluster.spec.network_admins.join(",")),
+                ..EnvVar::default()
+            },
+            EnvVar {
                 name: "SHULKER_PROXY_REDIS_HOST".to_string(),
                 value: Some(redis_ref.host),
                 ..EnvVar::default()

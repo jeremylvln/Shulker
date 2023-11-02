@@ -15,7 +15,10 @@ use shulker_crds::{
     v1alpha1::minecraft_server::{MinecraftServer, MinecraftServerStatus},
 };
 
-use self::{config_map::ConfigMapBuilder, gameserver::GameServerBuilder};
+use self::{
+    config_map::ConfigMapBuilder,
+    gameserver::{GameServerBuilder, GameServerBuilderContext},
+};
 
 use super::{
     builder::reconcile_builder, cluster_ref::resolve_cluster_ref, status::patch_status,
@@ -42,7 +45,7 @@ impl MinecraftServerReconciler {
         api: Api<MinecraftServer>,
         minecraft_server: Arc<MinecraftServer>,
     ) -> Result<Action> {
-        resolve_cluster_ref(
+        let cluster = resolve_cluster_ref(
             &self.client,
             &minecraft_server.namespace().unwrap(),
             &minecraft_server.spec.cluster_ref,
@@ -50,8 +53,12 @@ impl MinecraftServerReconciler {
         .await?;
 
         reconcile_builder(&self.config_map_builder, minecraft_server.as_ref(), None).await?;
-        let gameserver =
-            reconcile_builder(&self.gameserver_builder, minecraft_server.as_ref(), None).await?;
+        let gameserver = reconcile_builder(
+            &self.gameserver_builder,
+            minecraft_server.as_ref(),
+            Some(GameServerBuilderContext { cluster: &cluster }),
+        )
+        .await?;
 
         if let Some(gameserver) = &gameserver {
             if let Some(gameserver_status) = &gameserver.status {
