@@ -5,10 +5,6 @@ authors.workspace = true
 edition.workspace = true
 publish.workspace = true
 
-[lib]
-name = "shulker_utils"
-path = "src/lib.rs"
-
 [features]
 default = []
 testing = []

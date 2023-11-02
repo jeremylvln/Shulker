@@ -11,21 +11,17 @@ path = "src/crdgen.rs"
 doc = false
 test = false
 
-[lib]
-name = "shulker_crds"
-path = "src/lib.rs"
-
 [features]
 default = []
 
 [dependencies]
 k8s-openapi.workspace = true
-kube = { workspace = true, features = ["derive"] }
+kube.workspace = true
 schemars.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
-shulker-utils = { path = "../shulker-utils" }
+shulker-utils.workspace = true
 strum.workspace = true
 google-agones-crds = { path = "../google-agones-crds" }
 
