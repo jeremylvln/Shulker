@@ -60,8 +60,7 @@ pub struct MinecraftServerVersionSpec {
 pub enum MinecraftServerVersion {
     #[default]
     Paper,
-    Bukkit,
-    Spigot,
+    Folia,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]

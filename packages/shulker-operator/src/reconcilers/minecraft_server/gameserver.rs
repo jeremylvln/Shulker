@@ -464,8 +464,7 @@ impl GameServerBuilder {
     fn get_type_from_version_channel(channel: &MinecraftServerVersion) -> String {
         match channel {
             MinecraftServerVersion::Paper => "PAPER".to_string(),
-            MinecraftServerVersion::Bukkit => "BUKKIT".to_string(),
-            MinecraftServerVersion::Spigot => "SPIGOT".to_string(),
+            MinecraftServerVersion::Folia => "FOLIA".to_string(),
         }
     }
 
