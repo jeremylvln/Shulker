@@ -28,7 +28,6 @@ spec:
                   items:
                     type: string
                   type: array
-                  uniqueItems: true
                 redis:
                   description: Redis configuration to use as a synchronization backend for the different Shulker components
                   nullable: true

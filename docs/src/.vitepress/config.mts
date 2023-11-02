@@ -51,6 +51,10 @@ const sidebar = {
           text: 'Overriding pod properties',
           link: '/guide/recipes/overriding-pod-properties',
         },
+        {
+          text: 'Defining network administrators',
+          link: '/guide/recipes/defining-network-administrators',
+        },
       ],
     },
   ],
