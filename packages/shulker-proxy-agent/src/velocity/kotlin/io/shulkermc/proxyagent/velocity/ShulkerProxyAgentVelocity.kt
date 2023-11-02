@@ -20,28 +20,18 @@ import java.util.logging.Logger
     authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 )
 class ShulkerProxyAgentVelocity @Inject constructor(
-    private val proxy: ProxyServer,
+    val proxy: ProxyServer,
     logger: Logger
 ) {
-    private val agent = ShulkerProxyAgentCommon(ProxyInterfaceVelocity(this, proxy), logger)
+    val agent = ShulkerProxyAgentCommon(ProxyInterfaceVelocity(this, proxy), logger)
 
     @Subscribe
     fun onProxyInitialization(@Suppress("UNUSED_PARAMETER") event: ProxyInitializeEvent) {
         this.agent.onProxyInitialization()
 
-        val commandManager = this.proxy.commandManager
-        commandManager.register(
-            commandManager.metaBuilder("glist").plugin(this).build(),
-            GlobalListCommand.create(this.agent, this.proxy)
-        )
-        commandManager.register(
-            commandManager.metaBuilder("gtp").plugin(this).build(),
-            GlobalTeleportCommand.create(this.agent, this.proxy)
-        )
-        commandManager.register(
-            commandManager.metaBuilder("gfind").plugin(this).build(),
-            GlobalFindCommand.create(this.agent)
-        )
+        GlobalListCommand.register(this)
+        GlobalTeleportCommand.register(this)
+        GlobalFindCommand.register(this)
     }
 
     @Subscribe

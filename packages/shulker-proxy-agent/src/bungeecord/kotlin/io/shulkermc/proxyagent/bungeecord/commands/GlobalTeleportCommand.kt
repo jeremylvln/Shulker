@@ -1,46 +1,39 @@
-@file:Suppress("detekt:SpreadOperator")
-
 package io.shulkermc.proxyagent.bungeecord.commands
 
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
-import net.md_5.bungee.api.ChatColor
+import io.shulkermc.proxyagent.commands.TeleportCommandHandler
+import net.kyori.adventure.platform.bungeecord.BungeeAudiences
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.md_5.bungee.api.CommandSender
-import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.plugin.Command
 
-class GlobalTeleportCommand(private val agent: ShulkerProxyAgentCommon) : Command("gtp", "shulker.command.gtp") {
+class GlobalTeleportCommand(
+    private val agent: ShulkerProxyAgentCommon,
+    private val adventure: BungeeAudiences
+) : Command(TeleportCommandHandler.NAME, TeleportCommandHandler.PERMISSION) {
+    companion object {
+        private val USAGE_MESSAGE = Component.text("Usage: /gtp <player> [server]").color(NamedTextColor.RED)
+    }
+
     override fun execute(sender: CommandSender, args: Array<out String>) {
-        if (!this.hasPermission(sender)) {
-            sender.sendMessage(
-                *ComponentBuilder("You don't have permission to execute this command.").color(ChatColor.RED).create()
-            )
+        val audience = this.adventure.sender(sender)
+        if (!BungeeCordCommandHelper.testPermissionOrMessage(sender, audience, this.permission)) {
             return
         }
 
         if (args.isEmpty() || args.size > 2) {
-            sender.sendMessage(*ComponentBuilder("Usage: /gtp <player> [server]").color(ChatColor.RED).create())
+            audience.sendMessage(USAGE_MESSAGE)
             return
         }
 
-        val player = args[0]
-        val playerPosition = this.agent.cache.getPlayerIdFromName(player)
-            .flatMap { playerId -> this.agent.cache.getPlayerPosition(playerId) }
-
-        if (playerPosition.isEmpty) {
-            sender.sendMessage(*ComponentBuilder("Player $player not found.").color(ChatColor.RED).create())
-            return
-        }
+        val playerName = args[0]
 
         if (args.size == 1) {
-            val server = playerPosition.get().serverName
-            this.agent.pubSub.teleportPlayerOnServer(player, server)
-            sender.sendMessage(*ComponentBuilder("Teleported to server $server.").color(ChatColor.GREEN).create())
+            TeleportCommandHandler.executeTeleportToPlayer(this.agent, audience, playerName)
         } else {
-            val server = args[1]
-            this.agent.pubSub.teleportPlayerOnServer(player, server)
-            sender.sendMessage(
-                *ComponentBuilder("Teleported $player to server $server.").color(ChatColor.GREEN).create()
-            )
+            val serverName = args[1]
+            TeleportCommandHandler.executeTeleportPlayerToServer(this.agent, audience, playerName, serverName)
         }
     }
 }

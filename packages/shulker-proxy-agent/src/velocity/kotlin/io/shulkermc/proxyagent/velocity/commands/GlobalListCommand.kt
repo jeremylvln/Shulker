@@ -8,18 +8,28 @@ import com.velocitypowered.api.command.BrigadierCommand
 import com.velocitypowered.api.command.CommandSource
 import com.velocitypowered.api.proxy.ProxyServer
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
+import io.shulkermc.proxyagent.commands.ListCommandHandler
+import io.shulkermc.proxyagent.velocity.ShulkerProxyAgentVelocity
 
 object GlobalListCommand {
-    fun create(agent: ShulkerProxyAgentCommon, proxyServer: ProxyServer): BrigadierCommand {
-        val rootNode = LiteralArgumentBuilder.literal<CommandSource>("glist")
-            .requires { it.hasPermission("shulker.command.glist") }
+    fun register(plugin: ShulkerProxyAgentVelocity) {
+        plugin.proxy.commandManager.register(
+            plugin.proxy.commandManager.metaBuilder(ListCommandHandler.NAME).plugin(plugin).build(),
+            createCommand(plugin.agent, plugin.proxy)
+        )
+    }
+
+    private fun createCommand(agent: ShulkerProxyAgentCommon, proxyServer: ProxyServer): BrigadierCommand {
+        val rootNode = LiteralArgumentBuilder.literal<CommandSource>(ListCommandHandler.NAME)
+            .requires { it.hasPermission(ListCommandHandler.PERMISSION) }
             .executes { context ->
                 val source = context.source
 
-                showPlayerListInServers(agent, source, proxyServer.allServers.map { it.serverInfo.name }.toSet())
+                ListCommandHandler.executeListOnServers(
+                    agent,
+                    source,
+                    proxyServer.allServers.map { it.serverInfo.name }.toSet()
+                )
                 return@executes Command.SINGLE_SUCCESS
             }
             .then(
@@ -35,40 +45,12 @@ object GlobalListCommand {
                         val source = context.source
                         val server = context.getArgument("server", String::class.java)
 
-                        showPlayerListInServers(agent, source, setOf(server))
+                        ListCommandHandler.executeListOnServers(agent, source, setOf(server))
                         return@executes Command.SINGLE_SUCCESS
                     }
             )
             .build()
 
         return BrigadierCommand(rootNode)
-    }
-
-    private fun showPlayerListInServers(
-        agent: ShulkerProxyAgentCommon,
-        source: CommandSource,
-        serverNames: Set<String>
-    ) {
-        source.sendMessage(
-            Component.text("⎯".repeat(63)).color(NamedTextColor.DARK_GRAY).decorate(TextDecoration.STRIKETHROUGH)
-        )
-        source.sendMessage(Component.empty())
-        serverNames.map { serverName ->
-            source.sendMessage(this.createServerListMessage(agent, serverName))
-            source.sendMessage(Component.empty())
-        }
-        source.sendMessage(
-            Component.text("⎯".repeat(63)).color(NamedTextColor.DARK_GRAY).decorate(TextDecoration.STRIKETHROUGH)
-        )
-    }
-
-    private fun createServerListMessage(agent: ShulkerProxyAgentCommon, serverName: String): Component {
-        val playerNames = agent.cache.getPlayerNamesFromIds(agent.cache.listPlayersInServer(serverName)).values
-            .sortedBy { it.lowercase() }
-            .joinToString(", ") { it }
-
-        return Component.text("$serverName:\n")
-            .color(NamedTextColor.WHITE)
-            .append(Component.text(playerNames).color(NamedTextColor.GRAY))
     }
 }
