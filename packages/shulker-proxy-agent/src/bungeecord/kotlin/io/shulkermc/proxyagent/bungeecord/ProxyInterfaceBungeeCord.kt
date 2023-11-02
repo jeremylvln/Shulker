@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import net.md_5.bungee.api.event.PermissionCheckEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -130,6 +131,21 @@ class ProxyInterfaceBungeeCord(
                 @EventHandler(priority = EventPriority.HIGH)
                 fun onServerConnected(event: ServerConnectedEvent) {
                     hook(wrapPlayer(event.player), event.server.info.name)
+                }
+            }
+        )
+    }
+
+    override fun prepareNetworkAdminsPermissions(playerIds: List<UUID>) {
+        this.proxy.pluginManager.registerListener(
+            this.plugin,
+            object : Listener {
+                @EventHandler(priority = EventPriority.HIGHEST)
+                fun onPermissionCheck(event: PermissionCheckEvent) {
+                    val player = event.sender as? ProxiedPlayer ?: return
+                    if (playerIds.contains(player.uniqueId)) {
+                        event.setHasPermission(true)
+                    }
                 }
             }
         )

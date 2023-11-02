@@ -1,9 +1,13 @@
 package io.shulkermc.proxyagent
 
+import java.util.UUID
+
 object Configuration {
     val PROXY_NAMESPACE = getStringEnv("SHULKER_PROXY_NAMESPACE")
     val PROXY_NAME = getStringEnv("SHULKER_PROXY_NAME")
     val PROXY_TTL_SECONDS = getLongEnv("SHULKER_PROXY_TTL_SECONDS")
+
+    val NETWORK_ADMINS = getStringEnv("SHULKER_NETWORK_ADMINS").split(",").map(UUID::fromString)
 
     val REDIS_HOST = getStringEnv("SHULKER_PROXY_REDIS_HOST")
     val REDIS_PORT = getIntEnv("SHULKER_PROXY_REDIS_PORT")

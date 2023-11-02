@@ -74,6 +74,10 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.healthcheckTask = HealthcheckTask(this).schedule()
             this.lostProxyPurgeTask = LostProxyPurgeTask(this).schedule()
 
+            if (Configuration.NETWORK_ADMINS.isNotEmpty()) {
+                this.proxyInterface.prepareNetworkAdminsPermissions(Configuration.NETWORK_ADMINS)
+            }
+
             this.cache.registerProxy(Configuration.PROXY_NAME)
             this.agonesGateway.setAllocated()
         } catch (e: Exception) {

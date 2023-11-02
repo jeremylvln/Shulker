@@ -4,6 +4,7 @@ import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.connection.DisconnectEvent
 import com.velocitypowered.api.event.connection.LoginEvent
 import com.velocitypowered.api.event.connection.PreLoginEvent
+import com.velocitypowered.api.event.permission.PermissionsSetupEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import com.velocitypowered.api.event.proxy.ProxyPingEvent
@@ -108,6 +109,19 @@ class ProxyInterfaceVelocity(
             ServerPostConnectEvent::class.java,
             this.mapPostOrder(postOrder)
         ) { event -> hook(this.wrapPlayer(event.player), event.player.currentServer.get().serverInfo.name) }
+    }
+
+    override fun prepareNetworkAdminsPermissions(playerIds: List<UUID>) {
+        this.proxy.eventManager.register(
+            this.plugin,
+            PermissionsSetupEvent::class.java,
+            PostOrder.LAST
+        ) { event ->
+            val player = event.subject as? Player ?: return@register
+            if (playerIds.contains(player.uniqueId)) {
+                event.provider = AdminPermissionProvider.INSTANCE
+            }
+        }
     }
 
     override fun teleportPlayerOnServer(playerName: String, serverName: String) {

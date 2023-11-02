@@ -8,6 +8,7 @@ import io.shulkermc.proxyagent.platform.ProxyPingHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import java.net.InetSocketAddress
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 interface ProxyInterface {
@@ -22,6 +23,7 @@ interface ProxyInterface {
     fun addServerPreConnectHook(hook: ServerPreConnectHook, postOrder: HookPostOrder)
     fun addServerPostConnectHook(hook: ServerPostConnectHook, postOrder: HookPostOrder)
 
+    fun prepareNetworkAdminsPermissions(playerIds: List<UUID>)
     fun teleportPlayerOnServer(playerName: String, serverName: String)
     fun getPlayerCount(): Int
 
