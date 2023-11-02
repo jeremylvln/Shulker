@@ -76,6 +76,9 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
             if (Configuration.NETWORK_ADMINS.isNotEmpty()) {
                 this.proxyInterface.prepareNetworkAdminsPermissions(Configuration.NETWORK_ADMINS)
+                this.logger.info(
+                    "Created listener for ${Configuration.NETWORK_ADMINS.size} network administrators"
+                )
             }
 
             this.cache.registerProxy(Configuration.PROXY_NAME)

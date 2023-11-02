@@ -4,12 +4,13 @@ import dev.agones.AgonesSDK
 import dev.agones.AgonesSDKImpl
 import io.shulkermc.serveragent.api.ShulkerServerAPI
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
+import io.shulkermc.serveragent.tasks.HealthcheckTask
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
-class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, private val logger: Logger) {
+class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val logger: Logger) {
     companion object {
         private const val SUMMON_LABEL_NAME = "shulkermc.io/summoned"
         private const val SUMMON_TIMEOUT_MINUTES = 5L
@@ -38,12 +39,13 @@ class ShulkerServerAgentCommon(private val serverInterface: ServerInterface, pri
                 this.summonTimeoutTask = this.createSummonTimeoutTask()
             }
 
-            this.healthcheckTask = this.serverInterface.scheduleRepeatingTask(
-                0L,
-                HEALTHCHECK_DELAY_SECONDS,
-                TimeUnit.SECONDS
-            ) {
-                this.agonesGateway.sendHealthcheck()
+            this.healthcheckTask = HealthcheckTask(this).schedule()
+
+            if (Configuration.NETWORK_ADMINS.isNotEmpty()) {
+                this.serverInterface.prepareNetworkAdminsPermissions(Configuration.NETWORK_ADMINS)
+                this.logger.info(
+                    "Created listener for ${Configuration.NETWORK_ADMINS.size} network administrators"
+                )
             }
 
             this.agonesGateway.setReady()
