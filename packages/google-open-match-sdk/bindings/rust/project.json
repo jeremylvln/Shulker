@@ -1,14 +1,14 @@
 {
-  "name": "shulker-sdk-bindings-rust",
+  "name": "google-open-match-sdk-bindings-rust",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-sdk/bindings/rust/src",
+  "sourceRoot": "packages/google-open-match-sdk/bindings/rust/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo build --release",
-        "cwd": "packages/shulker-sdk/bindings/rust"
+        "cwd": "packages/google-open-match-sdk/bindings/rust"
       },
       "inputs": ["default", "rust:dependencies"]
     },
@@ -16,22 +16,22 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo tarpaulin",
-        "cwd": "packages/shulker-sdk/bindings/rust"
+        "cwd": "packages/google-open-match-sdk/bindings/rust"
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
       "outputs": [
-        "{workspaceRoot}/coverage/rust/shulker-sdk-bindings-rust/cobertura.xml"
+        "{workspaceRoot}/coverage/rust/google-open-match-sdk-bindings-rust/cobertura.xml"
       ]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo fmt",
-        "cwd": "packages/shulker-sdk/bindings/rust"
+        "cwd": "packages/google-open-match-sdk/bindings/rust"
       },
       "inputs": ["default", "rust:dependencies"]
     }
   },
-  "implicitDependencies": ["shulker-sdk"],
+  "implicitDependencies": ["google-open-match-sdk"],
   "tags": ["lang:rust"]
 }

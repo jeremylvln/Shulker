@@ -1,0 +1,15 @@
+[package]
+name = "google-open-match-sdk"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[features]
+default = ["client"]
+client = []
+
+[dependencies]
+tonic.workspace = true
+pbjson-types.workspace = true
+prost.workspace = true

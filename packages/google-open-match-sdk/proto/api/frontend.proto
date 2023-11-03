@@ -1,0 +1,222 @@
+// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+package openmatch;
+option go_package = "open-match.dev/open-match/pkg/pb";
+option csharp_namespace = "OpenMatch";
+
+import "api/messages.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Frontend"
+    version: "1.0"
+    contact: {
+      name: "Open Match"
+      url: "https://open-match.dev"
+      email: "open-match-discuss@googlegroups.com"
+    }
+    license: {
+      name: "Apache 2.0 License"
+      url: "https://github.com/googleforgames/open-match/blob/master/LICENSE"
+    }
+  }
+  external_docs: {
+    url: "https://open-match.dev/site/docs/"
+    description: "Open Match Documentation"
+  }
+  schemes: HTTP
+  schemes: HTTPS
+  consumes: "application/json"
+  produces: "application/json"
+  responses: {
+    key: "404"
+    value: {
+      description: "Returned when the resource does not exist."
+      schema: { json_schema: { type: STRING } }
+    }
+  }
+  // TODO Add annotations for security_defintiions.
+  // See
+  // https://github.com/grpc-ecosystem/grpc-gateway/blob/master/examples/internal/proto/examplepb/a_bit_of_everything.proto
+};
+
+message CreateTicketRequest {
+  // A Ticket object with SearchFields defined.
+  Ticket ticket = 1;
+}
+
+message DeleteTicketRequest {
+  // A TicketId of a generated Ticket to be deleted.
+  string ticket_id = 1;
+}
+
+message GetTicketRequest {
+  // A TicketId of a generated Ticket.
+  string ticket_id = 1;
+}
+
+message WatchAssignmentsRequest {
+  // A TicketId of a generated Ticket to get updates on.
+  string ticket_id = 1;
+}
+
+message WatchAssignmentsResponse {
+  // An updated Assignment of the requested Ticket.
+  Assignment assignment = 1;
+}
+
+// BETA FEATURE WARNING: This Request message is not finalized and still subject
+// to possible change or removal.
+message AcknowledgeBackfillRequest {
+  // An existing ID of Backfill to acknowledge.
+  string backfill_id = 1;
+
+  // An updated Assignment of the requested Backfill.
+  Assignment assignment = 2;
+}
+
+// BETA FEATURE WARNING: This Request message is not finalized and still subject
+// to possible change or removal.
+message AcknowledgeBackfillResponse {
+  // The Backfill that was acknowledged.
+  Backfill backfill = 1;
+
+  // All of the Tickets that were successfully assigned
+  repeated Ticket tickets = 2;
+}
+
+// BETA FEATURE WARNING: This Request message is not finalized and still subject
+// to possible change or removal.
+message CreateBackfillRequest {
+  // An empty Backfill object.
+  Backfill backfill = 1;
+}
+
+// BETA FEATURE WARNING: This Request message is not finalized and still subject
+// to possible change or removal.
+message DeleteBackfillRequest {
+  // An existing ID of Backfill to delete.
+  string backfill_id = 1;
+}
+
+// BETA FEATURE WARNING: This Request message is not finalized and still subject
+// to possible change or removal.
+message GetBackfillRequest {
+  // An existing ID of Backfill to retrieve.
+  string backfill_id = 1;
+}
+
+// UpdateBackfillRequest - update searchFields, extensions and set assignment.
+// 
+// BETA FEATURE WARNING: This Request message is not finalized and still subject
+// to possible change or removal.
+message UpdateBackfillRequest {
+  // A Backfill object with ID set and fields to update.
+  Backfill backfill = 1;
+}
+
+
+// The FrontendService implements APIs to manage and query status of a Tickets.
+service FrontendService {
+  // CreateTicket assigns an unique TicketId to the input Ticket and record it in state storage.
+  // A ticket is considered as ready for matchmaking once it is created.
+  //   - If a TicketId exists in a Ticket request, an auto-generated TicketId will override this field.
+  //   - If SearchFields exist in a Ticket, CreateTicket will also index these fields such that one can query the ticket with query.QueryTickets function.
+  rpc CreateTicket(CreateTicketRequest) returns (Ticket) {
+    option (google.api.http) = {
+      post: "/v1/frontendservice/tickets"
+      body: "*"
+    };
+  }
+
+  // DeleteTicket immediately stops Open Match from using the Ticket for matchmaking and removes the Ticket from state storage.
+  // The client should delete the Ticket when finished matchmaking with it. 
+  rpc DeleteTicket(DeleteTicketRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/frontendservice/tickets/{ticket_id}"
+    };
+  }
+
+  // GetTicket get the Ticket associated with the specified TicketId.
+  rpc GetTicket(GetTicketRequest) returns (Ticket) {
+    option (google.api.http) = {
+      get: "/v1/frontendservice/tickets/{ticket_id}"
+    };
+  }
+
+  // WatchAssignments stream back Assignment of the specified TicketId if it is updated.
+  //   - If the Assignment is not updated, GetAssignment will retry using the configured backoff strategy. 
+  rpc WatchAssignments(WatchAssignmentsRequest)
+      returns (stream WatchAssignmentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/frontendservice/tickets/{ticket_id}/assignments"
+    };
+  }
+
+  // AcknowledgeBackfill is used to notify OpenMatch about GameServer connection info
+  // This triggers an assignment process.
+  // BETA FEATURE WARNING: This call and the associated Request and Response
+  // messages are not finalized and still subject to possible change or removal.
+  rpc AcknowledgeBackfill(AcknowledgeBackfillRequest) returns (AcknowledgeBackfillResponse) {
+    option (google.api.http) = {
+      post: "/v1/frontendservice/backfills/{backfill_id}/acknowledge"
+      body: "*"
+    };
+  }
+
+  // CreateBackfill creates a new Backfill object.
+  // BETA FEATURE WARNING:  This call and the associated Request and Response
+  // messages are not finalized and still subject to possible change or removal.
+  rpc CreateBackfill(CreateBackfillRequest) returns (Backfill) {
+    option (google.api.http) = {
+      post: "/v1/frontendservice/backfills"
+      body: "*"
+    };
+  }
+
+  // DeleteBackfill receives a backfill ID and deletes its resource.
+  // Any tickets waiting for this backfill will be returned to the active pool, no longer pending.
+  // BETA FEATURE WARNING:  This call and the associated Request and Response
+  // messages are not finalized and still subject to possible change or removal.
+  rpc DeleteBackfill(DeleteBackfillRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/frontendservice/backfills/{backfill_id}"
+    };
+  }
+
+  // GetBackfill returns a backfill object by its ID.
+  // BETA FEATURE WARNING:  This call and the associated Request and Response
+  // messages are not finalized and still subject to possible change or removal.
+  rpc GetBackfill(GetBackfillRequest) returns (Backfill) {
+    option (google.api.http) = {
+      get: "/v1/frontendservice/backfills/{backfill_id}"
+    };
+  }
+  
+  // UpdateBackfill updates search_fields and extensions for the backfill with the provided id.
+  // Any tickets waiting for this backfill will be returned to the active pool, no longer pending.
+  // BETA FEATURE WARNING:  This call and the associated Request and Response
+  // messages are not finalized and still subject to possible change or removal.
+  rpc UpdateBackfill(UpdateBackfillRequest) returns (Backfill) {
+    option (google.api.http) = {
+      patch: "/v1/frontendservice/backfills"
+      body: "*"
+    };
+  }
+}

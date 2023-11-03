@@ -1,0 +1,18 @@
+{
+  "name": "google-open-match-sdk",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/google-open-match-sdk/proto",
+  "projectType": "library",
+  "targets": {
+    "buf": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx buf generate",
+        "cwd": "packages/google-open-match-sdk"
+      },
+      "inputs": ["default"],
+      "outputs": ["{projectRoot}/bindings/rust/src/gen"]
+    }
+  },
+  "tags": []
+}

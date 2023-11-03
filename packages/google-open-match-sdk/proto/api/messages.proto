@@ -1,0 +1,274 @@
+// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+package openmatch;
+option go_package = "open-match.dev/open-match/pkg/pb";
+option csharp_namespace = "OpenMatch";
+
+import "google/rpc/status.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+// A Ticket is a basic matchmaking entity in Open Match. A Ticket may represent
+// an individual 'Player', a 'Group' of players, or any other concepts unique to
+// your use case. Open Match will not interpret what the Ticket represents but
+// just treat it as a matchmaking unit with a set of SearchFields. Open Match
+// stores the Ticket in state storage and enables an Assignment to be set on the
+// Ticket.
+message Ticket {
+  // Id represents an auto-generated Id issued by Open Match.
+  string id = 1;
+
+  // An Assignment represents a game server assignment associated with a Ticket,
+  // or whatever finalized matched state means for your use case.
+  // Open Match does not require or inspect any fields on Assignment.
+  Assignment assignment = 3;
+
+  // Search fields are the fields which Open Match is aware of, and can be used
+  // when specifying filters.
+  SearchFields search_fields = 4;
+
+  // Customized information not inspected by Open Match, to be used by the match
+  // making function, evaluator, and components making calls to Open Match.
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> extensions = 5;
+
+  // Customized information not inspected by Open Match, to be kept persistent 
+  // throughout the life-cycle of a ticket. 
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> persistent_field = 6;
+
+  // Create time is the time the Ticket was created. It is populated by Open
+  // Match at the time of Ticket creation.
+  google.protobuf.Timestamp create_time = 7;
+
+  // Deprecated fields.
+  reserved 2;
+}
+
+// Search fields are the fields which Open Match is aware of, and can be used
+// when specifying filters.
+message SearchFields {
+  // Float arguments.  Filterable on ranges.
+  map<string, double> double_args = 1;
+
+  // String arguments.  Filterable on equality.
+  map<string, string> string_args = 2;
+
+  // Filterable on presence or absence of given value.
+  repeated string tags = 3;
+}
+
+// An Assignment represents a game server assignment associated with a Ticket.
+// Open Match does not require or inspect any fields on assignment.
+message Assignment {
+  // Connection information for this Assignment.
+  string connection = 1;
+
+  // Customized information not inspected by Open Match, to be used by the match
+  // making function, evaluator, and components making calls to Open Match.
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> extensions = 4;
+
+  // Deprecated fields.
+  reserved 2, 3;
+}
+
+// Filters numerical values to only those within a range.
+//   double_arg: "foo"
+//   max: 10
+//   min: 5
+// matches:
+//   {"foo": 5}
+//   {"foo": 7.5}
+//   {"foo": 10}
+// does not match:
+//   {"foo": 4}
+//   {"foo": 10.01}
+//   {"foo": "7.5"}
+//   {}
+message DoubleRangeFilter {
+  // Name of the ticket's search_fields.double_args this Filter operates on.
+  string double_arg = 1;
+
+  // Maximum value.
+  double max = 2;
+
+  // Minimum value.
+  double min = 3;
+
+  enum Exclude {
+    // No bounds should be excluded when evaluating the filter, i.e.: MIN <= x <= MAX
+    NONE = 0;
+
+    // Only the minimum bound should be excluded when evaluating the filter, i.e.: MIN < x <= MAX
+    MIN = 1;
+
+    // Only the maximum bound should be excluded when evaluating the filter, i.e.: MIN <= x < MAX
+    MAX = 2;
+
+    // Both bounds should be excluded when evaluating the filter, i.e.: MIN < x < MAX
+    BOTH = 3;
+  }
+
+  // Defines the bounds to apply when filtering tickets by their search_fields.double_args value.
+  // BETA FEATURE WARNING: This field and the associated values are
+  // not finalized and still subject to possible change or removal.
+  Exclude exclude = 4;
+}
+
+// Filters strings exactly equaling a value.
+//   string_arg: "foo"
+//   value: "bar"
+// matches:
+//   {"foo": "bar"}
+// does not match:
+//   {"foo": "baz"}
+//   {"bar": "foo"}
+//   {}
+message StringEqualsFilter {
+  // Name of the ticket's search_fields.string_args this Filter operates on.
+  string string_arg = 1;
+
+  string value = 2;
+}
+
+// Filters to the tag being present on the search_fields.
+//   tag: "foo"
+// matches:
+//   ["foo"]
+//   ["bar","foo"]
+// does not match:
+//   ["bar"]
+//   []
+message TagPresentFilter {
+  string tag = 1;
+}
+
+// Pool specfies a set of criteria that are used to select a subset of Tickets
+// that meet all the criteria.
+message Pool {
+  // A developer-chosen human-readable name for this Pool.
+  string name = 1;
+
+  // Set of Filters indicating the filtering criteria. Selected tickets must
+  // match every Filter.
+  repeated DoubleRangeFilter double_range_filters = 2;
+
+  repeated StringEqualsFilter string_equals_filters = 4;
+
+  repeated TagPresentFilter tag_present_filters = 5;
+
+  // If specified, only Tickets created before the specified time are selected.
+  google.protobuf.Timestamp created_before = 6;
+
+  // If specified, only Tickets created after the specified time are selected.
+  google.protobuf.Timestamp created_after = 7;
+
+  // Deprecated fields.
+  reserved 3;
+}
+
+// A MatchProfile is Open Match's representation of a Match specification. It is
+// used to indicate the criteria for selecting players for a match. A
+// MatchProfile is the input to the API to get matches and is passed to the
+// MatchFunction. It contains all the information required by the MatchFunction
+// to generate match proposals.
+message MatchProfile {
+  // Name of this match profile.
+  string name = 1;
+
+  // Set of pools to be queried when generating a match for this MatchProfile.
+  repeated Pool pools = 3;
+
+  // Customized information not inspected by Open Match, to be used by the match
+  // making function, evaluator, and components making calls to Open Match.
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> extensions = 5;
+
+  // Deprecated fields.
+  reserved 2, 4;
+}
+
+// A Match is used to represent a completed match object. It can be generated by
+// a MatchFunction as a proposal or can be returned by OpenMatch as a result in
+// response to the FetchMatches call.
+// When a match is returned by the FetchMatches call, it should contain at least
+// one ticket to be considered as valid.
+message Match {
+  // A Match ID that should be passed through the stack for tracing.
+  string match_id = 1;
+
+  // Name of the match profile that generated this Match.
+  string match_profile = 2;
+
+  // Name of the match function that generated this Match.
+  string match_function = 3;
+
+  // Tickets belonging to this match.
+  repeated Ticket tickets = 4;
+
+  // Customized information not inspected by Open Match, to be used by the match
+  // making function, evaluator, and components making calls to Open Match.
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> extensions = 7;
+
+  // Backfill request which contains additional information to the match
+  // and contains an association to a GameServer.
+  // BETA FEATURE WARNING: This field is not finalized and still subject
+  // to possible change or removal.
+  Backfill backfill = 8;
+
+  // AllocateGameServer signalise Director that Backfill is new and it should 
+  // allocate a GameServer, this Backfill would be assigned.
+  // BETA FEATURE WARNING: This field is not finalized and still subject
+  // to possible change or removal.
+  bool allocate_gameserver = 9;
+
+  // Deprecated fields.
+  reserved 5, 6;
+}
+
+// Represents a backfill entity which is used to fill partially full matches.
+// 
+// BETA FEATURE WARNING:  This call and the associated Request and Response
+// messages are not finalized and still subject to possible change or removal.
+message Backfill {
+  // Id represents an auto-generated Id issued by Open Match.
+  string id = 1;
+
+  // Search fields are the fields which Open Match is aware of, and can be used
+  // when specifying filters.
+  SearchFields search_fields = 2;
+
+  // Customized information not inspected by Open Match, to be used by
+  // the Match Function, evaluator, and components making calls to Open Match.
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> extensions = 3;
+
+  // Customized information not inspected by Open Match, to be kept persistent 
+  // throughout the life-cycle of a backfill. 
+  // Optional, depending on the requirements of the connected systems.
+  map<string, google.protobuf.Any> persistent_field = 4;
+
+  // Create time is the time the Ticket was created. It is populated by Open
+  // Match at the time of Ticket creation.
+  google.protobuf.Timestamp create_time = 5;
+
+  // Generation gets incremented on GameServers update operations.
+  // Prevents the MMF from overriding a newer version from the game server.
+  // Do NOT read or write to this field, it is for internal tracking, and changing the value will cause bugs.
+  int64 generation = 6;
+}
