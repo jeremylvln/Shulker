@@ -13,7 +13,7 @@ class GlobalTeleportCommand(
     private val adventure: BungeeAudiences
 ) : Command(TeleportCommandHandler.NAME, TeleportCommandHandler.PERMISSION) {
     companion object {
-        private val USAGE_MESSAGE = Component.text("Usage: /gtp <player> [server]").color(NamedTextColor.RED)
+        private val USAGE_MESSAGE = Component.text("Usage: /gtp <player> [<server>]").color(NamedTextColor.RED)
     }
 
     override fun execute(sender: CommandSender, args: Array<out String>) {
