@@ -1,6 +1,6 @@
 dependencies {
     api("com.google.protobuf:protobuf-java:3.25.0")
-    implementation("io.grpc:grpc-protobuf:1.58.0")
+    implementation("io.grpc:grpc-protobuf:1.59.0")
     implementation("io.grpc:grpc-services:1.59.0")
     implementation("io.grpc:grpc-stub:1.59.0")
     compileOnly("org.apache.tomcat:annotations-api:6.0.53")
