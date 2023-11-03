@@ -19,15 +19,15 @@ path = "src/lib.rs"
 default = []
 
 [dependencies]
+google-agones-crds.workspace = true
 k8s-openapi.workspace = true
-kube = { workspace = true, features = ["derive"] }
+kube.workspace = true
 schemars.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true
-shulker-utils = { path = "../shulker-utils" }
+shulker-utils.workspace = true
 strum.workspace = true
-google-agones-crds = { path = "../google-agones-crds" }
 
 [build-dependencies]
 base64.workspace = true
