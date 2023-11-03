@@ -1,5 +1,5 @@
 dependencies {
-    api("com.google.protobuf:protobuf-java:3.24.4")
+    api("com.google.protobuf:protobuf-java:3.25.0")
     implementation("io.grpc:grpc-protobuf:1.58.0")
     implementation("io.grpc:grpc-services:1.58.0")
     implementation("io.grpc:grpc-stub:1.58.0")

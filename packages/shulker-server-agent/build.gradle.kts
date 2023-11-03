@@ -5,7 +5,7 @@ dependencies {
 
     // Agones
     "commonImplementation"(project(":packages:google-agones-sdk-bindings-java"))
-    "commonRuntimeOnly"("io.grpc:grpc-netty-shaded:1.58.0")
+    "commonRuntimeOnly"("io.grpc:grpc-netty-shaded:1.59.0")
 }
 
 setOf("paperJar").forEach { taskName ->

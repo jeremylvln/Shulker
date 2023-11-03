@@ -5,5 +5,5 @@ managed:
 plugins:
   - plugin: buf.build/protocolbuffers/java
     out: bindings/java/src/generated/java
-  - plugin: buf.build/grpc/java:v1.58.0
+  - plugin: buf.build/grpc/java:v1.59.0
     out: bindings/java/src/generated/grpc
