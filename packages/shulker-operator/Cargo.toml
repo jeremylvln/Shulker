@@ -10,6 +10,7 @@ default-run = "shulker-operator"
 name = "shulker-operator"
 path = "src/main.rs"
 doc = false
+required-features = ["shulker-operator-bin"]
 
 [lib]
 name = "shulker_operator"
@@ -17,41 +18,33 @@ path = "src/lib.rs"
 
 [features]
 default = []
+shulker-operator-bin = ["clap"]
 
 [dependencies]
-actix-web.workspace = true
 anyhow.workspace = true
 async-trait.workspace = true
-chrono.workspace = true
-clap.workspace = true
+clap = { workspace = true, optional = true }
 futures.workspace = true
 google-agones-crds.workspace = true
-hostname.workspace = true
 k8s-openapi.workspace = true
-lazy_static.workspace = true
 kube.workspace = true
+lazy_static.workspace = true
 rand.workspace = true
-prometheus.workspace = true
-schemars.workspace = true
 serde.workspace = true
-serde_json.workspace = true
 serde_yaml.workspace = true
+shulker-crds.workspace = true
+shulker-kube-utils.workspace = true
+shulker-sdk.workspace = true
 thiserror.workspace = true
 tonic.workspace = true
-tokio.workspace = true
-tokio-util.workspace = true
 toml.workspace = true
 tracing.workspace = true
-tracing-subscriber.workspace = true
 url.workspace = true
-uuid.workspace = true
-shulker-crds.workspace = true
-shulker-sdk.workspace = true
-shulker-utils.workspace = true
 
 [dev-dependencies]
 http.workspace = true
 hyper.workspace = true
 insta.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
 tower-test.workspace = true
-shulker-utils = { workspace = true, features = ["testing"] }

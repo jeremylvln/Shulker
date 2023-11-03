@@ -1,14 +1,14 @@
 {
-  "name": "shulker-crds",
+  "name": "shulker-kube-utils",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-crds/src",
+  "sourceRoot": "packages/shulker-kube-utils/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo build --release",
-        "cwd": "packages/shulker-crds"
+        "cwd": "packages/shulker-kube-utils"
       },
       "inputs": ["default", "rust:dependencies"]
     },
@@ -16,20 +16,22 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo tarpaulin",
-        "cwd": "packages/shulker-crds"
+        "cwd": "packages/shulker-kube-utils"
       },
       "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
-      "outputs": ["{workspaceRoot}/coverage/rust/shulker-crds/cobertura.xml"]
+      "outputs": [
+        "{workspaceRoot}/coverage/rust/shulker-kube-utils/cobertura.xml"
+      ]
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo fmt",
-        "cwd": "packages/shulker-crds"
+        "cwd": "packages/shulker-kube-utils"
       },
       "inputs": ["default", "rust:dependencies"]
     }
   },
-  "implicitDependencies": ["google-agones-crds", "shulker-utils"],
+  "implicitDependencies": ["shulker-utils"],
   "tags": ["lang:rust"]
 }

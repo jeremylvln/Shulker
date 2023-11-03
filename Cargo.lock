@@ -894,7 +894,6 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
- "serde_yaml",
  "strum",
 ]
 
@@ -2083,42 +2082,56 @@ dependencies = [
 ]
 
 [[package]]
-name = "shulker-operator"
+name = "shulker-kube-utils"
 version = "0.3.0"
 dependencies = [
  "actix-web",
  "anyhow",
  "async-trait",
  "chrono",
+ "hostname",
+ "k8s-openapi",
+ "kube",
+ "prometheus",
+ "serde",
+ "serde_json",
+ "shulker-utils",
+ "thiserror",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "shulker-operator"
+version = "0.3.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
  "clap",
  "futures",
  "google-agones-crds",
- "hostname",
  "http",
  "hyper",
  "insta",
  "k8s-openapi",
  "kube",
  "lazy_static",
- "prometheus",
  "rand",
- "schemars",
  "serde",
  "serde_json",
  "serde_yaml",
  "shulker-crds",
+ "shulker-kube-utils",
  "shulker-sdk",
- "shulker-utils",
  "thiserror",
  "tokio",
- "tokio-util",
  "toml 0.8.6",
  "tonic",
  "tower-test",
  "tracing",
- "tracing-subscriber",
  "url",
- "uuid",
 ]
 
 [[package]]
@@ -2134,6 +2147,8 @@ name = "shulker-utils"
 version = "0.3.0"
 dependencies = [
  "chrono",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

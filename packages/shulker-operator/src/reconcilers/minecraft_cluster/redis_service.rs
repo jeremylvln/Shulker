@@ -8,8 +8,8 @@ use kube::Client;
 use kube::ResourceExt;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftClusterRedisDeploymentType;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::MinecraftClusterReconciler;
 
@@ -89,11 +89,9 @@ mod tests {
     use shulker_crds::v1alpha1::minecraft_cluster::{
         MinecraftClusterRedisDeploymentType, MinecraftClusterRedisSpec,
     };
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
-    };
+    use crate::reconcilers::minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER};
 
     #[test]
     fn name_contains_fleet_name() {

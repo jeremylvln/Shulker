@@ -4,8 +4,8 @@ use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleet;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::MinecraftServerFleetReconciler;
 
@@ -66,9 +66,10 @@ impl ConfigMapBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
+    use crate::reconcilers::minecraft_server_fleet::fixtures::{
+        create_client_mock, TEST_SERVER_FLEET,
     };
 
     #[test]

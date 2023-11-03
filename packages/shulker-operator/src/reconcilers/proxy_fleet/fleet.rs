@@ -29,7 +29,6 @@ use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
@@ -39,6 +38,7 @@ use google_agones_crds::v1::game_server::GameServerHealthSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleet;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateSpec;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::config_map::ConfigMapBuilder;
 use super::ProxyFleetReconciler;
@@ -550,9 +550,9 @@ impl FleetBuilder {
 #[cfg(test)]
 mod tests {
     use k8s_openapi::api::core::v1::EnvVar;
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::reconcilers::{
-        builder::ResourceBuilder,
         minecraft_cluster::fixtures::TEST_CLUSTER,
         proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
     };

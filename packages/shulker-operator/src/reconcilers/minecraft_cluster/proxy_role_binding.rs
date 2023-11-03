@@ -9,8 +9,8 @@ use kube::ResourceExt;
 use super::proxy_role::ProxyRoleBuilder;
 use super::proxy_service_account::ProxyServiceAccountBuilder;
 use super::MinecraftClusterReconciler;
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 pub struct ProxyRoleBindingBuilder {
     client: Client,
@@ -78,11 +78,9 @@ impl ProxyRoleBindingBuilder {
 #[cfg(test)]
 mod tests {
     use k8s_openapi::api::rbac::v1::{RoleBinding, RoleRef, Subject};
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
-    };
+    use crate::reconcilers::minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER};
 
     #[test]
     fn name_contains_cluster_name() {

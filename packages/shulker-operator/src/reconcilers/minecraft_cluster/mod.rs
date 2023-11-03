@@ -16,9 +16,12 @@ use kube::{
     },
     Api, Client, ResourceExt,
 };
+use shulker_kube_utils::reconcilers::builder::reconcile_builder;
 use tracing::*;
 
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
+
+use crate::reconcilers::ReconcilerError;
 
 use self::{
     forwarding_secret::ForwardingSecretBuilder, minecraft_server_role::MinecraftServerRoleBuilder,
@@ -29,7 +32,7 @@ use self::{
     redis_stateful_set::RedisStatefulSetBuilder,
 };
 
-use super::{builder::reconcile_builder, ReconcilerError, Result};
+use super::Result;
 
 mod forwarding_secret;
 mod minecraft_server_role;
@@ -67,25 +70,41 @@ impl MinecraftClusterReconciler {
         _api: Api<MinecraftCluster>,
         cluster: Arc<MinecraftCluster>,
     ) -> Result<Action> {
-        reconcile_builder(&self.forwarding_secret_builder, cluster.as_ref(), None).await?;
-        reconcile_builder(&self.proxy_service_account_builder, cluster.as_ref(), None).await?;
-        reconcile_builder(&self.proxy_role_builder, cluster.as_ref(), None).await?;
-        reconcile_builder(&self.proxy_role_binding_builder, cluster.as_ref(), None).await?;
+        reconcile_builder(&self.forwarding_secret_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.proxy_service_account_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.proxy_role_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.proxy_role_binding_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
         reconcile_builder(
             &self.minecraft_server_service_account_builder,
             cluster.as_ref(),
             None,
         )
-        .await?;
-        reconcile_builder(&self.minecraft_server_role_builder, cluster.as_ref(), None).await?;
+        .await
+        .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.minecraft_server_role_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
         reconcile_builder(
             &self.minecraft_server_role_binding_builder,
             cluster.as_ref(),
             None,
         )
-        .await?;
-        reconcile_builder(&self.redis_service_builder, cluster.as_ref(), None).await?;
-        reconcile_builder(&self.redis_stateful_set_builder, cluster.as_ref(), None).await?;
+        .await
+        .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.redis_service_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.redis_stateful_set_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
 
         Ok(Action::requeue(Duration::from_secs(5 * 60)))
     }

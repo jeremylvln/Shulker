@@ -16,6 +16,9 @@ coverage:
       google-agones-crds:
         flags:
           - google-agones-crds
+      shulker-kube-utils:
+        flags:
+          - shulker-kube-utils
       shulker-operator:
         flags:
           - shulker-operator
@@ -33,6 +36,10 @@ flags:
   google-agones-crds:
     paths:
       - packages/google-agones-crds
+    carryforward: true
+  shulker-kube-utils:
+    paths:
+      - packages/shulker-kube-utils
     carryforward: true
   shulker-operator:
     paths:

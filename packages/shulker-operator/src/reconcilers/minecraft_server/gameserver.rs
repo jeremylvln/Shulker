@@ -21,7 +21,6 @@ use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
@@ -30,6 +29,7 @@ use google_agones_crds::v1::game_server::GameServerPortSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::config_map::ConfigMapBuilder;
 use super::MinecraftServerReconciler;
@@ -502,10 +502,10 @@ impl GameServerBuilder {
 #[cfg(test)]
 mod tests {
     use k8s_openapi::api::core::v1::EnvVar;
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
         reconcilers::{
-            builder::ResourceBuilder,
             minecraft_cluster::fixtures::TEST_CLUSTER,
             minecraft_server::fixtures::{create_client_mock, TEST_SERVER},
         },

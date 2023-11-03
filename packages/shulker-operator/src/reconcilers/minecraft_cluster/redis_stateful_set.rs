@@ -24,8 +24,8 @@ use shulker_crds::v1alpha1::minecraft_cluster::MinecraftClusterRedisDeploymentTy
 
 use super::redis_service::RedisServiceBuilder;
 use super::MinecraftClusterReconciler;
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 const REDIS_IMAGE: &str = "redis:7-alpine";
 const REDIS_DATA_DIR: &str = "/data";
@@ -183,11 +183,9 @@ mod tests {
     use shulker_crds::v1alpha1::minecraft_cluster::{
         MinecraftClusterRedisDeploymentType, MinecraftClusterRedisSpec,
     };
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
-    };
+    use crate::reconcilers::minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER};
 
     #[test]
     fn name_contains_cluster_name() {

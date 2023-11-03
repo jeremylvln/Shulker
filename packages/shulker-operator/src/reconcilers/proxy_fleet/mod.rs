@@ -8,6 +8,7 @@ use kube::{
     runtime::{controller::Action, watcher::Config, Controller},
     Api, Client, ResourceExt,
 };
+use shulker_kube_utils::reconcilers::{builder::reconcile_builder, status::patch_status};
 use tracing::*;
 
 use shulker_crds::{
@@ -22,10 +23,7 @@ use self::{
     service::ServiceBuilder,
 };
 
-use super::{
-    builder::reconcile_builder, cluster_ref::resolve_cluster_ref, status::patch_status,
-    ReconcilerError, Result,
-};
+use super::{cluster_ref::resolve_cluster_ref, ReconcilerError, Result};
 
 mod config_map;
 mod fleet;
@@ -58,15 +56,22 @@ impl ProxyFleetReconciler {
         )
         .await?;
 
-        reconcile_builder(&self.config_map_builder, proxy_fleet.as_ref(), None).await?;
-        reconcile_builder(&self.service_builder, proxy_fleet.as_ref(), None).await?;
+        reconcile_builder(&self.config_map_builder, proxy_fleet.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.service_builder, proxy_fleet.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
         let fleet = reconcile_builder(
             &self.fleet_builder,
             proxy_fleet.as_ref(),
             Some(FleetBuilderContext { cluster: &cluster }),
         )
-        .await?;
-        reconcile_builder(&self.fleet_autoscaler_builder, proxy_fleet.as_ref(), None).await?;
+        .await
+        .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.fleet_autoscaler_builder, proxy_fleet.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
 
         if let Some(fleet) = &fleet {
             if let Some(fleet_status) = &fleet.status {
@@ -102,7 +107,8 @@ impl ProxyFleetReconciler {
                     &PatchParams::apply("shulker-operator").force(),
                     &proxy_fleet,
                 )
-                .await?;
+                .await
+                .map_err(ReconcilerError::BuilderError)?;
             }
         }
 

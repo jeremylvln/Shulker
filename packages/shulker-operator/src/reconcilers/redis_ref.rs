@@ -1,8 +1,9 @@
 use shulker_crds::v1alpha1::minecraft_cluster::{
     MinecraftCluster, MinecraftClusterRedisDeploymentType,
 };
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-use super::{builder::ResourceBuilder, minecraft_cluster::redis_service::RedisServiceBuilder};
+use super::minecraft_cluster::redis_service::RedisServiceBuilder;
 
 pub struct RedisRef {
     pub host: String,

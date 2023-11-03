@@ -3,10 +3,10 @@ use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use google_agones_crds::v1::fleet_autoscaler::FleetAutoscaler;
 use google_agones_crds::v1::fleet_autoscaler::FleetAutoscalerSpec;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleet;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::fleet::FleetBuilder;
 use super::ProxyFleetReconciler;
@@ -84,10 +84,9 @@ impl FleetAutoscalerBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
-    };
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
+    use crate::reconcilers::proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET};
 
     #[test]
     fn name_contains_fleet_name() {

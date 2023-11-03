@@ -5,8 +5,8 @@ use kube::Client;
 use kube::ResourceExt;
 
 use super::MinecraftClusterReconciler;
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 pub struct ProxyServiceAccountBuilder {
     client: Client,
@@ -59,10 +59,9 @@ impl ProxyServiceAccountBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER},
-    };
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
+    use crate::reconcilers::minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER};
 
     #[test]
     fn name_contains_cluster_name() {

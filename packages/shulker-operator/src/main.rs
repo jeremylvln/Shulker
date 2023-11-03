@@ -1,6 +1,11 @@
 use clap::Parser;
 use kube::Client;
-use shulker_operator::{api, lease, reconcilers, telemetry};
+use shulker_kube_utils::{lease, metrics};
+use shulker_operator::{api, reconcilers};
+use shulker_utils::telemetry;
+
+const LEASE_NAME: &str = "shulker-operator.shulkermc.io";
+const LEASE_CONTROLLER_NAME: &str = "shulker-operator";
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -23,8 +28,13 @@ async fn main() -> anyhow::Result<()> {
     let cancellation_token = tokio_util::sync::CancellationToken::new();
 
     let client = Client::try_default().await?;
-    let lease_holder =
-        lease::try_acquire_and_hold(client.clone(), cancellation_token.clone()).await?;
+    let lease_holder = lease::try_acquire_and_hold(
+        client.clone(),
+        LEASE_NAME.to_string(),
+        LEASE_CONTROLLER_NAME.to_string(),
+        cancellation_token.clone(),
+    )
+    .await?;
 
     tokio::select! {
         _ = tokio::signal::ctrl_c() => {
@@ -35,7 +45,7 @@ async fn main() -> anyhow::Result<()> {
         _ = reconcilers::proxy_fleet::run(client.clone()) => {},
         _ = reconcilers::minecraft_server::run(client.clone()) => {},
         _ = reconcilers::minecraft_server_fleet::run(client.clone()) => {},
-        _ = api::create_metrics_server(args.metrics_bind_address)? => {},
+        _ = metrics::create_http_server(args.metrics_bind_address)? => {},
         _ = api::create_grpc_server(args.api_bind_address, client.clone()) => {},
     }
 

@@ -7,6 +7,8 @@ use kube::{
 };
 use serde::{de::DeserializeOwned, Serialize};
 
+use crate::reconcilers::BuilderReconcilerError;
+
 #[async_trait::async_trait]
 pub trait ResourceBuilder<'a> {
     type OwnerType: kube::Resource<DynamicType = ()> + Clone + Serialize + DeserializeOwned + Debug;
@@ -93,7 +95,7 @@ pub async fn reconcile_builder<
 
     let mut existing_resource = get_existing(&api, &name)
         .await
-        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
+        .map_err(|e| BuilderReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 
     if existing_resource.is_some() {
         debug!(
@@ -109,7 +111,7 @@ pub async fn reconcile_builder<
             api.delete(&name, &DeleteParams::default())
                 .await
                 .map_err(|e| {
-                    super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into())
+                    BuilderReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into())
                 })
         };
 
@@ -147,7 +149,7 @@ pub async fn reconcile_builder<
     let mut new_resource = builder
         .build(owner, &name, existing_resource.as_ref(), context)
         .await
-        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
+        .map_err(|e| BuilderReconcilerError::BuilderError(std::any::type_name::<RB>(), e))?;
 
     let updated_resource = if let Some(existing_resource) = existing_resource {
         debug!(
@@ -173,7 +175,7 @@ pub async fn reconcile_builder<
             &Patch::Apply(&new_resource),
         )
         .await
-        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
+        .map_err(|e| BuilderReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
     } else {
         debug!(
             builder = std::any::type_name::<RB>(),
@@ -193,7 +195,7 @@ pub async fn reconcile_builder<
             &new_resource,
         )
         .await
-        .map_err(|e| super::ReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
+        .map_err(|e| BuilderReconcilerError::BuilderError(std::any::type_name::<RB>(), e.into()))?
     };
 
     Ok(Some(updated_resource))

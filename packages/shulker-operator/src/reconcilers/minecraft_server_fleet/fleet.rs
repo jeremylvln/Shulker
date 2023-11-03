@@ -8,13 +8,13 @@ use kube::Client;
 use kube::ResourceExt;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
 use google_agones_crds::v1::fleet::FleetSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
 use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleet;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::config_map::ConfigMapBuilder;
 use super::MinecraftServerFleetReconciler;
@@ -167,8 +167,9 @@ impl FleetBuilder {
 
 #[cfg(test)]
 mod tests {
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
     use crate::reconcilers::{
-        builder::ResourceBuilder,
         minecraft_cluster::fixtures::TEST_CLUSTER,
         minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
     };

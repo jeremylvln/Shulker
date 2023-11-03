@@ -8,6 +8,7 @@ use kube::{
     runtime::{controller::Action, watcher::Config, Controller},
     Api, Client, ResourceExt,
 };
+use shulker_kube_utils::reconcilers::{builder::reconcile_builder, status::patch_status};
 use tracing::*;
 
 use shulker_crds::{
@@ -20,10 +21,7 @@ use self::{
     gameserver::{GameServerBuilder, GameServerBuilderContext},
 };
 
-use super::{
-    builder::reconcile_builder, cluster_ref::resolve_cluster_ref, status::patch_status,
-    ReconcilerError, Result,
-};
+use super::{cluster_ref::resolve_cluster_ref, ReconcilerError, Result};
 
 pub mod config_map;
 pub mod gameserver;
@@ -52,13 +50,16 @@ impl MinecraftServerReconciler {
         )
         .await?;
 
-        reconcile_builder(&self.config_map_builder, minecraft_server.as_ref(), None).await?;
+        reconcile_builder(&self.config_map_builder, minecraft_server.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
         let gameserver = reconcile_builder(
             &self.gameserver_builder,
             minecraft_server.as_ref(),
             Some(GameServerBuilderContext { cluster: &cluster }),
         )
-        .await?;
+        .await
+        .map_err(ReconcilerError::BuilderError)?;
 
         if let Some(gameserver) = &gameserver {
             if let Some(gameserver_status) = &gameserver.status {
@@ -101,7 +102,8 @@ impl MinecraftServerReconciler {
                     &PatchParams::apply("shulker-operator").force(),
                     &minecraft_server,
                 )
-                .await?;
+                .await
+                .map_err(ReconcilerError::BuilderError)?;
             }
         }
 

@@ -3,6 +3,7 @@ resolver = "2"
 members = [
   "packages/shulker-crds",
   "packages/shulker-operator",
+  "packages/shulker-kube-utils",
   "packages/shulker-utils",
   "packages/google-agones-crds",
   "packages/shulker-sdk/bindings/rust"
@@ -16,11 +17,12 @@ publish = false
 
 [workspace.dependencies]
 # In workspace
-shulker-crds = { path = "./packages/shulker-crds" }
-shulker-operator = { path = "./packages/shulker-operator" }
 google-agones-crds = { path = "./packages/google-agones-crds" }
-shulker-utils = { path = "./packages/shulker-utils" }
+shulker-crds = { path = "./packages/shulker-crds" }
+shulker-kube-utils = { path = "./packages/shulker-kube-utils" }
+shulker-operator = { path = "./packages/shulker-operator" }
 shulker-sdk = { path = "./packages/shulker-sdk/bindings/rust" }
+shulker-utils = { path = "./packages/shulker-utils" }
 
 # External
 actix-web = "4.4.0"

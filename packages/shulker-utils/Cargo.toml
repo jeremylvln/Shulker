@@ -15,3 +15,5 @@ testing = []
 
 [dependencies]
 chrono.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

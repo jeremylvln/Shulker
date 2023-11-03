@@ -6,9 +6,9 @@ use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::MinecraftServerReconciler;
 
@@ -100,10 +100,9 @@ impl ConfigMapBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_server::fixtures::{create_client_mock, TEST_SERVER},
-    };
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
+    use crate::reconcilers::minecraft_server::fixtures::{create_client_mock, TEST_SERVER};
 
     #[test]
     fn name_contains_server_name() {

@@ -12,8 +12,6 @@ use tracing::*;
 
 use shulker_utils::time;
 
-const LEASE_NAME: &str = "shulker-operator.shulkermc.io";
-const LEASE_CONTROLLER_NAME: &str = "shulker-operator";
 const LEASE_DURATION_SECONDS: u64 = 15;
 const LEASE_RENEW_INTERVAL_SECONDS: u64 = 10;
 
@@ -243,13 +241,11 @@ impl LeaseLock {
 
 pub async fn try_acquire_and_hold(
     client: kube::Client,
+    name: String,
+    controller_name: String,
     cancellation_token: tokio_util::sync::CancellationToken,
 ) -> Result<tokio::task::JoinHandle<()>, anyhow::Error> {
-    let mut lease = LeaseLock::new(
-        client,
-        LEASE_NAME.to_string(),
-        LEASE_CONTROLLER_NAME.to_string(),
-    )?;
+    let mut lease = LeaseLock::new(client, name, controller_name)?;
 
     lease.try_acquire().await?;
 

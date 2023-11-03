@@ -7,7 +7,7 @@ use kube::Client;
 use kube::ResourceExt;
 use rand::distributions::{Alphanumeric, DistString};
 
-use crate::reconcilers::builder::ResourceBuilder;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 
@@ -108,13 +108,11 @@ mod tests {
 
     use k8s_openapi::{api::core::v1::Secret, ByteString};
     use kube::core::ObjectMeta;
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_cluster::{
-            fixtures::{create_client_mock, TEST_CLUSTER},
-            forwarding_secret::SECRET_DATA_KEY,
-        },
+    use crate::reconcilers::minecraft_cluster::{
+        fixtures::{create_client_mock, TEST_CLUSTER},
+        forwarding_secret::SECRET_DATA_KEY,
     };
 
     #[test]

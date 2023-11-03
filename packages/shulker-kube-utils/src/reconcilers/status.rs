@@ -7,7 +7,7 @@ use serde::{de::DeserializeOwned, Serialize};
 
 use crate::reconcilers::Result;
 
-use super::ReconcilerError;
+use super::BuilderReconcilerError;
 
 pub async fn patch_status<
     Resource: kube::Resource<DynamicType = ()> + DeserializeOwned + HasStatus,
@@ -28,7 +28,7 @@ where
 
         api.patch_status(&resource.name_any(), pp, &Patch::Apply(&status_json))
             .await
-            .map_err(ReconcilerError::FailedToUpdateStatus)?;
+            .map_err(BuilderReconcilerError::FailedToUpdateStatus)?;
     }
 
     Ok(())

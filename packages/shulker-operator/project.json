@@ -40,9 +40,10 @@
     }
   },
   "implicitDependencies": [
-    "shulker-crds",
-    "shulker-utils",
     "google-agones-crds",
+    "shulker-crds",
+    "shulker-kube-utils",
+    "shulker-utils",
     "shulker-sdk-bindings-rust"
   ],
   "tags": ["lang:rust"]

@@ -3,10 +3,10 @@ use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use google_agones_crds::v1::fleet_autoscaler::FleetAutoscaler;
 use google_agones_crds::v1::fleet_autoscaler::FleetAutoscalerSpec;
 use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleet;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::fleet::FleetBuilder;
 use super::MinecraftServerFleetReconciler;
@@ -84,9 +84,10 @@ impl FleetAutoscalerBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
+    use crate::reconcilers::minecraft_server_fleet::fixtures::{
+        create_client_mock, TEST_SERVER_FLEET,
     };
 
     #[test]

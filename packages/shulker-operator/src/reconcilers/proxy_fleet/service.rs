@@ -7,8 +7,8 @@ use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
 
-use crate::reconcilers::builder::ResourceBuilder;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleet;
+use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::ProxyFleetReconciler;
 
@@ -91,10 +91,9 @@ impl ServiceBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::reconcilers::{
-        builder::ResourceBuilder,
-        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
-    };
+    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+
+    use crate::reconcilers::proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET};
 
     #[test]
     fn name_contains_fleet_name() {

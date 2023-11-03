@@ -10,6 +10,7 @@ name = "crdgen"
 path = "src/crdgen.rs"
 doc = false
 test = false
+required-features = ["crdgen-bin"]
 
 [lib]
 name = "shulker_crds"
@@ -17,6 +18,7 @@ path = "src/lib.rs"
 
 [features]
 default = []
+crdgen-bin = ["serde_yaml"]
 
 [dependencies]
 google-agones-crds.workspace = true
@@ -25,7 +27,7 @@ kube.workspace = true
 schemars.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-serde_yaml.workspace = true
+serde_yaml = { workspace = true, optional = true }
 shulker-utils.workspace = true
 strum.workspace = true
 
