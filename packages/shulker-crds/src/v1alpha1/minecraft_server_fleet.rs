@@ -65,3 +65,20 @@ impl HasConditions for MinecraftServerFleetStatus {
         &mut self.conditions
     }
 }
+
+/// MinecraftServerFleetRef is to be used on resources referencing
+/// a MinecraftServerFleet.
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct MinecraftServerFleetRef {
+    /// Name of the Kubernetes `MinecraftServerFleet` owning
+    /// this resource
+    pub name: String,
+}
+
+impl MinecraftServerFleetRef {
+    /// Creates a new `MinecraftServerFleet` with the given name
+    pub fn new(name: String) -> Self {
+        Self { name }
+    }
+}

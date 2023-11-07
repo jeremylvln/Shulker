@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo build --release",
+        "command": "cargo build --release --bins",
         "cwd": "packages/shulker-addon-matchmaking"
       },
       "inputs": ["default", "rust:dependencies"]
@@ -40,6 +40,7 @@
     }
   },
   "implicitDependencies": [
+    "google-open-match-sdk-bindings-rust",
     "shulker-crds",
     "shulker-kube-utils",
     "shulker-utils",

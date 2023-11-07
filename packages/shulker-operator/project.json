@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo build --release",
+        "command": "cargo build --release --bins",
         "cwd": "packages/shulker-operator"
       },
       "inputs": ["default", "rust:dependencies"]

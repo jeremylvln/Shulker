@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shulker-addon-matchmaking-mmf-metrics
+  labels:
+    app.kubernetes.io/name: service
+    app.kubernetes.io/instance: shulker-addon-matchmaking-mmf-metrics
+    app.kubernetes.io/component: shulker-addon-matchmaking
+    app.kubernetes.io/part-of: shulker
+spec:
+  selector:
+    app.kubernetes.io/name: shulker-addon-matchmaking-mmf
+    app.kubernetes.io/instance: shulker-addon-matchmaking-mmf
+    app.kubernetes.io/component: shulker-addon-matchmaking
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: metrics

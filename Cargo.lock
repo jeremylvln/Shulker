@@ -923,6 +923,7 @@ dependencies = [
 name = "google-open-match-sdk"
 version = "0.3.0"
 dependencies = [
+ "futures-core",
  "pbjson-types",
  "prost",
  "tonic",
@@ -2221,6 +2222,27 @@ dependencies = [
 [[package]]
 name = "shulker-addon-matchmaking"
 version = "0.3.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "futures",
+ "google-agones-crds",
+ "google-open-match-sdk",
+ "kube",
+ "pbjson-types",
+ "prost",
+ "shulker-crds",
+ "shulker-kube-utils",
+ "shulker-sdk",
+ "shulker-utils",
+ "thiserror",
+ "tokio",
+ "tokio-stream",
+ "tokio-util",
+ "tonic",
+ "tracing",
+ "uuid",
+]
 
 [[package]]
 name = "shulker-crds"
@@ -2282,8 +2304,10 @@ dependencies = [
  "shulker-crds",
  "shulker-kube-utils",
  "shulker-sdk",
+ "shulker-utils",
  "thiserror",
  "tokio",
+ "tokio-util",
  "toml 0.8.8",
  "tonic",
  "tower-test",

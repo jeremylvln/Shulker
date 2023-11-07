@@ -5,11 +5,17 @@ authors.workspace = true
 edition.workspace = true
 publish.workspace = true
 
-# [[bin]]
-# name = "shulker-operator"
-# path = "src/main.rs"
-# doc = false
-# required-features = ["shulker-operator-bin"]
+[[bin]]
+name = "shulker-addon-matchmaking-director"
+path = "src/bin/director.rs"
+doc = false
+# required-features = ["shulker-addon-matchmaking-bin"]
+
+[[bin]]
+name = "shulker-addon-matchmaking-mmf"
+path = "src/bin/mmf.rs"
+doc = false
+# required-features = ["shulker-addon-matchmaking-bin"]
 
 [lib]
 name = "shulker_addon_matchmaking"
@@ -17,33 +23,25 @@ path = "src/lib.rs"
 
 [features]
 default = []
-# shulker-operator-bin = ["clap"]
+# shulker-addon-matchmaking-bin = ["clap"]
 
-# [dependencies]
-# anyhow.workspace = true
-# async-trait.workspace = true
-# clap = { workspace = true, optional = true }
-# futures.workspace = true
-# google-agones-crds.workspace = true
-# k8s-openapi.workspace = true
-# kube.workspace = true
-# lazy_static.workspace = true
-# rand.workspace = true
-# serde.workspace = true
-# serde_yaml.workspace = true
-# shulker-crds.workspace = true
-# shulker-kube-utils.workspace = true
-# shulker-sdk.workspace = true
-# thiserror.workspace = true
-# tonic.workspace = true
-# toml.workspace = true
-# tracing.workspace = true
-# url.workspace = true
-
-# [dev-dependencies]
-# http.workspace = true
-# hyper.workspace = true
-# insta.workspace = true
-# serde_json.workspace = true
-# tokio.workspace = true
-# tower-test.workspace = true
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+futures.workspace = true
+google-agones-crds.workspace = true
+google-open-match-sdk = { workspace = true, features = ["server"] }
+kube.workspace = true
+pbjson-types.workspace = true
+prost.workspace = true
+shulker-crds.workspace = true
+shulker-kube-utils.workspace = true
+shulker-sdk = { workspace = true, features = ["client"] }
+shulker-utils.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+tonic.workspace = true
+tracing.workspace = true
+uuid.workspace = true

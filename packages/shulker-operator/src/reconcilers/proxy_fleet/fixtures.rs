@@ -30,7 +30,7 @@ lazy_static! {
             ..ObjectMeta::default()
         },
         spec: ProxyFleetSpec {
-            cluster_ref: MinecraftClusterRef::new("my-cluster"),
+            cluster_ref: MinecraftClusterRef::new("my-cluster".to_string()),
             replicas: 3,
             template: TemplateSpec {
                 metadata: Some(ObjectMeta {

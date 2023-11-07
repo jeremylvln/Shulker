@@ -27,6 +27,7 @@ spec:
                   description: List of player UUIDs that are automatically promoted as network administrators, which are granted all the permissions by default on all the proxies and servers
                   items:
                     type: string
+                  nullable: true
                   type: array
                 redis:
                   description: Redis configuration to use as a synchronization backend for the different Shulker components
@@ -61,8 +62,6 @@ spec:
                   required:
                     - type
                   type: object
-              required:
-                - networkAdmins
               type: object
             status:
               description: The status object of `MinecraftCluster`
