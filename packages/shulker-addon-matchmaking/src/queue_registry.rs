@@ -13,11 +13,14 @@ use tracing::info;
 
 use crate::{
     extensions::{set_max_players_in_profile, set_min_players_in_profile},
-    mmf::MMFRegistry,
+    mmf::registry::MMFRegistry,
 };
 
 #[derive(Debug, Error)]
 pub enum RegistryError {
+    #[error("built-in mmf {0} not found, it should not be possible")]
+    BuiltInMMFNotFound(String),
+
     #[error("no valid mmf configuration provided for queue {0}")]
     NoValidMMFConfiguration(String),
 }
@@ -107,6 +110,7 @@ impl PreparedQueue {
         return if let Some(built_in) = matchmaking_queue.spec.mmf.built_in.as_ref() {
             Ok(mmf_registry
                 .get_mmf_config_for_type(&built_in.type_)
+                .ok_or_else(|| RegistryError::BuiltInMMFNotFound(built_in.type_.to_string()))?
                 .clone())
         } else if let Some(provided) = matchmaking_queue.spec.mmf.provided.as_ref() {
             Ok(FunctionConfig {

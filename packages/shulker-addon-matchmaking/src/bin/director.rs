@@ -4,7 +4,7 @@ use clap::Parser;
 use google_open_match_sdk::backend_service_client::BackendServiceClient;
 use kube::Client;
 use shulker_addon_matchmaking::{
-    director, mmf::MMFRegistry, queue_registry::QueueRegistry, reconcilers,
+    director, mmf::registry::MMFRegistry, queue_registry::QueueRegistry, reconcilers,
 };
 use shulker_crds::matchmaking::v1alpha1::matchmaking_queue::MatchmakingQueueMMFBuiltInType;
 use shulker_kube_utils::{lease, metrics};
