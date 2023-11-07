@@ -54,7 +54,7 @@ thiserror = "1.0.50"
 tonic = { version = "0.10.2", features = ["gzip"] }
 tokio = { version = "1.33.0", features = ["macros", "rt-multi-thread"] }
 tokio-util = "0.7.10"
-toml = "0.8.6"
+toml = "0.8.8"
 tower-test = "0.4.0"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.17", features = ["json", "env-filter"] }
