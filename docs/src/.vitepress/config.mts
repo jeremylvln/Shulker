@@ -10,55 +10,70 @@ const description =
 
 const renderTitle = (title: string) => titleTemplate.replace(':title', title);
 
-const sidebar = {
-  '/guide/': [
-    {
-      text: 'Introduction',
-      items: [
-        { text: 'What is Shulker?', link: '/guide/' },
-        { text: 'Architecture', link: '/guide/architecture' },
-      ],
-    },
-    {
-      text: 'Getting Started',
-      items: [
-        {
-          text: 'Prerequisites',
-          link: '/guide/getting-started/prerequisites',
-        },
-        {
-          text: 'Installation',
-          link: '/guide/getting-started/installation',
-        },
-        {
-          text: 'Your First Cluster',
-          link: '/guide/getting-started/your-first-cluster',
-        },
-      ],
-    },
-    {
-      text: 'Recipes',
-      items: [
-        {
-          text: 'Adding custom content',
-          link: '/guide/recipes/adding-custom-content',
-        },
-        {
-          text: 'Enabling proxy protocol',
-          link: '/guide/recipes/enabling-proxy-protocol',
-        },
-        {
-          text: 'Overriding pod properties',
-          link: '/guide/recipes/overriding-pod-properties',
-        },
-        {
-          text: 'Defining network administrators',
-          link: '/guide/recipes/defining-network-administrators',
-        },
-      ],
-    },
-  ],
-} satisfies DefaultTheme.SidebarMulti;
+const sidebar = [
+  {
+    text: 'Introduction',
+    items: [
+      { text: 'What is Shulker?', link: '/guide/' },
+      { text: 'Architecture', link: '/guide/architecture' },
+    ],
+  },
+  {
+    text: 'Getting Started',
+    items: [
+      {
+        text: 'Prerequisites',
+        link: '/guide/getting-started/prerequisites',
+      },
+      {
+        text: 'Installation',
+        link: '/guide/getting-started/installation',
+      },
+      {
+        text: 'Your First Cluster',
+        link: '/guide/getting-started/your-first-cluster',
+      },
+    ],
+  },
+  {
+    text: 'Recipes',
+    items: [
+      {
+        text: 'Adding custom content',
+        link: '/guide/recipes/adding-custom-content',
+      },
+      {
+        text: 'Enabling proxy protocol',
+        link: '/guide/recipes/enabling-proxy-protocol',
+      },
+      {
+        text: 'Overriding pod properties',
+        link: '/guide/recipes/overriding-pod-properties',
+      },
+      {
+        text: 'Defining network administrators',
+        link: '/guide/recipes/defining-network-administrators',
+      },
+    ],
+  },
+  {
+    text: 'Addons',
+    items: [
+      {
+        text: 'What are addons?',
+        link: '/guide/addons/what-are-addons',
+      },
+      {
+        text: 'Matchmaking (alpha)',
+        link: '/guide/addons/matchmaking',
+      },
+    ],
+  },
+  {
+    text: 'API & SDK Reference',
+    link: '/sdk/',
+  },
+] satisfies DefaultTheme.Sidebar;
 
 export default defineConfig({
   title: 'Shulker',
@@ -140,9 +155,10 @@ export default defineConfig({
     socialLinks: [{ icon: 'github', link: repositoryUrl }],
 
     nav: [
-      { text: 'Getting Started', link: sidebar['/guide/'][1].items[0].link },
+      { text: 'Getting Started', link: '/guide/getting-started/prerequisites' },
       { text: 'Guide', link: '/guide/' },
-      { text: 'Recipes', link: sidebar['/guide/'][2].items[0].link },
+      { text: 'Recipes', link: '/guide/recipes/adding-custom-content' },
+      { text: 'Addons', link: '/guide/addons/what-are-addons' },
     ],
 
     sidebar,

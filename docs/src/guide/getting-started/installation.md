@@ -4,32 +4,46 @@ Shulker is composed of multiple components, some of them being
 optional. By design, only the **Shulker Operator** is required
 to be installed as it contains the core logic.
 
-## Shulker Operator
+## Using Helm
 
-The **Shulker Operator** can be installed using **Kustomize**:
+If you need to fine-tune Shulker and its different components,
+an exhaustive Helm chart is provided. The default configuration
+is enough to get started.
+
+The Helm Chart is available in the [`kube/helm`](https://github.com/jeremylvln/Shulker/tree/main/kube/helm)
+folder of the repository.
+
+To install Shulker using Helm:
 
 ```bash
 $ git clone https://github.com/jeremylvln/Shulker
-$ kubectl apply -k Shulker/kube/overlays/stable -n shulker-system
+$ cd Shulker/kube/helm
+$ helm install -n shulker-system .
 ```
 
-:::tip
+## Using pre-rendered manifests
 
-If Prometheus is installed (along with its custom CRDs), you
-would prefer selecting the `stable-with-prometheus` overlay which
-will create appropriate `ServiceMonitor`s resources.
+Pre-rendered manifests for common uses are provided and are
+generated for the Helm charts. It allows you to test Shulker
+in your cluster without hassle.
 
-:::
+The manifests are available in the [`kube/manifests`](https://github.com/jeremylvln/Shulker/tree/main/kube/manifests)
+folder of the repository.
 
-After this, a `shulker-operator` Pod should be scheduled and
-work immediately.
+There are 4 pre-rendered variants available:
 
-:::info
+- `stable.yaml`: a default configuration as you would render
+  the Helm chart without modifying the values
+- `stable-with-prometheus.yaml`: the same default configuration
+  with Prometheus support, including `ServiceMonitor` for the
+  different components
+- `next.yaml`: the same configuration as for `stable.yaml`, with
+  the images tagged to `next` to quickly test the future release
+- `next-with-prometheus.yaml`: the combination of `next.yaml` with
+  Prometheus support
 
-The operator Pod requires a certificate from cert-manager to
-be provisioned, it may take some seconds/minutes to generate.
-If the certificate is still not available after some minutes,
-check your cert-manager logs. There is no special configuration
-expected, a default installation should work out of the box.
+You can apply them directly with `kubectl`:
 
-:::
+```bash
+$ kubectl apply -f stable.yaml -n shulker-system
+```
