@@ -30,7 +30,7 @@ lazy_static! {
             ..ObjectMeta::default()
         },
         spec: MinecraftServerFleetSpec {
-            cluster_ref: MinecraftClusterRef::new("my-cluster"),
+            cluster_ref: MinecraftClusterRef::new("my-cluster".to_string()),
             replicas: 3,
             template: TemplateSpec {
                 metadata: Some(ObjectMeta {
@@ -45,7 +45,7 @@ lazy_static! {
                     ..ObjectMeta::default()
                 }),
                 spec: MinecraftServerSpec {
-                    cluster_ref: MinecraftClusterRef::new("my-cluster"),
+                    cluster_ref: MinecraftClusterRef::new("my-cluster".to_string()),
                     tags: vec!["lobby".to_string()],
                     version: MinecraftServerVersionSpec {
                         channel: MinecraftServerVersion::Paper,

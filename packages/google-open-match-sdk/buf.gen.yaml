@@ -13,5 +13,5 @@ plugins:
     opt:
       - compile_well_known_types
       - extern_path=.google.protobuf=::pbjson_types
-      - no_server
+      - server_mod_attribute=.=#[cfg(feature = "server")]
       - client_mod_attribute=.=#[cfg(feature = "client")]
