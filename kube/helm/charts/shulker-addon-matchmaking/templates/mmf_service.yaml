@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}
+  labels:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-mmf
+spec:
+  type: ClusterIP
+  ports:
+    - name: mmf-batch
+      port: 9090
+      protocol: TCP
+      targetPort: mmf-batch
+    - name: mmf-elo
+      port: 9091
+      protocol: TCP
+      targetPort: mmf-elo
+  selector:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-mmf

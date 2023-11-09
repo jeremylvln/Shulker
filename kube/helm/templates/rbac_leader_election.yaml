@@ -1,0 +1,40 @@
+{{- if .Values.global.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "shulker-operator.fullname" . }}:leader-election
+  labels:
+    {{- include "shulker-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-operator-rbac
+rules:
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    resourceNames:
+      - shulker-operator.shulkermc.io
+    verbs: ["get", "update", "patch"]
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs: ["create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "shulker-operator.fullname" . }}:leader-election
+  labels:
+    {{- include "shulker-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-operator-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "shulker-operator.fullname" . }}:leader-election
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ template "shulker-operator.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

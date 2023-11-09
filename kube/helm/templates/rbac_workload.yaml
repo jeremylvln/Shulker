@@ -1,0 +1,81 @@
+{{- if .Values.global.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "shulker-operator.fullname" . }}:workload
+  labels:
+    {{- include "shulker-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-operator-rbac
+rules:
+  - apiGroups:
+      - shulkermc.io
+    resources:
+      - minecraftclusters
+      - minecraftserverfleets
+      - minecraftservers
+      - proxyfleets
+    verbs: [get, list, watch]
+  - apiGroups:
+      - shulkermc.io
+    resources:
+      - minecraftclusters
+      - minecraftclusters/status
+      - minecraftserverfleets
+      - minecraftserverfleets/status
+      - minecraftservers
+      - minecraftservers/status
+      - proxyfleets
+      - proxyfleets/status
+    verbs: [update, patch]
+
+  - apiGroups:
+      - ''
+    resources:
+      - services
+      - configmaps
+      - secrets
+      - serviceaccounts
+      - events
+    verbs: [create, delete, get, list, patch, update, watch]
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs: [create, delete, get, list, patch, update, watch]
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+    verbs: [create, delete, get, list, patch, update, watch]
+
+  - apiGroups:
+      - agones.dev
+    resources:
+      - fleets
+      - gameservers
+    verbs: [create, delete, get, list, patch, update, watch]
+  - apiGroups:
+      - autoscaling.agones.dev
+    resources:
+      - fleetautoscalers
+    verbs: [create, delete, get, list, patch, update, watch]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "shulker-operator.fullname" . }}:workload
+  labels:
+    {{- include "shulker-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-operator-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "shulker-operator.fullname" . }}:workload
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ template "shulker-operator.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

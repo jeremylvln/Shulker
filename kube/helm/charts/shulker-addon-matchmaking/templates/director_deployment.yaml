@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}-director
+  labels:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-director
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "shulker-addon-matchmaking.labels" . | nindent 6 }}
+      app.kubernetes.io/component: shulker-addon-matchmaking-director
+  template:
+    metadata:
+      labels:
+        {{- include "shulker-addon-matchmaking.labels" . | nindent 8 }}
+        app.kubernetes.io/component: shulker-addon-matchmaking-director
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ template "shulker-addon-matchmaking.serviceAccountName" . }}
+      containers:
+        - name: shulker-addon-matchmaking-director
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --metrics-bind-address=0.0.0.0:8080
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: metrics
+
+          env:
+            - name: OPEN_MATCH_BACKEND_HOST
+              value: {{ .Values.director.openMatch.backend.host }}
+            - name: OPEN_MATCH_BACKEND_GRPC_PORT
+              value: {{ quote .Values.director.openMatch.backend.grpcPort }}
+            - name: SHULKER_API_HOST
+              value: "shulker-operator.{{ .Release.Namespace }}"
+            - name: SHULKER_API_GRPC_PORT
+              value: '8080'
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+
+          {{- with .Values.livenessProbe }}
+          {{- if .enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            successThreshold: {{ .successThreshold }}
+            failureThreshold: {{ .failureThreshold }}
+          {{- end }}
+          {{- end }}
+
+          {{- with .Values.startupProbe }}
+          {{- if .enabled }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            successThreshold: {{ .successThreshold }}
+            failureThreshold: {{ .failureThreshold }}
+          {{- end }}
+          {{- end }}
+
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

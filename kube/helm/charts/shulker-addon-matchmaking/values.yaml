@@ -1,0 +1,195 @@
+nameOverride: 'shulker-addon-matchmaking'
+fullnameOverride: 'shulker-addon-matchmaking'
+
+image:
+  repository: ghcr.io/jeremylvln/shulker-addon-matchmaking
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ''
+
+director:
+  # Additional command line flags to pass.
+  extraArgs: []
+
+  # Additional environment variables to add to the pod.
+  extraEnv:
+    []
+    # - name: MY_ENV_KEY
+    #   value: 'my value'
+
+  openMatch:
+    backend:
+      host: open-match-backend.open-match
+      grpcPort: 50505
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+
+  volumes: []
+
+  volumeMounts: []
+
+  podAnnotations: {}
+
+  nodeSelector:
+    kubernetes.io/os: linux
+
+  tolerations: []
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+                  - arm64
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 5
+
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 5
+
+  metrics:
+    enabled: true
+
+    serviceAnnotations: {}
+
+    servicemonitor:
+      enabled: false
+      labels: {}
+      annotations: {}
+      prometheusInstance: default
+      interval: 60s
+      scrapeTimeout: 30s
+      honorLabels: false
+      endpointAdditionalProperties: {}
+
+mmf:
+  replicas: 1
+
+  # Additional command line flags to pass.
+  extraArgs: []
+
+  # Additional environment variables to add to the pod.
+  extraEnv:
+    []
+    # - name: MY_ENV_KEY
+    #   value: 'my value'
+
+  openMatch:
+    query:
+      host: open-match-query.open-match
+      grpcPort: 50503
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+
+  volumes: []
+
+  volumeMounts: []
+
+  podAnnotations: {}
+
+  nodeSelector:
+    kubernetes.io/os: linux
+
+  tolerations: []
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+                  - arm64
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 5
+
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 5
+
+  metrics:
+    enabled: true
+
+    serviceAnnotations: {}
+
+    servicemonitor:
+      enabled: false
+      labels: {}
+      annotations: {}
+      prometheusInstance: default
+      interval: 60s
+      scrapeTimeout: 30s
+      honorLabels: false
+      endpointAdditionalProperties: {}
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ''

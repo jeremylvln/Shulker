@@ -19,12 +19,18 @@ async function main() {
       delete codecovConfig.coverage.status.project[name];
     });
 
-  const projects = Object.values(graph.nodes).filter(
-    (project) =>
-      !PROJECTS_TO_EXCLUDE.includes(project.name) &&
-      'test' in project.data.targets &&
-      'outputs' in project.data.targets.test,
-  );
+  const projects = Object.values(graph.nodes)
+    .filter(
+      (project) =>
+        !PROJECTS_TO_EXCLUDE.includes(project.name) &&
+        'test' in project.data.targets &&
+        'outputs' in project.data.targets.test,
+    )
+    .sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
 
   projects.forEach((project) => {
     codecovConfig.coverage.status.project[project.name] = {

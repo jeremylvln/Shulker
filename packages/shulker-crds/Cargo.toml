@@ -7,7 +7,7 @@ publish.workspace = true
 
 [[bin]]
 name = "crdgen"
-path = "src/crdgen.rs"
+path = "src/bin/crdgen.rs"
 doc = false
 test = false
 # required-features = ["crdgen-bin"]
