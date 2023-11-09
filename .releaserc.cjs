@@ -42,18 +42,18 @@ const fileReplacements = [
     countMatches: true,
   },
   {
-    files: ['kube/overlays/stable*/kustomization.yaml'],
-    from: 'newTag: .*',
-    to: 'newTag: ${nextRelease.version}',
+    files: ['kube/helm/Chart.yaml', 'kube/helm/charts/*/Chart.yaml'],
+    from: 'appVersion: .*',
+    to: "appVersion: '${nextRelease.version}'",
     results: [
       {
-        file: 'kube/overlays/stable-with-prometheus/kustomization.yaml',
+        file: 'kube/helm/Chart.yaml',
         hasChanged: true,
         numMatches: 1,
         numReplacements: 1,
       },
       {
-        file: 'kube/overlays/stable/kustomization.yaml',
+        file: 'kube/helm/charts/shulker-addon-matchmaking/Chart.yaml',
         hasChanged: true,
         numMatches: 1,
         numReplacements: 1,
@@ -115,6 +115,12 @@ module.exports = {
       },
     ],
     [
+      '@semantic-release/exec',
+      {
+        publishCmd: 'cd kube/manifests && ./generate_from_helm.sh',
+      },
+    ],
+    [
       '@semantic-release/git',
       {
         assets: [
@@ -124,13 +130,18 @@ module.exports = {
           ...fileReplacements.flatMap((replacement) =>
             replacement.results.map((result) => result.file),
           ),
+          'kube/manifests/*.yaml',
         ],
       },
     ],
     [
       '@semantic-release/github',
       {
-        assets: ['CHANGELOG.md'].map((path) => ({ path })),
+        assets: [
+          'CHANGELOG.md',
+          'kube/manifests/stable.yaml',
+          'kube/manifests/stable-with-prometheus.yaml',
+        ].map((path) => ({ path })),
         failComment: false,
         releasedLabels: false,
         discussionCategoryName: 'Announcements',
