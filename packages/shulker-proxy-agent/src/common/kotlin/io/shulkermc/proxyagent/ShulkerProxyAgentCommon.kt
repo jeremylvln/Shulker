@@ -113,14 +113,15 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     }
 
     private fun createJedisPool(): JedisPool {
-        if (Configuration.REDIS_USERNAME != null && Configuration.REDIS_PASSWORD != null) {
-            return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT)
+        if (Configuration.REDIS_USERNAME.isPresent && Configuration.REDIS_PASSWORD.isPresent) {
+            return JedisPool(
+                Configuration.REDIS_HOST,
+                Configuration.REDIS_PORT,
+                Configuration.REDIS_USERNAME.get(),
+                Configuration.REDIS_PASSWORD.get()
+            )
         }
-        return JedisPool(
-            Configuration.REDIS_HOST,
-            Configuration.REDIS_PORT,
-            Configuration.REDIS_USERNAME,
-            Configuration.REDIS_PASSWORD
-        )
+
+        return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT)
     }
 }

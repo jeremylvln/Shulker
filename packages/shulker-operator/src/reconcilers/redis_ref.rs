@@ -5,6 +5,7 @@ use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::minecraft_cluster::redis_service::RedisServiceBuilder;
 
+#[derive(Debug, PartialEq, Clone)]
 pub struct RedisRef {
     pub host: String,
     pub port: u16,
@@ -34,5 +35,85 @@ impl RedisRef {
                 )),
             },
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use shulker_crds::v1alpha1::minecraft_cluster::{
+        MinecraftClusterRedisDeploymentType, MinecraftClusterRedisProvidedSpec,
+        MinecraftClusterRedisSpec,
+    };
+
+    use crate::reconcilers::{minecraft_cluster::fixtures::TEST_CLUSTER, redis_ref::RedisRef};
+
+    #[test]
+    fn from_cluster_default() {
+        // G
+        let mut cluster = TEST_CLUSTER.clone();
+        cluster.spec.redis = None;
+
+        // W
+        let redis_ref = super::RedisRef::from_cluster(&cluster).unwrap();
+
+        // T
+        assert_eq!(
+            redis_ref,
+            RedisRef {
+                host: "my-cluster-redis-managed".to_string(),
+                port: 6379,
+                credentials_secret_name: None,
+            }
+        );
+    }
+
+    #[test]
+    fn from_cluster_managed() {
+        // G
+        let mut cluster = TEST_CLUSTER.clone();
+        cluster.spec.redis = Some(MinecraftClusterRedisSpec {
+            type_: MinecraftClusterRedisDeploymentType::ManagedSingleNode,
+            provided: None,
+        });
+
+        // W
+        let redis_ref = super::RedisRef::from_cluster(&cluster).unwrap();
+
+        // T
+        assert_eq!(
+            redis_ref,
+            RedisRef {
+                host: "my-cluster-redis-managed".to_string(),
+                port: 6379,
+                credentials_secret_name: None,
+            }
+        );
+    }
+
+    #[test]
+    fn from_cluster_provided() {
+        // G
+        let mut cluster = TEST_CLUSTER.clone();
+        cluster.spec.redis = Some(MinecraftClusterRedisSpec {
+            type_: MinecraftClusterRedisDeploymentType::Provided,
+            provided: Some(MinecraftClusterRedisProvidedSpec {
+                host: "my-redis-host".to_string(),
+                port: 1234,
+                credentials_secret_name: Some("my-redis-credentials".to_string()),
+            }),
+        });
+
+        // W
+        let redis_ref = super::RedisRef::from_cluster(&cluster).unwrap();
+
+        // T
+        assert_eq!(
+            redis_ref,
+            RedisRef {
+                host: "my-redis-host".to_string(),
+                port: 1234,
+                credentials_secret_name: Some("my-redis-credentials".to_string()),
+            }
+        );
     }
 }

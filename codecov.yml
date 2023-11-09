@@ -13,18 +13,18 @@ coverage:
       google-open-match-sdk-bindings-rust:
         flags:
           - google-open-match-sdk-bindings-rust
-      shulker-addon-matchmaking:
-        flags:
-          - shulker-addon-matchmaking
       shulker-sdk-bindings-rust:
         flags:
           - shulker-sdk-bindings-rust
-      google-agones-crds:
+      shulker-addon-matchmaking:
         flags:
-          - google-agones-crds
+          - shulker-addon-matchmaking
       shulker-kube-utils:
         flags:
           - shulker-kube-utils
+      google-agones-crds:
+        flags:
+          - google-agones-crds
       shulker-operator:
         flags:
           - shulker-operator
@@ -39,21 +39,21 @@ flags:
     paths:
       - packages/google-open-match-sdk/bindings/rust
     carryforward: true
-  shulker-addon-matchmaking:
-    paths:
-      - packages/shulker-addon-matchmaking
-    carryforward: true
   shulker-sdk-bindings-rust:
     paths:
       - packages/shulker-sdk/bindings/rust
     carryforward: true
-  google-agones-crds:
+  shulker-addon-matchmaking:
     paths:
-      - packages/google-agones-crds
+      - packages/shulker-addon-matchmaking
     carryforward: true
   shulker-kube-utils:
     paths:
       - packages/shulker-kube-utils
+    carryforward: true
+  google-agones-crds:
+    paths:
+      - packages/google-agones-crds
     carryforward: true
   shulker-operator:
     paths:
