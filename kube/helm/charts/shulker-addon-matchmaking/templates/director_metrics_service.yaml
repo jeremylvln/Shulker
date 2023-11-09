@@ -1,0 +1,23 @@
+{{- if .Values.director.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}-director-metrics
+  labels:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
+  {{- with .Values.director.metrics.serviceAnnotations }}
+  annotations:
+    {{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-director
+{{- end }}

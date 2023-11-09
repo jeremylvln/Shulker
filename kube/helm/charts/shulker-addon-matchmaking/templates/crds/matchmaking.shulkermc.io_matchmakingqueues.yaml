@@ -1,0 +1,95 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: matchmakingqueues.matchmaking.shulkermc.io
+spec:
+  group: matchmaking.shulkermc.io
+  names:
+    categories: []
+    kind: MatchmakingQueue
+    plural: matchmakingqueues
+    shortNames: []
+    singular: matchmakingqueue
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for MatchmakingQueueSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              maxPlayers:
+                description: The maximum number of players a match can contain
+                format: uint32
+                minimum: 0.0
+                type: integer
+              minPlayers:
+                description: The minimum number of players required to create a match. If `None`, the matchmaking function will wait for the maximum number of players
+                format: uint32
+                minimum: 0.0
+                nullable: true
+                type: integer
+              mmf:
+                description: The matchmaking function to use to create matches for this queue
+                properties:
+                  builtIn:
+                    description: The matchmaking function to use is provided by Shulker
+                    nullable: true
+                    properties:
+                      type:
+                        description: The type of the matchmaking function to use
+                        enum:
+                        - Batch
+                        - Elo
+                        type: string
+                    required:
+                    - type
+                    type: object
+                  provided:
+                    description: The matchmaking function to use is provided by the user
+                    nullable: true
+                    properties:
+                      host:
+                        description: Host of the matchmaking function
+                        type: string
+                      port:
+                        description: GRPC port of the matchmaking function
+                        format: uint16
+                        minimum: 0.0
+                        type: integer
+                    required:
+                    - host
+                    - port
+                    type: object
+                type: object
+              targetFleetRef:
+                description: The `MinecraftServerFleet` to use as a target for this queue
+                properties:
+                  name:
+                    description: Name of the Kubernetes `MinecraftServerFleet` owning this resource
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - maxPlayers
+            - mmf
+            - targetFleetRef
+            type: object
+          status:
+            description: The status object of `MatchmakingQueue`
+            nullable: true
+            type: object
+        required:
+        - spec
+        title: MatchmakingQueue
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

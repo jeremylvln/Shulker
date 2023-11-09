@@ -1,9 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - shulkermc.io_minecraftclusters.yaml
-  - shulkermc.io_minecraftserverfleets.yaml
-  - shulkermc.io_minecraftservers.yaml
-  - shulkermc.io_proxyfleets.yaml
-  - matchmaking/matchmaking.shulkermc.io_matchmakingqueues.yaml

@@ -1,0 +1,51 @@
+{{- if .Values.global.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}:workload
+  labels:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-rbac
+rules:
+  - apiGroups:
+      - matchmaking.shulkermc.io
+    resources:
+      - matchmakingqueues
+    verbs: [get, list, watch]
+  - apiGroups:
+      - shulkermc.io
+    resources:
+      - matchmakingqueues
+      - matchmakingqueues/status
+    verbs: [update, patch]
+
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs: [create, delete, get, list, patch, update, watch]
+
+  - apiGroups:
+      - agones.dev
+    resources:
+      - gameservers
+    verbs: [list]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}:workload
+  labels:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}:workload
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ template "shulker-addon-matchmaking.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

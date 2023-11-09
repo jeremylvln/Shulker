@@ -19,12 +19,12 @@ coverage:
       shulker-addon-matchmaking:
         flags:
           - shulker-addon-matchmaking
-      shulker-kube-utils:
-        flags:
-          - shulker-kube-utils
       google-agones-crds:
         flags:
           - google-agones-crds
+      shulker-kube-utils:
+        flags:
+          - shulker-kube-utils
       shulker-operator:
         flags:
           - shulker-operator
@@ -47,13 +47,13 @@ flags:
     paths:
       - packages/shulker-addon-matchmaking
     carryforward: true
-  shulker-kube-utils:
-    paths:
-      - packages/shulker-kube-utils
-    carryforward: true
   google-agones-crds:
     paths:
       - packages/google-agones-crds
+    carryforward: true
+  shulker-kube-utils:
+    paths:
+      - packages/shulker-kube-utils
     carryforward: true
   shulker-operator:
     paths:

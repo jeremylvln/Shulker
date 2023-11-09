@@ -1,0 +1,23 @@
+{{- if .Values.operator.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "shulker-operator.fullname" . }}-metrics
+  labels:
+    {{- include "shulker-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-operator-metrics
+  {{- with .Values.operator.metrics.serviceAnnotations }}
+  annotations:
+    {{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: metrics
+  selector:
+    {{- include "shulker-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-operator
+{{- end }}

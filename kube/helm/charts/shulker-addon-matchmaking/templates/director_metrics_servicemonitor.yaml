@@ -1,0 +1,32 @@
+{{- if and .Values.director.metrics.enabled .Values.director.metrics.servicemonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "shulker-addon-matchmaking.fullname" . }}-director
+  labels:
+    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
+    prometheus: {{ .Values.director.metrics.servicemonitor.prometheusInstance }}
+    {{- with .Values.director.metrics.servicemonitor.labels }}
+    {{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- with .Values.director.metrics.servicemonitor.annotations }}
+  annotations:
+    {{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ template "shulker-addon-matchmaking.fullname" . }}-director
+  selector:
+    matchLabels:
+      {{- include "shulker-addon-matchmaking.labels" . | nindent 6 }}
+      app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
+  endpoints:
+    - targetPort: metrics
+      path: /metrics
+      interval: {{ .Values.director.metrics.servicemonitor.interval }}
+      scrapeTimeout: {{ .Values.director.metrics.servicemonitor.scrapeTimeout }}
+      honorLabels: {{ .Values.director.metrics.servicemonitor.honorLabels }}
+      {{- with .Values.director.metrics.servicemonitor.endpointAdditionalProperties }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+{{- end }}

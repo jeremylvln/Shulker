@@ -1,0 +1,6 @@
+dependencies:
+- name: shulker-addon-matchmaking
+  repository: file://./charts/shulker-addon-matchmaking
+  version: 0.0.0-internal
+digest: sha256:d95f396bddb02c92d64ac82bc116bb8cadde02f81d1196a8dc3058221d4db7b8
+generated: "2023-11-09T16:17:43.698306+01:00"
