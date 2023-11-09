@@ -8,9 +8,9 @@ dependencies {
     "commonApi"(project(":packages:shulker-proxy-api"))
 
     // Kubernetes
-    "commonCompileOnly"("io.fabric8:kubernetes-client-api:6.9.0")
-    "commonRuntimeOnly"("io.fabric8:kubernetes-client:6.9.0")
-    "commonImplementation"("io.fabric8:kubernetes-httpclient-okhttp:6.9.0")
+    "commonCompileOnly"("io.fabric8:kubernetes-client-api:6.9.1")
+    "commonRuntimeOnly"("io.fabric8:kubernetes-client:6.9.1")
+    "commonImplementation"("io.fabric8:kubernetes-httpclient-okhttp:6.9.1")
 
     // Agones
     "commonImplementation"(project(":packages:google-agones-sdk-bindings-java"))
