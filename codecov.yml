@@ -10,46 +10,46 @@ coverage:
       flag_coverage_not_uploaded_behavior: exclude
     project:
       default: {}
-      google-open-match-sdk-bindings-rust:
-        flags:
-          - google-open-match-sdk-bindings-rust
-      shulker-sdk-bindings-rust:
-        flags:
-          - shulker-sdk-bindings-rust
-      shulker-addon-matchmaking:
-        flags:
-          - shulker-addon-matchmaking
       google-agones-crds:
         flags:
           - google-agones-crds
+      google-open-match-sdk-bindings-rust:
+        flags:
+          - google-open-match-sdk-bindings-rust
+      shulker-addon-matchmaking:
+        flags:
+          - shulker-addon-matchmaking
+      shulker-crds:
+        flags:
+          - shulker-crds
       shulker-kube-utils:
         flags:
           - shulker-kube-utils
       shulker-operator:
         flags:
           - shulker-operator
+      shulker-sdk-bindings-rust:
+        flags:
+          - shulker-sdk-bindings-rust
       shulker-utils:
         flags:
           - shulker-utils
-      shulker-crds:
-        flags:
-          - shulker-crds
 flags:
+  google-agones-crds:
+    paths:
+      - packages/google-agones-crds
+    carryforward: true
   google-open-match-sdk-bindings-rust:
     paths:
       - packages/google-open-match-sdk/bindings/rust
-    carryforward: true
-  shulker-sdk-bindings-rust:
-    paths:
-      - packages/shulker-sdk/bindings/rust
     carryforward: true
   shulker-addon-matchmaking:
     paths:
       - packages/shulker-addon-matchmaking
     carryforward: true
-  google-agones-crds:
+  shulker-crds:
     paths:
-      - packages/google-agones-crds
+      - packages/shulker-crds
     carryforward: true
   shulker-kube-utils:
     paths:
@@ -59,11 +59,11 @@ flags:
     paths:
       - packages/shulker-operator
     carryforward: true
+  shulker-sdk-bindings-rust:
+    paths:
+      - packages/shulker-sdk/bindings/rust
+    carryforward: true
   shulker-utils:
     paths:
       - packages/shulker-utils
-    carryforward: true
-  shulker-crds:
-    paths:
-      - packages/shulker-crds
     carryforward: true
