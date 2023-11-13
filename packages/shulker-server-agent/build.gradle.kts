@@ -18,3 +18,7 @@ tasks.named("processPaperResources", ProcessResources::class.java) {
     inputs.property("version", project.version)
     expand("version" to project.version)
 }
+
+tasks.withType(ShadowJar::class.java) {
+    relocate("com.google.protobuf", "shulker.protobuf")
+}

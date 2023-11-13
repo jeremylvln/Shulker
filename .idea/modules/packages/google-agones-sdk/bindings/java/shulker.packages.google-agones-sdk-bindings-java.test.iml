@@ -9,10 +9,10 @@
     <orderEntry type="module" module-name="shulker.packages.google-agones-sdk-bindings-java.main" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-services:1.59.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.59.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.api.grpc:proto-google-common-protos:2.28.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.25.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-stub:1.59.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-util:1.59.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.api.grpc:proto-google-common-protos:2.22.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf-lite:1.59.0" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-api:1.59.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />

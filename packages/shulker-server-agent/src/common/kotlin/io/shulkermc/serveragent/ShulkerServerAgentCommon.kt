@@ -1,7 +1,7 @@
 package io.shulkermc.serveragent
 
-import dev.agones.AgonesSDK
-import dev.agones.AgonesSDKImpl
+import com.agones.dev.sdk.AgonesSDK
+import com.agones.dev.sdk.AgonesSDKImpl
 import io.shulkermc.serveragent.api.ShulkerServerAPI
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
 import io.shulkermc.serveragent.tasks.HealthcheckTask
@@ -14,8 +14,6 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val
     companion object {
         private const val SUMMON_LABEL_NAME = "shulkermc.io/summoned"
         private const val SUMMON_TIMEOUT_MINUTES = 5L
-
-        private const val HEALTHCHECK_DELAY_SECONDS = 10L
     }
 
     lateinit var agonesGateway: AgonesSDK

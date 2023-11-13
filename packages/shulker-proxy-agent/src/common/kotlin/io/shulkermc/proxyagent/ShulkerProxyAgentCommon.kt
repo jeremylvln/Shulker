@@ -1,7 +1,7 @@
 package io.shulkermc.proxyagent
 
-import dev.agones.AgonesSDK
-import dev.agones.AgonesSDKImpl
+import com.agones.dev.sdk.AgonesSDK
+import com.agones.dev.sdk.AgonesSDKImpl
 import io.shulkermc.proxyagent.adapters.cache.CacheAdapter
 import io.shulkermc.proxyagent.adapters.cache.RedisCacheAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
