@@ -11,7 +11,10 @@
         "cwd": "packages/google-open-match-sdk"
       },
       "inputs": ["default"],
-      "outputs": ["{projectRoot}/bindings/rust/src/gen"]
+      "outputs": [
+        "{projectRoot}/bindings/rust/src/gen",
+        "{projectRoot}/bindings/java/src/generated"
+      ]
     }
   },
   "tags": []

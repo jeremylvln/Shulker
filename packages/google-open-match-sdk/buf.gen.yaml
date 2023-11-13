@@ -1,7 +1,6 @@
 version: v1
 managed:
   enabled: true
-  java_package_prefix: dev
 plugins:
   - plugin: buf.build/community/neoeinstein-prost:v0.2.3
     out: bindings/rust/src/gen

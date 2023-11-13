@@ -19,41 +19,6 @@ option csharp_namespace = "OpenMatch";
 
 import "api/messages.proto";
 import "google/api/annotations.proto";
-import "protoc-gen-openapiv2/options/annotations.proto";
-
-option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-  info: {
-    title: "MM Logic (Data Layer)"
-    version: "1.0"
-    contact: {
-      name: "Open Match"
-      url: "https://open-match.dev"
-      email: "open-match-discuss@googlegroups.com"
-    }
-    license: {
-      name: "Apache 2.0 License"
-      url: "https://github.com/googleforgames/open-match/blob/master/LICENSE"
-    }
-  }
-  external_docs: {
-    url: "https://open-match.dev/site/docs/"
-    description: "Open Match Documentation"
-  }
-  schemes: HTTP
-  schemes: HTTPS
-  consumes: "application/json"
-  produces: "application/json"
-  responses: {
-    key: "404"
-    value: {
-      description: "Returned when the resource does not exist."
-      schema: { json_schema: { type: STRING } }
-    }
-  }
-  // TODO Add annotations for security_defintiions.
-  // See
-  // https://github.com/grpc-ecosystem/grpc-gateway/blob/master/examples/internal/proto/examplepb/a_bit_of_everything.proto
-};
 
 message QueryTicketsRequest {
   // The Pool representing the set of Filters to be queried.
@@ -75,14 +40,14 @@ message QueryTicketIdsResponse {
   repeated string ids = 1;
 }
 
-// BETA FEATURE WARNING:  This Request messages are not finalized and 
+// BETA FEATURE WARNING:  This Request messages are not finalized and
 // still subject to possible change or removal.
 message QueryBackfillsRequest {
   // The Pool representing the set of Filters to be queried.
   Pool pool = 1;
 }
 
-// BETA FEATURE WARNING:  This Request messages are not finalized and 
+// BETA FEATURE WARNING:  This Request messages are not finalized and
 // still subject to possible change or removal.
 message QueryBackfillsResponse {
   // Backfills that meet all the filtering criteria requested by the pool.
