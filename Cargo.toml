@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
   "packages/google-agones-crds",
+  "packages/google-agones-sdk/bindings/rust",
   "packages/google-open-match-sdk/bindings/rust",
   "packages/shulker-addon-matchmaking",
   "packages/shulker-crds",
@@ -20,6 +21,7 @@ publish = false
 [workspace.dependencies]
 # In workspace
 google-agones-crds = { path = "./packages/google-agones-crds" }
+google-agones-sdk = { path = "./packages/google-agones-sdk/bindings/rust" }
 google-open-match-sdk = { path = "./packages/google-open-match-sdk/bindings/rust" }
 shulker-crds = { path = "./packages/shulker-crds" }
 shulker-kube-utils = { path = "./packages/shulker-kube-utils" }
@@ -54,7 +56,7 @@ serde_yaml = "0.9.27"
 strum = { version = "0.25.0", features = ["derive"] }
 tempfile = "3.8.1"
 thiserror = "1.0.50"
-tonic = { version = "0.10.2", features = ["gzip"] }
+tonic = { version = "0.10.2", features = ["gzip", "tls"] }
 tokio = { version = "1.34.0", features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1.14"
 tokio-util = "0.7.10"

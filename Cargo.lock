@@ -920,6 +920,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "google-agones-sdk"
+version = "0.3.0"
+dependencies = [
+ "futures-core",
+ "pbjson-types",
+ "prost",
+ "tonic",
+]
+
+[[package]]
 name = "google-open-match-sdk"
 version = "0.3.0"
 dependencies = [
@@ -2227,6 +2237,7 @@ dependencies = [
  "clap",
  "futures",
  "google-agones-crds",
+ "google-agones-sdk",
  "google-open-match-sdk",
  "kube",
  "paste",
@@ -2685,7 +2696,10 @@ dependencies = [
  "percent-encoding",
  "pin-project",
  "prost",
+ "rustls",
+ "rustls-pemfile",
  "tokio",
+ "tokio-rustls",
  "tokio-stream",
  "tower",
  "tower-layer",

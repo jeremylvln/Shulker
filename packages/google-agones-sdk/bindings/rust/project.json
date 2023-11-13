@@ -1,0 +1,37 @@
+{
+  "name": "google-agones-sdk-bindings-rust",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/google-agones-sdk/bindings/rust/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo build --release",
+        "cwd": "packages/google-agones-sdk/bindings/rust"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tarpaulin",
+        "cwd": "packages/google-agones-sdk/bindings/rust"
+      },
+      "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
+      "outputs": [
+        "{workspaceRoot}/coverage/rust/google-agones-sdk-bindings-rust/cobertura.xml"
+      ]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo fmt",
+        "cwd": "packages/google-agones-sdk/bindings/rust"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    }
+  },
+  "implicitDependencies": ["google-agones-sdk"],
+  "tags": ["lang:rust"]
+}
