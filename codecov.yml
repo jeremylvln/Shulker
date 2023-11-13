@@ -13,6 +13,9 @@ coverage:
       google-agones-crds:
         flags:
           - google-agones-crds
+      google-agones-sdk-bindings-rust:
+        flags:
+          - google-agones-sdk-bindings-rust
       google-open-match-sdk-bindings-rust:
         flags:
           - google-open-match-sdk-bindings-rust
@@ -38,6 +41,10 @@ flags:
   google-agones-crds:
     paths:
       - packages/google-agones-crds
+    carryforward: true
+  google-agones-sdk-bindings-rust:
+    paths:
+      - packages/google-agones-sdk/bindings/rust
     carryforward: true
   google-open-match-sdk-bindings-rust:
     paths:

@@ -57,10 +57,29 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         config_clone.existing_config_map_name =
             Some(ConfigMapBuilder::name(minecraft_server_fleet));
 
+        let mut template_labels = MinecraftServerFleetReconciler::get_labels(
+            minecraft_server_fleet,
+            "minecraft-server".to_string(),
+            "minecraft-server".to_string(),
+        );
+        let mut template_annotations = BTreeMap::<String, String>::new();
+
+        if let Some(metadata) = &minecraft_server_fleet.spec.template.metadata {
+            if let Some(additional_labels) = metadata.labels.clone() {
+                template_labels.extend(additional_labels);
+            }
+
+            if let Some(additional_annotations) = metadata.annotations.clone() {
+                template_annotations.extend(additional_annotations);
+            }
+        }
+
         let fake_mincraft_server = MinecraftServer {
             metadata: ObjectMeta {
                 namespace: minecraft_server_fleet.namespace(),
                 name: Some(minecraft_server_fleet.name_any()),
+                labels: Some(template_labels.clone()),
+                annotations: Some(template_annotations.clone()),
                 ..ObjectMeta::default()
             },
             spec: MinecraftServerSpec {
@@ -85,42 +104,6 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
             Some(_) => 0,
             None => minecraft_server_fleet.spec.replicas as i32,
         };
-
-        let mut template_labels = MinecraftServerFleetReconciler::get_labels(
-            minecraft_server_fleet,
-            "minecraft-server".to_string(),
-            "minecraft-server".to_string(),
-        );
-        template_labels.extend(
-            game_server_spec
-                .template
-                .metadata
-                .as_ref()
-                .map_or_else(BTreeMap::new, |metadata| {
-                    metadata.labels.clone().unwrap_or_default()
-                }),
-        );
-
-        let mut template_annotations = BTreeMap::<String, String>::new();
-        template_annotations.extend(
-            game_server_spec
-                .template
-                .metadata
-                .as_ref()
-                .map_or_else(BTreeMap::new, |metadata| {
-                    metadata.annotations.clone().unwrap_or_default()
-                }),
-        );
-
-        if let Some(metadata) = &minecraft_server_fleet.spec.template.metadata {
-            if let Some(additional_labels) = metadata.labels.clone() {
-                template_labels.extend(additional_labels);
-            }
-
-            if let Some(additional_annotations) = metadata.annotations.clone() {
-                template_annotations.extend(additional_annotations);
-            }
-        }
 
         let fleet = Fleet {
             metadata: ObjectMeta {

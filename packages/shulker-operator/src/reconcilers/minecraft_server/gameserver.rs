@@ -270,23 +270,29 @@ impl GameServerBuilder {
             pod_spec.tolerations = pod_overrides.tolerations.clone();
         }
 
+        let mut pod_labels = minecraft_server.labels().clone();
+        pod_labels.append(&mut MinecraftServerReconciler::get_labels(
+            minecraft_server,
+            "minecraft-server".to_string(),
+            "minecraft-server".to_string(),
+        ));
+
+        let mut pod_annotations = minecraft_server.annotations().clone();
+        pod_annotations.append(&mut BTreeMap::<String, String>::from([
+            (
+                "kubectl.kubernetes.io/default-exec-container".to_string(),
+                "minecraft-server".to_string(),
+            ),
+            (
+                "minecraftserver.shulkermc.io/tags".to_string(),
+                minecraft_server.spec.tags.join(","),
+            ),
+        ]));
+
         Ok(PodTemplateSpec {
             metadata: Some(ObjectMeta {
-                labels: Some(MinecraftServerReconciler::get_labels(
-                    minecraft_server,
-                    "minecraft-server".to_string(),
-                    "minecraft-server".to_string(),
-                )),
-                annotations: Some(BTreeMap::<String, String>::from([
-                    (
-                        "kubectl.kubernetes.io/default-exec-container".to_string(),
-                        "minecraft-server".to_string(),
-                    ),
-                    (
-                        "minecraftserver.shulkermc.io/tags".to_string(),
-                        minecraft_server.spec.tags.join(","),
-                    ),
-                ])),
+                labels: Some(pod_labels),
+                annotations: Some(pod_annotations),
                 ..ObjectMeta::default()
             }),
             spec: Some(pod_spec),

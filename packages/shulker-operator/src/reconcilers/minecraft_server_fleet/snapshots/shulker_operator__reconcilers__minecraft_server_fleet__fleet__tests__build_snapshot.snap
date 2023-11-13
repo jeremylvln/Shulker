@@ -23,8 +23,6 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/default-exec-container: minecraft-server
-        minecraftserver.shulkermc.io/tags: lobby
         test-annotation/shulkermc.io: my-value
       labels:
         app.kubernetes.io/component: minecraft-server
@@ -50,6 +48,7 @@ spec:
           annotations:
             kubectl.kubernetes.io/default-exec-container: minecraft-server
             minecraftserver.shulkermc.io/tags: lobby
+            test-annotation/shulkermc.io: my-value
           labels:
             app.kubernetes.io/component: minecraft-server
             app.kubernetes.io/instance: minecraft-server-my-server
@@ -57,6 +56,8 @@ spec:
             app.kubernetes.io/name: minecraft-server
             app.kubernetes.io/part-of: cluster-my-cluster
             minecraftcluster.shulkermc.io/name: my-cluster
+            minecraftserverfleet.shulkermc.io/name: my-server
+            test-label/shulkermc.io: my-value
         spec:
           containers:
             - env:
