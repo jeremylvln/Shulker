@@ -1,1 +1,1 @@
-include!("gen/shulkermc.sdk.v1alpha1.rs");
+include!("gen/shulkermc.sdk.rs");

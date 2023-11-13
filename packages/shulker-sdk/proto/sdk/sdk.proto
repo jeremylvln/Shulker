@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package shulkermc.sdk;
+
+service SDKService {
+  rpc AllocateFromFleet (FleetAllocationRequest) returns (FleetAllocationReply) {}
+}
+
+message FleetAllocationRequest {
+  string namespace = 1;
+  string name = 2;
+  bool summon_if_needed = 3;
+  map<string, string> custom_annotations = 4;
+}
+
+message FleetAllocationReply {
+  string game_server_id = 1;
+}

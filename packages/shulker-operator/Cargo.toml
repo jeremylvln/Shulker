@@ -26,6 +26,8 @@ async-trait.workspace = true
 clap.workspace = true
 futures.workspace = true
 google-agones-crds.workspace = true
+google-agones-sdk = { workspace = true, features = ["client"] }
+http.workspace = true
 k8s-openapi.workspace = true
 kube.workspace = true
 lazy_static.workspace = true

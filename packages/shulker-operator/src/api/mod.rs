@@ -1,19 +1,27 @@
 use std::pin::Pin;
 
 use futures::Future;
-use shulker_sdk::minecraft_server_fleet_service_server::MinecraftServerFleetServiceServer;
+use google_agones_sdk::allocation::allocation_service_client::AllocationServiceClient;
+use shulker_sdk::sdk_service_server::SdkServiceServer;
+use tonic::transport::Channel;
 
-mod minecraft_server_fleet_grpc;
+mod sdk_grpc;
+
+#[derive(Clone)]
+pub struct GrpcServerContext {
+    pub client: kube::Client,
+    pub agones_allocator_client: AllocationServiceClient<Channel>,
+}
 
 pub fn create_grpc_server(
     addr: String,
-    client: kube::Client,
+    context: GrpcServerContext,
 ) -> Pin<Box<dyn Future<Output = Result<(), tonic::transport::Error>>>> {
     Box::pin(
         tonic::transport::Server::builder()
-            .add_service(MinecraftServerFleetServiceServer::new(
-                minecraft_server_fleet_grpc::MinecraftServerFleetServiceGrpc::new(client.clone()),
-            ))
+            .add_service(SdkServiceServer::new(sdk_grpc::SdkServiceGrpc::new(
+                context.clone(),
+            )))
             .serve(addr.parse().unwrap()),
     )
 }
