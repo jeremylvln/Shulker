@@ -41,7 +41,7 @@ spec:
             - name: SHULKER_API_HOST
               value: "shulker-operator.{{ .Release.Namespace }}"
             - name: SHULKER_API_GRPC_PORT
-              value: '8080'
+              value: '9090'
             {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

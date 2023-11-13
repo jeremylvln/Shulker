@@ -1,5 +1,11 @@
 rootProject.name = "shulker"
 
+include ':packages:google-agones-sdk-bindings-java'
+project(':packages:google-agones-sdk-bindings-java').projectDir = file('packages/google-agones-sdk/bindings/java')
+
+include ':packages:google-open-match-sdk-bindings-java'
+project(':packages:google-open-match-sdk-bindings-java').projectDir = file('packages/google-open-match-sdk/bindings/java')
+
 include ':packages:shulker-proxy-api'
 include ':packages:shulker-proxy-agent'
 
@@ -8,6 +14,3 @@ include ':packages:shulker-server-agent'
 
 include ':packages:shulker-sdk-bindings-java'
 project(':packages:shulker-sdk-bindings-java').projectDir = file('packages/shulker-sdk/bindings/java')
-
-include ':packages:google-agones-sdk-bindings-java'
-project(':packages:google-agones-sdk-bindings-java').projectDir = file('packages/google-agones-sdk/bindings/java')

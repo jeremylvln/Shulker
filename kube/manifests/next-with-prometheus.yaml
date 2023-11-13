@@ -3778,7 +3778,7 @@ spec:
             - name: SHULKER_API_HOST
               value: 'shulker-operator.shulker-system'
             - name: SHULKER_API_GRPC_PORT
-              value: '8080'
+              value: '9090'
 ---
 # Source: shulker-operator/charts/shulker-addon-matchmaking/templates/mmf_deployment.yaml
 apiVersion: apps/v1

@@ -1,6 +1,7 @@
 version: v1
 managed:
   enabled: true
+  java_package_prefix: dev
 plugins:
   - plugin: buf.build/community/neoeinstein-prost:v0.2.3
     out: bindings/rust/src/gen
@@ -15,3 +16,7 @@ plugins:
       - extern_path=.google.protobuf=::pbjson_types
       - server_mod_attribute=.=#[cfg(feature = "server")]
       - client_mod_attribute=.=#[cfg(feature = "client")]
+  - plugin: buf.build/protocolbuffers/java
+    out: bindings/java/src/generated/java
+  - plugin: buf.build/grpc/java:v1.59.0
+    out: bindings/java/src/generated/grpc
