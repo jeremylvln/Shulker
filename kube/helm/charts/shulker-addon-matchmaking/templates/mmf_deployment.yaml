@@ -16,7 +16,7 @@ spec:
       labels:
         {{- include "shulker-addon-matchmaking.labels" . | nindent 8 }}
         app.kubernetes.io/component: shulker-addon-matchmaking-mmf
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.mmf.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -24,8 +24,8 @@ spec:
       serviceAccountName: {{ template "shulker-addon-matchmaking.serviceAccountName" . }}
       containers:
         - name: shulker-addon-matchmaking-mmf
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.mmf.image.repository }}:{{ .Values.mmf.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.mmf.image.pullPolicy }}
           command: ['/shulker-addon-matchmaking-mmf']
           args:
             - --metrics-bind-address=0.0.0.0:8080
@@ -45,11 +45,11 @@ spec:
               value: {{ .Values.mmf.openMatch.query.host }}
             - name: OPEN_MATCH_QUERY_GRPC_PORT
               value: {{ quote .Values.mmf.openMatch.query.grpcPort }}
-            {{- with .Values.extraEnv }}
+            {{- with .Values.mmf.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
 
-          {{- with .Values.livenessProbe }}
+          {{- with .Values.mmf.livenessProbe }}
           {{- if .enabled }}
           livenessProbe:
             httpGet:
@@ -64,7 +64,7 @@ spec:
           {{- end }}
           {{- end }}
 
-          {{- with .Values.startupProbe }}
+          {{- with .Values.mmf.startupProbe }}
           {{- if .enabled }}
           startupProbe:
             httpGet:
@@ -79,42 +79,42 @@ spec:
           {{- end }}
           {{- end }}
 
-          {{- with .Values.resources }}
+          {{- with .Values.mmf.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- with .Values.volumeMounts }}
+          {{- with .Values.mmf.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- with .Values.containerSecurityContext }}
+          {{- with .Values.mmf.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.mmf.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.tolerations }}
+      {{- with .Values.mmf.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.affinity }}
+      {{- with .Values.mmf.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.securityContext }}
+      {{- with .Values.mmf.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.volumes }}
+      {{- with .Values.mmf.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}

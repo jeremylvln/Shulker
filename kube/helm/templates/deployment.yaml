@@ -29,6 +29,10 @@ spec:
           args:
             - --metrics-bind-address=0.0.0.0:8080
             - --api-bind-address=0.0.0.0:9090
+            {{- if .Values.operator.agones.allocator.mtlsSecretName }}
+            - --agones-allocation-tls-client-crt=/mnt/shulker/agones-allocation-client-tls/tls.crt
+            - --agones-allocation-tls-client-key=/mnt/shulker/agones-allocation-client-tls/tls.key
+            {{- end }}
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -36,11 +40,14 @@ spec:
             - containerPort: 9090
               protocol: TCP
               name: api-grpc
-
-          {{- with .Values.operator.extraEnv }}
           env:
+            - name: AGONES_ALLOCATOR_HOST
+              value: {{ .Values.operator.agones.allocator.host }}
+            - name: AGONES_ALLOCATOR_GRPC_PORT
+              value: {{ quote .Values.operator.agones.allocator.grpcPort }}
+            {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
 
           {{- with .Values.operator.livenessProbe }}
           {{- if .enabled }}
@@ -77,9 +84,19 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
+          {{- if .Values.operator.agones.allocator.mtlsSecretName }}
+          volumeMounts:
+            - name: agones-allocation-client-tls
+              readOnly: true
+              mountPath: "/mnt/shulker/agones-allocation-client-tls"
+            {{- with .Values.operator.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- else }}
           {{- with .Values.operator.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- end }}
 
           {{- with .Values.operator.containerSecurityContext }}
@@ -107,7 +124,18 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
+      {{- if .Values.operator.agones.allocator.mtlsSecretName }}
+      volumes:
+        - name: agones-allocation-client-tls
+          secret:
+            secretName: allocator-client.default
+        {{- with .Values.operator.volumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- else }}
       {{- with .Values.operator.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+

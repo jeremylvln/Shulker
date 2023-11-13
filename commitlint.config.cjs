@@ -2,7 +2,7 @@ const {
   buildProjectGraphWithoutDaemon,
 } = require('nx/src/project-graph/project-graph');
 
-const EXTRA_SCOPES = ['release', 'deps'];
+const EXTRA_SCOPES = ['release', 'deps', 'deploy'];
 
 const listNxProjects = async () => {
   const graph = await buildProjectGraphWithoutDaemon();

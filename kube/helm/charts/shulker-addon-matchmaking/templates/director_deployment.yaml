@@ -16,7 +16,7 @@ spec:
       labels:
         {{- include "shulker-addon-matchmaking.labels" . | nindent 8 }}
         app.kubernetes.io/component: shulker-addon-matchmaking-director
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.director.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -24,15 +24,14 @@ spec:
       serviceAccountName: {{ template "shulker-addon-matchmaking.serviceAccountName" . }}
       containers:
         - name: shulker-addon-matchmaking-director
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.director.image.repository }}:{{ .Values.director.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.director.image.pullPolicy }}
           args:
             - --metrics-bind-address=0.0.0.0:8080
           ports:
             - containerPort: 8080
               protocol: TCP
               name: metrics
-
           env:
             - name: OPEN_MATCH_BACKEND_HOST
               value: {{ .Values.director.openMatch.backend.host }}
@@ -42,11 +41,11 @@ spec:
               value: "shulker-operator.{{ .Release.Namespace }}"
             - name: SHULKER_API_GRPC_PORT
               value: '9090'
-            {{- with .Values.extraEnv }}
+            {{- with .Values.director.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
 
-          {{- with .Values.livenessProbe }}
+          {{- with .Values.director.livenessProbe }}
           {{- if .enabled }}
           livenessProbe:
             httpGet:
@@ -61,7 +60,7 @@ spec:
           {{- end }}
           {{- end }}
 
-          {{- with .Values.startupProbe }}
+          {{- with .Values.director.startupProbe }}
           {{- if .enabled }}
           startupProbe:
             httpGet:
@@ -76,42 +75,42 @@ spec:
           {{- end }}
           {{- end }}
 
-          {{- with .Values.resources }}
+          {{- with .Values.director.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- with .Values.volumeMounts }}
+          {{- with .Values.director.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
-          {{- with .Values.containerSecurityContext }}
+          {{- with .Values.director.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
 
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.director.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.tolerations }}
+      {{- with .Values.director.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.affinity }}
+      {{- with .Values.director.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.securityContext }}
+      {{- with .Values.director.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.volumes }}
+      {{- with .Values.director.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}

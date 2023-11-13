@@ -1,17 +1,14 @@
-use std::sync::{Arc, Mutex};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
 use futures::StreamExt;
-use google_agones_crds::v1::game_server::GameServer;
 use google_open_match_sdk::{
     backend_service_client::BackendServiceClient, AssignTicketsRequest, Assignment,
     AssignmentGroup, FetchMatchesRequest, Match,
 };
-use kube::{api::ListParams, Api, Client, ResourceExt};
-use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleetRef;
-use shulker_sdk::{
-    minecraft_server_fleet_service_client::MinecraftServerFleetServiceClient,
-    SummonFromFleetRequest,
-};
+use shulker_sdk::{sdk_service_client::SdkServiceClient, FleetAllocationRequest};
 use thiserror::Error;
 use tokio_util::sync::CancellationToken;
 use tonic::transport::Channel;
@@ -32,23 +29,20 @@ enum DirectorError {
 
 #[derive(Clone)]
 struct Context {
-    game_server_api: Api<GameServer>,
     open_match_backend_client: BackendServiceClient<Channel>,
-    shulker_sdk_fleet_client: MinecraftServerFleetServiceClient<Channel>,
+    shulker_sdk_client: SdkServiceClient<Channel>,
     queue_registry: Arc<Mutex<QueueRegistry>>,
 }
 
 pub fn run(
-    client: Client,
     open_match_backend_client: BackendServiceClient<Channel>,
-    shulker_sdk_fleet_client: MinecraftServerFleetServiceClient<Channel>,
+    shulker_sdk_client: SdkServiceClient<Channel>,
     queue_registry: Arc<Mutex<QueueRegistry>>,
     cancellation_token: CancellationToken,
 ) -> Result<tokio::task::JoinHandle<()>, anyhow::Error> {
     let context = Context {
-        game_server_api: Api::all(client),
         open_match_backend_client,
-        shulker_sdk_fleet_client,
+        shulker_sdk_client,
         queue_registry,
     };
 
@@ -140,7 +134,24 @@ async fn try_allocate_match(
             "match needs a new server to be allocated"
         );
 
-        find_available_server_or_create(context, &queue.namespace, &queue.fleet_ref).await?
+        context
+            .shulker_sdk_client
+            .clone()
+            .allocate_from_fleet(FleetAllocationRequest {
+                namespace: queue.namespace.to_string(),
+                name: queue.fleet_ref.name.clone(),
+                summon_if_needed: true,
+                custom_annotations: match &created_match.backfill {
+                    Some(backfill) => HashMap::from([(
+                        "matchmaking.shulkermc.io/backfill".to_string(),
+                        backfill.id.clone(),
+                    )]),
+                    None => HashMap::new(),
+                },
+            })
+            .await?
+            .into_inner()
+            .game_server_id
     } else {
         created_match
             .backfill
@@ -175,51 +186,4 @@ async fn try_allocate_match(
         .await?;
 
     Ok(())
-}
-
-async fn find_available_server_or_create(
-    context: &Context,
-    namespace: &str,
-    fleet_ref: &MinecraftServerFleetRef,
-) -> Result<String, anyhow::Error> {
-    let game_servers = context
-        .game_server_api
-        .list(&ListParams::default().labels(&format!(
-            "minecraftserverfleet.shulkermc.io/name={}",
-            fleet_ref.name
-        )))
-        .await?;
-
-    let existing_game_server_id = game_servers
-        .items
-        .iter()
-        .filter(|gs| gs.metadata.namespace.as_ref().unwrap() == namespace)
-        .find(|gs| {
-            gs.status
-                .as_ref()
-                .is_some_and(|status| status.state == "Ready")
-        })
-        .map(|gs| gs.name_any());
-
-    if let Some(existing_game_server_id) = existing_game_server_id {
-        debug!(
-            game_server_id = existing_game_server_id,
-            "found existing game server in Ready state"
-        );
-
-        return Ok(existing_game_server_id);
-    }
-
-    let created_game_server_id = context
-        .shulker_sdk_fleet_client
-        .clone()
-        .summon_from_fleet(SummonFromFleetRequest {
-            namespace: namespace.to_string(),
-            name: fleet_ref.name.clone(),
-        })
-        .await?
-        .into_inner()
-        .game_server_id;
-
-    Ok(created_game_server_id)
 }

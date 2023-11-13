@@ -8,7 +8,7 @@ use shulker_addon_matchmaking::{
 };
 use shulker_crds::matchmaking::v1alpha1::matchmaking_queue::MatchmakingQueueMMFBuiltInType;
 use shulker_kube_utils::{lease, metrics};
-use shulker_sdk::minecraft_server_fleet_service_client::MinecraftServerFleetServiceClient;
+use shulker_sdk::sdk_service_client::SdkServiceClient;
 use shulker_utils::telemetry;
 
 const LEASE_NAME: &str = "shulker-addon-matchmaking.shulkermc.io";
@@ -90,13 +90,12 @@ async fn main() -> anyhow::Result<()> {
     let queue_registry = Arc::new(Mutex::new(QueueRegistry::new(mmf_registry)));
 
     let director = director::run(
-        client.clone(),
         BackendServiceClient::connect(format!(
             "http://{}:{}",
             args.open_match_backend_host, args.open_match_backend_grpc_port
         ))
         .await?,
-        MinecraftServerFleetServiceClient::connect(format!(
+        SdkServiceClient::connect(format!(
             "http://{}:{}",
             args.shulker_api_host, args.shulker_api_grpc_port
         ))
