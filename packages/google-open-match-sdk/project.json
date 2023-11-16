@@ -7,8 +7,13 @@
     "buf": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx buf generate",
-        "cwd": "packages/google-open-match-sdk"
+        "commands": [
+          "rm -Rf bindings/rust/src/gen",
+          "rm -Rf bindings/java/src/generated",
+          "npx buf generate"
+        ],
+        "cwd": "packages/google-open-match-sdk",
+        "parallel": false
       },
       "inputs": ["default"],
       "outputs": [

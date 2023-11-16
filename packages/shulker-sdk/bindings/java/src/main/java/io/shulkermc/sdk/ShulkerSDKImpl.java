@@ -5,29 +5,40 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.shulkermc.sdk.v1alpha1.MinecraftServerFleetServiceGrpc;
-import io.shulkermc.sdk.v1alpha1.SummonFromFleetReply;
-import io.shulkermc.sdk.v1alpha1.SummonFromFleetRequest;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class ShulkerSDKImpl implements ShulkerSDK {
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private final MinecraftServerFleetServiceGrpc.MinecraftServerFleetServiceFutureStub minecraftServerFleetServiceFutureStub;
+    private final SDKServiceGrpc.SDKServiceFutureStub sdkServiceFutureStub;
 
     private ShulkerSDKImpl(ManagedChannel channel) {
-        this.minecraftServerFleetServiceFutureStub = MinecraftServerFleetServiceGrpc.newFutureStub(channel);
+        this.sdkServiceFutureStub = SDKServiceGrpc.newFutureStub(channel);
     }
 
     @Override
-    public CompletableFuture<String> summonFromFleet(String namespace, String fleetName) {
-        return this.wrapGrpcFuture(this.minecraftServerFleetServiceFutureStub.summonFromFleet(SummonFromFleetRequest.newBuilder()
+    public CompletableFuture<String> allocateFromFleet(String namespace, String fleetName) {
+        return this.allocateFromFleet(namespace, fleetName, false, Collections.emptyMap());
+    }
+
+    @Override
+    public CompletableFuture<String> allocateFromFleet(String namespace, String fleetName, boolean summonIfNeeded) {
+        return this.allocateFromFleet(namespace, fleetName, summonIfNeeded, Collections.emptyMap());
+    }
+
+    @Override
+    public CompletableFuture<String> allocateFromFleet(String namespace, String fleetName, boolean summonIfNeeded, Map<String, String> customAnnotations) {
+        return this.wrapGrpcFuture(this.sdkServiceFutureStub.allocateFromFleet(FleetAllocationRequest.newBuilder()
                 .setNamespace(namespace)
                 .setName(fleetName)
+                .setSummonIfNeeded(summonIfNeeded)
+                .putAllCustomAnnotations(customAnnotations)
                 .build()
-        )).thenApply(SummonFromFleetReply::getGameServerId);
+        )).thenApply(FleetAllocationReply::getGameServerId);
     }
 
     private <T> CompletableFuture<T> wrapGrpcFuture(ListenableFuture<T> listenableFuture) {

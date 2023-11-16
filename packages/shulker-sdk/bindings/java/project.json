@@ -10,7 +10,9 @@
         "command": "./gradlew :packages:shulker-sdk-bindings-java:build -x check"
       },
       "inputs": ["default", "java:dependencies"],
-      "outputs": ["{workspaceRoot}/dist/packages/shulker-sdk/bindings/java"]
+      "outputs": [
+        "{workspaceRoot}/dist/java/packages/shulker-sdk-bindings-java"
+      ]
     },
     "test": {
       "executor": "nx:run-commands",

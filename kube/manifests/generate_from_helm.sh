@@ -40,3 +40,5 @@ generate next-with-prometheus \
   --set shulker-addon-matchmaking.director.metrics.servicemonitor.enabled=true \
   --set shulker-addon-matchmaking.mmf.metrics.enabled=true \
   --set shulker-addon-matchmaking.mmf.metrics.servicemonitor.enabled=true
+
+(cd .. && npx prettier --write 'kube/manifests/*.yaml')

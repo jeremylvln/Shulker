@@ -7,13 +7,18 @@
     "buf": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx buf generate",
-        "cwd": "packages/shulker-sdk"
+        "commands": [
+          "rm -Rf bindings/rust/src/gen",
+          "rm -Rf bindings/java/src/generated",
+          "npx buf generate"
+        ],
+        "cwd": "packages/shulker-sdk",
+        "parallel": false
       },
       "inputs": ["default"],
       "outputs": [
-        "{projectRoot}/bindings/java/src/generated",
-        "{projectRoot}/bindings/rust/src/gen"
+        "{projectRoot}/bindings/rust/src/gen",
+        "{projectRoot}/bindings/java/src/generated"
       ]
     }
   },

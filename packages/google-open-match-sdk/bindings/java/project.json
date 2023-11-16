@@ -11,7 +11,7 @@
       },
       "inputs": ["default", "java:dependencies"],
       "outputs": [
-        "{workspaceRoot}/dist/packages/google-open-match-sdk/bindings/java"
+        "{workspaceRoot}/dist/java/packages/google-open-match-sdk-bindings-java"
       ]
     },
     "test": {

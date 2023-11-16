@@ -1,16 +1,16 @@
 rootProject.name = "shulker"
 
-include ':packages:google-agones-sdk-bindings-java'
-project(':packages:google-agones-sdk-bindings-java').projectDir = file('packages/google-agones-sdk/bindings/java')
+def includeBindingProject(String name) {
+  include ":packages:${name}-bindings-java"
+  project(":packages:${name}-bindings-java").projectDir = file("packages/${name}/bindings/java")
+}
 
-include ':packages:google-open-match-sdk-bindings-java'
-project(':packages:google-open-match-sdk-bindings-java').projectDir = file('packages/google-open-match-sdk/bindings/java')
+includeBindingProject('google-agones-sdk')
+includeBindingProject('google-open-match-sdk')
+includeBindingProject('shulker-sdk')
 
 include ':packages:shulker-proxy-api'
 include ':packages:shulker-proxy-agent'
 
 include ':packages:shulker-server-api'
 include ':packages:shulker-server-agent'
-
-include ':packages:shulker-sdk-bindings-java'
-project(':packages:shulker-sdk-bindings-java').projectDir = file('packages/shulker-sdk/bindings/java')
