@@ -1,4 +1,4 @@
-project_id: '558609'
+project_id: "558609"
 api_token_env: CROWDIN_PERSONAL_TOKEN
 preserve_hierarchy: 1
 files:

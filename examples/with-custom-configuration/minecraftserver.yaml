@@ -14,7 +14,7 @@ spec:
         - lobby
       version:
         channel: Paper
-        name: '1.20.2'
+        name: "1.20.2"
       config:
         world:
           url: https://example.com/my-world.tar.gz
@@ -24,7 +24,7 @@ spec:
                 repositoryUrl: https://example.com/maven
                 groupId: com.example
                 artifactId: myplugin
-                version: '1.0.0'
+                version: "1.0.0"
                 credentialsSecretName: example-repo-secret
         patches:
           - url: https://example.com/add-config-to-myplugin.tar.gz

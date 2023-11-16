@@ -1,4 +1,4 @@
 resources:
-- cluster.yaml
-- proxy.yaml
-- minecraftserver.yaml
+  - cluster.yaml
+  - proxy.yaml
+  - minecraftserver.yaml

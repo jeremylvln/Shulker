@@ -1,5 +1,5 @@
-nameOverride: ''
-fullnameOverride: ''
+nameOverride: ""
+fullnameOverride: ""
 
 global:
   # Reference to one or more secrets to be used when pulling images
@@ -16,7 +16,7 @@ operator:
     repository: ghcr.io/jeremylvln/shulker-operator
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: ''
+    tag: ""
 
   # Additional command line flags to pass.
   extraArgs: []
@@ -117,7 +117,7 @@ operator:
     annotations: {}
     # The name of the service account to use.
     # If not set and create is true, a name is generated using the fullname template
-    name: ''
+    name: ""
 
 # Configuration dedicated to th Shulker Matchmaking Addon
 shulker-addon-matchmaking:

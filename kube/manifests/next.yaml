@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 ---
@@ -21,7 +21,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 ---
@@ -276,13 +276,13 @@ spec:
                                 If the webhook is running within the cluster, then you should use `service`.
                               properties:
                                 name:
-                                  description: '`name` is the name of the service. Required'
+                                  description: "`name` is the name of the service. Required"
                                   type: string
                                 namespace:
-                                  description: '`namespace` is the namespace of the service. Required'
+                                  description: "`namespace` is the namespace of the service. Required"
                                   type: string
                                 path:
-                                  description: '`path` is an optional URL path which will be sent in any request to this service.'
+                                  description: "`path` is an optional URL path which will be sent in any request to this service."
                                   type: string
                                 port:
                                   description: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
@@ -334,7 +334,7 @@ spec:
                         annotations:
                           additionalProperties:
                             type: string
-                          description: 'Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations'
+                          description: "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations"
                           type: object
                         creationTimestamp:
                           description: |-
@@ -374,7 +374,7 @@ spec:
                         labels:
                           additionalProperties:
                             type: string
-                          description: 'Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels'
+                          description: "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels"
                           type: object
                         managedFields:
                           description: ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
@@ -406,7 +406,7 @@ spec:
                             type: object
                           type: array
                         name:
-                          description: 'Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names'
+                          description: "Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names"
                           type: string
                         namespace:
                           description: |-
@@ -429,13 +429,13 @@ spec:
                                 description: If true, this reference points to the managing controller.
                                 type: boolean
                               kind:
-                                description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                                description: "Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
                                 type: string
                               name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names'
+                                description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names"
                                 type: string
                               uid:
-                                description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#uids'
+                                description: "UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#uids"
                                 type: string
                             required:
                               - apiVersion
@@ -451,7 +451,7 @@ spec:
                             Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
                           type: string
                         selfLink:
-                          description: 'Deprecated: selfLink is a legacy read-only field that is no longer populated by the system.'
+                          description: "Deprecated: selfLink is a legacy read-only field that is no longer populated by the system."
                           type: string
                         uid:
                           description: |-
@@ -577,7 +577,7 @@ spec:
                             serverProperties:
                               additionalProperties:
                                 type: string
-                              description: 'Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values'
+                              description: "Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values"
                               nullable: true
                               type: object
                             world:
@@ -1103,7 +1103,7 @@ spec:
                                             description: The key to select.
                                             type: string
                                           name:
-                                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                            description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                             type: string
                                           optional:
                                             description: Specify whether the ConfigMap or its key must be defined
@@ -1124,16 +1124,16 @@ spec:
                                           - fieldPath
                                         type: object
                                       resourceFieldRef:
-                                        description: 'Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.'
+                                        description: "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
                                         properties:
                                           containerName:
-                                            description: 'Container name: required for volumes, optional for env vars'
+                                            description: "Container name: required for volumes, optional for env vars"
                                             type: string
                                           divisor:
                                             description: Specifies the output format of the exposed resources, defaults to "1"
                                             type: string
                                           resource:
-                                            description: 'Required: resource to select'
+                                            description: "Required: resource to select"
                                             type: string
                                         required:
                                           - resource
@@ -1145,7 +1145,7 @@ spec:
                                             description: The key of the secret to select from.  Must be a valid secret key.
                                             type: string
                                           name:
-                                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                            description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                             type: string
                                           optional:
                                             description: Specify whether the Secret or its key must be defined
@@ -1169,7 +1169,7 @@ spec:
                                     description: LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.
                                     properties:
                                       name:
-                                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                        description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                         type: string
                                     type: object
                                   type: array
@@ -1219,13 +1219,13 @@ spec:
                                   additionalProperties:
                                     description: "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` <quantity>        ::= <signedNumber><suffix>\n\n\t(Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n\n<digit>           ::= 0 | 1 | ... | 9 <digits>          ::= <digit> | <digit><digits> <number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits> <sign>            ::= \"+\" | \"-\" <signedNumber>    ::= <number> | <sign><number> <suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI> <binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber> ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation."
                                     type: string
-                                  description: 'Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                  description: "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
                                   type: object
                                 requests:
                                   additionalProperties:
                                     description: "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` <quantity>        ::= <signedNumber><suffix>\n\n\t(Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n\n<digit>           ::= 0 | 1 | ... | 9 <digits>          ::= <digit> | <digit><digits> <number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits> <sign>            ::= \"+\" | \"-\" <signedNumber>    ::= <number> | <sign><number> <suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI> <binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber> ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation."
                                     type: string
-                                  description: 'Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                  description: "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
                                   type: object
                               type: object
                             serviceAccountName:
@@ -1495,7 +1495,7 @@ spec:
                     serverProperties:
                       additionalProperties:
                         type: string
-                      description: 'Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values'
+                      description: "Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values"
                       nullable: true
                       type: object
                     world:
@@ -2021,7 +2021,7 @@ spec:
                                     description: The key to select.
                                     type: string
                                   name:
-                                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                    description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                     type: string
                                   optional:
                                     description: Specify whether the ConfigMap or its key must be defined
@@ -2042,16 +2042,16 @@ spec:
                                   - fieldPath
                                 type: object
                               resourceFieldRef:
-                                description: 'Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.'
+                                description: "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
                                 properties:
                                   containerName:
-                                    description: 'Container name: required for volumes, optional for env vars'
+                                    description: "Container name: required for volumes, optional for env vars"
                                     type: string
                                   divisor:
                                     description: Specifies the output format of the exposed resources, defaults to "1"
                                     type: string
                                   resource:
-                                    description: 'Required: resource to select'
+                                    description: "Required: resource to select"
                                     type: string
                                 required:
                                   - resource
@@ -2063,7 +2063,7 @@ spec:
                                     description: The key of the secret to select from.  Must be a valid secret key.
                                     type: string
                                   name:
-                                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                    description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                     type: string
                                   optional:
                                     description: Specify whether the Secret or its key must be defined
@@ -2087,7 +2087,7 @@ spec:
                             description: LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.
                             properties:
                               name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                 type: string
                             type: object
                           type: array
@@ -2137,13 +2137,13 @@ spec:
                           additionalProperties:
                             description: "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` <quantity>        ::= <signedNumber><suffix>\n\n\t(Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n\n<digit>           ::= 0 | 1 | ... | 9 <digits>          ::= <digit> | <digit><digits> <number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits> <sign>            ::= \"+\" | \"-\" <signedNumber>    ::= <number> | <sign><number> <suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI> <binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber> ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation."
                             type: string
-                          description: 'Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          description: "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
                           type: object
                         requests:
                           additionalProperties:
                             description: "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` <quantity>        ::= <signedNumber><suffix>\n\n\t(Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n\n<digit>           ::= 0 | 1 | ... | 9 <digits>          ::= <digit> | <digit><digits> <number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits> <sign>            ::= \"+\" | \"-\" <signedNumber>    ::= <number> | <sign><number> <suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI> <binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber> ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation."
                             type: string
-                          description: 'Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          description: "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
                           type: object
                       type: object
                     serviceAccountName:
@@ -2330,13 +2330,13 @@ spec:
                                 If the webhook is running within the cluster, then you should use `service`.
                               properties:
                                 name:
-                                  description: '`name` is the name of the service. Required'
+                                  description: "`name` is the name of the service. Required"
                                   type: string
                                 namespace:
-                                  description: '`namespace` is the namespace of the service. Required'
+                                  description: "`namespace` is the namespace of the service. Required"
                                   type: string
                                 path:
-                                  description: '`path` is an optional URL path which will be sent in any request to this service.'
+                                  description: "`path` is an optional URL path which will be sent in any request to this service."
                                   type: string
                                 port:
                                   description: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
@@ -2395,7 +2395,7 @@ spec:
                       type: string
                     type:
                       default: LoadBalancer
-                      description: 'Type of Service to create. Must be one of: ClusterIP, LoadBalancer, NodePort'
+                      description: "Type of Service to create. Must be one of: ClusterIP, LoadBalancer, NodePort"
                       enum:
                         - ClusterIP
                         - NodePort
@@ -2412,7 +2412,7 @@ spec:
                         annotations:
                           additionalProperties:
                             type: string
-                          description: 'Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations'
+                          description: "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations"
                           type: object
                         creationTimestamp:
                           description: |-
@@ -2452,7 +2452,7 @@ spec:
                         labels:
                           additionalProperties:
                             type: string
-                          description: 'Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels'
+                          description: "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels"
                           type: object
                         managedFields:
                           description: ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like "ci-cd". The set of fields is always in the version that the workflow used when modifying the object.
@@ -2484,7 +2484,7 @@ spec:
                             type: object
                           type: array
                         name:
-                          description: 'Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names'
+                          description: "Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names"
                           type: string
                         namespace:
                           description: |-
@@ -2507,13 +2507,13 @@ spec:
                                 description: If true, this reference points to the managing controller.
                                 type: boolean
                               kind:
-                                description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                                description: "Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
                                 type: string
                               name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names'
+                                description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#names"
                                 type: string
                               uid:
-                                description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#uids'
+                                description: "UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#uids"
                                 type: string
                             required:
                               - apiVersion
@@ -2529,7 +2529,7 @@ spec:
                             Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
                           type: string
                         selfLink:
-                          description: 'Deprecated: selfLink is a legacy read-only field that is no longer populated by the system.'
+                          description: "Deprecated: selfLink is a legacy read-only field that is no longer populated by the system."
                           type: string
                         uid:
                           description: |-
@@ -3134,7 +3134,7 @@ spec:
                                             description: The key to select.
                                             type: string
                                           name:
-                                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                            description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                             type: string
                                           optional:
                                             description: Specify whether the ConfigMap or its key must be defined
@@ -3155,16 +3155,16 @@ spec:
                                           - fieldPath
                                         type: object
                                       resourceFieldRef:
-                                        description: 'Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.'
+                                        description: "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
                                         properties:
                                           containerName:
-                                            description: 'Container name: required for volumes, optional for env vars'
+                                            description: "Container name: required for volumes, optional for env vars"
                                             type: string
                                           divisor:
                                             description: Specifies the output format of the exposed resources, defaults to "1"
                                             type: string
                                           resource:
-                                            description: 'Required: resource to select'
+                                            description: "Required: resource to select"
                                             type: string
                                         required:
                                           - resource
@@ -3176,7 +3176,7 @@ spec:
                                             description: The key of the secret to select from.  Must be a valid secret key.
                                             type: string
                                           name:
-                                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                            description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                             type: string
                                           optional:
                                             description: Specify whether the Secret or its key must be defined
@@ -3200,7 +3200,7 @@ spec:
                                     description: LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.
                                     properties:
                                       name:
-                                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                        description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
                                         type: string
                                     type: object
                                   type: array
@@ -3250,13 +3250,13 @@ spec:
                                   additionalProperties:
                                     description: "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` <quantity>        ::= <signedNumber><suffix>\n\n\t(Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n\n<digit>           ::= 0 | 1 | ... | 9 <digits>          ::= <digit> | <digit><digits> <number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits> <sign>            ::= \"+\" | \"-\" <signedNumber>    ::= <number> | <sign><number> <suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI> <binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber> ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation."
                                     type: string
-                                  description: 'Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                  description: "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
                                   type: object
                                 requests:
                                   additionalProperties:
                                     description: "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` <quantity>        ::= <signedNumber><suffix>\n\n\t(Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n\n<digit>           ::= 0 | 1 | ... | 9 <digits>          ::= <digit> | <digit><digits> <number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits> <sign>            ::= \"+\" | \"-\" <signedNumber>    ::= <number> | <sign><number> <suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI> <binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber> ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation."
                                     type: string
-                                  description: 'Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                  description: "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
                                   type: object
                               type: object
                             serviceAccountName:
@@ -3384,7 +3384,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -3400,7 +3400,7 @@ rules:
       - matchmakingqueues/status
     verbs: [update, patch]
   - apiGroups:
-      - ''
+      - ""
     resources:
       - events
     verbs: [create, delete, get, list, patch, update, watch]
@@ -3419,7 +3419,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -3444,7 +3444,7 @@ rules:
       - proxyfleets/status
     verbs: [update, patch]
   - apiGroups:
-      - ''
+      - ""
     resources:
       - services
       - configmaps
@@ -3484,7 +3484,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -3492,7 +3492,7 @@ roleRef:
   kind: ClusterRole
   name: shulker-addon-matchmaking:workload
 subjects:
-  - apiGroup: ''
+  - apiGroup: ""
     kind: ServiceAccount
     name: shulker-addon-matchmaking
     namespace: shulker-system
@@ -3506,7 +3506,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -3514,7 +3514,7 @@ roleRef:
   kind: ClusterRole
   name: shulker-operator:workload
 subjects:
-  - apiGroup: ''
+  - apiGroup: ""
     kind: ServiceAccount
     name: shulker-operator
     namespace: shulker-system
@@ -3528,7 +3528,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -3538,12 +3538,12 @@ rules:
       - leases
     resourceNames:
       - shulker-addon-matchmaking.shulkermc.io
-    verbs: ['get', 'update', 'patch']
+    verbs: ["get", "update", "patch"]
   - apiGroups:
       - coordination.k8s.io
     resources:
       - leases
-    verbs: ['create']
+    verbs: ["create"]
 ---
 # Source: shulker-operator/templates/rbac_leader_election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3554,7 +3554,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -3564,12 +3564,12 @@ rules:
       - leases
     resourceNames:
       - shulker-operator.shulkermc.io
-    verbs: ['get', 'update', 'patch']
+    verbs: ["get", "update", "patch"]
   - apiGroups:
       - coordination.k8s.io
     resources:
       - leases
-    verbs: ['create']
+    verbs: ["create"]
 ---
 # Source: shulker-operator/charts/shulker-addon-matchmaking/templates/rbac_leader_election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3580,7 +3580,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -3588,7 +3588,7 @@ roleRef:
   kind: Role
   name: shulker-addon-matchmaking:leader-election
 subjects:
-  - apiGroup: ''
+  - apiGroup: ""
     kind: ServiceAccount
     name: shulker-addon-matchmaking
     namespace: shulker-system
@@ -3602,7 +3602,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -3610,7 +3610,7 @@ roleRef:
   kind: Role
   name: shulker-operator:leader-election
 subjects:
-  - apiGroup: ''
+  - apiGroup: ""
     kind: ServiceAccount
     name: shulker-operator
     namespace: shulker-system
@@ -3624,7 +3624,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
 spec:
@@ -3638,7 +3638,7 @@ spec:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 ---
@@ -3651,7 +3651,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -3669,7 +3669,7 @@ spec:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 ---
@@ -3682,7 +3682,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
 spec:
@@ -3696,7 +3696,7 @@ spec:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 ---
@@ -3709,7 +3709,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -3723,7 +3723,7 @@ spec:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 ---
@@ -3736,7 +3736,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
+    app.kubernetes.io/version: "0.3.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 spec:
@@ -3746,7 +3746,7 @@ spec:
       helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
       app.kubernetes.io/name: shulker-addon-matchmaking
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: '0.3.0'
+      app.kubernetes.io/version: "0.3.0"
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-addon-matchmaking-director
   template:
@@ -3755,14 +3755,14 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: '0.3.0'
+        app.kubernetes.io/version: "0.3.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-director
     spec:
       serviceAccountName: shulker-addon-matchmaking
       containers:
         - name: shulker-addon-matchmaking-director
-          image: 'ghcr.io/jeremylvln/shulker-addon-matchmaking:next'
+          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.3.0"
           imagePullPolicy: Always
           args:
             - --metrics-bind-address=0.0.0.0:8080
@@ -3774,115 +3774,11 @@ spec:
             - name: OPEN_MATCH_BACKEND_HOST
               value: open-match-backend.open-match
             - name: OPEN_MATCH_BACKEND_GRPC_PORT
-              value: '50505'
+              value: "50505"
             - name: SHULKER_API_HOST
-              value: 'shulker-operator.shulker-system'
+              value: "shulker-operator.shulker-system"
             - name: SHULKER_API_GRPC_PORT
-              value: '9090'
----
-# Source: shulker-operator/charts/shulker-addon-matchmaking/templates/mmf_deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: shulker-addon-matchmaking-mmf
-  labels:
-    helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
-    app.kubernetes.io/name: shulker-addon-matchmaking
-    app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: shulker-addon-matchmaking-mmf
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
-      app.kubernetes.io/name: shulker-addon-matchmaking
-      app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: '0.3.0'
-      app.kubernetes.io/managed-by: Helm
-      app.kubernetes.io/component: shulker-addon-matchmaking-mmf
-  template:
-    metadata:
-      labels:
-        helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
-        app.kubernetes.io/name: shulker-addon-matchmaking
-        app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: '0.3.0'
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: shulker-addon-matchmaking-mmf
-    spec:
-      serviceAccountName: shulker-addon-matchmaking
-      containers:
-        - name: shulker-addon-matchmaking-mmf
-          image: 'ghcr.io/jeremylvln/shulker-addon-matchmaking:next'
-          imagePullPolicy: Always
-          command: ['/shulker-addon-matchmaking-mmf']
-          args:
-            - --metrics-bind-address=0.0.0.0:8080
-          ports:
-            - containerPort: 8080
-              protocol: TCP
-              name: metrics
-            - containerPort: 9090
-              protocol: TCP
-              name: mmf-batch
-            - containerPort: 9091
-              protocol: TCP
-              name: mmf-elo
-          env:
-            - name: OPEN_MATCH_QUERY_HOST
-              value: open-match-query.open-match
-            - name: OPEN_MATCH_QUERY_GRPC_PORT
-              value: '50503'
----
-# Source: shulker-operator/templates/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: shulker-operator
-  labels:
-    helm.sh/chart: shulker-operator-0.1.0
-    app.kubernetes.io/name: shulker-operator
-    app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: '0.3.0'
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: shulker-operator
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      helm.sh/chart: shulker-operator-0.1.0
-      app.kubernetes.io/name: shulker-operator
-      app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: '0.3.0'
-      app.kubernetes.io/managed-by: Helm
-      app.kubernetes.io/component: shulker-operator
-  template:
-    metadata:
-      labels:
-        helm.sh/chart: shulker-operator-0.1.0
-        app.kubernetes.io/name: shulker-operator
-        app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: '0.3.0'
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: shulker-operator
-    spec:
-      serviceAccountName: shulker-operator
-      containers:
-        - name: shulker-operator
-          image: 'ghcr.io/jeremylvln/shulker-operator:next'
-          imagePullPolicy: Always
-          args:
-            - --metrics-bind-address=0.0.0.0:8080
-            - --api-bind-address=0.0.0.0:9090
-          ports:
-            - containerPort: 8080
-              protocol: TCP
-              name: metrics
-            - containerPort: 9090
-              protocol: TCP
-              name: api-grpc
+              value: "9090"
           livenessProbe:
             httpGet:
               path: /healthz
@@ -3916,7 +3812,6 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-          env: []
       nodeSelector:
         kubernetes.io/os: linux
       affinity:
@@ -3933,3 +3828,220 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+---
+# Source: shulker-operator/charts/shulker-addon-matchmaking/templates/mmf_deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shulker-addon-matchmaking-mmf
+  labels:
+    helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
+    app.kubernetes.io/name: shulker-addon-matchmaking
+    app.kubernetes.io/instance: shulker-operator
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: shulker-addon-matchmaking-mmf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
+      app.kubernetes.io/name: shulker-addon-matchmaking
+      app.kubernetes.io/instance: shulker-operator
+      app.kubernetes.io/version: "0.3.0"
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/component: shulker-addon-matchmaking-mmf
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
+        app.kubernetes.io/name: shulker-addon-matchmaking
+        app.kubernetes.io/instance: shulker-operator
+        app.kubernetes.io/version: "0.3.0"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: shulker-addon-matchmaking-mmf
+    spec:
+      serviceAccountName: shulker-addon-matchmaking
+      containers:
+        - name: shulker-addon-matchmaking-mmf
+          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.3.0"
+          imagePullPolicy: Always
+          command: ["/shulker-addon-matchmaking-mmf"]
+          args:
+            - --metrics-bind-address=0.0.0.0:8080
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: metrics
+            - containerPort: 9090
+              protocol: TCP
+              name: mmf-batch
+            - containerPort: 9091
+              protocol: TCP
+              name: mmf-elo
+          env:
+            - name: OPEN_MATCH_QUERY_HOST
+              value: open-match-query.open-match
+            - name: OPEN_MATCH_QUERY_GRPC_PORT
+              value: "50503"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - arm64
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+# Source: shulker-operator/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shulker-operator
+  labels:
+    helm.sh/chart: shulker-operator-0.1.0
+    app.kubernetes.io/name: shulker-operator
+    app.kubernetes.io/instance: shulker-operator
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: shulker-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      helm.sh/chart: shulker-operator-0.1.0
+      app.kubernetes.io/name: shulker-operator
+      app.kubernetes.io/instance: shulker-operator
+      app.kubernetes.io/version: "0.3.0"
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/component: shulker-operator
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: shulker-operator-0.1.0
+        app.kubernetes.io/name: shulker-operator
+        app.kubernetes.io/instance: shulker-operator
+        app.kubernetes.io/version: "0.3.0"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: shulker-operator
+    spec:
+      serviceAccountName: shulker-operator
+      containers:
+        - name: shulker-operator
+          image: "ghcr.io/jeremylvln/shulker-operator:next"
+          imagePullPolicy: Always
+          args:
+            - --metrics-bind-address=0.0.0.0:8080
+            - --api-bind-address=0.0.0.0:9090
+            - --agones-allocation-tls-client-crt=/mnt/shulker/agones-allocation-client-tls/tls.crt
+            - --agones-allocation-tls-client-key=/mnt/shulker/agones-allocation-client-tls/tls.key
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: metrics
+            - containerPort: 9090
+              protocol: TCP
+              name: api-grpc
+          env:
+            - name: AGONES_ALLOCATOR_HOST
+              value: agones-allocator.agones-system
+            - name: AGONES_ALLOCATOR_GRPC_PORT
+              value: "443"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: agones-allocation-client-tls
+              readOnly: true
+              mountPath: "/mnt/shulker/agones-allocation-client-tls"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - arm64
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: agones-allocation-client-tls
+          secret:
+            secretName: allocator-client.default

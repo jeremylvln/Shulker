@@ -1,9 +1,12 @@
 # Add files here to ignore them from prettier formatting
 
-/dist
-/coverage
-
+/.gradle
+/.idea
 /.nx/cache
-
+/build
+/coverage
+/dist
+/node_modules
+/docs/node_modules
 kube/helm/templates/
 kube/helm/charts/*/templates/

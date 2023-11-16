@@ -1,13 +1,13 @@
-nameOverride: 'shulker-addon-matchmaking'
-fullnameOverride: 'shulker-addon-matchmaking'
-
-image:
-  repository: ghcr.io/jeremylvln/shulker-addon-matchmaking
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ''
+nameOverride: "shulker-addon-matchmaking"
+fullnameOverride: "shulker-addon-matchmaking"
 
 director:
+  image:
+    repository: ghcr.io/jeremylvln/shulker-addon-matchmaking
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
   # Additional command line flags to pass.
   extraArgs: []
 
@@ -96,6 +96,12 @@ director:
       endpointAdditionalProperties: {}
 
 mmf:
+  image:
+    repository: ghcr.io/jeremylvln/shulker-addon-matchmaking
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
   replicas: 1
 
   # Additional command line flags to pass.
@@ -192,4 +198,4 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ''
+  name: ""

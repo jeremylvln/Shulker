@@ -13,6 +13,7 @@
     "prepare": "husky install && npm run proto:build",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
+    "format": "prettier --ignore-unknown --write '**/*'",
     "lint": "nx run-many --target=lint --all",
     "proto:build": "nx run-many --target=buf --all",
     "crd:install": "cargo run --bin crdgen && kubectl apply -k kube/resources/crd",

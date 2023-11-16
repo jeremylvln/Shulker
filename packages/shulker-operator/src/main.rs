@@ -27,7 +27,7 @@ struct Args {
     // The host of the allocator service of Agones
     #[arg(
         long,
-        default_value = "agones-alocator.agones-system",
+        default_value = "agones-allocator.agones-system",
         value_name = "host",
         env = "AGONES_ALLOCATOR_HOST"
     )]

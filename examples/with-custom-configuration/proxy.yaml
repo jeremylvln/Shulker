@@ -21,7 +21,7 @@ spec:
                 repository: https://example.com/maven
                 groupId: com.example
                 artifactId: myplugin
-                version: '1.0.0'
+                version: "1.0.0"
                 credentialsSecretName: example-repo-secret
         patches:
           - url: https://example.com/add-config-to-myplugin.tar.gz
