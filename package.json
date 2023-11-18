@@ -31,7 +31,7 @@
     "lint-staged": "15.0.2",
     "nx": "17.0.3",
     "prettier": "3.0.3",
-    "semantic-release": "22.0.6",
+    "semantic-release": "22.0.7",
     "semantic-release-replace-plugin": "1.2.7",
     "yaml": "2.3.4"
   },
