@@ -66,4 +66,4 @@ tower-test = "0.4.0"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["json", "env-filter"] }
 url = "2.4.1"
-uuid = { version = "1.5.0", features = ["v4"] }
+uuid = { version = "1.6.0", features = ["v4"] }
