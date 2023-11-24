@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 plugins {
     id("idea")
@@ -10,11 +11,11 @@ plugins {
     id("jacoco")
     id("maven-publish")
     id("signing")
-    kotlin("jvm") version "1.9.10"
-    kotlin("kapt") version "1.9.10"
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
-    id("com.github.johnrengelman.shadow") version "8.1.0"
-    id("io.gitlab.arturbosch.detekt") version "1.23.1"
+    kotlin("jvm") version libs.versions.kotlin.get()
+    kotlin("kapt") version libs.versions.kotlin.get()
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt)
 }
 
 repositories {
@@ -25,8 +26,16 @@ val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
     output = layout.buildDirectory.file("reports/detekt/merge.sarif")
 }
 
+allprojects {
+    if (System.getenv("IS_RELEASE") != "true") {
+        version = "$version-SNAPSHOT"
+    }
+}
+
 subprojects {
     if (listOf("packages").contains(project.name)) return@subprojects
+
+    val libs = rootProject.libs
 
     apply(plugin = "idea")
     apply(plugin = "java")
@@ -69,8 +78,8 @@ subprojects {
 
     if (!project.hasProperty("javaOnly")) {
         apply(plugin = "org.jetbrains.kotlin.jvm")
-        apply(plugin = "org.jlleitschuh.gradle.ktlint")
-        apply(plugin = "io.gitlab.arturbosch.detekt")
+        apply(plugin = libs.plugins.ktlint.get().pluginId)
+        apply(plugin = libs.plugins.detekt.get().pluginId)
 
         dependencies {
             testImplementation(kotlin("test"))
@@ -111,7 +120,7 @@ subprojects {
     }
 
     if (!project.hasProperty("isLibrary")) {
-        apply(plugin = "com.github.johnrengelman.shadow")
+        apply(plugin = libs.plugins.shadow.get().pluginId)
 
         tasks {
             assemble {
@@ -155,7 +164,7 @@ subprojects {
                     licenses {
                         license {
                             name.set("The Apache License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                            url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                         }
                     }
 
@@ -172,8 +181,15 @@ subprojects {
 
         repositories {
             maven {
-                name = "Shulker"
-                url = uri("https://maven.jeremylvln.fr/artifactory/shulker")
+                name = "shulker"
+
+                url = if ((version as String).endsWith("-SNAPSHOT")) {
+                    uri("https://maven.jeremylvln.fr/artifactory/shulker-snapshots")
+                } else {
+                    uri("https://maven.jeremylvln.fr/artifactory/shulker-releases")
+                }
+
+
                 credentials {
                     username = findProperty("artifactory.username")?.toString() ?: System.getenv("ARTIFACTORY_USERNAME")
                     password = findProperty("artifactory.password")?.toString() ?: System.getenv("ARTIFACTORY_PASSWORD")
@@ -227,11 +243,11 @@ subprojects {
         }
 
         dependencies {
-            "commonCompileOnly"("net.kyori:adventure-api:4.14.0")
-            "bungeecordCompileOnly"("net.md-5:bungeecord-api:1.20-R0.1")
-            "bungeecordImplementation"("net.kyori:adventure-platform-bungeecord:4.3.1")
-            "velocityCompileOnly"("com.velocitypowered:velocity-api:3.1.1")
-            "kaptVelocity"("com.velocitypowered:velocity-api:3.1.1")
+            "commonCompileOnly"(libs.adventure.api)
+            "bungeecordCompileOnly"(libs.bungeecord.api)
+            "bungeecordImplementation"(libs.adventure.platform.bungeecord)
+            "velocityCompileOnly"(libs.velocity.api)
+            "kaptVelocity"(libs.velocity.api)
         }
     } else if (project.name == "shulker-server-agent") {
         val commonSourceSet = sourceSets.create("common")
@@ -240,8 +256,8 @@ subprojects {
         }
 
         dependencies {
-            "commonCompileOnly"("net.kyori:adventure-api:4.14.0")
-            "paperCompileOnly"("dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
+            "commonCompileOnly"(libs.adventure.api)
+            "paperCompileOnly"(libs.folia.api)
         }
     }
 }

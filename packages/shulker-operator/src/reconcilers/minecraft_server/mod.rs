@@ -16,6 +16,8 @@ use shulker_crds::{
     v1alpha1::minecraft_server::{MinecraftServer, MinecraftServerStatus},
 };
 
+use crate::agent::AgentConfig;
+
 use self::{
     config_map::ConfigMapBuilder,
     gameserver::{GameServerBuilder, GameServerBuilderContext},
@@ -31,6 +33,7 @@ mod fixtures;
 
 struct MinecraftServerReconciler {
     client: kube::Client,
+    agent_config: AgentConfig,
 
     // Builders
     config_map_builder: ConfigMapBuilder,
@@ -56,7 +59,10 @@ impl MinecraftServerReconciler {
         let gameserver = reconcile_builder(
             &self.gameserver_builder,
             minecraft_server.as_ref(),
-            Some(GameServerBuilderContext { cluster: &cluster }),
+            Some(GameServerBuilderContext {
+                cluster: &cluster,
+                agent_config: &self.agent_config,
+            }),
         )
         .await
         .map_err(ReconcilerError::BuilderError)?;
@@ -180,7 +186,7 @@ fn error_policy(
     Action::requeue(Duration::from_secs(5))
 }
 
-pub async fn run(client: Client) {
+pub async fn run(client: Client, agent_config: AgentConfig) {
     let minecraft_servers_api = Api::<MinecraftServer>::all(client.clone());
     if let Err(e) = minecraft_servers_api
         .list(&ListParams::default().limit(1))
@@ -192,6 +198,7 @@ pub async fn run(client: Client) {
 
     let context = MinecraftServerReconciler {
         client: client.clone(),
+        agent_config,
         config_map_builder: ConfigMapBuilder::new(client.clone()),
         gameserver_builder: GameServerBuilder::new(client.clone()),
     };

@@ -16,6 +16,8 @@ use shulker_crds::{
     v1alpha1::proxy_fleet::{ProxyFleet, ProxyFleetStatus},
 };
 
+use crate::agent::AgentConfig;
+
 use self::{
     config_map::ConfigMapBuilder,
     fleet::{FleetBuilder, FleetBuilderContext},
@@ -35,6 +37,7 @@ mod fixtures;
 
 struct ProxyFleetReconciler {
     client: kube::Client,
+    agent_config: AgentConfig,
 
     // Builders
     config_map_builder: ConfigMapBuilder,
@@ -65,7 +68,10 @@ impl ProxyFleetReconciler {
         let fleet = reconcile_builder(
             &self.fleet_builder,
             proxy_fleet.as_ref(),
-            Some(FleetBuilderContext { cluster: &cluster }),
+            Some(FleetBuilderContext {
+                cluster: &cluster,
+                agent_config: &self.agent_config,
+            }),
         )
         .await
         .map_err(ReconcilerError::BuilderError)?;
@@ -186,7 +192,7 @@ fn error_policy(
     Action::requeue(Duration::from_secs(5))
 }
 
-pub async fn run(client: Client) {
+pub async fn run(client: Client, agent_config: AgentConfig) {
     let proxy_fleets_api = Api::<ProxyFleet>::all(client.clone());
     if let Err(e) = proxy_fleets_api.list(&ListParams::default().limit(1)).await {
         error!("CRD is not queryable; {e:?}. Is the CRD installed?");
@@ -195,6 +201,7 @@ pub async fn run(client: Client) {
 
     let context = ProxyFleetReconciler {
         client: client.clone(),
+        agent_config,
         config_map_builder: ConfigMapBuilder::new(client.clone()),
         service_builder: ServiceBuilder::new(client.clone()),
         fleet_builder: FleetBuilder::new(client.clone()),

@@ -1,24 +1,24 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.github.gmazzo.buildconfig") version "4.1.2"
+    alias(libs.plugins.buildconfig)
 }
 
 dependencies {
-    "commonApi"(project(":packages:shulker-proxy-api"))
+    commonApi(project(":packages:shulker-proxy-api"))
 
     // Kubernetes
-    "commonCompileOnly"("io.fabric8:kubernetes-client-api:6.9.2")
-    "commonRuntimeOnly"("io.fabric8:kubernetes-client:6.9.2")
-    "commonImplementation"("io.fabric8:kubernetes-httpclient-okhttp:6.9.2")
+    commonCompileOnly(libs.kubernetes.client)
+    commonRuntimeOnly(libs.kubernetes.client.api)
+    commonImplementation(libs.kubernetes.client.http)
 
     // Agones
-    "commonImplementation"(project(":packages:google-agones-sdk-bindings-java"))
-    "commonRuntimeOnly"("io.grpc:grpc-netty-shaded:1.59.0")
+    commonImplementation(project(":packages:google-agones-sdk"))
+    commonRuntimeOnly(libs.netty.shaded)
 
     // Sync
-    "commonImplementation"("redis.clients:jedis:5.0.2")
-    "commonImplementation"("com.google.guava:guava:32.1.3-jre")
+    commonImplementation(libs.jedis)
+    commonImplementation(libs.guava)
 }
 
 setOf("bungeecordJar", "velocityJar").forEach { taskName ->

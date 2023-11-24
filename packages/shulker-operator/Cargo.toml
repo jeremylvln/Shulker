@@ -24,6 +24,7 @@ default = []
 anyhow.workspace = true
 async-trait.workspace = true
 clap.workspace = true
+const_format.workspace = true
 futures.workspace = true
 google-agones-crds.workspace = true
 google-agones-sdk = { workspace = true, features = ["client"] }

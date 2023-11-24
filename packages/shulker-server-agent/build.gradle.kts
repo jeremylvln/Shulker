@@ -1,11 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 dependencies {
-    "commonApi"(project(":packages:shulker-server-api"))
+    commonApi(project(":packages:shulker-server-api"))
 
     // Agones
-    "commonImplementation"(project(":packages:google-agones-sdk-bindings-java"))
-    "commonRuntimeOnly"("io.grpc:grpc-netty-shaded:1.59.0")
+    commonImplementation(project(":packages:google-agones-sdk"))
+    commonRuntimeOnly(libs.netty.shaded)
 }
 
 setOf("paperJar").forEach { taskName ->

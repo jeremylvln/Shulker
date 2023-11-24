@@ -128,10 +128,10 @@ spec:
                   value: /server
                 - name: TYPE
                   value: VELOCITY
+                - name: SHULKER_MAVEN_REPOSITORY
+                  value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots"
                 - name: SHULKER_PROXY_AGENT_VERSION
                   value: 0.0.0-test-cfg
-                - name: SHULKER_MAVEN_REPOSITORY
-                  value: "https://maven.jeremylvln.fr/artifactory/shulker"
                 - name: PROXY_PLUGIN_URLS
                   value: "https://example.com/my_plugin.jar"
                 - name: PROXY_PATCH_URLS

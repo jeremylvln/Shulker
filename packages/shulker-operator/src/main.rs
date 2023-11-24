@@ -4,8 +4,9 @@ use http::Uri;
 use kube::Client;
 use shulker_kube_utils::{lease, metrics};
 use shulker_operator::{
+    agent::AgentConfig,
     api::{self, GrpcServerContext},
-    reconcilers,
+    constants, reconcilers,
 };
 use shulker_utils::telemetry;
 use tonic::transport::{Channel, ClientTlsConfig, Identity};
@@ -51,6 +52,22 @@ struct Args {
     /// Allocator service
     #[arg(long, value_name = "path")]
     agones_allocator_tls_client_key: Option<String>,
+
+    #[arg(
+        long,
+        default_value_t = constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+        value_name = "url",
+        env = "SHULKER_AGENT_MAVEN_REPOSITORY"
+    )]
+    agent_maven_repository: String,
+
+    #[arg(
+        long,
+        default_value_t = constants::SHULKER_PLUGIN_VERSION.to_string(),
+        value_name = "version",
+        env = "SHULKER_AGENT_VERSION"
+    )]
+    agent_version: String,
 }
 
 #[tokio::main]
@@ -92,15 +109,20 @@ async fn main() -> anyhow::Result<()> {
     let agones_allocator_client =
         AllocationServiceClient::connect(agones_allocator_channel).await?;
 
+    let agent_config = AgentConfig {
+        maven_repository: args.agent_maven_repository,
+        version: args.agent_version,
+    };
+
     tokio::select! {
         _ = tokio::signal::ctrl_c() => {
             cancellation_token.cancel();
         },
         _ = lease_holder => {},
         _ = reconcilers::minecraft_cluster::run(client.clone()) => {},
-        _ = reconcilers::proxy_fleet::run(client.clone()) => {},
-        _ = reconcilers::minecraft_server::run(client.clone()) => {},
-        _ = reconcilers::minecraft_server_fleet::run(client.clone()) => {},
+        _ = reconcilers::proxy_fleet::run(client.clone(), agent_config.clone()) => {},
+        _ = reconcilers::minecraft_server::run(client.clone(), agent_config.clone()) => {},
+        _ = reconcilers::minecraft_server_fleet::run(client.clone(), agent_config.clone()) => {},
         _ = metrics::create_http_server(args.metrics_bind_address)? => {},
         _ = api::create_grpc_server(args.api_bind_address, GrpcServerContext {
             client: client.clone(),

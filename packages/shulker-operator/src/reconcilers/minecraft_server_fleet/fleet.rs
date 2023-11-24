@@ -8,6 +8,8 @@ use kube::Client;
 use kube::ResourceExt;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 
+use crate::agent::AgentConfig;
+use crate::reconcilers::minecraft_server::gameserver::GameServerBuilderContext;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
 use google_agones_crds::v1::fleet::FleetSpec;
@@ -27,6 +29,7 @@ pub struct FleetBuilder {
 #[derive(Clone, Debug)]
 pub struct FleetBuilderContext<'a> {
     pub cluster: &'a MinecraftCluster,
+    pub agent_config: &'a AgentConfig,
 }
 
 #[async_trait::async_trait]
@@ -95,9 +98,14 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
             status: None,
         };
 
+        let game_server_context = GameServerBuilderContext {
+            cluster: context.as_ref().unwrap().cluster,
+            agent_config: context.as_ref().unwrap().agent_config,
+        };
+
         let game_server_spec = crate::reconcilers::minecraft_server::gameserver::GameServerBuilder::get_game_server_spec(
             &self.resourceref_resolver,
-            context.unwrap().cluster,
+            &game_server_context,
             &fake_mincraft_server,
         ).await?;
         let replicas = match &minecraft_server_fleet.spec.autoscaling {
@@ -152,9 +160,13 @@ impl FleetBuilder {
 mod tests {
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-    use crate::reconcilers::{
-        minecraft_cluster::fixtures::TEST_CLUSTER,
-        minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
+    use crate::{
+        agent::AgentConfig,
+        constants,
+        reconcilers::{
+            minecraft_cluster::fixtures::TEST_CLUSTER,
+            minecraft_server_fleet::fixtures::{create_client_mock, TEST_SERVER_FLEET},
+        },
     };
 
     #[test]
@@ -174,6 +186,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -194,6 +210,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -238,6 +258,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -282,6 +306,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_SERVER_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W

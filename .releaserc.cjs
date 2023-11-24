@@ -111,7 +111,7 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        publishCmd: './gradlew publish',
+        publishCmd: 'IS_RELEASE=true ./gradlew publish',
       },
     ],
     [

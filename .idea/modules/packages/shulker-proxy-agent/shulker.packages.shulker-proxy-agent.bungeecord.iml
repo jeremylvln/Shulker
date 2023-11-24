@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-proxy-agent:bungeecord" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.3.0" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-proxy-agent:bungeecord" external.linked.project.path="$MODULE_DIR$/../../../../packages/shulker-proxy-agent" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.3.0-SNAPSHOT" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -81,9 +81,9 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-api:1.20-R0.1" level="project" />
     <orderEntry type="library" name="Gradle: net.kyori:adventure-platform-bungeecord:4.3.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.14.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:kubernetes-client:6.9.1" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-httpclient-okhttp:6.9.1" level="project" />
-    <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-client-api:6.9.1" level="project" />
-    <orderEntry type="module" module-name="shulker.packages.google-agones-sdk-bindings-java.main" />
+    <orderEntry type="module" module-name="shulker.packages.google-agones-sdk.main" />
     <orderEntry type="library" name="Gradle: redis.clients:jedis:5.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:32.1.3-jre" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10" level="project" />
@@ -102,8 +102,30 @@
     <orderEntry type="library" name="Gradle: net.kyori:examination-string:1.3.0" level="project" />
     <orderEntry type="library" name="Gradle: net.kyori:examination-api:1.3.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains:annotations:24.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-client-api:6.9.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.fabric8:zjsonpatch:0.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:3.12.12" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.12.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.25.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:2.0.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-pool2:2.11.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.json:json:20231013" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.10.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.37.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.21.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:2.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:brigadier:1.0.16-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec:4.1.96.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.sf.trove4j:core:3.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: se.llbit:jo-nbt:1.3.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport:4.1.96.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-buffer:4.1.96.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-common:4.1.96.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-json:4.14.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-model-gatewayapi:6.9.1" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-model-resource:6.9.1" level="project" />
@@ -129,37 +151,15 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.15.2" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.15.2" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:2.0.9" level="project" />
     <orderEntry type="library" name="Gradle: org.snakeyaml:snakeyaml-engine:2.7" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.25.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.commons:commons-pool2:2.11.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.json:json:20231013" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.10.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.checkerframework:checker-qual:3.37.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.21.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:2.8" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:brigadier:1.0.16-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec:4.1.96.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.sf.trove4j:core:3.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: se.llbit:jo-nbt:1.3.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport:4.1.96.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-buffer:4.1.96.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-common:4.1.96.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-json:4.14.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.15.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver:4.1.96.Final" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.15.2" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric8:kubernetes-model-common:6.9.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver:4.1.96.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:kubernetes-client:6.9.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-netty-shaded:1.59.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-platform-facet:4.3.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-text-serializer-gson:4.13.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.kyori:adventure-text-serializer-legacy:4.13.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.fabric8:zjsonpatch:0.3.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-services:1.59.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-protobuf:1.59.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-stub:1.59.0" level="project" />

@@ -29,6 +29,7 @@ use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 
+use crate::agent::AgentConfig;
 use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
@@ -48,12 +49,6 @@ const PROXY_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const PROXY_SHULKER_FORWARDING_SECRET_DIR: &str = "/mnt/shulker/forwarding-secret";
 const PROXY_DATA_DIR: &str = "/server";
 const PROXY_DRAIN_LOCK_DIR: &str = "/mnt/drain-lock";
-const PROXY_SHULKER_MAVEN_REPOSITORY: &str = "https://maven.jeremylvln.fr/artifactory/shulker";
-
-#[cfg(not(test))]
-const PROXY_SHULKER_PROXY_AGENT_VERSION: &str = env!("CARGO_PKG_VERSION");
-#[cfg(test)]
-const PROXY_SHULKER_PROXY_AGENT_VERSION: &str = "0.0.0-test-cfg";
 
 lazy_static! {
     static ref PROXY_SECURITY_CONTEXT: SecurityContext = SecurityContext {
@@ -77,6 +72,7 @@ pub struct FleetBuilder {
 #[derive(Clone, Debug)]
 pub struct FleetBuilderContext<'a> {
     pub cluster: &'a MinecraftCluster,
+    pub agent_config: &'a AgentConfig,
 }
 
 #[async_trait::async_trait]
@@ -104,7 +100,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server_spec = self
-            .get_game_server_spec(context.unwrap().cluster, proxy_fleet)
+            .get_game_server_spec(context.as_ref().unwrap(), proxy_fleet)
             .await?;
         let replicas = match &proxy_fleet.spec.autoscaling {
             Some(_) => 0,
@@ -144,7 +140,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
     }
 }
 
-impl FleetBuilder {
+impl<'a> FleetBuilder {
     pub fn new(client: Client) -> Self {
         FleetBuilder {
             client: client.clone(),
@@ -154,10 +150,10 @@ impl FleetBuilder {
 
     async fn get_game_server_spec(
         &self,
-        cluster: &MinecraftCluster,
+        context: &FleetBuilderContext<'a>,
         proxy_fleet: &ProxyFleet,
     ) -> Result<GameServerSpec, anyhow::Error> {
-        let pod_template_spec = self.get_pod_template_spec(cluster, proxy_fleet).await?;
+        let pod_template_spec = self.get_pod_template_spec(context, proxy_fleet).await?;
         let game_server_spec = GameServerSpec {
             ports: Some(vec![]),
             eviction: Some(GameServerEvictionSpec {
@@ -177,7 +173,7 @@ impl FleetBuilder {
 
     async fn get_pod_template_spec(
         &self,
-        cluster: &MinecraftCluster,
+        context: &FleetBuilderContext<'a>,
         proxy_fleet: &ProxyFleet,
     ) -> Result<PodTemplateSpec, anyhow::Error> {
         let mut pod_spec = PodSpec {
@@ -188,7 +184,7 @@ impl FleetBuilder {
                     "sh".to_string(),
                     format!("{}/init-fs.sh", PROXY_SHULKER_CONFIG_DIR),
                 ]),
-                env: Some(self.get_init_env(proxy_fleet).await?),
+                env: Some(self.get_init_env(context, proxy_fleet).await?),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
                     VolumeMount {
@@ -213,7 +209,7 @@ impl FleetBuilder {
                     container_port: 25577,
                     ..ContainerPort::default()
                 }]),
-                env: Some(self.get_env(cluster, &proxy_fleet.spec.template.spec)?),
+                env: Some(self.get_env(context, &proxy_fleet.spec.template.spec)?),
                 readiness_probe: Some(Probe {
                     exec: Some(ExecAction {
                         command: Some(vec![
@@ -351,7 +347,11 @@ impl FleetBuilder {
         })
     }
 
-    async fn get_init_env(&self, proxy_fleet: &ProxyFleet) -> Result<Vec<EnvVar>, anyhow::Error> {
+    async fn get_init_env(
+        &self,
+        context: &FleetBuilderContext<'a>,
+        proxy_fleet: &ProxyFleet,
+    ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let spec = &proxy_fleet.spec.template.spec;
 
         let mut env: Vec<EnvVar> = vec![
@@ -371,13 +371,13 @@ impl FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_PROXY_AGENT_VERSION".to_string(),
-                value: Some(PROXY_SHULKER_PROXY_AGENT_VERSION.to_string()),
+                name: "SHULKER_MAVEN_REPOSITORY".to_string(),
+                value: Some(context.agent_config.maven_repository.clone()),
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_MAVEN_REPOSITORY".to_string(),
-                value: Some(PROXY_SHULKER_MAVEN_REPOSITORY.to_string()),
+                name: "SHULKER_PROXY_AGENT_VERSION".to_string(),
+                value: Some(context.agent_config.version.clone()),
                 ..EnvVar::default()
             },
         ];
@@ -419,10 +419,10 @@ impl FleetBuilder {
 
     fn get_env(
         &self,
-        cluster: &MinecraftCluster,
+        context: &FleetBuilderContext<'a>,
         spec: &ProxyFleetTemplateSpec,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
-        let redis_ref = RedisRef::from_cluster(cluster)?;
+        let redis_ref = RedisRef::from_cluster(context.cluster)?;
 
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
@@ -455,7 +455,8 @@ impl FleetBuilder {
             EnvVar {
                 name: "SHULKER_NETWORK_ADMINS".to_string(),
                 value: Some(
-                    cluster
+                    context
+                        .cluster
                         .spec
                         .network_admins
                         .as_ref()
@@ -552,9 +553,13 @@ mod tests {
     use k8s_openapi::api::core::v1::EnvVar;
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
-    use crate::reconcilers::{
-        minecraft_cluster::fixtures::TEST_CLUSTER,
-        proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+    use crate::{
+        agent::AgentConfig,
+        constants,
+        reconcilers::{
+            minecraft_cluster::fixtures::TEST_CLUSTER,
+            proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
+        },
     };
 
     #[test]
@@ -574,6 +579,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -594,6 +603,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -638,6 +651,10 @@ mod tests {
         let name = super::FleetBuilder::name(&TEST_PROXY_FLEET);
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -679,9 +696,19 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = builder.get_init_env(&TEST_PROXY_FLEET).await.unwrap();
+        let env = builder
+            .get_init_env(&context, &TEST_PROXY_FLEET)
+            .await
+            .unwrap();
 
         // T
         let plugins_env = env
@@ -703,9 +730,19 @@ mod tests {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = builder.get_init_env(&TEST_PROXY_FLEET).await.unwrap();
+        let env = builder
+            .get_init_env(&context, &TEST_PROXY_FLEET)
+            .await
+            .unwrap();
 
         // T
         let patches_env = env
@@ -728,9 +765,16 @@ mod tests {
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
         let spec = TEST_PROXY_FLEET.spec.clone();
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = builder.get_env(&TEST_CLUSTER, &spec.template.spec).unwrap();
+        let env = builder.get_env(&context, &spec.template.spec).unwrap();
 
         // T
         spec.template

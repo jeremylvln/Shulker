@@ -21,6 +21,7 @@ use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
 
+use crate::agent::AgentConfig;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
@@ -38,13 +39,6 @@ const MINECRAFT_SERVER_IMAGE: &str = "itzg/minecraft-server:2023.10.1-java17";
 const MINECRAFT_SERVER_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const MINECRAFT_SERVER_CONFIG_DIR: &str = "/config";
 const MINECRAFT_SERVER_DATA_DIR: &str = "/data";
-const MINECRAFT_SERVER_SHULKER_MAVEN_REPOSITORY: &str =
-    "https://maven.jeremylvln.fr/artifactory/shulker";
-
-#[cfg(not(test))]
-const MINECRAFT_SERVER_SHULKER_PROXY_AGENT_VERSION: &str = env!("CARGO_PKG_VERSION");
-#[cfg(test)]
-const MINECRAFT_SERVER_SHULKER_PROXY_AGENT_VERSION: &str = "0.0.0-test-cfg";
 
 lazy_static! {
     static ref PROXY_SECURITY_CONTEXT: SecurityContext = SecurityContext {
@@ -68,6 +62,7 @@ pub struct GameServerBuilder {
 #[derive(Clone, Debug)]
 pub struct GameServerBuilderContext<'a> {
     pub cluster: &'a MinecraftCluster,
+    pub agent_config: &'a AgentConfig,
 }
 
 #[async_trait::async_trait]
@@ -107,7 +102,7 @@ impl<'a> ResourceBuilder<'a> for GameServerBuilder {
             },
             spec: Self::get_game_server_spec(
                 &self.resourceref_resolver,
-                context.unwrap().cluster,
+                context.as_ref().unwrap(),
                 minecraft_server,
             )
             .await?,
@@ -118,7 +113,7 @@ impl<'a> ResourceBuilder<'a> for GameServerBuilder {
     }
 }
 
-impl GameServerBuilder {
+impl<'a> GameServerBuilder {
     pub fn new(client: Client) -> Self {
         GameServerBuilder {
             client: client.clone(),
@@ -128,11 +123,11 @@ impl GameServerBuilder {
 
     pub async fn get_game_server_spec(
         resourceref_resolver: &ResourceRefResolver,
-        cluster: &MinecraftCluster,
+        context: &GameServerBuilderContext<'a>,
         minecraft_server: &MinecraftServer,
     ) -> Result<GameServerSpec, anyhow::Error> {
         let pod_template_spec =
-            Self::get_pod_template_spec(resourceref_resolver, cluster, minecraft_server).await?;
+            Self::get_pod_template_spec(resourceref_resolver, context, minecraft_server).await?;
 
         let game_server_spec = GameServerSpec {
             ports: Some(vec![GameServerPortSpec {
@@ -157,7 +152,7 @@ impl GameServerBuilder {
 
     async fn get_pod_template_spec(
         resourceref_resolver: &ResourceRefResolver,
-        cluster: &MinecraftCluster,
+        context: &GameServerBuilderContext<'a>,
         minecraft_server: &MinecraftServer,
     ) -> Result<PodTemplateSpec, anyhow::Error> {
         let mut pod_spec = PodSpec {
@@ -168,7 +163,9 @@ impl GameServerBuilder {
                     "sh".to_string(),
                     format!("{}/init-fs.sh", MINECRAFT_SERVER_SHULKER_CONFIG_DIR),
                 ]),
-                env: Some(Self::get_init_env(resourceref_resolver, minecraft_server).await?),
+                env: Some(
+                    Self::get_init_env(resourceref_resolver, context, minecraft_server).await?,
+                ),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
                     VolumeMount {
@@ -188,7 +185,7 @@ impl GameServerBuilder {
             containers: vec![Container {
                 image: Some(MINECRAFT_SERVER_IMAGE.to_string()),
                 name: "minecraft-server".to_string(),
-                env: Some(Self::get_env(cluster, &minecraft_server.spec)),
+                env: Some(Self::get_env(context, &minecraft_server.spec)),
                 image_pull_policy: Some("IfNotPresent".to_string()),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
@@ -301,6 +298,7 @@ impl GameServerBuilder {
 
     async fn get_init_env(
         resourceref_resolver: &ResourceRefResolver,
+        context: &GameServerBuilderContext<'a>,
         minecraft_server: &MinecraftServer,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let spec = &minecraft_server.spec;
@@ -327,13 +325,13 @@ impl GameServerBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_SERVER_AGENT_VERSION".to_string(),
-                value: Some(MINECRAFT_SERVER_SHULKER_PROXY_AGENT_VERSION.to_string()),
+                name: "SHULKER_MAVEN_REPOSITORY".to_string(),
+                value: Some(context.agent_config.maven_repository.clone()),
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_MAVEN_REPOSITORY".to_string(),
-                value: Some(MINECRAFT_SERVER_SHULKER_MAVEN_REPOSITORY.to_string()),
+                name: "SHULKER_SERVER_AGENT_VERSION".to_string(),
+                value: Some(context.agent_config.version.clone()),
                 ..EnvVar::default()
             },
         ];
@@ -384,7 +382,7 @@ impl GameServerBuilder {
         Ok(env)
     }
 
-    fn get_env(cluster: &MinecraftCluster, spec: &MinecraftServerSpec) -> Vec<EnvVar> {
+    fn get_env(context: &GameServerBuilderContext, spec: &MinecraftServerSpec) -> Vec<EnvVar> {
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_SERVER_NAME".to_string(),
@@ -411,7 +409,8 @@ impl GameServerBuilder {
             EnvVar {
                 name: "SHULKER_NETWORK_ADMINS".to_string(),
                 value: Some(
-                    cluster
+                    context
+                        .cluster
                         .spec
                         .network_admins
                         .as_ref()
@@ -511,6 +510,8 @@ mod tests {
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
+        agent::AgentConfig,
+        constants,
         reconcilers::{
             minecraft_cluster::fixtures::TEST_CLUSTER,
             minecraft_server::fixtures::{create_client_mock, TEST_SERVER},
@@ -535,6 +536,10 @@ mod tests {
         let name = super::GameServerBuilder::name(&TEST_SERVER);
         let context = super::GameServerBuilderContext {
             cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
         };
 
         // W
@@ -552,11 +557,19 @@ mod tests {
         // G
         let client = create_client_mock();
         let resourceref_resolver = ResourceRefResolver::new(client);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &TEST_SERVER)
-            .await
-            .unwrap();
+        let env =
+            super::GameServerBuilder::get_init_env(&resourceref_resolver, &context, &TEST_SERVER)
+                .await
+                .unwrap();
 
         // T
         let world_env = env
@@ -578,11 +591,19 @@ mod tests {
         // G
         let client = create_client_mock();
         let resourceref_resolver = ResourceRefResolver::new(client);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &TEST_SERVER)
-            .await
-            .unwrap();
+        let env =
+            super::GameServerBuilder::get_init_env(&resourceref_resolver, &context, &TEST_SERVER)
+                .await
+                .unwrap();
 
         // T
         let plugins_env = env
@@ -604,11 +625,19 @@ mod tests {
         // G
         let client = create_client_mock();
         let resourceref_resolver = ResourceRefResolver::new(client);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &TEST_SERVER)
-            .await
-            .unwrap();
+        let env =
+            super::GameServerBuilder::get_init_env(&resourceref_resolver, &context, &TEST_SERVER)
+                .await
+                .unwrap();
 
         // T
         let patches_env = env
@@ -629,9 +658,16 @@ mod tests {
     fn get_env_merges_env_overrides() {
         // G
         let spec = TEST_SERVER.spec.clone();
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
 
         // W
-        let env = super::GameServerBuilder::get_env(&TEST_CLUSTER, &spec);
+        let env = super::GameServerBuilder::get_env(&context, &spec);
 
         // T
         spec.pod_overrides
