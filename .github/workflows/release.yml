@@ -1,20 +1,23 @@
 name: release
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+      - stable
 
 jobs:
   release-next:
     runs-on: ubuntu-latest
 
-    if: github.event_name == 'push'
+    if: github.ref_name == 'main'
 
     permissions:
       contents: read
       packages: write
+
+    env:
+      IS_RELEASE: "false"
 
     steps:
       - name: Checkout
@@ -48,11 +51,14 @@ jobs:
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v4
 
-      # TODO: Add Gradle snapshot publishing
-      - name: Release on next channel
-        run: npx nx affected --target=docker --parallel=1
+      - name: Publish Docker images
+        run: npx nx affected --target=docker --parallel 1 --output-style stream
         env:
           DOCKER_BUILD_PLATFORMS: linux/amd64,linux/arm64/v8
+
+      - name: Publish Gradle snapshots
+        run: ./gradlew publish
+        env:
           ORG_GRADLE_PROJECT_signing.gnupg.keyName: "${{ steps.gpg-signing-key.outputs.keyid }}"
           ORG_GRADLE_PROJECT_signing.gnupg.passphrase: "${{ secrets.GPG_PASSPHRASE }}"
           ARTIFACTORY_USERNAME: "${{ secrets.ARTIFACTORY_USERNAME }}"
@@ -61,7 +67,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    if: github.event_name == 'workflow_dispatch'
+    if: github.ref_name == 'stable'
 
     permissions:
       contents: write
@@ -69,6 +75,9 @@ jobs:
       pull-requests: write
       packages: write
       discussions: write
+
+    env:
+      IS_RELEASE: "true"
 
     steps:
       - name: Checkout
