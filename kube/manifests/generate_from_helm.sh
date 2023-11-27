@@ -35,10 +35,11 @@ generate next-with-prometheus \
   --set operator.metrics.enabled=true \
   --set operator.metrics.servicemonitor.enabled=true \
   --set shulker-addon-matchmaking.enabled=true \
-  --set shulker-addon-matchmaking.image.tag=next \
+  --set shulker-addon-matchmaking.director.image.tag=next \
   --set shulker-addon-matchmaking.director.metrics.enabled=true \
   --set shulker-addon-matchmaking.director.metrics.servicemonitor.enabled=true \
+  --set shulker-addon-matchmaking.mmf.image.tag=next \
   --set shulker-addon-matchmaking.mmf.metrics.enabled=true \
   --set shulker-addon-matchmaking.mmf.metrics.servicemonitor.enabled=true
 
-(cd .. && npx prettier --write 'kube/manifests/*.yaml')
+(cd ../.. && npx prettier --write 'kube/manifests/*.yaml')

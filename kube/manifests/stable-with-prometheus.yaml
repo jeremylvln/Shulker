@@ -3494,8 +3494,8 @@ spec:
           args:
             - --metrics-bind-address=0.0.0.0:8080
             - --api-bind-address=0.0.0.0:9090
-            - --agones-allocation-tls-client-crt=/mnt/shulker/agones-allocation-client-tls/tls.crt
-            - --agones-allocation-tls-client-key=/mnt/shulker/agones-allocation-client-tls/tls.key
+            - --agones-allocator-tls-client-crt=/mnt/shulker/agones-allocator-client-tls/tls.crt
+            - --agones-allocator-tls-client-key=/mnt/shulker/agones-allocator-client-tls/tls.key
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -3536,9 +3536,9 @@ spec:
               cpu: 100m
               memory: 128Mi
           volumeMounts:
-            - name: agones-allocation-client-tls
+            - name: agones-allocator-client-tls
               readOnly: true
-              mountPath: "/mnt/shulker/agones-allocation-client-tls"
+              mountPath: "/mnt/shulker/agones-allocator-client-tls"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -3562,7 +3562,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       volumes:
-        - name: agones-allocation-client-tls
+        - name: agones-allocator-client-tls
           secret:
             secretName: allocator-client.default
 ---

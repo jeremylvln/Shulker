@@ -1,5 +1,6 @@
 use thiserror::Error;
 
+mod agent;
 mod cluster_ref;
 pub mod minecraft_cluster;
 pub mod minecraft_server;

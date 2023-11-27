@@ -12,14 +12,8 @@ else
   cp "${SHULKER_CONFIG_DIR}/bungeecord-config.yml" "${PROXY_DATA_DIR}/config.yml"
 fi
 
-mkdir -p "${PROXY_DATA_DIR}/plugins"
-if [ "${TYPE}" == "VELOCITY" ]; then
-  (cd "${PROXY_DATA_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-velocity.jar")
-else
-  (cd "${PROXY_DATA_DIR}/plugins" && wget "${SHULKER_MAVEN_REPOSITORY}/io/shulkermc/shulker-proxy-agent/${SHULKER_PROXY_AGENT_VERSION}/shulker-proxy-agent-${SHULKER_PROXY_AGENT_VERSION}-bungeecord.jar")
-fi
-
 if [ ! -z "${PROXY_PLUGIN_URLS+x}" ]; then
+  mkdir -p "${PROXY_DATA_DIR}/plugins"
   for plugin_url in ${PROXY_PLUGIN_URLS//;/ }; do
     (cd "${PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
   done

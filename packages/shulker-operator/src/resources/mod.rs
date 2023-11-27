@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 pub mod http_credentials;
+pub mod maven;
 pub mod resourceref;
 pub mod resourceref_resolver;
 
@@ -14,6 +15,9 @@ pub enum ResourceRefError {
 
     #[error("invalid generated URL for a resource: {0}")]
     InvalidUrlSpec(#[source] url::ParseError),
+
+    #[error("failed to resolve Maven metadata: {0}")]
+    FailedToResolveMavenMetadata(#[source] maven::resolver::ResolverError),
 
     #[error("invalid resource ref")]
     InvalidSpec,

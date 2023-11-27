@@ -3,4 +3,4 @@ Shulker Operator {{ .Chart.AppVersion }} has been deployed successfully!
 You are now able to create your first MinecraftCluster. See the Getting Started
 guide in the documentation: 
 
-https://shulker.jeremylvln.fr/guide/getting-started/your-first-cluster.html
+https://shulker.jeremylvln.fr/latest/guide/getting-started/your-first-cluster.html

@@ -1,6 +1,17 @@
 use super::{http_credentials::HttpCredentials, ResourceRefError, Result};
 
 #[derive(Clone, Debug, PartialEq)]
+pub struct MavenArtifact {
+    repository_url: String,
+    group_id: String,
+    artifact_id: String,
+    version: String,
+    snapshot_version: Option<String>,
+    classifier: Option<String>,
+    credentials: Option<HttpCredentials>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
 pub enum ResourceRef {
     Url(String),
     MavenArtifact {
@@ -8,6 +19,7 @@ pub enum ResourceRef {
         group_id: String,
         artifact_id: String,
         version: String,
+        snapshot_version: Option<String>,
         classifier: Option<String>,
         credentials: Option<HttpCredentials>,
     },
@@ -24,13 +36,17 @@ impl ResourceRef {
                 group_id,
                 artifact_id,
                 version,
+                snapshot_version,
                 classifier,
                 credentials,
             } => {
                 let group_path = group_id.replace('.', "/");
+                let file_version = snapshot_version.as_ref().unwrap_or(version);
                 let file_name = match classifier {
-                    None => format!("{}-{}.jar", artifact_id, version),
-                    Some(classifier) => format!("{}-{}-{}.jar", artifact_id, version, classifier),
+                    None => format!("{}-{}.jar", artifact_id, file_version),
+                    Some(classifier) => {
+                        format!("{}-{}-{}.jar", artifact_id, file_version, classifier)
+                    }
                 };
 
                 let mut url = url::Url::parse(&format!(
@@ -67,13 +83,14 @@ mod tests {
     }
 
     #[test]
-    fn serialize_mavenartifact_without_classifier_credentials() {
+    fn serialize_mavenartifact_with_snapshot_version() {
         // G
         let resourceref = super::ResourceRef::MavenArtifact {
             repository_url: "https://example.com".to_string(),
             group_id: "io.shulkermc".to_string(),
             artifact_id: "test".to_string(),
             version: "1.0.0".to_string(),
+            snapshot_version: Some("0.3.0-20231127.101010-1".to_string()),
             classifier: None,
             credentials: None,
         };
@@ -84,18 +101,19 @@ mod tests {
         // T
         assert_eq!(
             url.to_string(),
-            "https://example.com/io/shulkermc/test/1.0.0/test-1.0.0.jar"
+            "https://example.com/io/shulkermc/test/1.0.0/test-0.3.0-20231127.101010-1.jar"
         );
     }
 
     #[test]
-    fn serialize_mavenartifact_with_classifier_without_credentials() {
+    fn serialize_mavenartifact_with_classifier() {
         // G
         let resourceref = super::ResourceRef::MavenArtifact {
             repository_url: "https://example.com".to_string(),
             group_id: "io.shulkermc".to_string(),
             artifact_id: "test".to_string(),
             version: "1.0.0".to_string(),
+            snapshot_version: None,
             classifier: Some("api".to_string()),
             credentials: None,
         };
@@ -111,13 +129,14 @@ mod tests {
     }
 
     #[test]
-    fn serialize_mavenartifact_with_classifier_credentials() {
+    fn serialize_mavenartifact_with_credentials() {
         // G
         let resourceref = super::ResourceRef::MavenArtifact {
             repository_url: "https://example.com".to_string(),
             group_id: "io.shulkermc".to_string(),
             artifact_id: "test".to_string(),
             version: "1.0.0".to_string(),
+            snapshot_version: None,
             classifier: Some("api".to_string()),
             credentials: Some(HttpCredentials {
                 username: "user".to_string(),

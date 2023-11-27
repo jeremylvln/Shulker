@@ -129,14 +129,10 @@ spec:
                   value: /data
                 - name: TYPE
                   value: PAPER
-                - name: SHULKER_MAVEN_REPOSITORY
-                  value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots"
-                - name: SHULKER_SERVER_AGENT_VERSION
-                  value: 0.0.0-test-cfg
                 - name: SERVER_WORLD_URL
                   value: "https://example.com/my_world.tar.gz"
                 - name: SERVER_PLUGIN_URLS
-                  value: "https://example.com/my_plugin.jar"
+                  value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar"
                 - name: SERVER_PATCH_URLS
                   value: "https://example.com/my_patch.tar.gz"
               image: "alpine:latest"

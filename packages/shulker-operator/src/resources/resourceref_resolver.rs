@@ -4,7 +4,8 @@ use url::Url;
 use shulker_crds::resourceref::ResourceRefSpec;
 
 use super::{
-    http_credentials::HttpCredentials, resourceref::ResourceRef, ResourceRefError, Result,
+    http_credentials::HttpCredentials, maven::resolver::MavenResolver, resourceref::ResourceRef,
+    ResourceRefError, Result,
 };
 
 pub struct ResourceRefResolver {
@@ -53,11 +54,31 @@ impl ResourceRefResolver {
                     }
                 };
 
+                let snapshot_version = if maven_ref.version.ends_with("-SNAPSHOT") {
+                    MavenResolver::new(maven_ref.repository_url.clone(), credentials.clone())
+                        .try_resolve_version_metadata(
+                            &maven_ref.group_id,
+                            &maven_ref.artifact_id,
+                            &maven_ref.version,
+                        )
+                        .await
+                        .map_err(ResourceRefError::FailedToResolveMavenMetadata)?
+                        .and_then(|metadata| {
+                            metadata.find_latest_snapshot_version_for_classifier(
+                                "jar",
+                                maven_ref.classifier.as_deref(),
+                            )
+                        })
+                } else {
+                    None
+                };
+
                 return Ok(ResourceRef::MavenArtifact {
                     repository_url: maven_ref.repository_url.clone(),
                     group_id: maven_ref.group_id.clone(),
                     artifact_id: maven_ref.artifact_id.clone(),
                     version: maven_ref.version.clone(),
+                    snapshot_version,
                     classifier: maven_ref.classifier.clone(),
                     credentials,
                 });
@@ -219,6 +240,7 @@ mod tests {
                 group_id,
                 artifact_id,
                 version,
+                snapshot_version: None,
                 classifier: Some(classifier),
                 credentials: None,
             }
@@ -285,6 +307,7 @@ mod tests {
                 group_id,
                 artifact_id,
                 version,
+                snapshot_version: None,
                 classifier: Some(classifier),
                 credentials: Some(super::HttpCredentials {
                     username: "user".to_string(),

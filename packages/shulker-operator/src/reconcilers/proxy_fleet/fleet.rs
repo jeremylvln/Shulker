@@ -28,8 +28,11 @@ use kube::ResourceExt;
 use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
+use url::Url;
 
 use crate::agent::AgentConfig;
+use crate::reconcilers::agent::get_agent_plugin_url;
+use crate::reconcilers::agent::AgentSide;
 use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
@@ -354,6 +357,9 @@ impl<'a> FleetBuilder {
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let spec = &proxy_fleet.spec.template.spec;
 
+        let plugin_urls =
+            FleetBuilder::get_plugin_urls(&self.resourceref_resolver, context, proxy_fleet).await?;
+
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_CONFIG_DIR".to_string(),
@@ -370,26 +376,10 @@ impl<'a> FleetBuilder {
                 value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
                 ..EnvVar::default()
             },
-            EnvVar {
-                name: "SHULKER_MAVEN_REPOSITORY".to_string(),
-                value: Some(context.agent_config.maven_repository.clone()),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_PROXY_AGENT_VERSION".to_string(),
-                value: Some(context.agent_config.version.clone()),
-                ..EnvVar::default()
-            },
         ];
 
-        if let Some(plugins) = &spec.config.plugins {
-            let urls: Vec<String> = self
-                .resourceref_resolver
-                .resolve_all(proxy_fleet.namespace().as_ref().unwrap(), plugins)
-                .await?
-                .into_iter()
-                .map(|url| url.to_string())
-                .collect();
+        if !plugin_urls.is_empty() {
+            let urls: Vec<String> = plugin_urls.into_iter().map(|url| url.to_string()).collect();
 
             env.push(EnvVar {
                 name: "PROXY_PLUGIN_URLS".to_string(),
@@ -529,6 +519,43 @@ impl<'a> FleetBuilder {
         }
 
         Ok(env)
+    }
+
+    async fn get_plugin_urls(
+        resourceref_resolver: &ResourceRefResolver,
+        context: &FleetBuilderContext<'a>,
+        proxy_fleet: &ProxyFleet,
+    ) -> Result<Vec<Url>, anyhow::Error> {
+        let agent_platform = match proxy_fleet.spec.template.spec.version.channel {
+            ProxyFleetTemplateVersion::Velocity => Some("velocity".to_string()),
+            ProxyFleetTemplateVersion::BungeeCord | ProxyFleetTemplateVersion::Waterfall => {
+                Some("bungeecord".to_string())
+            }
+        };
+
+        let mut plugin_refs: Vec<Url> = vec![];
+
+        if let Some(agent_platform) = agent_platform {
+            plugin_refs.push(
+                get_agent_plugin_url(
+                    resourceref_resolver,
+                    context.agent_config,
+                    AgentSide::Proxy,
+                    agent_platform,
+                )
+                .await?,
+            )
+        }
+
+        if let Some(plugins) = &proxy_fleet.spec.template.spec.config.plugins {
+            plugin_refs.extend(
+                resourceref_resolver
+                    .resolve_all(proxy_fleet.namespace().as_ref().unwrap(), plugins)
+                    .await?,
+            );
+        }
+
+        Ok(plugin_refs)
     }
 
     fn get_type_from_version_channel(channel: &ProxyFleetTemplateVersion) -> String {
@@ -719,7 +746,7 @@ mod tests {
             plugins_env,
             &EnvVar {
                 name: "PROXY_PLUGIN_URLS".to_string(),
-                value: Some("https://example.com/my_plugin.jar".to_string()),
+                value: Some("https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar".to_string()),
                 ..EnvVar::default()
             }
         );

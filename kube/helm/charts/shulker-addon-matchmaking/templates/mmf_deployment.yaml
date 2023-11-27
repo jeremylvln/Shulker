@@ -29,6 +29,9 @@ spec:
           command: ['/shulker-addon-matchmaking-mmf']
           args:
             - --metrics-bind-address=0.0.0.0:8080
+            {{- with .Values.mmf.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
             - containerPort: 8080
               protocol: TCP

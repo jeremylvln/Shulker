@@ -20,8 +20,11 @@ use kube::ResourceExt;
 use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
+use url::Url;
 
 use crate::agent::AgentConfig;
+use crate::reconcilers::agent::get_agent_plugin_url;
+use crate::reconcilers::agent::AgentSide;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
@@ -303,6 +306,10 @@ impl<'a> GameServerBuilder {
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let spec = &minecraft_server.spec;
 
+        let plugin_urls =
+            GameServerBuilder::get_plugin_urls(resourceref_resolver, context, minecraft_server)
+                .await?;
+
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_CONFIG_DIR".to_string(),
@@ -324,16 +331,6 @@ impl<'a> GameServerBuilder {
                 value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
                 ..EnvVar::default()
             },
-            EnvVar {
-                name: "SHULKER_MAVEN_REPOSITORY".to_string(),
-                value: Some(context.agent_config.maven_repository.clone()),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_SERVER_AGENT_VERSION".to_string(),
-                value: Some(context.agent_config.version.clone()),
-                ..EnvVar::default()
-            },
         ];
 
         if let Some(world) = &spec.config.world {
@@ -349,13 +346,8 @@ impl<'a> GameServerBuilder {
             })
         }
 
-        if let Some(plugins) = &spec.config.plugins {
-            let urls: Vec<String> = resourceref_resolver
-                .resolve_all(minecraft_server.namespace().as_ref().unwrap(), plugins)
-                .await?
-                .into_iter()
-                .map(|url| url.to_string())
-                .collect();
+        if !plugin_urls.is_empty() {
+            let urls: Vec<String> = plugin_urls.into_iter().map(|url| url.to_string()).collect();
 
             env.push(EnvVar {
                 name: "SERVER_PLUGIN_URLS".to_string(),
@@ -492,6 +484,42 @@ impl<'a> GameServerBuilder {
         env
     }
 
+    async fn get_plugin_urls(
+        resourceref_resolver: &ResourceRefResolver,
+        context: &GameServerBuilderContext<'a>,
+        minecraft_server: &MinecraftServer,
+    ) -> Result<Vec<Url>, anyhow::Error> {
+        let agent_platform = match minecraft_server.spec.version.channel {
+            MinecraftServerVersion::Paper | MinecraftServerVersion::Folia => {
+                Some("paper".to_string())
+            }
+        };
+
+        let mut plugin_refs: Vec<Url> = vec![];
+
+        if let Some(agent_platform) = agent_platform {
+            plugin_refs.push(
+                get_agent_plugin_url(
+                    resourceref_resolver,
+                    context.agent_config,
+                    AgentSide::Server,
+                    agent_platform,
+                )
+                .await?,
+            )
+        }
+
+        if let Some(plugins) = &minecraft_server.spec.config.plugins {
+            plugin_refs.extend(
+                resourceref_resolver
+                    .resolve_all(minecraft_server.namespace().as_ref().unwrap(), plugins)
+                    .await?,
+            );
+        }
+
+        Ok(plugin_refs)
+    }
+
     fn get_type_from_version_channel(channel: &MinecraftServerVersion) -> String {
         match channel {
             MinecraftServerVersion::Paper => "PAPER".to_string(),
@@ -614,7 +642,7 @@ mod tests {
             plugins_env,
             &EnvVar {
                 name: "SERVER_PLUGIN_URLS".to_string(),
-                value: Some("https://example.com/my_plugin.jar".to_string()),
+                value: Some("https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar".to_string()),
                 ..EnvVar::default()
             }
         );

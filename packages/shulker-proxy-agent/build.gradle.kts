@@ -8,8 +8,8 @@ dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
 
     // Kubernetes
-    commonCompileOnly(libs.kubernetes.client)
-    commonRuntimeOnly(libs.kubernetes.client.api)
+    commonCompileOnly(libs.kubernetes.client.api)
+    commonRuntimeOnly(libs.kubernetes.client)
     commonImplementation(libs.kubernetes.client.http)
 
     // Agones

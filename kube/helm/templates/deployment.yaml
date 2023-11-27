@@ -30,8 +30,11 @@ spec:
             - --metrics-bind-address=0.0.0.0:8080
             - --api-bind-address=0.0.0.0:9090
             {{- if .Values.operator.agones.allocator.mtlsSecretName }}
-            - --agones-allocation-tls-client-crt=/mnt/shulker/agones-allocation-client-tls/tls.crt
-            - --agones-allocation-tls-client-key=/mnt/shulker/agones-allocation-client-tls/tls.key
+            - --agones-allocator-tls-client-crt=/mnt/shulker/agones-allocator-client-tls/tls.crt
+            - --agones-allocator-tls-client-key=/mnt/shulker/agones-allocator-client-tls/tls.key
+            {{- end }}
+            {{- with .Values.operator.extraArgs }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           ports:
             - containerPort: 8080
@@ -86,9 +89,9 @@ spec:
 
           {{- if .Values.operator.agones.allocator.mtlsSecretName }}
           volumeMounts:
-            - name: agones-allocation-client-tls
+            - name: agones-allocator-client-tls
               readOnly: true
-              mountPath: "/mnt/shulker/agones-allocation-client-tls"
+              mountPath: "/mnt/shulker/agones-allocator-client-tls"
             {{- with .Values.operator.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -126,7 +129,7 @@ spec:
 
       {{- if .Values.operator.agones.allocator.mtlsSecretName }}
       volumes:
-        - name: agones-allocation-client-tls
+        - name: agones-allocator-client-tls
           secret:
             secretName: allocator-client.default
         {{- with .Values.operator.volumes }}
