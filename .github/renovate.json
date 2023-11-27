@@ -16,6 +16,11 @@
     {
       "matchManagers": ["cargo"],
       "rangeStrategy": "auto"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchSourceUrlPrefixes": ["https://github.com/nrwl/"],
+      "enabled": false
     }
   ]
 }
