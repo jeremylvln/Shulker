@@ -3,6 +3,7 @@ name = "shulker-addon-matchmaking"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 publish.workspace = true
 
 [[bin]]
