@@ -16,7 +16,7 @@ folder of the repository.
 To install Shulker using Helm:
 
 ```bash
-$ git clone https://github.com/jeremylvln/Shulker
+$ git clone --single-branch --branch stable https://github.com/jeremylvln/Shulker
 $ cd Shulker/kube/helm
 $ helm install -n shulker-system .
 ```

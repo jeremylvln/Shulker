@@ -3,7 +3,7 @@
 <center>
    <img
       alt="Architecture Diagram"
-      src="/basics/basics.excalidraw.png"
+      src="../assets/basics/basics.excalidraw.png"
    >
 </center>
 

@@ -24,7 +24,13 @@ entity because it is referenced in many other resources.
 
 Create a `cluster.yaml` file containing the following:
 
-<<< ../../../../examples/getting-started/cluster.yaml
+```yaml
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftCluster
+metadata:
+  name: getting-started
+spec: {}
+```
 
 And then apply this file:
 
@@ -53,7 +59,25 @@ separate entrypoint for privileged players (like a staff, etc...).
 
 Create a `proxy.yaml` file containing the following:
 
-<<< ../../../../examples/getting-started/proxy.yaml
+```yaml
+apiVersion: shulkermc.io/v1alpha1
+kind: ProxyFleet
+metadata:
+  name: public
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+  template:
+    spec:
+      version:
+        channel: Velocity
+        name: latest
+      config: {}
+```
 
 And then apply this file:
 
@@ -105,7 +129,7 @@ server list, you should see an output similar to the following:
 <center>
   <img
     alt="Server List Screenshot"
-    src="/getting-started/motd.png"
+    src="../..assets/getting-started/motd.png"
   />
 </center>
 
@@ -115,7 +139,7 @@ error:
 <center>
   <img
     alt="No Limbo Screenshot"
-    src="/getting-started/no-limbo.png"
+    src="../../assets/getting-started/no-limbo.png"
   />
 </center>
 
@@ -131,7 +155,26 @@ Kubernetes Service is created because the only entrypoints are the Proxies.
 
 Create a `minecraftserver.yaml` file containing the following:
 
-<<< ../../../../examples/getting-started/minecraftserver.yaml
+```yaml
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: lobby
+spec:
+  clusterRef:
+    name: getting-started
+  replicas: 1
+  template:
+    spec:
+      clusterRef:
+        name: getting-started
+      tags:
+        - lobby
+      version:
+        channel: Paper
+        name: '1.20.2'
+      config: {}
+```
 
 And then apply this file:
 
@@ -154,7 +197,7 @@ arrive on the server you just created:
 <center>
   <img
     alt="Server Screenshot"
-    src="/getting-started/server.png"
+    src="../../assets/getting-started/server.png"
   />
 </center>
 

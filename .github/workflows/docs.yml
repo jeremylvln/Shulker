@@ -3,12 +3,12 @@ name: docs
 on:
   push:
     branches:
-      - main
+      - stable
     paths:
       - docs/**
 
 concurrency:
-  group: docs
+  group: docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

@@ -33,15 +33,6 @@ All Shulker components should be installed in the same namespace,
 
 ## Mandatory softwares
 
-### Cert-Manager
-
-Cert-Manager will be used to generate self-signed certificates for internal
-use (mostly to secure internal communication between Shulker components and
-Kubernetes's control plane).
-
-- Website: https://cert-manager.io/
-- Installation guide: https://cert-manager.io/docs/installation/
-
 ### Agones
 
 Shulker delegates the management of game servers (proxies and servers) to
