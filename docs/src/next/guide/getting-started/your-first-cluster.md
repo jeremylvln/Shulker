@@ -19,7 +19,7 @@ the namespace.
 ## A _spoon_ of MinecraftCluster
 
 Everything starts by creating a `MincraftCluster`. As described in
-the **[Architecture](/guide/architecture)** chapter, it is the most important
+the **[Architecture](../architecture)** chapter, it is the most important
 entity because it is referenced in many other resources.
 
 Create a `cluster.yaml` file containing the following:
@@ -129,7 +129,7 @@ server list, you should see an output similar to the following:
 <center>
   <img
     alt="Server List Screenshot"
-    src="../..assets/getting-started/motd.png"
+    src="../../assets/getting-started/motd.png"
   />
 </center>
 
