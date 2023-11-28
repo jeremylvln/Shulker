@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 ---
@@ -3274,7 +3274,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -3339,7 +3339,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -3361,7 +3361,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -3387,7 +3387,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -3409,7 +3409,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
 spec:
@@ -3423,7 +3423,7 @@ spec:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 ---
@@ -3436,7 +3436,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -3450,7 +3450,7 @@ spec:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 ---
@@ -3463,7 +3463,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -3473,7 +3473,7 @@ spec:
       helm.sh/chart: shulker-operator-0.1.0
       app.kubernetes.io/name: shulker-operator
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.3.0"
+      app.kubernetes.io/version: "0.4.0"
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-operator
   template:
@@ -3482,14 +3482,14 @@ spec:
         helm.sh/chart: shulker-operator-0.1.0
         app.kubernetes.io/name: shulker-operator
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.3.0"
+        app.kubernetes.io/version: "0.4.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-operator
     spec:
       serviceAccountName: shulker-operator
       containers:
         - name: shulker-operator
-          image: "ghcr.io/jeremylvln/shulker-operator:0.3.0"
+          image: "ghcr.io/jeremylvln/shulker-operator:0.4.0"
           imagePullPolicy: Always
           args:
             - --metrics-bind-address=0.0.0.0:8080
@@ -3575,7 +3575,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/version: "0.4.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
     prometheus: default
@@ -3586,7 +3586,7 @@ spec:
       helm.sh/chart: shulker-operator-0.1.0
       app.kubernetes.io/name: shulker-operator
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.3.0"
+      app.kubernetes.io/version: "0.4.0"
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-operator-metrics
   endpoints:

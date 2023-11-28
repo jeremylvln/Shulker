@@ -104,20 +104,7 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        publishCmd:
-          'npx nx run-many --target=docker --all --parallel 1 --output-style stream -- ${nextRelease.version}',
-      },
-    ],
-    [
-      '@semantic-release/exec',
-      {
-        publishCmd: 'IS_RELEASE=true ./gradlew publish',
-      },
-    ],
-    [
-      '@semantic-release/exec',
-      {
-        publishCmd: 'cd kube/manifests && ./generate_from_helm.sh',
+        prepareCmd: 'cd kube/manifests && ./generate_from_helm.sh',
       },
     ],
     [
@@ -132,6 +119,19 @@ module.exports = {
           ),
           'kube/manifests/*.yaml',
         ],
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        publishCmd:
+          'npx nx run-many --target=docker --all --parallel 1 --output-style stream -- ${nextRelease.version}',
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        publishCmd: 'IS_RELEASE=true ./gradlew publish',
       },
     ],
     [
