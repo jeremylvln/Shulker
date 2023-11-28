@@ -22,6 +22,7 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val
 
     fun onServerInitialization() {
         try {
+            this.logger.fine("Creating Agones SDK from environment")
             this.agonesGateway = AgonesSDKImpl.createFromEnvironment()
             val gameServer = this.agonesGateway.getGameServer().get()
             this.logger.info(
@@ -48,7 +49,7 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val
 
             this.agonesGateway.setReady()
         } catch (e: Exception) {
-            this.logger.severe("Failed to parse configuration: ${e.message}")
+            this.logger.severe("Shulker Agent crashed, stopping server")
             e.printStackTrace()
             this.shutdown()
         }

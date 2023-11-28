@@ -45,7 +45,9 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
     fun onProxyInitialization() {
         try {
+            this.logger.fine("Creating Agones SDK from environment")
             this.agonesGateway = AgonesSDKImpl.createFromEnvironment()
+
             val gameServer = this.agonesGateway.getGameServer().get()
             this.logger.info(
                 "Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}"
@@ -53,6 +55,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
             ShulkerProxyAPI.INSTANCE = ShulkerProxyAPIImpl(this)
 
+            this.logger.fine("Creating Redis pool")
             this.jedisPool = this.createJedisPool()
             this.jedisPool.resource.use { jedis -> jedis.ping() }
 
@@ -84,7 +87,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.cache.registerProxy(Configuration.PROXY_NAME)
             this.agonesGateway.setAllocated()
         } catch (e: Exception) {
-            this.logger.severe("Failed to parse configuration")
+            this.logger.severe("Shulker Agent crashed, stopping proxy")
             e.printStackTrace()
             this.shutdown()
         }

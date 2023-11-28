@@ -9,7 +9,11 @@ object Configuration {
     val PROXY_TTL_SECONDS = getLongEnv("SHULKER_PROXY_TTL_SECONDS")
 
     val NETWORK_ADMINS: List<UUID> = getOptionalStringEnv("SHULKER_NETWORK_ADMINS")
-        .map { it.split(",").map(UUID::fromString) }
+        .map {
+            it.split(",")
+                .filter(String::isNotBlank)
+                .map(UUID::fromString)
+        }
         .orElse(emptyList())
 
     val REDIS_HOST = getStringEnv("SHULKER_PROXY_REDIS_HOST")
