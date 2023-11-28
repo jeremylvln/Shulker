@@ -7,15 +7,15 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :packages:google-agones-sdk-bindings-java:build -x check"
+        "command": "./gradlew :packages:google-agones-sdk:build -x check"
       },
       "inputs": ["default", "java:dependencies"],
-      "outputs": ["{workspaceRoot}/dist/java/google-agones-sdk-bindings-java"]
+      "outputs": ["{workspaceRoot}/dist/java/google-agones-sdk"]
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :packages:google-agones-sdk-bindings-java:test"
+        "command": "./gradlew :packages:google-agones-sdk:test"
       },
       "inputs": ["default", "java:dependencies"]
     }

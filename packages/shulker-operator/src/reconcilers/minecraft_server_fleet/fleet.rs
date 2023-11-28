@@ -65,7 +65,10 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
             "minecraft-server".to_string(),
             "minecraft-server".to_string(),
         );
-        let mut template_annotations = BTreeMap::<String, String>::new();
+        let mut template_annotations = BTreeMap::<String, String>::from([(
+            "minecraftserver.shulkermc.io/tags".to_string(),
+            minecraft_server_fleet.spec.template.spec.tags.join(","),
+        )]);
 
         if let Some(metadata) = &minecraft_server_fleet.spec.template.metadata {
             if let Some(additional_labels) = metadata.labels.clone() {

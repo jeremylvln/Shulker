@@ -2,16 +2,23 @@ use actix_web::{get, HttpRequest, HttpResponse, Responder};
 use actix_web::{middleware, App, HttpServer};
 use tracing::*;
 
-pub fn create_http_server(addr: String) -> Result<actix_web::dev::Server, anyhow::Error> {
-    Ok(HttpServer::new(move || {
-        App::new()
-            .wrap(middleware::Logger::default().exclude("/healthz"))
-            .service(healthz)
-            .service(metrics)
-    })
-    .bind(addr)?
-    .shutdown_timeout(5)
-    .run())
+pub fn create_http_server(addr: String) -> Result<tokio::task::JoinHandle<()>, anyhow::Error> {
+    let task = tokio::spawn(async move {
+        HttpServer::new(move || {
+            App::new()
+                .wrap(middleware::Logger::default().exclude("/healthz"))
+                .service(healthz)
+                .service(metrics)
+        })
+        .bind(addr)
+        .unwrap()
+        .shutdown_timeout(5)
+        .run()
+        .await
+        .unwrap()
+    });
+
+    Ok(task)
 }
 
 #[get("/healthz")]

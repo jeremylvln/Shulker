@@ -101,6 +101,10 @@ impl<'a> ResourceBuilder<'a> for GameServerBuilder {
                     "minecraft-server".to_string(),
                     "minecraft-server".to_string(),
                 )),
+                annotations: Some(BTreeMap::<String, String>::from([(
+                    "minecraftserver.shulkermc.io/tags".to_string(),
+                    minecraft_server.spec.tags.join(","),
+                )])),
                 ..ObjectMeta::default()
             },
             spec: Self::get_game_server_spec(
@@ -278,16 +282,10 @@ impl<'a> GameServerBuilder {
         ));
 
         let mut pod_annotations = minecraft_server.annotations().clone();
-        pod_annotations.append(&mut BTreeMap::<String, String>::from([
-            (
-                "kubectl.kubernetes.io/default-exec-container".to_string(),
-                "minecraft-server".to_string(),
-            ),
-            (
-                "minecraftserver.shulkermc.io/tags".to_string(),
-                minecraft_server.spec.tags.join(","),
-            ),
-        ]));
+        pod_annotations.append(&mut BTreeMap::<String, String>::from([(
+            "kubectl.kubernetes.io/default-exec-container".to_string(),
+            "minecraft-server".to_string(),
+        )]));
 
         Ok(PodTemplateSpec {
             metadata: Some(ObjectMeta {

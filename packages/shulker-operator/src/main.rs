@@ -76,9 +76,10 @@ async fn main() -> anyhow::Result<()> {
 
     telemetry::init().await;
 
+    let client = Client::try_default().await?;
     let cancellation_token = tokio_util::sync::CancellationToken::new();
 
-    let client = Client::try_default().await?;
+    let metrics_http_server = metrics::create_http_server(args.metrics_bind_address)?;
     let lease_holder = lease::try_acquire_and_hold(
         client.clone(),
         LEASE_NAME.to_string(),
@@ -118,12 +119,12 @@ async fn main() -> anyhow::Result<()> {
         _ = tokio::signal::ctrl_c() => {
             cancellation_token.cancel();
         },
+        _ = metrics_http_server => {},
         _ = lease_holder => {},
         _ = reconcilers::minecraft_cluster::run(client.clone()) => {},
         _ = reconcilers::proxy_fleet::run(client.clone(), agent_config.clone()) => {},
         _ = reconcilers::minecraft_server::run(client.clone(), agent_config.clone()) => {},
         _ = reconcilers::minecraft_server_fleet::run(client.clone(), agent_config.clone()) => {},
-        _ = metrics::create_http_server(args.metrics_bind_address)? => {},
         _ = api::create_grpc_server(args.api_bind_address, GrpcServerContext {
             client: client.clone(),
             agones_allocator_client,

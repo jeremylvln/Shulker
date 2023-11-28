@@ -23,6 +23,7 @@ spec:
   template:
     metadata:
       annotations:
+        minecraftserver.shulkermc.io/tags: lobby
         test-annotation/shulkermc.io: my-value
       labels:
         app.kubernetes.io/component: minecraft-server

@@ -64,9 +64,10 @@ async fn main() -> anyhow::Result<()> {
 
     telemetry::init().await;
 
+    let client = Client::try_default().await?;
     let cancellation_token = tokio_util::sync::CancellationToken::new();
 
-    let client = Client::try_default().await?;
+    let metrics_http_server = metrics::create_http_server(args.metrics_bind_address)?;
     let lease_holder = lease::try_acquire_and_hold(
         client.clone(),
         LEASE_NAME.to_string(),
@@ -108,10 +109,10 @@ async fn main() -> anyhow::Result<()> {
         _ = tokio::signal::ctrl_c() => {
             cancellation_token.cancel();
         },
+        _ = metrics_http_server => {},
         _ = lease_holder => {},
         _ = reconcilers::matchmaking_queue::run(client.clone(), queue_registry.clone()) => {},
         _ = director => {},
-        _ = metrics::create_http_server(args.metrics_bind_address)? => {},
     }
 
     Ok(())
