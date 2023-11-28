@@ -30,9 +30,9 @@ shulker-sdk = { path = "./packages/shulker-sdk/bindings/rust" }
 shulker-utils = { path = "./packages/shulker-utils" }
 
 # External
-actix-web = "4.4.0"
 anyhow = "1.0.75"
 async-trait = "0.1.74"
+axum = "0.7.1"
 base64 = "0.21.5"
 chrono = { version = "0.4.31", features = ["serde"] }
 clap = { version = "4.4.8", features = ["derive", "env"] }
@@ -51,7 +51,7 @@ pbjson-types = "0.6.0"
 prometheus = "0.13.3"
 prost = "0.12.3"
 rand = "0.8.5"
-reqwest = { version = "0.11.22", default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.11.22", default-features = false, features = ["rustls-tls-native-roots"] }
 schemars = { version = "0.8.16", features = ["chrono"] }
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"

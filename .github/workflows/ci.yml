@@ -92,9 +92,12 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Install Rust tools
-        run: cargo binstall -y clippy-sarif sarif-fmt
+        run: cargo binstall -y cargo-deny clippy-sarif sarif-fmt
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run cargo-deny
+        run: cargo deny check
 
       - name: Run clippy
         run: cargo clippy --all-features --message-format=json -- --deny warnings | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt

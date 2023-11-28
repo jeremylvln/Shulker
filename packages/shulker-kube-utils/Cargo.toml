@@ -14,9 +14,9 @@ path = "src/lib.rs"
 default = []
 
 [dependencies]
-actix-web.workspace = true
 anyhow.workspace = true
 async-trait.workspace = true
+axum.workspace = true
 chrono.workspace = true
 hostname.workspace = true
 k8s-openapi.workspace = true
