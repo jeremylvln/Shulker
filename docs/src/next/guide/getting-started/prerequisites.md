@@ -5,9 +5,10 @@
 Shulker should be able to be installed on any Kubernetes cluster meeting
 the following criterias:
 
-- The minimum Kubernetes version supported is **TODO**
-- At least one Linux node is needed for the Shulker operators to work
-  (no special architecture is required)
+- The minimum known working Kubernetes version is **1.27**, but it way
+  work on older versions as well
+- At least one **Linux node** is needed for the Shulker operators to work
+  (amd64 or arm64 architectures are supported)
 
 :::info
 
@@ -40,6 +41,18 @@ Agones.
 
 - Website: https://agones.dev/site/
 - Installation guide: https://agones.dev/site/docs/installation/
+
+Shulker requires that you to configure Agones to work properly:
+
+- Add your Shulker deployment's namespace (`shulker-system` by default) to
+  Agones's list of `GameServer` namespaces. This will make Agones create
+  the secret containing the gRPC credentials Shulker will use to interact
+  with its API. Add the namespace to the `gameservers.namespaces` Helm value
+- Enable Agones Allocator component. It is used to summon manually a new
+  `GameServer` when needed (mostly used in Shulker addons). Set the
+  `agones.allocator.install=true` Helm value. Optionally make its `Service`
+  be of type `ClusterIP` so it will be only used internally by setting the
+  `agones.allocator.service.serviceType=ClusterIP` value
 
 :::warning
 

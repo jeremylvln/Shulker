@@ -18,6 +18,13 @@
         "command": "vitepress dev src",
         "cwd": "docs"
       }
+    },
+    "promote-latest": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash ./copy_next_to_latest.sh",
+        "cwd": "docs/scripts"
+      }
     }
   },
   "tags": ["lang:js"]

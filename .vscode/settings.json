@@ -11,5 +11,6 @@
     "https://json.schemastore.org/github-workflow.json": ".github/workflows/deploy.yml",
     "https://json.schemastore.org/github-issue-config.json": ".github/ISSUE_TEMPLATE/config.yml"
   },
-  "rust-analyzer.cargo.features": "all"
+  "rust-analyzer.cargo.features": "all",
+  "githubPullRequests.ignoredPullRequestBranches": ["main"]
 }
