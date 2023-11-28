@@ -1,3 +1,57 @@
+## [0.4.0](https://github.com/jeremylvln/Shulker/compare/v0.3.0...v0.4.0) (2023-11-28)
+
+
+### :sparkles: Features :sparkles:
+
+* **deploy:** add agones allocator env ([929c652](https://github.com/jeremylvln/Shulker/commit/929c652f6299e719f6068ce7a9fb5ee6259ffa92))
+* **google-agones-sdk:** generate Rust SDK and update proto ([5d02808](https://github.com/jeremylvln/Shulker/commit/5d028089d4292f677c781f300b6240fd718bcd23))
+* **google-open-match-sdk:** create auto-generated java sdk ([5235405](https://github.com/jeremylvln/Shulker/commit/523540595ecf2b29968106fd742e5e139a507fe6))
+* **google-open-match-sdk:** create auto-generated sdk ([68f443d](https://github.com/jeremylvln/Shulker/commit/68f443d7d47a7157739b88a2f8d7a7a492ea6a73))
+* **google-open-match-sdk:** regenerate java sdk ([e700916](https://github.com/jeremylvln/Shulker/commit/e700916e463ad136cf3bd67ab65ff62a44a4834c))
+* remove usage of macro_use ([#197](https://github.com/jeremylvln/Shulker/issues/197)) ([74d4067](https://github.com/jeremylvln/Shulker/commit/74d4067016008735d83e0cd7bdfbb1cb636e5f98))
+* **shulker-addon-matchmaking:** create director and mmf ([#210](https://github.com/jeremylvln/Shulker/issues/210)) ([72cd61f](https://github.com/jeremylvln/Shulker/commit/72cd61f21b92e8539c0ed3daf656da6d3871d0e3))
+* **shulker-crds:** add network admins list to cluster ([86d7135](https://github.com/jeremylvln/Shulker/commit/86d7135c4fc83f3b094302583c224f816c8e5093))
+* **shulker-operator:** add a Maven snapshot resolver ([2b82d07](https://github.com/jeremylvln/Shulker/commit/2b82d072cea299198138bd2fabe10764874cc8d6))
+* **shulker-operator:** add support for folia ([5244336](https://github.com/jeremylvln/Shulker/commit/5244336c71f89962133945ed7329c83a83df277a))
+* **shulker-operator:** decouple version of agent from the operator ([a231cfe](https://github.com/jeremylvln/Shulker/commit/a231cfee73742bcae9eea3475d11fcd77aec5c25))
+* **shulker-operator:** inject SHULKER_NETWORK_ADMINS env to proxies and servers ([cafc0cb](https://github.com/jeremylvln/Shulker/commit/cafc0cb3a56efdd181bb7f78f36e75737a8c4e12))
+* **shulker-operator:** rework summon sdk method to try to allocate an existing server first ([3b661a1](https://github.com/jeremylvln/Shulker/commit/3b661a1fa02b183df673f4b3fb3610cf63003ff1))
+* **shulker-proxy-agent:** grant all permissions to network admins ([0f96077](https://github.com/jeremylvln/Shulker/commit/0f96077d85e7bd5dcee7f3aac0ae841df7e806a1))
+* **shulker-server-agent:** grant network admins as operators ([d4fccbf](https://github.com/jeremylvln/Shulker/commit/d4fccbf68c099e484fe6588eeae2c84a939aa983))
+* **shulker-server-agent:** hybrid support between paper and folia ([0b151eb](https://github.com/jeremylvln/Shulker/commit/0b151ebf546969b02adfcd473a7356cde8b8a877))
+
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency io.grpc:grpc-protobuf to v1.59.0 ([#199](https://github.com/jeremylvln/Shulker/issues/199)) ([9d83dbc](https://github.com/jeremylvln/Shulker/commit/9d83dbc759a9ae5ff11d06234defa232cc0a4f70))
+* **deps:** update dependency io.grpc:grpc-services to v1.59.0 ([#200](https://github.com/jeremylvln/Shulker/issues/200)) ([c501357](https://github.com/jeremylvln/Shulker/commit/c501357dcfbc3cbb628d304c8f710ec04864d3b5))
+* **deps:** update dependency io.grpc:grpc-stub to v1.59.0 ([#201](https://github.com/jeremylvln/Shulker/issues/201)) ([e422ef2](https://github.com/jeremylvln/Shulker/commit/e422ef23d184a83e766fcdb3339dda77931d34f8))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.9.1 ([#214](https://github.com/jeremylvln/Shulker/issues/214)) ([022903c](https://github.com/jeremylvln/Shulker/commit/022903c370773705f4cb6cbd11e8c8c49680cf41))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.9.2 ([#228](https://github.com/jeremylvln/Shulker/issues/228)) ([9c5a37f](https://github.com/jeremylvln/Shulker/commit/9c5a37f53468d5ac3715dd1b20e17197b0dba973))
+* **shulker-operator:** fleet labels not added to GameServers from MinecraftServerFleets ([4cf98b9](https://github.com/jeremylvln/Shulker/commit/4cf98b9305c44e32a82b8145c43506384c62fb2e))
+* **shulker-operator:** network admins are optional ([020a1d0](https://github.com/jeremylvln/Shulker/commit/020a1d09f9ccef07de8f6f2b52d2cb0ba4f062bd))
+* **shulker-operator:** prevent proxy connections only if LoadBalancer or NodePort service ([e8a4993](https://github.com/jeremylvln/Shulker/commit/e8a4993ffeacdb69550902fb2fd8cdc6a0338eac))
+* **shulker-proxy-agent:** correctly create Jedis pool with credentials ([d3231d4](https://github.com/jeremylvln/Shulker/commit/d3231d49ac40b95694d73cf4b48af138f6e56349))
+* **shulker-proxy-agent:** having no network admins tries to parse an empty string uuid ([47e26e8](https://github.com/jeremylvln/Shulker/commit/47e26e812af0a0a773b0ed4d2981663dbb5ccf68))
+* **shulker-proxy-agent:** use a dedicated thread pool for redis pubsub ([afb575d](https://github.com/jeremylvln/Shulker/commit/afb575d0e3026c0ef028dd7dc44423240085cc8a))
+* **shulker-server-agent:** use new agones package ([1adac9b](https://github.com/jeremylvln/Shulker/commit/1adac9b4a9289df739a4459b3aa3cb8a33f506c4))
+
+
+### :warning: Reverts :warning:
+
+* Revert "chore(deps): update nrwl monorepo to v17.1.1 (#239)" (#240) ([6080f92](https://github.com/jeremylvln/Shulker/commit/6080f921c739879664ace321de2a761c52d6764a)), closes [#239](https://github.com/jeremylvln/Shulker/issues/239) [#240](https://github.com/jeremylvln/Shulker/issues/240)
+
+
+### :books: Documentation :books:
+
+* add pages about helm and matchmaking ([#215](https://github.com/jeremylvln/Shulker/issues/215)) ([554277b](https://github.com/jeremylvln/Shulker/commit/554277bf4df26e286ff2f22baa22ef070aefc0ae))
+* add section about network admins ([471960c](https://github.com/jeremylvln/Shulker/commit/471960c9323f06d31f1cd293e35967baa686e6b9))
+* add section about player sync ([5040512](https://github.com/jeremylvln/Shulker/commit/5040512fc6834b27fe87a4a4f8da99f04965e562))
+* fix dead links ([9994604](https://github.com/jeremylvln/Shulker/commit/999460448aaff8b9ae97259d02b603ad1d267dbc))
+* fix typo ([#193](https://github.com/jeremylvln/Shulker/issues/193)) ([78650e1](https://github.com/jeremylvln/Shulker/commit/78650e1c1459306922a184c4af9701448b6f38f5))
+* separate pages for next and latest ([b5afb9d](https://github.com/jeremylvln/Shulker/commit/b5afb9de5b774d20d76f11f09ace0eac398ef693))
+* update Agones prerequisites ([ef4dcd5](https://github.com/jeremylvln/Shulker/commit/ef4dcd514166e94ea8c3b2bab3341ee8bdcf71e9))
+
 ## [0.3.0](https://github.com/jeremylvln/Shulker/compare/v0.2.0...v0.3.0) (2023-10-31)
 
 ### :sparkles: Features :sparkles:
