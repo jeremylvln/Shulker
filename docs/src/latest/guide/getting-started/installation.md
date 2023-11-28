@@ -16,10 +16,19 @@ folder of the repository.
 To install Shulker using Helm:
 
 ```bash
-$ git clone --single-branch --branch stable https://github.com/jeremylvln/Shulker
-$ cd Shulker/kube/helm
+$ git clone https://github.com/jeremylvln/Shulker
+$ cd Shulker
+$ git checkout <version tag to use>
+$ cd kube/helm
 $ helm install -n shulker-system .
 ```
+
+:::tip
+
+Replace `<version tag to use>` by the name of the version you want
+to install, for instance `v0.3.0`.
+
+:::
 
 ## Using pre-rendered manifests
 

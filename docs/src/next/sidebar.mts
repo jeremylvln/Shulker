@@ -1,6 +1,8 @@
+import * as path from 'node:path';
 import { DefaultTheme } from 'vitepress';
 
-const link = (link: string) => `/next${link}`;
+const versionName = path.basename(__dirname);
+const link = (link: string) => `/${versionName}${link}`;
 
 export default [
   {

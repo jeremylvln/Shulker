@@ -5,13 +5,12 @@ on:
   push:
     branches:
       - main
-      - stable
 
 jobs:
-  release-next:
+  preview:
     runs-on: ubuntu-latest
 
-    if: github.ref_name == 'main'
+    if: github.event_name == 'push'
 
     permissions:
       contents: read
@@ -68,7 +67,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    if: github.ref_name == 'stable'
+    if: github.event_name == 'workflow_dispatch'
 
     permissions:
       contents: write
