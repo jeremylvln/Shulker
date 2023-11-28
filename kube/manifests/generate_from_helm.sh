@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 CHART_PATH="../helm"
 CHART_NAME="shulker-operator"

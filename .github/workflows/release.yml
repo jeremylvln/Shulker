@@ -89,6 +89,15 @@ jobs:
       - name: Install tools
         uses: ./.github/actions/install-tools
 
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install additional packages
+        run: sudo apt-get install -y yq
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 

@@ -3762,7 +3762,7 @@ spec:
       serviceAccountName: shulker-addon-matchmaking
       containers:
         - name: shulker-addon-matchmaking-director
-          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.3.0"
+          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:next"
           imagePullPolicy: Always
           args:
             - --metrics-bind-address=0.0.0.0:8080
@@ -3864,7 +3864,7 @@ spec:
       serviceAccountName: shulker-addon-matchmaking
       containers:
         - name: shulker-addon-matchmaking-mmf
-          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.3.0"
+          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:next"
           imagePullPolicy: Always
           command: ["/shulker-addon-matchmaking-mmf"]
           args:
