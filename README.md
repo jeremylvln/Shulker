@@ -13,11 +13,11 @@
     <a href="https://github.com/jeremylvln/Shulker/blob/main/LICENSE">
       <img src="https://img.shields.io/github/license/jeremylvln/Shulker.svg" alt="License" />
     </a>
-    <a href="https://github.com/jeremylvln/Shulker/blob/main/LICENSE">
+    <a href="https://app.codecov.io/github/jeremylvln/Shulker">
       <img src="https://img.shields.io/codecov/c/github/jeremylvln/Shulker" alt="Coverage">
     </a>
     <br />
-    <a href="https://app.codecov.io/github/jeremylvln/Shulker">
+    <a href="https://github.com/sponsors/jeremylvln">
       <img src="https://img.shields.io/github/sponsors/jeremylvln" alt="GitHub Sponsors" />
     </a>
   </p>
