@@ -367,13 +367,13 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "PROXY_DATA_DIR".to_string(),
+                name: "SHULKER_PROXY_DATA_DIR".to_string(),
                 value: Some(PROXY_DATA_DIR.to_string()),
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "TYPE".to_string(),
-                value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
+                name: "SHULKER_VERSION_CHANNEL".to_string(),
+                value: Some(spec.version.channel.to_string()),
                 ..EnvVar::default()
             },
         ];
@@ -382,7 +382,7 @@ impl<'a> FleetBuilder {
             let urls: Vec<String> = plugin_urls.into_iter().map(|url| url.to_string()).collect();
 
             env.push(EnvVar {
-                name: "PROXY_PLUGIN_URLS".to_string(),
+                name: "SHULKER_PROXY_PLUGIN_URLS".to_string(),
                 value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
@@ -398,7 +398,7 @@ impl<'a> FleetBuilder {
                 .collect();
 
             env.push(EnvVar {
-                name: "PROXY_PATCH_URLS".to_string(),
+                name: "SHULKER_PROXY_PATCH_URLS".to_string(),
                 value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
@@ -577,7 +577,6 @@ impl<'a> FleetBuilder {
 
 #[cfg(test)]
 mod tests {
-    use k8s_openapi::api::core::v1::EnvVar;
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
@@ -740,15 +739,11 @@ mod tests {
         // T
         let plugins_env = env
             .iter()
-            .find(|env| env.name == "PROXY_PLUGIN_URLS")
+            .find(|env| env.name == "SHULKER_PROXY_PLUGIN_URLS")
             .unwrap();
         assert_eq!(
-            plugins_env,
-            &EnvVar {
-                name: "PROXY_PLUGIN_URLS".to_string(),
-                value: Some("https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar".to_string()),
-                ..EnvVar::default()
-            }
+            plugins_env.value.as_ref().unwrap(),
+            "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar"
         );
     }
 
@@ -774,15 +769,11 @@ mod tests {
         // T
         let patches_env = env
             .iter()
-            .find(|env| env.name == "PROXY_PATCH_URLS")
+            .find(|env| env.name == "SHULKER_PROXY_PATCH_URLS")
             .unwrap();
         assert_eq!(
-            patches_env,
-            &EnvVar {
-                name: "PROXY_PATCH_URLS".to_string(),
-                value: Some("https://example.com/my_patch.tar.gz".to_string()),
-                ..EnvVar::default()
-            }
+            patches_env.value.as_ref().unwrap(),
+            "https://example.com/my_patch.tar.gz"
         );
     }
 

@@ -124,13 +124,13 @@ spec:
               env:
                 - name: SHULKER_CONFIG_DIR
                   value: /mnt/shulker/config
-                - name: PROXY_DATA_DIR
+                - name: SHULKER_PROXY_DATA_DIR
                   value: /server
-                - name: TYPE
-                  value: VELOCITY
-                - name: PROXY_PLUGIN_URLS
+                - name: SHULKER_VERSION_CHANNEL
+                  value: Velocity
+                - name: SHULKER_PROXY_PLUGIN_URLS
                   value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar"
-                - name: PROXY_PATCH_URLS
+                - name: SHULKER_PROXY_PATCH_URLS
                   value: "https://example.com/my_patch.tar.gz"
               image: "alpine:latest"
               name: init-fs

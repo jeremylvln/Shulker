@@ -50,6 +50,7 @@ lazy_static! {
                     version: MinecraftServerVersionSpec {
                         channel: MinecraftServerVersion::Paper,
                         name: "1.20.1".to_string(),
+                        ..MinecraftServerVersionSpec::default()
                     },
                     config: MinecraftServerConfigurationSpec {
                         existing_config_map_name: None,
