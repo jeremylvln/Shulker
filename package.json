@@ -15,9 +15,7 @@
     "test": "nx run-many --target=test --all",
     "format": "prettier --ignore-unknown --write '**/*'",
     "lint": "nx run-many --target=lint --all",
-    "proto:build": "nx run-many --target=buf --all",
-    "crd:install": "cargo run --bin crdgen && kubectl apply -k kube/resources/crd",
-    "crd:uninstall": "cargo run --bin crdgen && kubectl delete -k kube/resources/crd"
+    "proto:build": "nx run-many --target=buf --all"
   },
   "devDependencies": {
     "@bufbuild/buf": "1.28.1",

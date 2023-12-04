@@ -18,6 +18,6 @@ spec:
       protocol: TCP
       targetPort: metrics
   selector:
-    {{- include "shulker-operator.labels" . | nindent 4 }}
+    {{- include "shulker-operator.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: shulker-operator
 {{- end }}

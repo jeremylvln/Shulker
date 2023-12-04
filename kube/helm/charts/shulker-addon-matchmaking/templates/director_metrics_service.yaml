@@ -18,6 +18,6 @@ spec:
       protocol: TCP
       targetPort: metrics
   selector:
-    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    {{- include "shulker-addon-matchmaking.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 {{- end }}

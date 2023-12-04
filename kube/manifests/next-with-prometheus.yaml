@@ -1272,6 +1272,41 @@ spec:
                                 - Paper
                                 - Folia
                               type: string
+                            customJar:
+                              description: Reference to a server JAR file to download and use instead of the built-in one
+                              nullable: true
+                              properties:
+                                url:
+                                  nullable: true
+                                  type: string
+                                urlFrom:
+                                  nullable: true
+                                  properties:
+                                    mavenRef:
+                                      nullable: true
+                                      properties:
+                                        artifactId:
+                                          type: string
+                                        classifier:
+                                          nullable: true
+                                          type: string
+                                        credentialsSecretName:
+                                          nullable: true
+                                          type: string
+                                        groupId:
+                                          type: string
+                                        repositoryUrl:
+                                          type: string
+                                        version:
+                                          type: string
+                                      required:
+                                        - artifactId
+                                        - groupId
+                                        - repositoryUrl
+                                        - version
+                                      type: object
+                                  type: object
+                              type: object
                             name:
                               description: Name of the version to use
                               type: string
@@ -2190,6 +2225,41 @@ spec:
                         - Paper
                         - Folia
                       type: string
+                    customJar:
+                      description: Reference to a server JAR file to download and use instead of the built-in one
+                      nullable: true
+                      properties:
+                        url:
+                          nullable: true
+                          type: string
+                        urlFrom:
+                          nullable: true
+                          properties:
+                            mavenRef:
+                              nullable: true
+                              properties:
+                                artifactId:
+                                  type: string
+                                classifier:
+                                  nullable: true
+                                  type: string
+                                credentialsSecretName:
+                                  nullable: true
+                                  type: string
+                                groupId:
+                                  type: string
+                                repositoryUrl:
+                                  type: string
+                                version:
+                                  type: string
+                              required:
+                                - artifactId
+                                - groupId
+                                - repositoryUrl
+                                - version
+                              type: object
+                          type: object
+                      type: object
                     name:
                       description: Name of the version to use
                       type: string
@@ -3635,11 +3705,8 @@ spec:
       protocol: TCP
       targetPort: metrics
   selector:
-    helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.4.0"
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 ---
 # Source: shulker-operator/charts/shulker-addon-matchmaking/templates/mmf_service.yaml
@@ -3666,11 +3733,8 @@ spec:
       protocol: TCP
       targetPort: mmf-elo
   selector:
-    helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.4.0"
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 ---
 # Source: shulker-operator/templates/metrics_service.yaml
@@ -3693,11 +3757,8 @@ spec:
       protocol: TCP
       targetPort: metrics
   selector:
-    helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.4.0"
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 ---
 # Source: shulker-operator/templates/service.yaml
@@ -3720,11 +3781,8 @@ spec:
       protocol: TCP
       targetPort: api-grpc
   selector:
-    helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.4.0"
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 ---
 # Source: shulker-operator/charts/shulker-addon-matchmaking/templates/director_deployment.yaml
@@ -3743,11 +3801,8 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
       app.kubernetes.io/name: shulker-addon-matchmaking
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.4.0"
-      app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-addon-matchmaking-director
   template:
     metadata:
@@ -3845,11 +3900,8 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
       app.kubernetes.io/name: shulker-addon-matchmaking
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.4.0"
-      app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-addon-matchmaking-mmf
   template:
     metadata:
@@ -3950,11 +4002,8 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      helm.sh/chart: shulker-operator-0.1.0
       app.kubernetes.io/name: shulker-operator
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.4.0"
-      app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-operator
   template:
     metadata:
@@ -4063,11 +4112,8 @@ spec:
   jobLabel: shulker-addon-matchmaking-director
   selector:
     matchLabels:
-      helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
       app.kubernetes.io/name: shulker-addon-matchmaking
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.4.0"
-      app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
   endpoints:
     - targetPort: metrics
@@ -4093,11 +4139,8 @@ spec:
   jobLabel: shulker-operator
   selector:
     matchLabels:
-      helm.sh/chart: shulker-operator-0.1.0
       app.kubernetes.io/name: shulker-operator
       app.kubernetes.io/instance: shulker-operator
-      app.kubernetes.io/version: "0.4.0"
-      app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/component: shulker-operator-metrics
   endpoints:
     - targetPort: metrics
