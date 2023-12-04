@@ -18,7 +18,7 @@ spec:
   jobLabel: {{ template "shulker-operator.fullname" . }}
   selector:
     matchLabels:
-      {{- include "shulker-operator.labels" . | nindent 6 }}
+      {{- include "shulker-operator.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: shulker-operator-metrics
   endpoints:
     - targetPort: metrics

@@ -17,5 +17,5 @@ spec:
       protocol: TCP
       targetPort: mmf-elo
   selector:
-    {{- include "shulker-addon-matchmaking.labels" . | nindent 4 }}
+    {{- include "shulker-addon-matchmaking.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf

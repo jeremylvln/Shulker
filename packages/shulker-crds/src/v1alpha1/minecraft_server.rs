@@ -52,6 +52,11 @@ pub struct MinecraftServerVersionSpec {
 
     /// Name of the version to use
     pub name: String,
+
+    /// Reference to a server JAR file to download and use instead of
+    /// the built-in one
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_jar: Option<ResourceRefSpec>,
 }
 
 #[derive(

@@ -32,7 +32,6 @@ use google_agones_crds::v1::game_server::GameServerHealthSpec;
 use google_agones_crds::v1::game_server::GameServerPortSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
-use shulker_crds::v1alpha1::minecraft_server::MinecraftServerSpec;
 use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::config_map::ConfigMapBuilder;
@@ -192,7 +191,7 @@ impl<'a> GameServerBuilder {
             containers: vec![Container {
                 image: Some(MINECRAFT_SERVER_IMAGE.to_string()),
                 name: "minecraft-server".to_string(),
-                env: Some(Self::get_env(context, &minecraft_server.spec)),
+                env: Some(Self::get_env(resourceref_resolver, context, minecraft_server).await?),
                 image_pull_policy: Some("IfNotPresent".to_string()),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
                 volume_mounts: Some(vec![
@@ -315,18 +314,18 @@ impl<'a> GameServerBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SERVER_CONFIG_DIR".to_string(),
+                name: "SHULKER_SERVER_CONFIG_DIR".to_string(),
                 value: Some(MINECRAFT_SERVER_CONFIG_DIR.to_string()),
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SERVER_DATA_DIR".to_string(),
+                name: "SHULKER_SERVER_DATA_DIR".to_string(),
                 value: Some(MINECRAFT_SERVER_DATA_DIR.to_string()),
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "TYPE".to_string(),
-                value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
+                name: "SHULKER_VERSION_CHANNEL".to_string(),
+                value: Some(spec.version.channel.to_string()),
                 ..EnvVar::default()
             },
         ];
@@ -338,7 +337,7 @@ impl<'a> GameServerBuilder {
                 .as_url()?;
 
             env.push(EnvVar {
-                name: "SERVER_WORLD_URL".to_string(),
+                name: "SHULKER_SERVER_WORLD_URL".to_string(),
                 value: Some(url.to_string()),
                 ..EnvVar::default()
             })
@@ -348,7 +347,7 @@ impl<'a> GameServerBuilder {
             let urls: Vec<String> = plugin_urls.into_iter().map(|url| url.to_string()).collect();
 
             env.push(EnvVar {
-                name: "SERVER_PLUGIN_URLS".to_string(),
+                name: "SHULKER_SERVER_PLUGIN_URLS".to_string(),
                 value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
@@ -363,7 +362,7 @@ impl<'a> GameServerBuilder {
                 .collect();
 
             env.push(EnvVar {
-                name: "SERVER_PATCH_URLS".to_string(),
+                name: "SHULKER_SERVER_PATCH_URLS".to_string(),
                 value: Some(urls.join(";")),
                 ..EnvVar::default()
             })
@@ -372,7 +371,13 @@ impl<'a> GameServerBuilder {
         Ok(env)
     }
 
-    fn get_env(context: &GameServerBuilderContext, spec: &MinecraftServerSpec) -> Vec<EnvVar> {
+    async fn get_env(
+        resourceref_resolver: &ResourceRefResolver,
+        context: &GameServerBuilderContext<'a>,
+        minecraft_server: &MinecraftServer,
+    ) -> Result<Vec<EnvVar>, anyhow::Error> {
+        let spec = &minecraft_server.spec;
+
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_SERVER_NAME".to_string(),
@@ -407,16 +412,6 @@ impl<'a> GameServerBuilder {
                         .map(|list| list.join(","))
                         .unwrap_or("".to_string()),
                 ),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "TYPE".to_string(),
-                value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: Self::get_version_env_from_version_channel(&spec.version.channel),
-                value: Some(spec.version.name.clone()),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -473,13 +468,47 @@ impl<'a> GameServerBuilder {
             },
         ];
 
+        if let Some(custom_jar) = spec.version.custom_jar.as_ref() {
+            env.append(&mut vec![
+                EnvVar {
+                    name: "TYPE".to_string(),
+                    value: Some("CUSTOM".to_string()),
+                    ..EnvVar::default()
+                },
+                EnvVar {
+                    name: "CUSTOM_SERVER".to_string(),
+                    value: Some(
+                        resourceref_resolver
+                            .resolve(minecraft_server.namespace().as_ref().unwrap(), custom_jar)
+                            .await?
+                            .as_url()?
+                            .to_string(),
+                    ),
+                    ..EnvVar::default()
+                },
+            ]);
+        } else {
+            env.append(&mut vec![
+                EnvVar {
+                    name: "TYPE".to_string(),
+                    value: Some(Self::get_type_from_version_channel(&spec.version.channel)),
+                    ..EnvVar::default()
+                },
+                EnvVar {
+                    name: Self::get_version_env_from_version_channel(&spec.version.channel),
+                    value: Some(spec.version.name.clone()),
+                    ..EnvVar::default()
+                },
+            ]);
+        }
+
         if let Some(pod_overrides) = &spec.pod_overrides {
             if let Some(env_overrides) = &pod_overrides.env {
                 env.extend(env_overrides.clone());
             }
         }
 
-        env
+        Ok(env)
     }
 
     async fn get_plugin_urls(
@@ -532,7 +561,7 @@ impl<'a> GameServerBuilder {
 
 #[cfg(test)]
 mod tests {
-    use k8s_openapi::api::core::v1::EnvVar;
+    use shulker_crds::resourceref::ResourceRefSpec;
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
@@ -600,15 +629,11 @@ mod tests {
         // T
         let world_env = env
             .iter()
-            .find(|env| env.name == "SERVER_WORLD_URL")
+            .find(|env| env.name == "SHULKER_SERVER_WORLD_URL")
             .unwrap();
         assert_eq!(
-            world_env,
-            &EnvVar {
-                name: "SERVER_WORLD_URL".to_string(),
-                value: Some("https://example.com/my_world.tar.gz".to_string()),
-                ..EnvVar::default()
-            }
+            world_env.value.as_ref().unwrap(),
+            "https://example.com/my_world.tar.gz"
         );
     }
 
@@ -634,15 +659,11 @@ mod tests {
         // T
         let plugins_env = env
             .iter()
-            .find(|env| env.name == "SERVER_PLUGIN_URLS")
+            .find(|env| env.name == "SHULKER_SERVER_PLUGIN_URLS")
             .unwrap();
         assert_eq!(
-            plugins_env,
-            &EnvVar {
-                name: "SERVER_PLUGIN_URLS".to_string(),
-                value: Some("https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar".to_string()),
-                ..EnvVar::default()
-            }
+            plugins_env.value.as_ref().unwrap(),
+            "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar"
         );
     }
 
@@ -668,22 +689,24 @@ mod tests {
         // T
         let patches_env = env
             .iter()
-            .find(|env| env.name == "SERVER_PATCH_URLS")
+            .find(|env| env.name == "SHULKER_SERVER_PATCH_URLS")
             .unwrap();
         assert_eq!(
-            patches_env,
-            &EnvVar {
-                name: "SERVER_PATCH_URLS".to_string(),
-                value: Some("https://example.com/my_patch.tar.gz".to_string()),
-                ..EnvVar::default()
-            }
+            patches_env.value.as_ref().unwrap(),
+            "https://example.com/my_patch.tar.gz"
         );
     }
 
-    #[test]
-    fn get_env_merges_env_overrides() {
+    #[tokio::test]
+    async fn get_env_with_custom_jar() {
         // G
-        let spec = TEST_SERVER.spec.clone();
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.version.custom_jar = Some(ResourceRefSpec {
+            url: Some("https://example.com/my_custom.jar".to_string()),
+            ..ResourceRefSpec::default()
+        });
         let context = super::GameServerBuilderContext {
             cluster: &TEST_CLUSTER,
             agent_config: &AgentConfig {
@@ -693,12 +716,46 @@ mod tests {
         };
 
         // W
-        let env = super::GameServerBuilder::get_env(&context, &spec);
+        let env = super::GameServerBuilder::get_env(&resourceref_resolver, &context, &server)
+            .await
+            .unwrap();
 
         // T
-        spec.pod_overrides
+        let type_env = env.iter().find(|env| env.name == "TYPE").unwrap();
+        assert_eq!(type_env.value.as_ref().unwrap(), "CUSTOM");
+        let custom_server = env.iter().find(|env| env.name == "CUSTOM_SERVER").unwrap();
+        assert_eq!(
+            custom_server.value.as_ref().unwrap(),
+            "https://example.com/my_custom.jar"
+        );
+    }
+
+    #[tokio::test]
+    async fn get_env_merges_env_overrides() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let env = super::GameServerBuilder::get_env(&resourceref_resolver, &context, &TEST_SERVER)
+            .await
+            .unwrap();
+
+        // T
+        TEST_SERVER
+            .spec
+            .pod_overrides
+            .as_ref()
             .unwrap()
             .env
+            .as_ref()
             .unwrap()
             .iter()
             .for_each(|env_override| {

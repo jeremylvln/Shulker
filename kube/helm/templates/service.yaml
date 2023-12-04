@@ -17,5 +17,5 @@ spec:
       protocol: TCP
       targetPort: api-grpc
   selector:
-    {{- include "shulker-operator.labels" . | nindent 4 }}
+    {{- include "shulker-operator.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: shulker-operator

@@ -72,10 +72,6 @@ spec:
                       fieldPath: metadata.namespace
                 - name: SHULKER_NETWORK_ADMINS
                   value: ""
-                - name: TYPE
-                  value: PAPER
-                - name: VERSION
-                  value: 1.20.1
                 - name: EULA
                   value: "TRUE"
                 - name: COPY_CONFIG_DEST
@@ -97,6 +93,10 @@ spec:
                   value: ""
                 - name: JVM_XX_OPTS
                   value: "-XX:MaxRAMPercentage=75"
+                - name: TYPE
+                  value: PAPER
+                - name: VERSION
+                  value: 1.20.1
                 - name: EXTRA_ENV
                   value: my_value
               image: "itzg/minecraft-server:2023.10.1-java17"
@@ -124,17 +124,17 @@ spec:
               env:
                 - name: SHULKER_CONFIG_DIR
                   value: /mnt/shulker/config
-                - name: SERVER_CONFIG_DIR
+                - name: SHULKER_SERVER_CONFIG_DIR
                   value: /config
-                - name: SERVER_DATA_DIR
+                - name: SHULKER_SERVER_DATA_DIR
                   value: /data
-                - name: TYPE
-                  value: PAPER
-                - name: SERVER_WORLD_URL
+                - name: SHULKER_VERSION_CHANNEL
+                  value: Paper
+                - name: SHULKER_SERVER_WORLD_URL
                   value: "https://example.com/my_world.tar.gz"
-                - name: SERVER_PLUGIN_URLS
+                - name: SHULKER_SERVER_PLUGIN_URLS
                   value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar"
-                - name: SERVER_PATCH_URLS
+                - name: SHULKER_SERVER_PATCH_URLS
                   value: "https://example.com/my_patch.tar.gz"
               image: "alpine:latest"
               name: init-fs

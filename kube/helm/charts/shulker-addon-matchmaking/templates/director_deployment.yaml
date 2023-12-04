@@ -9,7 +9,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "shulker-addon-matchmaking.labels" . | nindent 6 }}
+      {{- include "shulker-addon-matchmaking.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: shulker-addon-matchmaking-director
   template:
     metadata:
