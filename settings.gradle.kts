@@ -13,7 +13,7 @@ dependencyResolutionManagement {
             library("bungeecord-api", "net.md-5:bungeecord-api:1.20-R0.1")
             library("folia-api", "dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
             library("guava", "com.google.guava:guava:32.1.3-jre")
-            library("jedis", "redis.clients:jedis:5.0.2")
+            library("jedis", "redis.clients:jedis:5.1.0")
             library("kubernetes-client", "io.fabric8", "kubernetes-client").versionRef("kubernetes-client")
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
