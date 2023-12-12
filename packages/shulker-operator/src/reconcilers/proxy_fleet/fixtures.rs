@@ -86,8 +86,8 @@ lazy_static! {
             service: Some(ProxyFleetServiceSpec {
                 type_: ProxyFleetServiceType::LoadBalancer,
                 annotations: Some(BTreeMap::from([(
-                    "lb/shulkermc.io".to_string(),
-                    "192.168.1.34".to_string()
+                    "service.beta.kubernetes.io/load-balancer".to_string(),
+                    "internal".to_string()
                 )])),
                 external_traffic_policy: Some(ProxyFleetServiceExternalTrafficPolicy::Cluster)
             }),
