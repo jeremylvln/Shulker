@@ -17,7 +17,7 @@ dependencyResolutionManagement {
             library("kubernetes-client", "io.fabric8", "kubernetes-client").versionRef("kubernetes-client")
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
-            library("netty-shaded", "io.grpc:grpc-netty-shaded:1.59.0")
+            library("netty-shaded", "io.grpc:grpc-netty-shaded:1.59.1")
             library("protobuf", "com.google.protobuf:protobuf-java:3.25.1")
             library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.28.0")
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
