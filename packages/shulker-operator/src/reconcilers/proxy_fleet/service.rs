@@ -54,6 +54,7 @@ impl<'a> ResourceBuilder<'a> for ServiceBuilder {
                     "proxy".to_string(),
                     "proxy".to_string(),
                 )),
+                annotations: service_config.annotations.clone(),
                 ..ObjectMeta::default()
             },
             spec: Some(ServiceSpec {
@@ -91,6 +92,8 @@ impl ServiceBuilder {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::reconcilers::proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET};
@@ -147,5 +150,28 @@ mod tests {
 
         // T
         insta::assert_yaml_snapshot!(service);
+    }
+
+    #[tokio::test]
+    async fn build_add_custom_annotations() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ServiceBuilder::new(client);
+        let custom_annotations = BTreeMap::from([(
+            "service.beta.kubernetes.io/load-balancer".to_string(),
+            "internal".to_string(),
+        )]);
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet.spec.service.as_mut().unwrap().annotations = Some(custom_annotations.clone());
+        let name = super::ServiceBuilder::name(&proxy_fleet);
+
+        // W
+        let service = builder
+            .build(&proxy_fleet, &name, None, None)
+            .await
+            .unwrap();
+
+        // T
+        assert_eq!(service.metadata.annotations.unwrap(), custom_annotations);
     }
 }

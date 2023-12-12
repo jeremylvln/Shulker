@@ -5,6 +5,8 @@ expression: service
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    service.beta.kubernetes.io/load-balancer: internal
   labels:
     app.kubernetes.io/component: proxy
     app.kubernetes.io/instance: proxy-my-proxy
