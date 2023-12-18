@@ -147,7 +147,7 @@ pub struct MinecraftServerPodOverridesSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<ImageOverrideSpec>,
 
-    /// Extra environment variables to add to the crated `Pod`
+    /// Extra environment variables to add to the created `Pod`
     #[serde(skip_serializing_if = "Option::is_none")]
     pub env: Option<Vec<k8s_openapi::api::core::v1::EnvVar>>,
 
@@ -170,6 +170,12 @@ pub struct MinecraftServerPodOverridesSpec {
     /// Name of the ServiceAccount to use
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_name: Option<String>,
+
+    /// Extra volumesmounts to add to the created `Pod`
+    pub volume_mounts: Option<Vec<k8s_openapi::api::core::v1::VolumeMount>>,
+
+    /// Extra volumes to add to the created `Pod`
+    pub volumes: Option<Vec<k8s_openapi::api::core::v1::Volume>>,
 }
 
 /// The status object of `MinecraftServer`
