@@ -88,6 +88,8 @@ lazy_static! {
                         )])),
                         tolerations: None,
                         service_account_name: None,
+                        volume_mounts: None,
+                        volumes: None,
                     })
                 },
             },

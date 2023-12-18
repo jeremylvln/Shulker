@@ -271,6 +271,22 @@ impl<'a> GameServerBuilder {
             }
 
             pod_spec.tolerations = pod_overrides.tolerations.clone();
+
+            if let Some(volume_mounts_overrides) = &pod_overrides.volume_mounts {
+                pod_spec.containers[0]
+                    .volume_mounts
+                    .as_mut()
+                    .unwrap()
+                    .append(&mut volume_mounts_overrides.clone());
+            }
+
+            if let Some(volumes_override) = &pod_overrides.volumes {
+                pod_spec
+                    .volumes
+                    .as_mut()
+                    .unwrap()
+                    .append(&mut volumes_override.clone());
+            }
         }
 
         let mut pod_labels = minecraft_server.labels().clone();
@@ -561,6 +577,7 @@ impl<'a> GameServerBuilder {
 
 #[cfg(test)]
 mod tests {
+    use k8s_openapi::api::core::v1::{EmptyDirVolumeSource, Volume, VolumeMount};
     use shulker_crds::resourceref::ResourceRefSpec;
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
@@ -605,6 +622,85 @@ mod tests {
 
         // T
         insta::assert_yaml_snapshot!(game_server);
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_volume_mounts() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.pod_overrides.as_mut().unwrap().volume_mounts = Some(vec![VolumeMount {
+            name: "my_extra_volume".to_string(),
+            mount_path: "/mnt/path".to_string(),
+            ..VolumeMount::default()
+        }]);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = super::GameServerBuilder::get_pod_template_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        let extra_volume_mount = pod_template.spec.as_ref().unwrap().containers[0]
+            .volume_mounts
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|volume_mount| volume_mount.name == "my_extra_volume");
+        assert!(extra_volume_mount.is_some());
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_volumes() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.pod_overrides.as_mut().unwrap().volumes = Some(vec![Volume {
+            name: "my_extra_volume".to_string(),
+            empty_dir: Some(EmptyDirVolumeSource::default()),
+            ..Volume::default()
+        }]);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = super::GameServerBuilder::get_pod_template_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        let extra_volume = pod_template
+            .spec
+            .as_ref()
+            .unwrap()
+            .volumes
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|volume| volume.name == "my_extra_volume");
+        assert!(extra_volume.is_some());
     }
 
     #[tokio::test]
