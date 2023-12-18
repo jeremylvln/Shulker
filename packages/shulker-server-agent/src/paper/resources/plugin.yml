@@ -1,6 +1,6 @@
 name: ShulkerServerAgent
 version: ${version}
-api-version: 1.19
+api-version: 1.18
 main: io.shulkermc.serveragent.paper.ShulkerServerAgentPaper
 author: Jérémy Levilain <jeremy@jeremylvln.fr>
 folia-supported: true

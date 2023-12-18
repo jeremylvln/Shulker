@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":packages:shulker-sdk:main" external.linked.project.path="$MODULE_DIR$/../../../../../../packages/shulker-sdk/bindings/java" external.root.project.path="$MODULE_DIR$/../../../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.3.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":packages:shulker-sdk:main" external.linked.project.path="$MODULE_DIR$/../../../../../../packages/shulker-sdk/bindings/java" external.root.project.path="$MODULE_DIR$/../../../../../.." external.system.id="GRADLE" external.system.module.group="io.shulkermc" external.system.module.type="sourceSet" external.system.module.version="0.4.0-SNAPSHOT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../../../../../dist/java/packages/shulker-sdk/classes/java/main" />
     <exclude-output />
@@ -12,18 +12,18 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-services:1.59.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.59.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.25.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-services:1.59.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf:1.59.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.25.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.tomcat:annotations-api:6.0.53" level="project" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-stub:1.59.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-util:1.59.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-stub:1.59.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-util:1.59.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api.grpc:proto-google-common-protos:2.22.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf-lite:1.59.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-api:1.59.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-protobuf-lite:1.59.1" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-api:1.59.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:32.0.1-android" level="project" />
-    <orderEntry type="library" name="Gradle: io.grpc:grpc-core:1.59.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.grpc:grpc-core:1.59.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.20.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
@@ -33,7 +33,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:32.0.1-jre" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.gson:gson:2.10.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.codehaus.mojo:animal-sniffer-annotations:1.23" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-context:1.59.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-context:1.59.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.android:annotations:4.1.1.4" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.perfmark:perfmark-api:0.26.0" level="project" />
   </component>
