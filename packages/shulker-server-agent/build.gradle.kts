@@ -14,9 +14,11 @@ setOf("paperJar").forEach { taskName ->
     }
 }
 
-tasks.named("processPaperResources", ProcessResources::class.java) {
-    inputs.property("version", project.version)
-    expand("version" to project.version)
+setOf("processPaperResources").forEach { taskName ->
+    tasks.named(taskName, ProcessResources::class.java) {
+        inputs.property("version", project.version)
+        expand("version" to project.version)
+    }
 }
 
 tasks.withType(ShadowJar::class.java) {

@@ -1,7 +1,9 @@
 package io.shulkermc.serveragent.paper
 
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import io.shulkermc.serveragent.ServerInterface
+import io.shulkermc.serveragent.paper.scheduler.ServerScheduler
+import io.shulkermc.serveragent.paper.scheduler.ServerSchedulerFolia
+import io.shulkermc.serveragent.paper.scheduler.ServerSchedulerPaper
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -10,6 +12,23 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : ServerInterface {
+    companion object {
+        private fun isFoliaContext(): Boolean {
+            return try {
+                Class.forName("io.papermc.paper.threadedregions.RegionizedServer")
+                true
+            } catch (ignored: ClassNotFoundException) {
+                false
+            }
+        }
+    }
+
+    private val scheduler: ServerScheduler = if (isFoliaContext()) {
+        ServerSchedulerFolia(this.plugin)
+    } else {
+        ServerSchedulerPaper(this.plugin)
+    }
+
     override fun prepareNetworkAdminsPermissions(playerIds: List<UUID>) {
         this.plugin.server.pluginManager.registerEvents(
             object : Listener {
@@ -30,26 +49,12 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         delay: Long,
         timeUnit: TimeUnit,
         runnable: Runnable
-    ): ServerInterface.ScheduledTask {
-        return PaperScheduledTask(
-            this.plugin.server.asyncScheduler.runDelayed(this.plugin, { runnable.run() }, delay, timeUnit)
-        )
-    }
+    ): ServerInterface.ScheduledTask = this.scheduler.scheduleDelayedTask(delay, timeUnit, runnable)
 
     override fun scheduleRepeatingTask(
         delay: Long,
         interval: Long,
         timeUnit: TimeUnit,
         runnable: Runnable
-    ): ServerInterface.ScheduledTask {
-        return PaperScheduledTask(
-            this.plugin.server.asyncScheduler.runAtFixedRate(this.plugin, { runnable.run() }, delay, interval, timeUnit)
-        )
-    }
-
-    private class PaperScheduledTask(private val scheduledTask: ScheduledTask) : ServerInterface.ScheduledTask {
-        override fun cancel() {
-            if (!this.scheduledTask.isCancelled) this.scheduledTask.cancel()
-        }
-    }
+    ): ServerInterface.ScheduledTask = this.scheduler.scheduleRepeatingTask(delay, interval, timeUnit, runnable)
 }
