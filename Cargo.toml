@@ -58,7 +58,7 @@ serde_json = "1.0.108"
 serde-xml-rs = "0.6.0"
 serde_yaml = "0.9.29"
 strum = { version = "0.25.0", features = ["derive"] }
-tempfile = "3.8.1"
+tempfile = "3.9.0"
 thiserror = "1.0.52"
 tonic = { version = "0.10.2", features = ["gzip", "tls"] }
 tokio = { version = "1.35.1", features = ["macros", "rt-multi-thread"] }
