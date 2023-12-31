@@ -31,7 +31,7 @@ shulker-utils = { path = "./packages/shulker-utils" }
 
 # External
 anyhow = "1.0.78"
-async-trait = "0.1.75"
+async-trait = "0.1.76"
 axum = "0.7.3"
 base64 = "0.21.5"
 chrono = { version = "0.4.31", features = ["serde"] }
