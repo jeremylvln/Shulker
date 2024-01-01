@@ -12,7 +12,7 @@ dependencyResolutionManagement {
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.18-R0.1-SNAPSHOT")
             library("folia-api", "dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
-            library("guava", "com.google.guava:guava:32.1.3-jre")
+            library("guava", "com.google.guava:guava:33.0.0-jre")
             library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.29.0")
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
             library("grpc-services", "io.grpc", "grpc-services").versionRef("grpc")
