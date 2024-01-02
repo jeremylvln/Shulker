@@ -42,7 +42,7 @@ jobs:
         run: npx nx build docs && touch docs/src/.vitepress/dist/.nojekyll
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs/src/.vitepress/dist
 
