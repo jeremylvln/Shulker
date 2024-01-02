@@ -30,7 +30,7 @@ shulker-sdk = { path = "./packages/shulker-sdk/bindings/rust" }
 shulker-utils = { path = "./packages/shulker-utils" }
 
 # External
-anyhow = "1.0.78"
+anyhow = "1.0.79"
 async-trait = "0.1.76"
 axum = "0.7.3"
 base64 = "0.21.5"
