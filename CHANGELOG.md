@@ -1,27 +1,3 @@
-## [0.5.0](https://github.com/jeremylvln/Shulker/compare/v0.4.0...v0.5.0) (2024-01-03)
-
-
-### :sparkles: Features :sparkles:
-
-* **shulker-operator:** add the possibility to use custom server jars ([#254](https://github.com/jeremylvln/Shulker/issues/254)) ([72844b1](https://github.com/jeremylvln/Shulker/commit/72844b1c85e2680371109661279ad5fc52de7a6e))
-* support mounting custom volumes to servers ([#281](https://github.com/jeremylvln/Shulker/issues/281)) ([5e7f774](https://github.com/jeremylvln/Shulker/commit/5e7f774764612da9f1cb584add0d038cfde980ea))
-
-
-### :bug: Bug Fixes :bug:
-
-* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.29.0 ([#276](https://github.com/jeremylvln/Shulker/issues/276)) ([e8c9e74](https://github.com/jeremylvln/Shulker/commit/e8c9e748d391ffaf17d7a7344ad55944019d928f))
-* **deps:** update dependency com.google.guava:guava to v33 ([#312](https://github.com/jeremylvln/Shulker/issues/312)) ([49fe6bc](https://github.com/jeremylvln/Shulker/commit/49fe6bc481c49a4a2f2f788e71310f393ba6ee7d))
-* **deps:** update dependency com.google.protobuf:protobuf-java to v3.25.1 ([#257](https://github.com/jeremylvln/Shulker/issues/257)) ([ba9d2cf](https://github.com/jeremylvln/Shulker/commit/ba9d2cfc968fccaa491f0d2509076d433b94dbd7))
-* **deps:** update dependency io.grpc:grpc-netty-shaded to v1.59.1 ([#271](https://github.com/jeremylvln/Shulker/issues/271)) ([e2c7230](https://github.com/jeremylvln/Shulker/commit/e2c7230edcc66453715a405060229ee302351dcc))
-* **deps:** update dependency io.grpc:grpc-netty-shaded to v1.60.0 ([#285](https://github.com/jeremylvln/Shulker/issues/285)) ([a60a643](https://github.com/jeremylvln/Shulker/commit/a60a643033a4d5ed907b42fefe939a0b6009906c))
-* **deps:** update dependency net.kyori:adventure-api to v4.15.0 ([#311](https://github.com/jeremylvln/Shulker/issues/311)) ([5b66eec](https://github.com/jeremylvln/Shulker/commit/5b66eecb8fed2f232c677f078f1e84792fcad317))
-* **deps:** update dependency redis.clients:jedis to v5.1.0 ([#266](https://github.com/jeremylvln/Shulker/issues/266)) ([81a52a7](https://github.com/jeremylvln/Shulker/commit/81a52a75faff9f41842fd7ce11fd619632dc1e53))
-* **deps:** update fabric8-kubernetes-client monorepo to v6.9.2 ([#258](https://github.com/jeremylvln/Shulker/issues/258)) ([10af60c](https://github.com/jeremylvln/Shulker/commit/10af60c42452d72c65bfcc53edffd90d33bf004b))
-* **deps:** update grpc to v1.59.1 ([#272](https://github.com/jeremylvln/Shulker/issues/272)) ([75c4cdd](https://github.com/jeremylvln/Shulker/commit/75c4cdddc2536794cbc5bc40e2b39361abe3465a))
-* **deps:** update grpc to v1.60.0 ([#286](https://github.com/jeremylvln/Shulker/issues/286)) ([f538bf4](https://github.com/jeremylvln/Shulker/commit/f538bf41434d7fb1d1b634ccaf386cd4b331f6a7))
-* regenerate crds ([456fc8b](https://github.com/jeremylvln/Shulker/commit/456fc8b4776c8b8ac10f5a6589b30e119d440d91))
-* **shulker-operator:** custom annotations not added to ProxyFleet service ([#273](https://github.com/jeremylvln/Shulker/issues/273)) ([83e5f53](https://github.com/jeremylvln/Shulker/commit/83e5f53dce58c23b64058deb320b0b008a363b6a))
-
 ## [0.4.0](https://github.com/jeremylvln/Shulker/compare/v0.3.0...v0.4.0) (2023-11-28)
 
 
