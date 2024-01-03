@@ -2,13 +2,13 @@ const fs = require('node:fs');
 const path = require('node:path');
 const YAML = require('yaml');
 const {
-  buildProjectGraphWithoutDaemon,
+  buildProjectGraphAndSourceMapsWithoutDaemon,
 } = require('nx/src/project-graph/project-graph');
 
 const PROJECTS_TO_EXCLUDE = ['docs'];
 
 async function main() {
-  const graph = await buildProjectGraphWithoutDaemon();
+  const { projectGraph } = await buildProjectGraphAndSourceMapsWithoutDaemon();
   const codecovConfigPath = path.join(__dirname, '..', 'codecov.yml');
   const codecovConfig = YAML.parse(fs.readFileSync(codecovConfigPath, 'utf8'));
 
@@ -19,7 +19,7 @@ async function main() {
       delete codecovConfig.coverage.status.project[name];
     });
 
-  const projects = Object.values(graph.nodes)
+  const projects = Object.values(projectGraph.nodes)
     .filter(
       (project) =>
         !PROJECTS_TO_EXCLUDE.includes(project.name) &&

@@ -1,12 +1,12 @@
 const {
-  buildProjectGraphWithoutDaemon,
+  buildProjectGraphAndSourceMapsWithoutDaemon,
 } = require('nx/src/project-graph/project-graph');
 
 const EXTRA_SCOPES = ['release', 'deps', 'deploy'];
 
 const listNxProjects = async () => {
-  const graph = await buildProjectGraphWithoutDaemon();
-  return Object.values(graph.nodes).map((project) => project.name);
+  const { projectGraph } = await buildProjectGraphAndSourceMapsWithoutDaemon();
+  return Object.values(projectGraph.nodes).map((project) => project.name);
 };
 
 module.exports = {
