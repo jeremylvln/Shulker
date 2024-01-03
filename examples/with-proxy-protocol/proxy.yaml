@@ -4,7 +4,7 @@ metadata:
   name: public
 spec:
   clusterRef:
-    name: getting-started
+    name: with-proxy-protocol
   replicas: 1
   service:
     type: LoadBalancer

@@ -4,7 +4,7 @@ metadata:
   name: public
 spec:
   clusterRef:
-    name: getting-started
+    name: with-custom-configuration
   replicas: 1
   service:
     type: LoadBalancer
@@ -18,7 +18,7 @@ spec:
         plugins:
           - urlFrom:
               mavenRef:
-                repository: https://example.com/maven
+                repositoryUrl: https://example.com/maven
                 groupId: com.example
                 artifactId: myplugin
                 version: "1.0.0"

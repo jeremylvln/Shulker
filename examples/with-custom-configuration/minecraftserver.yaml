@@ -4,12 +4,12 @@ metadata:
   name: lobby
 spec:
   clusterRef:
-    name: getting-started
+    name: with-custom-configuration
   replicas: 1
   template:
     spec:
       clusterRef:
-        name: getting-started
+        name: with-custom-configuration
       tags:
         - lobby
       version:
