@@ -28,7 +28,7 @@
     "java:dependencies": [
       "{workspaceRoot}/build.gradle.kts",
       "{workspaceRoot}/gradle.properties",
-      "{workspaceRoot}/settings.gradle",
+      "{workspaceRoot}/settings.gradle.kts",
       "{projectRoot}/build.gradle.kts",
       "{projectRoot}/gradle.properties"
     ],
