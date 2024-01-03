@@ -5,20 +5,20 @@
   
   <p>
     <a href="https://github.com/jeremylvln/Shulker/issues/">
-      <img src="https://img.shields.io/github/issues/jeremylvln/Shulker" alt="Open Issues" />
+      <img src="https://img.shields.io/github/issues/jeremylvln/Shulker?style=flat-square" alt="Open Issues" />
     </a>
     <a href="https://github.com/jeremylvln/Shulker/stargazers">
-      <img src="https://img.shields.io/github/stars/jeremylvln/Shulker" alt="Stars" />
+      <img src="https://img.shields.io/github/stars/jeremylvln/Shulker?style=flat-square" alt="Stars" />
     </a>
     <a href="https://github.com/jeremylvln/Shulker/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/jeremylvln/Shulker.svg" alt="License" />
+      <img src="https://img.shields.io/github/license/jeremylvln/Shulker?style=flat-square" alt="License" />
     </a>
     <a href="https://app.codecov.io/github/jeremylvln/Shulker">
-      <img src="https://img.shields.io/codecov/c/github/jeremylvln/Shulker" alt="Coverage">
+      <img src="https://img.shields.io/codecov/c/github/jeremylvln/Shulker?style=flat-square" alt="Coverage">
     </a>
     <br />
     <a href="https://github.com/sponsors/jeremylvln">
-      <img src="https://img.shields.io/github/sponsors/jeremylvln" alt="GitHub Sponsors" />
+      <img src="https://img.shields.io/github/sponsors/jeremylvln?style=flat-square" alt="GitHub Sponsors" />
     </a>
   </p>
    
