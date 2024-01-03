@@ -48,6 +48,10 @@ export default [
         text: 'Defining network administrators',
         link: link('/guide/recipes/defining-network-administrators'),
       },
+      {
+        text: 'Using custom server JAR',
+        link: link('/guide/recipes/using-custom-server-jar'),
+      },
     ],
   },
   {

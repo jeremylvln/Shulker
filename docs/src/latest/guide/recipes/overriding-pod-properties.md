@@ -13,7 +13,7 @@ You can find all the properties overridable by looking at the
 - [ProxyFleet](https://github.com/jeremylvln/Shulker/blob/main/packages/shulker-crds/src/v1alpha1/proxy_fleet.rs)
 - [MinecraftServerFleet](https://github.com/jeremylvln/Shulker/blob/main/packages/shulker-crds/src/v1alpha1/minecraft_server_fleet.rs)
 
-## Add environment variables
+## Adding environment variables
 
 Shulker already injects some environment variables that could
 be useful. But adding your own is fully supported:
@@ -39,7 +39,7 @@ spec:
 
 ## Setting custom affinities
 
-By default, Agones adds a \*_preferred_ scheduling on nodes
+By default, Agones adds a _preferred_ scheduling on nodes
 labelled with `agones.dev/role=gameserver`. However you
 may want to customize more the scheduling behavior.
 
@@ -73,3 +73,35 @@ spec:
             value: "my-server" // [!code focus]
             effect: "NoSchedule" // [!code focus]
 ```
+
+## Mounting volumes <Badge type="tip" text="servers" />
+
+Additional volumes can be injected to the `MinecraftServer`'s
+created `Pod`:
+
+```yaml
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServer
+metadata:
+  name: my-server
+spec:
+  clusterRef:
+    name: my-cluster
+  podOverrides: // [!code focus]
+    volumeMounts: // [!code focus]
+      - name: my_extra_volume // [!code focus]
+        mountPath: /mnt/path // [!code focus]
+    volumes: // [!code focus]
+      - name: my_extra_volume // [!code focus]
+        emptyDir: {} // [!code focus]
+```
+
+:::warning
+
+Agones, and thus Shulker, are not meant for data persistence but
+rather ephemeral workload. While adding custom volumes to a `MinecraftServer`
+is expected to work perfectly, adding some to a `MinecraftServerFleet`
+will only work if your volume source support multiple mounts (it is
+essentially the same as mounting the same volume to a `Deployment`).
+
+:::
