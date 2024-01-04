@@ -8,7 +8,7 @@ dependencyResolutionManagement {
             version("grpc", "1.60.1")
 
             library("adventure-api", "net.kyori:adventure-api:4.15.0")
-            library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.3.1")
+            library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.3.2")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.18-R0.1-SNAPSHOT")
             library("folia-api", "dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
