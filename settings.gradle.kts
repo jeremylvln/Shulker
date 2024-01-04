@@ -21,7 +21,7 @@ dependencyResolutionManagement {
             library("kubernetes-client", "io.fabric8", "kubernetes-client").versionRef("kubernetes-client")
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
-            library("netty-shaded", "io.grpc:grpc-netty-shaded:1.60.0")
+            library("netty-shaded", "io.grpc:grpc-netty-shaded:1.60.1")
             library("protobuf", "com.google.protobuf:protobuf-java:3.25.1")
             library("velocity-api", "com.velocitypowered:velocity-api:3.1.1")
 
