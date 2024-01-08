@@ -1,3 +1,18 @@
+## [0.5.1](https://github.com/jeremylvln/Shulker/compare/v0.5.0...v0.5.1) (2024-01-08)
+
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency io.grpc:grpc-netty-shaded to v1.60.1 ([#322](https://github.com/jeremylvln/Shulker/issues/322)) ([8303b6e](https://github.com/jeremylvln/Shulker/commit/8303b6e775ec897f219b654cbba21c467566f038))
+* **deps:** update dependency net.kyori:adventure-platform-bungeecord to v4.3.2 ([#326](https://github.com/jeremylvln/Shulker/issues/326)) ([a9d6e34](https://github.com/jeremylvln/Shulker/commit/a9d6e3431d56d7a07cc53417f1410abbef627154))
+* **deps:** update grpc to v1.60.1 ([#323](https://github.com/jeremylvln/Shulker/issues/323)) ([87e8641](https://github.com/jeremylvln/Shulker/commit/87e864154dec12e32e050461a5522fe467f4b695))
+* **shulker-operator:** do not let Agones map the server ports ([#330](https://github.com/jeremylvln/Shulker/issues/330)) ([d1a9955](https://github.com/jeremylvln/Shulker/commit/d1a99552aea2093973d7ab7955a8e991cccf7084))
+
+
+### :books: Documentation :books:
+
+* promote next to latest ([8178611](https://github.com/jeremylvln/Shulker/commit/8178611ff4d2a40fe11155c42fab354abd79ff1a))
+
 ## [0.5.0](https://github.com/jeremylvln/Shulker/compare/v0.4.0...v0.5.0) (2024-01-03)
 
 
