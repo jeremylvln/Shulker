@@ -33,7 +33,7 @@ shulker-utils = { path = "./packages/shulker-utils" }
 anyhow = "1.0.79"
 async-trait = "0.1.77"
 axum = "0.7.3"
-base64 = "0.21.5"
+base64 = "0.21.6"
 chrono = { version = "0.4.31", features = ["serde"] }
 clap = { version = "4.4.13", features = ["derive", "env"] }
 const_format = "0.2.32"
