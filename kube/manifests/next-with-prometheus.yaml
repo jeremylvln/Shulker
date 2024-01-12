@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 ---
@@ -21,7 +21,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 ---
@@ -5666,7 +5666,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -5701,7 +5701,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -5766,7 +5766,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -5788,7 +5788,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -5810,7 +5810,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -5836,7 +5836,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -5862,7 +5862,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -5884,7 +5884,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -5906,7 +5906,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
 spec:
@@ -5930,7 +5930,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -5958,7 +5958,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
 spec:
@@ -5982,7 +5982,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -6006,7 +6006,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 spec:
@@ -6022,7 +6022,7 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.5.1"
+        app.kubernetes.io/version: "0.5.2"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-director
     spec:
@@ -6105,7 +6105,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -6121,7 +6121,7 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.5.1"
+        app.kubernetes.io/version: "0.5.2"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-mmf
     spec:
@@ -6207,7 +6207,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -6223,7 +6223,7 @@ spec:
         helm.sh/chart: shulker-operator-0.1.0
         app.kubernetes.io/name: shulker-operator
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.5.1"
+        app.kubernetes.io/version: "0.5.2"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-operator
     spec:
@@ -6316,7 +6316,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
     prometheus: default
@@ -6343,7 +6343,7 @@ metadata:
     helm.sh/chart: shulker-operator-0.1.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/version: "0.5.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
     prometheus: default

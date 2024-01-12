@@ -1,3 +1,10 @@
+## [0.5.2](https://github.com/jeremylvln/Shulker/compare/v0.5.1...v0.5.2) (2024-01-12)
+
+
+### :warning: Reverts :warning:
+
+* Revert "fix(shulker-operator): do not let Agones map the server ports (#330)" ([5a376cf](https://github.com/jeremylvln/Shulker/commit/5a376cf57b683180badf068a9cca76758e5caf53)), closes [#330](https://github.com/jeremylvln/Shulker/issues/330)
+
 ## [0.5.1](https://github.com/jeremylvln/Shulker/compare/v0.5.0...v0.5.1) (2024-01-08)
 
 
