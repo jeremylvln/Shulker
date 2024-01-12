@@ -134,3 +134,51 @@ jobs:
           ORG_GRADLE_PROJECT_signing.gnupg.passphrase: "${{ secrets.GPG_PASSPHRASE }}"
           ARTIFACTORY_USERNAME: "${{ secrets.ARTIFACTORY_USERNAME }}"
           ARTIFACTORY_PASSWORD: "${{ secrets.ARTIFACTORY_PASSWORD }}"
+
+      - name: Package Helm chart
+        working-directory: kube/helm
+        run: helm package .
+
+      - name: Upload Helm chart as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-chart-archive
+          path: kube/helm/shulker-operator-*.tgz
+          if-no-files-found: error
+          retention-days: 1
+
+  update-helm-repository:
+    runs-on: ubuntu-latest
+    needs: [release]
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: "gh-pages"
+          token: ${{ secrets.RELEASE_GH_PAT }}
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download built Helm chart
+        uses: actions/download-artifact@v4
+        with:
+          name: helm-chart-archive
+          path: helm-charts
+
+      - name: Update Helm index
+        working-directory: helm-charts
+        run: helm repo index . --url https://shulker.jeremylvln.fr/helm-charts/
+
+      - name: Push to GitHub Pages
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update Helm repository"
+          file_pattern: "helm-charts/*"

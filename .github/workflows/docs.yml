@@ -22,7 +22,7 @@ jobs:
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://shulker.jeremylvln.fr/
 
     steps:
       - name: Checkout
@@ -42,11 +42,11 @@ jobs:
       - name: Build documentation
         run: npx nx build docs && touch docs/src/.vitepress/dist/.nojekyll
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Push build output to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: docs/src/.vitepress/dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          branch: gh-pages
+          folder: docs/src/.vitepress/dist
+          clean: true
+          clean-exclude: |
+            helm-charts/*
