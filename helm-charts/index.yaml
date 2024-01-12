@@ -1,0 +1,23 @@
+apiVersion: v1
+entries:
+  shulker-operator:
+  - apiVersion: v2
+    appVersion: 0.5.1
+    created: "2024-01-12T12:47:52.316071+01:00"
+    dependencies:
+    - condition: shulker-addon-matchmaking.enabled
+      name: shulker-addon-matchmaking
+      repository: file://./charts/shulker-addon-matchmaking
+      version: 0.0.0-internal
+    description: A Kubernetes operator for managing complex and dynamic Minecraft
+      infrastructures.
+    digest: 76ce056b9516a9894a472c20d1ea4fe0e11171ce85585da3df8408cf204db65d
+    home: https://shulker.jeremylvln.fr
+    name: shulker-operator
+    sources:
+    - https://github.com/jeremylvln/Shulker
+    type: application
+    urls:
+    - https://shulker.jeremylvln.fr/helm-charts/shulker-operator-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-01-12T12:47:52.30899+01:00"
