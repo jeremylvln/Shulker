@@ -1,0 +1,14 @@
+{
+  "name": "Shulker",
+  "short_name": "Shulker",
+  "icons": [
+    {
+      "src": "/android-chrome-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#7f00ff",
+  "background_color": "#7f00ff",
+  "display": "standalone"
+}
