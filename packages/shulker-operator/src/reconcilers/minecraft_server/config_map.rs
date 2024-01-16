@@ -167,7 +167,7 @@ mod vanilla {
 
     impl VanillaProperties {
         pub fn from_spec(spec: &MinecraftServerConfigurationSpec) -> Self {
-            let mut properties = BTreeMap::new();
+            let mut properties = spec.server_properties.clone().unwrap_or_default();
 
             properties.insert("max-players".to_string(), spec.max_players.to_string());
             properties.insert(
