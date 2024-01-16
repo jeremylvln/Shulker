@@ -29,7 +29,7 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/default-exec-container: minecraft-server
+        kubectl.kubernetes.io/default-container: minecraft-server
       labels:
         app.kubernetes.io/component: minecraft-server
         app.kubernetes.io/instance: minecraft-server-my-server

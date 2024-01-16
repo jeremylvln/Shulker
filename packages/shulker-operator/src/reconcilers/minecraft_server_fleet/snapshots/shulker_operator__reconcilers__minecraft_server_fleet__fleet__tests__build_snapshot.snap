@@ -47,7 +47,7 @@ spec:
       template:
         metadata:
           annotations:
-            kubectl.kubernetes.io/default-exec-container: minecraft-server
+            kubectl.kubernetes.io/default-container: minecraft-server
             minecraftserver.shulkermc.io/tags: lobby
             test-annotation/shulkermc.io: my-value
           labels:

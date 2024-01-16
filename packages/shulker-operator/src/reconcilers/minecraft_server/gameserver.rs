@@ -298,7 +298,7 @@ impl<'a> GameServerBuilder {
 
         let mut pod_annotations = minecraft_server.annotations().clone();
         pod_annotations.append(&mut BTreeMap::<String, String>::from([(
-            "kubectl.kubernetes.io/default-exec-container".to_string(),
+            "kubectl.kubernetes.io/default-container".to_string(),
             "minecraft-server".to_string(),
         )]));
 
