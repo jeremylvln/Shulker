@@ -1,6 +1,6 @@
 {
   "name": "@shulkermc/monorepo",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "license": "AGPL-3.0-or-later",
   "private": true,
   "engines": {

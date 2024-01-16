@@ -1,3 +1,12 @@
+## [0.5.3](https://github.com/jeremylvln/Shulker/compare/v0.5.2...v0.5.3) (2024-01-16)
+
+
+### :bug: Bug Fixes :bug:
+
+* **shulker-operator:** custom server properties not being passed to the server ([2c75cf3](https://github.com/jeremylvln/Shulker/commit/2c75cf3de53a153127cf78f5a1d2919f8617901d))
+* **shulker-operator:** inject proper pod annotation for default container ([25becea](https://github.com/jeremylvln/Shulker/commit/25becea3c1ab647f4822947fd569d463f9dde94a))
+* **shulker-sdk:** already set the Netty library as runtime dependency ([970c47a](https://github.com/jeremylvln/Shulker/commit/970c47adb5042b6417abcff1b3e1ad74b00c84d8))
+
 ## [0.5.2](https://github.com/jeremylvln/Shulker/compare/v0.5.1...v0.5.2) (2024-01-12)
 
 
