@@ -8,7 +8,6 @@
 build/
 coverage/
 dist/
-docs/.docusaurus/
 docs/build/
 docs/node_modules/
 examples/

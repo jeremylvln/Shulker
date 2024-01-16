@@ -5,6 +5,7 @@ dependencies {
     implementation(libs.grpc.services)
     implementation(libs.grpc.stub)
     compileOnly(libs.annotations.api)
+    runtimeOnly(libs.grpc.netty.shaded)
 }
 
 configure<JavaPluginExtension> {

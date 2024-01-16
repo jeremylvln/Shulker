@@ -14,7 +14,6 @@ dependencies {
 
     // Agones
     commonImplementation(project(":packages:google-agones-sdk"))
-    commonRuntimeOnly(libs.netty.shaded)
 
     // Sync
     commonImplementation(libs.jedis)

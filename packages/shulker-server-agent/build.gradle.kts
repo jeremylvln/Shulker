@@ -5,7 +5,6 @@ dependencies {
 
     // Agones
     commonImplementation(project(":packages:google-agones-sdk"))
-    commonRuntimeOnly(libs.netty.shaded)
 }
 
 setOf("paperJar").forEach { taskName ->

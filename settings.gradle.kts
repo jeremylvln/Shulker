@@ -5,7 +5,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlin", "1.9.10")
             version("kubernetes-client", "6.9.2")
-            version("grpc", "1.60.1")
+            version("grpc", "1.61.0")
 
             library("adventure-api", "net.kyori:adventure-api:4.15.0")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.3.2")
@@ -14,6 +14,7 @@ dependencyResolutionManagement {
             library("folia-api", "dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
             library("guava", "com.google.guava:guava:33.0.0-jre")
             library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.29.0")
+            library("grpc-netty-shaded", "io.grpc", "grpc-netty-shaded").versionRef("grpc")
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
             library("grpc-services", "io.grpc", "grpc-services").versionRef("grpc")
             library("grpc-stub", "io.grpc", "grpc-stub").versionRef("grpc")
@@ -21,7 +22,6 @@ dependencyResolutionManagement {
             library("kubernetes-client", "io.fabric8", "kubernetes-client").versionRef("kubernetes-client")
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
-            library("netty-shaded", "io.grpc:grpc-netty-shaded:1.60.1")
             library("protobuf", "com.google.protobuf:protobuf-java:3.25.1")
             library("velocity-api", "com.velocitypowered:velocity-api:3.1.1")
 
