@@ -42,6 +42,20 @@ const fileReplacements = [
     countMatches: true,
   },
   {
+    files: ['kube/helm/Chart.yaml'],
+    from: '^version: .*',
+    to: "version: '${nextRelease.version}'",
+    results: [
+      {
+        file: 'kube/helm/Chart.yaml',
+        hasChanged: true,
+        numMatches: 1,
+        numReplacements: 1,
+      },
+    ],
+    countMatches: true,
+  },
+  {
     files: ['kube/helm/Chart.yaml', 'kube/helm/charts/*/Chart.yaml'],
     from: 'appVersion: .*',
     to: "appVersion: '${nextRelease.version}'",
