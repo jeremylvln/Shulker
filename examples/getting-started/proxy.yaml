@@ -7,8 +7,8 @@ spec:
     name: getting-started
   replicas: 1
   service:
-    type: LoadBalancer
-    externalTrafficPolicy: Local
+    type: ClusterIP
+    # externalTrafficPolicy: Local
   template:
     spec:
       version:

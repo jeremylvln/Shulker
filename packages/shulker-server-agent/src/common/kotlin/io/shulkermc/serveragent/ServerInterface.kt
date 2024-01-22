@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit
 interface ServerInterface {
     fun prepareNetworkAdminsPermissions(playerIds: List<UUID>)
 
-    fun addPlayerLoginHook(hook: PlayerLoginHook, postOrder: HookPostOrder)
-    fun addPlayerDisconnectHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder)
+    fun addPlayerJoinHook(hook: PlayerLoginHook, postOrder: HookPostOrder)
+    fun addPlayerQuitHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder)
 
     fun getPlayerCount(): Int
 

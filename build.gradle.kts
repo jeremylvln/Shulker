@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
@@ -95,22 +94,17 @@ subprojects {
         detekt {
             buildUponDefaultConfig = true
             ignoreFailures = true
-            baseline = file("$rootDir/gradle/detekt/baseline.xml")
+            config.setFrom("$rootDir/gradle/detekt-config.yml")
+            baseline = file("$rootDir/gradle/detekt-baseline.xml")
             basePath = rootDir.absolutePath
         }
 
         tasks.withType<Detekt>().configureEach {
-            jvmTarget = "1.8"
-
             reports {
                 sarif.required = true
             }
 
             finalizedBy(detektReportMergeSarif)
-        }
-
-        tasks.withType<DetektCreateBaselineTask>().configureEach {
-            jvmTarget = "1.8"
         }
 
         detektReportMergeSarif.configure {

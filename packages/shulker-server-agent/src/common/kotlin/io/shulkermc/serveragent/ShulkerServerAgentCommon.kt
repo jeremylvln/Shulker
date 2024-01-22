@@ -8,6 +8,7 @@ import io.shulkermc.serveragent.services.PlayerMovementService
 import io.shulkermc.serveragent.tasks.HealthcheckTask
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
@@ -56,9 +57,8 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
             }
 
             this.agonesGateway.setReady()
-        } catch (e: Exception) {
-            this.logger.severe("Shulker Agent crashed, stopping server")
-            e.printStackTrace()
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping server", e)
             this.shutdown()
         }
     }
@@ -73,9 +73,12 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
     fun shutdown() {
         try {
             this.agonesGateway.askShutdown()
-        } catch (ex: Exception) {
-            this.logger.severe("Failed to ask Agones sidecar to shutdown properly, stopping process manually")
-            ex.printStackTrace()
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            this.logger.log(
+                Level.SEVERE,
+                "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
+                e
+            )
             exitProcess(0)
         }
     }

@@ -39,7 +39,7 @@ spec:
         - lobby
       version:
         channel: Paper
-        name: '1.18.2'
+        name: '1.20.4'
       config:  // [!code focus]
         lifecycleStrategy: AllocateWhenNotEmpty // [!code focus]
 ```

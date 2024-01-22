@@ -1,0 +1,16 @@
+complexity:
+  TooManyFunctions:
+    active: false
+
+naming:
+  MemberNameEqualsClassName:
+    excludes:
+      - "**/kubernetes/models/**"
+
+style:
+  MaxLineLength:
+    active: false
+  ForbiddenVoid:
+    ignoreOverridden: true
+  ReturnCount:
+    active: false

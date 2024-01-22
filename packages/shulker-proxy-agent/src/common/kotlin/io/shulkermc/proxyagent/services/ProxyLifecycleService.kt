@@ -57,7 +57,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
                 this.agent.logger.info("Proxy is empty, stopping")
                 this.agent.shutdown()
             } else {
-                this.agent.logger.info(String.format("There are still %d players connected, waiting", playerCount))
+                this.agent.logger.info("There are still $playerCount players connected, waiting")
             }
         }
     }
