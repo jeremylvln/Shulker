@@ -14,6 +14,7 @@ use shulker_crds::{
     v1alpha1::{
         minecraft_cluster::MinecraftClusterRef,
         minecraft_server::{
+            MinecraftServerConfigurationLifecycleStrategy,
             MinecraftServerConfigurationProxyForwardingMode, MinecraftServerConfigurationSpec,
             MinecraftServerPodOverridesSpec, MinecraftServerSpec, MinecraftServerVersion,
             MinecraftServerVersionSpec,
@@ -71,7 +72,9 @@ lazy_static! {
                         disable_end: true,
                         server_properties: None,
                         proxy_forwarding_mode:
-                            MinecraftServerConfigurationProxyForwardingMode::Velocity
+                            MinecraftServerConfigurationProxyForwardingMode::Velocity,
+                        lifecycle_strategy:
+                            MinecraftServerConfigurationLifecycleStrategy::AllocateWhenNotEmpty
                     },
                     pod_overrides: Some(MinecraftServerPodOverridesSpec {
                         image: None,
