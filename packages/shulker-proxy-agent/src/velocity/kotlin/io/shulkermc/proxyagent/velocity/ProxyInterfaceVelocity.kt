@@ -26,6 +26,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
 
+@Suppress("TooManyFunctions")
 class ProxyInterfaceVelocity(
     private val plugin: ShulkerProxyAgentVelocity,
     private val proxy: ProxyServer

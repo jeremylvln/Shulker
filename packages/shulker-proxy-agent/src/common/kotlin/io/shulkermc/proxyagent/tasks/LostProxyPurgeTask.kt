@@ -25,12 +25,12 @@ class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable 
         val maybeLock = this.agent.cache.tryLockLostProxiesPurgeTask(Configuration.PROXY_NAME)
 
         maybeLock.ifPresent { lock ->
-            lock.use {
+            lock.use { _ ->
                 this.agent.cache.listRegisteredProxies()
                     .filter { System.currentTimeMillis() - it.lastSeenMillis > PROXY_LOST_MILLIS_THRESHOLD }
-                    .forEach {
-                        this.agent.cache.unregisterProxy(it.proxyName)
-                        this.agent.logger.info("Unregistered lost proxy ${it.proxyName}")
+                    .forEach { proxy ->
+                        this.agent.cache.unregisterProxy(proxy.proxyName)
+                        this.agent.logger.info("Unregistered lost proxy ${proxy.proxyName}")
                     }
             }
         }

@@ -11,6 +11,7 @@ import java.net.InetSocketAddress
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
+@Suppress("TooManyFunctions")
 interface ProxyInterface {
     fun registerServer(name: String, address: InetSocketAddress)
     fun unregisterServer(name: String): Boolean

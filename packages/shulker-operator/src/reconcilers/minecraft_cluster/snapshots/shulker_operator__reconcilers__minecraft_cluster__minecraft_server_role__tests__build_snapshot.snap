@@ -21,6 +21,7 @@ rules:
       - events
     verbs:
       - create
+      - patch
   - apiGroups:
       - agones.dev
     resources:

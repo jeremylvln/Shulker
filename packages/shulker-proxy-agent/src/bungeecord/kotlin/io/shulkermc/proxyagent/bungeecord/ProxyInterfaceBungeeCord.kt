@@ -31,6 +31,7 @@ import java.net.InetSocketAddress
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
+@Suppress("TooManyFunctions")
 class ProxyInterfaceBungeeCord(
     private val plugin: Plugin,
     private val proxy: ProxyServer
@@ -72,6 +73,7 @@ class ProxyInterfaceBungeeCord(
                     val result = hook()
 
                     if (!result.allowed) {
+                        @Suppress("UnsafeCallOnNullableType")
                         event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
                     }
                 }
@@ -116,6 +118,7 @@ class ProxyInterfaceBungeeCord(
                     val result = hook(wrapPlayer(event.player), event.target.name)
 
                     if (result.newServerName.isPresent) {
+                        @Suppress("UnsafeCallOnNullableType")
                         event.target = proxy.servers[result.newServerName.get()]!!
                     }
                 }

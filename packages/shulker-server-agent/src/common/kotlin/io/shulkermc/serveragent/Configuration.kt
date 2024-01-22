@@ -18,13 +18,13 @@ object Configuration {
 
     private fun getOptionalStringEnv(name: String): Optional<String> = Optional.ofNullable(System.getenv(name))
 
-    enum class LifecycleStrategy(private val envValue: String) {
+    enum class LifecycleStrategy(private val strategy: String) {
         ALLOCATE_WHEN_NOT_EMPTY("AllocateWhenNotEmpty"),
         MANUAL("Manual");
 
         companion object {
             fun byEnvValue(value: String): LifecycleStrategy {
-                return requireNotNull(LifecycleStrategy.entries.find { it.envValue === value }) {
+                return requireNotNull(LifecycleStrategy.entries.find { it.strategy == value }) {
                     "Unknown lifecycle strategy: $value"
                 }
             }

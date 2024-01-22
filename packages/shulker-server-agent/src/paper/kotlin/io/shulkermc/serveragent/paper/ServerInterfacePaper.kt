@@ -7,10 +7,10 @@ import io.shulkermc.serveragent.paper.scheduler.ServerSchedulerPaper
 import io.shulkermc.serveragent.platform.HookPostOrder
 import io.shulkermc.serveragent.platform.PlayerDisconnectHook
 import io.shulkermc.serveragent.platform.PlayerLoginHook
-import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.EventExecutor
@@ -47,15 +47,15 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         }
     }
 
-    override fun addPlayerLoginHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
-        this.registerEventWithPriority(PlayerLoginEvent::class.java, postOrder) { event ->
-            hook(wrapPlayer(event.player))
+    override fun addPlayerJoinHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
+        this.registerEventWithPriority(PlayerJoinEvent::class.java, postOrder) {
+            hook()
         }
     }
 
-    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
-        this.registerEventWithPriority(PlayerQuitEvent::class.java, postOrder) { event ->
-            hook(wrapPlayer(event.player))
+    override fun addPlayerQuitHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
+        this.registerEventWithPriority(PlayerQuitEvent::class.java, postOrder) {
+            hook()
         }
     }
 
@@ -93,16 +93,6 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
             executor,
             this.plugin
         )
-    }
-
-    private fun wrapPlayer(paperPlayer: Player): io.shulkermc.serveragent.platform.Player {
-        return object : io.shulkermc.serveragent.platform.Player {
-            override val uniqueId: UUID
-                get() = paperPlayer.uniqueId
-
-            override val name: String
-                get() = paperPlayer.name
-        }
     }
 
     private fun mapPostOrder(postOrder: HookPostOrder): EventPriority {

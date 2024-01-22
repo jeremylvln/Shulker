@@ -8,13 +8,17 @@ import java.util.Optional
 import java.util.UUID
 
 class HttpMojangGatewayAdapter : MojangGatewayAdapter {
+    companion object {
+        private const val HTTP_OK = 200
+    }
+
     override fun getProfileFromName(playerName: String): Optional<MojangGatewayAdapter.MojangProfile> {
         val url = URI("https://api.mojang.com/users/profiles/minecraft/$playerName").toURL()
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 
         val status = connection.responseCode
-        if (status != 200) return Optional.empty()
+        if (status != HTTP_OK) return Optional.empty()
 
         val response = connection.inputStream.bufferedReader().use { it.readText() }
         val responseJson = JsonParser.parseString(response).asJsonObject
@@ -28,7 +32,7 @@ class HttpMojangGatewayAdapter : MojangGatewayAdapter {
         connection.requestMethod = "GET"
 
         val status = connection.responseCode
-        if (status != 200) return Optional.empty()
+        if (status != HTTP_OK) return Optional.empty()
 
         val response = connection.inputStream.bufferedReader().use { it.readText() }
         val responseJson = JsonParser.parseString(response).asJsonObject
