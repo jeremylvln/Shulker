@@ -40,6 +40,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     lateinit var playerMovementService: PlayerMovementService
     private lateinit var proxyLifecycleService: ProxyLifecycleService
 
+    // Tasks
     private lateinit var healthcheckTask: ProxyInterface.ScheduledTask
     private lateinit var lostProxyPurgeTask: ProxyInterface.ScheduledTask
 

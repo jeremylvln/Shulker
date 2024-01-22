@@ -185,6 +185,7 @@ class ProxyInterfaceVelocity(
             HookPostOrder.NORMAL -> PostOrder.NORMAL
             HookPostOrder.LATE -> PostOrder.LATE
             HookPostOrder.LAST -> PostOrder.LAST
+            HookPostOrder.MONITOR -> PostOrder.LAST
         }
     }
 

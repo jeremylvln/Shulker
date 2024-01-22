@@ -2,7 +2,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 plugins {
     id("idea")
@@ -188,7 +187,6 @@ subprojects {
                 } else {
                     uri("https://maven.jeremylvln.fr/artifactory/shulker-releases")
                 }
-
 
                 credentials {
                     username = findProperty("artifactory.username")?.toString() ?: System.getenv("ARTIFACTORY_USERNAME")

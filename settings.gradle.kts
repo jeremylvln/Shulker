@@ -34,8 +34,8 @@ dependencyResolutionManagement {
 }
 
 fun includeBindingProject(name: String) {
-  include(":packages:${name}")
-  project(":packages:${name}").projectDir = file("packages/${name}/bindings/java")
+    include(":packages:$name")
+    project(":packages:$name").projectDir = file("packages/$name/bindings/java")
 }
 
 includeBindingProject("google-agones-sdk")
