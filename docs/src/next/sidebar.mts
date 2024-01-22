@@ -52,6 +52,10 @@ export default [
         text: 'Using custom server JAR',
         link: link('/guide/recipes/using-custom-server-jar'),
       },
+      {
+        text: 'Understanding Lifecycle Strategy',
+        link: link('/guide/recipes/understanding-lifecycle-strategies'),
+      },
     ],
   },
   {

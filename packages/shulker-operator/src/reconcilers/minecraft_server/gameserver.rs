@@ -431,6 +431,11 @@ impl<'a> GameServerBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
+                name: "SHULKER_SERVER_LIFECYCLE_STRATEGY".to_string(),
+                value: Some(minecraft_server.spec.config.lifecycle_strategy.to_string()),
+                ..EnvVar::default()
+            },
+            EnvVar {
                 name: "EULA".to_string(),
                 value: Some("TRUE".to_string()),
                 ..EnvVar::default()

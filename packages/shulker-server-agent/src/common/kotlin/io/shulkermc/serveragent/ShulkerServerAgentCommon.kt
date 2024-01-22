@@ -4,19 +4,26 @@ import com.agones.dev.sdk.AgonesSDK
 import com.agones.dev.sdk.AgonesSDKImpl
 import io.shulkermc.serveragent.api.ShulkerServerAPI
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
+import io.shulkermc.serveragent.services.PlayerMovementService
 import io.shulkermc.serveragent.tasks.HealthcheckTask
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
-class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val logger: Logger) {
+class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger: Logger) {
     companion object {
         private const val SUMMON_LABEL_NAME = "shulkermc.io/summoned"
         private const val SUMMON_TIMEOUT_MINUTES = 5L
     }
 
     lateinit var agonesGateway: AgonesSDK
+
+    // Services
+    lateinit var playerMovementService: PlayerMovementService
+
+    // Tasks
     private lateinit var healthcheckTask: ServerInterface.ScheduledTask
     private var summonTimeoutTask: ServerInterface.ScheduledTask? = null
 
@@ -31,12 +38,7 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val
 
             ShulkerServerAPI.INSTANCE = ShulkerServerAPIImpl(this)
 
-            if (gameServer.objectMeta.containsLabels(SUMMON_LABEL_NAME)) {
-                this.logger.info(
-                    "This server was summoned manually, it will be shutdown automatically in $SUMMON_TIMEOUT_MINUTES minutes" // ktlint-disable standard_max-line-length
-                )
-                this.summonTimeoutTask = this.createSummonTimeoutTask()
-            }
+            this.playerMovementService = PlayerMovementService(this)
 
             this.healthcheckTask = HealthcheckTask(this).schedule()
 
@@ -47,10 +49,16 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val
                 )
             }
 
+            if (gameServer.objectMeta.containsLabels(SUMMON_LABEL_NAME)) {
+                this.logger.info(
+                    "This server was summoned manually, it will be shutdown automatically in $SUMMON_TIMEOUT_MINUTES minutes" // ktlint-disable standard_max-line-length
+                )
+                this.summonTimeoutTask = this.createSummonTimeoutTask()
+            }
+
             this.agonesGateway.setReady()
-        } catch (e: Exception) {
-            this.logger.severe("Shulker Agent crashed, stopping server")
-            e.printStackTrace()
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping server", e)
             this.shutdown()
         }
     }
@@ -65,9 +73,12 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, private val
     fun shutdown() {
         try {
             this.agonesGateway.askShutdown()
-        } catch (ex: Exception) {
-            this.logger.severe("Failed to ask Agones sidecar to shutdown properly, stopping process manually")
-            ex.printStackTrace()
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            this.logger.log(
+                Level.SEVERE,
+                "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
+                e
+            )
             exitProcess(0)
         }
     }

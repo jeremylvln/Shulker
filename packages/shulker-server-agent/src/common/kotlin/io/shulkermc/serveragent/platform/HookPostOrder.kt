@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.platform
+package io.shulkermc.serveragent.platform
 
 enum class HookPostOrder {
     FIRST, EARLY, NORMAL, LATE, LAST, MONITOR

@@ -1,8 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 plugins {
     id("idea")
@@ -96,22 +94,17 @@ subprojects {
         detekt {
             buildUponDefaultConfig = true
             ignoreFailures = true
-            baseline = file("$rootDir/gradle/detekt/baseline.xml")
+            config.setFrom("$rootDir/gradle/detekt-config.yml")
+            baseline = file("$rootDir/gradle/detekt-baseline.xml")
             basePath = rootDir.absolutePath
         }
 
         tasks.withType<Detekt>().configureEach {
-            jvmTarget = "1.8"
-
             reports {
                 sarif.required = true
             }
 
             finalizedBy(detektReportMergeSarif)
-        }
-
-        tasks.withType<DetektCreateBaselineTask>().configureEach {
-            jvmTarget = "1.8"
         }
 
         detektReportMergeSarif.configure {
@@ -188,7 +181,6 @@ subprojects {
                 } else {
                     uri("https://maven.jeremylvln.fr/artifactory/shulker-releases")
                 }
-
 
                 credentials {
                     username = findProperty("artifactory.username")?.toString() ?: System.getenv("ARTIFACTORY_USERNAME")

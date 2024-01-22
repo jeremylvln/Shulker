@@ -4,10 +4,16 @@ import io.shulkermc.serveragent.ServerInterface
 import io.shulkermc.serveragent.paper.scheduler.ServerScheduler
 import io.shulkermc.serveragent.paper.scheduler.ServerSchedulerFolia
 import io.shulkermc.serveragent.paper.scheduler.ServerSchedulerPaper
-import org.bukkit.event.EventHandler
+import io.shulkermc.serveragent.platform.HookPostOrder
+import io.shulkermc.serveragent.platform.PlayerDisconnectHook
+import io.shulkermc.serveragent.platform.PlayerLoginHook
+import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerLoginEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.plugin.EventExecutor
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -23,6 +29,8 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         }
     }
 
+    private val eventListener = object : Listener {}
+
     private val scheduler: ServerScheduler = if (isFoliaContext()) {
         ServerSchedulerFolia(this.plugin)
     } else {
@@ -30,19 +38,29 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
     }
 
     override fun prepareNetworkAdminsPermissions(playerIds: List<UUID>) {
-        this.plugin.server.pluginManager.registerEvents(
-            object : Listener {
-                @EventHandler(priority = EventPriority.HIGHEST)
-                fun onPlayerLogin(event: PlayerLoginEvent) {
-                    if (event.player.uniqueId in playerIds) {
-                        event.player.isOp = true
-                        // TODO: This may not be sufficient to give them all permissions
-                        //       but there is solution to grant all of them without knowing them
-                    }
-                }
-            },
-            this.plugin
-        )
+        this.registerEventWithPriority(PlayerLoginEvent::class.java, HookPostOrder.FIRST) { event ->
+            if (event.player.uniqueId in playerIds) {
+                event.player.isOp = true
+                // TODO: This may not be sufficient to give them all permissions
+                //       but there is solution to grant all of them without knowing them
+            }
+        }
+    }
+
+    override fun addPlayerJoinHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
+        this.registerEventWithPriority(PlayerJoinEvent::class.java, postOrder) {
+            hook()
+        }
+    }
+
+    override fun addPlayerQuitHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
+        this.registerEventWithPriority(PlayerQuitEvent::class.java, postOrder) {
+            hook()
+        }
+    }
+
+    override fun getPlayerCount(): Int {
+        return this.plugin.server.onlinePlayers.size
     }
 
     override fun scheduleDelayedTask(
@@ -57,4 +75,34 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         timeUnit: TimeUnit,
         runnable: Runnable
     ): ServerInterface.ScheduledTask = this.scheduler.scheduleRepeatingTask(delay, interval, timeUnit, runnable)
+
+    private fun <T : Event> registerEventWithPriority(
+        clazz: Class<T>,
+        postOrder: HookPostOrder,
+        callback: (event: T) -> Unit
+    ) {
+        val executor = EventExecutor { _, event ->
+            @Suppress("UNCHECKED_CAST")
+            callback(event as T)
+        }
+
+        this.plugin.server.pluginManager.registerEvent(
+            clazz,
+            this.eventListener,
+            this.mapPostOrder(postOrder),
+            executor,
+            this.plugin
+        )
+    }
+
+    private fun mapPostOrder(postOrder: HookPostOrder): EventPriority {
+        return when (postOrder) {
+            HookPostOrder.FIRST -> EventPriority.LOWEST
+            HookPostOrder.EARLY -> EventPriority.LOW
+            HookPostOrder.NORMAL -> EventPriority.NORMAL
+            HookPostOrder.LATE -> EventPriority.HIGH
+            HookPostOrder.LAST -> EventPriority.HIGHEST
+            HookPostOrder.MONITOR -> EventPriority.MONITOR
+        }
+    }
 }

@@ -21,6 +21,7 @@ import io.shulkermc.proxyagent.tasks.HealthcheckTask
 import io.shulkermc.proxyagent.tasks.LostProxyPurgeTask
 import redis.clients.jedis.JedisPool
 import java.lang.Exception
+import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
@@ -40,6 +41,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     lateinit var playerMovementService: PlayerMovementService
     private lateinit var proxyLifecycleService: ProxyLifecycleService
 
+    // Tasks
     private lateinit var healthcheckTask: ProxyInterface.ScheduledTask
     private lateinit var lostProxyPurgeTask: ProxyInterface.ScheduledTask
 
@@ -86,9 +88,8 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
             this.cache.registerProxy(Configuration.PROXY_NAME)
             this.agonesGateway.setAllocated()
-        } catch (e: Exception) {
-            this.logger.severe("Shulker Agent crashed, stopping proxy")
-            e.printStackTrace()
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping proxy", e)
             this.shutdown()
         }
     }
@@ -109,8 +110,12 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.cache.unregisterProxy(Configuration.PROXY_NAME)
             this.pubSub.close()
             this.agonesGateway.askShutdown()
-        } catch (ex: Exception) {
-            this.logger.severe("Failed to ask Agones sidecar to shutdown properly, stopping process manually")
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            this.logger.log(
+                Level.SEVERE,
+                "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
+                e
+            )
             exitProcess(0)
         }
     }

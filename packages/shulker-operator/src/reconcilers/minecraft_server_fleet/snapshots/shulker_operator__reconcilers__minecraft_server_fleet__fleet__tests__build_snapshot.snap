@@ -72,6 +72,8 @@ spec:
                       fieldPath: metadata.namespace
                 - name: SHULKER_NETWORK_ADMINS
                   value: ""
+                - name: SHULKER_SERVER_LIFECYCLE_STRATEGY
+                  value: AllocateWhenNotEmpty
                 - name: EULA
                   value: "TRUE"
                 - name: COPY_CONFIG_DEST

@@ -114,6 +114,10 @@ pub struct MinecraftServerConfigurationSpec {
     /// this `MinecraftServer`
     #[serde(default)]
     pub proxy_forwarding_mode: MinecraftServerConfigurationProxyForwardingMode,
+
+    /// Strategy to apply concerning Agones `GameServer` lifecycle management
+    #[serde(default)]
+    pub lifecycle_strategy: MinecraftServerConfigurationLifecycleStrategy,
 }
 
 #[cfg(not(tarpaulin_include))]
@@ -138,6 +142,15 @@ pub enum MinecraftServerConfigurationProxyForwardingMode {
     #[default]
     Velocity,
     BungeeCord,
+}
+
+#[derive(
+    PartialEq, Deserialize, Serialize, Clone, Debug, Default, JsonSchema, IntoStaticStr, Display,
+)]
+pub enum MinecraftServerConfigurationLifecycleStrategy {
+    #[default]
+    AllocateWhenNotEmpty,
+    Manual,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
