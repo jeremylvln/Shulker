@@ -1,0 +1,27 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_cluster/minecraft_server_headless_service.rs
+expression: service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: minecraft-server-headless
+    app.kubernetes.io/instance: service-my-cluster
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: service
+    app.kubernetes.io/part-of: cluster-my-cluster
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-cluster-servers
+  namespace: default
+spec:
+  clusterIP: None
+  ports:
+    - name: minecraft
+      port: 25565
+      protocol: TCP
+      targetPort: minecraft
+  selector:
+    app.kubernetes.io/component: minecraft-server
+    minecraftcluster.shulkermc.io/name: my-cluster
+

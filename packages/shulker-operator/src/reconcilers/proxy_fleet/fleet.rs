@@ -416,6 +416,11 @@ impl<'a> FleetBuilder {
 
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
+                name: "SHULKER_CLUSTER_NAME".to_string(),
+                value: Some(context.cluster.name_any()),
+                ..EnvVar::default()
+            },
+            EnvVar {
                 name: "SHULKER_PROXY_NAME".to_string(),
                 value_from: Some(EnvVarSource {
                     field_ref: Some(ObjectFieldSelector {
