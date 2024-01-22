@@ -4,6 +4,8 @@ import java.util.Optional
 import java.util.UUID
 
 object Configuration {
+    val CLUSTER_NAME = getStringEnv("SHULKER_CLUSTER_NAME")
+
     val PROXY_NAMESPACE = getStringEnv("SHULKER_PROXY_NAMESPACE")
     val PROXY_NAME = getStringEnv("SHULKER_PROXY_NAME")
     val PROXY_TTL_SECONDS = getLongEnv("SHULKER_PROXY_TTL_SECONDS")

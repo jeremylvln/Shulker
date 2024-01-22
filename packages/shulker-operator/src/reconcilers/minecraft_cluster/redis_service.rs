@@ -94,7 +94,7 @@ mod tests {
     use crate::reconcilers::minecraft_cluster::fixtures::{create_client_mock, TEST_CLUSTER};
 
     #[test]
-    fn name_contains_fleet_name() {
+    fn name_contains_cluster_name() {
         // W
         let name = super::RedisServiceBuilder::name(&TEST_CLUSTER);
 

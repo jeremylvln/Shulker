@@ -17,10 +17,7 @@ metadata:
   name: my-server
   namespace: default
 spec:
-  ports:
-    - name: minecraft
-      containerPort: 25565
-      protocol: TCP
+  ports: []
   health:
     disabled: false
     periodSeconds: 15
@@ -82,6 +79,9 @@ spec:
           image: "itzg/minecraft-server:2023.10.1-java17"
           imagePullPolicy: IfNotPresent
           name: minecraft-server
+          ports:
+            - containerPort: 25565
+              name: minecraft
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -136,6 +136,7 @@ spec:
         beta.kubernetes.io/os: linux
       restartPolicy: Never
       serviceAccountName: shulker-my-cluster-server
+      subdomain: my-cluster-cluster
       volumes:
         - configMap:
             name: my-server-config

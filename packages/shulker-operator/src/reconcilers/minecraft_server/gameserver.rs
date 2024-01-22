@@ -3,6 +3,7 @@ use std::collections::BTreeMap;
 use k8s_openapi::api::core::v1::Capabilities;
 use k8s_openapi::api::core::v1::ConfigMapVolumeSource;
 use k8s_openapi::api::core::v1::Container;
+use k8s_openapi::api::core::v1::ContainerPort;
 use k8s_openapi::api::core::v1::EmptyDirVolumeSource;
 use k8s_openapi::api::core::v1::EnvVar;
 use k8s_openapi::api::core::v1::EnvVarSource;
@@ -29,7 +30,6 @@ use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
 use google_agones_crds::v1::game_server::GameServerHealthSpec;
-use google_agones_crds::v1::game_server::GameServerPortSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
@@ -136,11 +136,7 @@ impl<'a> GameServerBuilder {
             Self::get_pod_template_spec(resourceref_resolver, context, minecraft_server).await?;
 
         let game_server_spec = GameServerSpec {
-            ports: Some(vec![GameServerPortSpec {
-                name: "minecraft".to_string(),
-                container_port: 25565,
-                protocol: "TCP".to_string(),
-            }]),
+            ports: Some(vec![]),
             eviction: Some(GameServerEvictionSpec {
                 safe: "OnUpgrade".to_string(),
             }),
@@ -191,6 +187,11 @@ impl<'a> GameServerBuilder {
             containers: vec![Container {
                 image: Some(MINECRAFT_SERVER_IMAGE.to_string()),
                 name: "minecraft-server".to_string(),
+                ports: Some(vec![ContainerPort {
+                    name: Some("minecraft".to_string()),
+                    container_port: 25565,
+                    ..ContainerPort::default()
+                }]),
                 env: Some(Self::get_env(resourceref_resolver, context, minecraft_server).await?),
                 image_pull_policy: Some("IfNotPresent".to_string()),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
@@ -213,6 +214,10 @@ impl<'a> GameServerBuilder {
                 ]),
                 ..Container::default()
             }],
+            subdomain: Some(format!(
+                "{}-cluster",
+                &minecraft_server.spec.cluster_ref.name
+            )),
             service_account_name: Some(format!(
                 "shulker-{}-server",
                 &minecraft_server.spec.cluster_ref.name

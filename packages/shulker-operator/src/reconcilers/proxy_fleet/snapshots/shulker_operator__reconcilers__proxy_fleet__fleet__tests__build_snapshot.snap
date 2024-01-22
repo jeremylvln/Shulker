@@ -61,6 +61,8 @@ spec:
         spec:
           containers:
             - env:
+                - name: SHULKER_CLUSTER_NAME
+                  value: my-cluster
                 - name: SHULKER_PROXY_NAME
                   valueFrom:
                     fieldRef:

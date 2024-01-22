@@ -24,7 +24,8 @@ use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use crate::reconcilers::ReconcilerError;
 
 use self::{
-    forwarding_secret::ForwardingSecretBuilder, minecraft_server_role::MinecraftServerRoleBuilder,
+    forwarding_secret::ForwardingSecretBuilder, headless_service::HeadlessServiceBuilder,
+    minecraft_server_role::MinecraftServerRoleBuilder,
     minecraft_server_role_binding::MinecraftServerRoleBindingBuilder,
     minecraft_server_service_account::MinecraftServerServiceAccountBuilder,
     proxy_role::ProxyRoleBuilder, proxy_role_binding::ProxyRoleBindingBuilder,
@@ -35,6 +36,7 @@ use self::{
 use super::Result;
 
 mod forwarding_secret;
+mod headless_service;
 mod minecraft_server_role;
 mod minecraft_server_role_binding;
 mod minecraft_server_service_account;
@@ -54,6 +56,7 @@ struct MinecraftClusterReconciler {
 
     // Builders
     forwarding_secret_builder: ForwardingSecretBuilder,
+    headless_service_builder: HeadlessServiceBuilder,
     proxy_service_account_builder: ProxyServiceAccountBuilder,
     proxy_role_builder: ProxyRoleBuilder,
     proxy_role_binding_builder: ProxyRoleBindingBuilder,
@@ -71,6 +74,9 @@ impl MinecraftClusterReconciler {
         cluster: Arc<MinecraftCluster>,
     ) -> Result<Action> {
         reconcile_builder(&self.forwarding_secret_builder, cluster.as_ref(), None)
+            .await
+            .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(&self.headless_service_builder, cluster.as_ref(), None)
             .await
             .map_err(ReconcilerError::BuilderError)?;
         reconcile_builder(&self.proxy_service_account_builder, cluster.as_ref(), None)
@@ -191,6 +197,7 @@ pub async fn run(client: Client) {
     let context = MinecraftClusterReconciler {
         client: client.clone(),
         forwarding_secret_builder: ForwardingSecretBuilder::new(client.clone()),
+        headless_service_builder: HeadlessServiceBuilder::new(client.clone()),
         proxy_service_account_builder: ProxyServiceAccountBuilder::new(client.clone()),
         proxy_role_builder: ProxyRoleBuilder::new(client.clone()),
         proxy_role_binding_builder: ProxyRoleBindingBuilder::new(client.clone()),
