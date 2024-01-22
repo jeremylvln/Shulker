@@ -39,39 +39,15 @@ class AgonesV1GameServer : CustomResource<AgonesV1GameServer.Spec, AgonesV1GameS
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonPropertyOrder(
-        "address",
-        "ports",
         "state"
     )
     class Status : KubernetesResource {
-        @set:JsonProperty("address")
-        @get:JsonProperty("address")
-        @JsonProperty("address")
-        var address: String? = null
-
-        @set:JsonProperty("ports")
-        @get:JsonProperty("ports")
-        @JsonProperty("ports")
-        var ports: kotlin.collections.List<Port>? = null
-
         @set:JsonProperty("state")
         @get:JsonProperty("state")
         @JsonProperty("state")
         var state: String? = null
 
         fun isReady(): Boolean = this.state == "Ready" || this.state == "Reserved" || this.state == "Allocated"
-
-        class Port {
-            @get:JsonProperty("name")
-            @set:JsonProperty("name")
-            @JsonProperty("name")
-            var name: String? = null
-
-            @get:JsonProperty("port")
-            @set:JsonProperty("port")
-            @JsonProperty("port")
-            var port: Int? = null
-        }
     }
 
     @JsonDeserialize(using = JsonDeserializer.None::class)

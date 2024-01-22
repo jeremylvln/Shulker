@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent.services
 
+import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
 import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
@@ -10,6 +11,10 @@ class ServerDirectoryService(
 ) {
     private val serversByTag = HashMap<String, MutableSet<String>>()
     private val tagsByServer = HashMap<String, Set<String>>()
+
+    companion object {
+        private const val DEFAULT_MINECRAFT_PORT = 25565
+    }
 
     init {
         this.agent.kubernetesGateway.watchMinecraftServerEvents { action, minecraftServer ->
@@ -38,9 +43,13 @@ class ServerDirectoryService(
 
         if (minecraftServer.status.isReady()) {
             val tags = minecraftServer.metadata.annotations["minecraftserver.shulkermc.io/tags"]
+
             this.registerServer(
                 minecraftServer.metadata.name,
-                InetSocketAddress(minecraftServer.status.address, minecraftServer.status.ports!![0].port!!),
+                InetSocketAddress(
+                    "${minecraftServer.metadata.name}.${Configuration.CLUSTER_NAME}-cluster.${minecraftServer.metadata.namespace}", // ktlint-disable standard_max-line-length
+                    DEFAULT_MINECRAFT_PORT
+                ),
                 tags?.split(",")?.toSet().orEmpty()
             )
         }
