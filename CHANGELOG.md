@@ -1,3 +1,16 @@
+## [0.6.0](https://github.com/jeremylvln/Shulker/compare/v0.5.3...v0.6.0) (2024-01-22)
+
+
+### :sparkles: Features :sparkles:
+
+* implement lifecycle strategies on server ([#356](https://github.com/jeremylvln/Shulker/issues/356)) ([a8a33ab](https://github.com/jeremylvln/Shulker/commit/a8a33ab266412cfc52bd1c9c78889e17f779ee30))
+* route proxy to server internal network through internal DNS ([#357](https://github.com/jeremylvln/Shulker/issues/357)) ([5f12300](https://github.com/jeremylvln/Shulker/commit/5f12300e46c819d6a18a21ae93b1cfa3eb272304))
+
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.30.0 ([#350](https://github.com/jeremylvln/Shulker/issues/350)) ([c6e14a3](https://github.com/jeremylvln/Shulker/commit/c6e14a3ceb7b564e7ca095d3cfb1392516a5fa12))
+
 ## [0.5.3](https://github.com/jeremylvln/Shulker/compare/v0.5.2...v0.5.3) (2024-01-16)
 
 
