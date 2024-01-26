@@ -16,7 +16,7 @@ macro_rules! generate_crd {
             Path::new(".")
                 .join("kube")
                 .join("helm")
-                .join("subcharts")
+                .join("charts")
                 .join($component)
                 .join("templates")
                 .join("crds")

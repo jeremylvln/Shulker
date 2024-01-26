@@ -13,7 +13,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private val ttlTask: ProxyInterface.ScheduledTask
-    private var drained = false
+    private var draining = false
 
     init {
         this.agent.kubernetesGateway.watchProxyEvents { action, proxy ->
@@ -27,6 +27,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         }
 
         this.agent.logger.info("Proxy will be force stopped in ${Configuration.PROXY_TTL_SECONDS} seconds")
+
         this.ttlTask =
             this.agent.proxyInterface.scheduleDelayedTask(
                 Configuration.PROXY_TTL_SECONDS,
@@ -39,10 +40,11 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun drain() {
-        if (this.drained) {
+        if (this.draining) {
             return
         }
-        this.drained = true
+
+        this.draining = true
 
         this.agent.fileSystem.createDrainLock()
         this.agent.playerMovementService.setAcceptingPlayers(false)

@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent.services
 
+import com.google.common.base.Preconditions
 import com.google.common.base.Suppliers
 import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
@@ -11,6 +12,7 @@ import io.shulkermc.proxyagent.platform.ServerPreConnectHookResult
 import io.shulkermc.proxyagent.utils.createDisconnectMessage
 import net.kyori.adventure.text.format.NamedTextColor
 import java.util.Optional
+import java.util.UUID
 
 class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     companion object {
@@ -49,10 +51,20 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             java.util.concurrent.TimeUnit.SECONDS,
         )
 
+    private val externalClusterAddress = this.agent.kubernetesGateway.getFleetServiceAddress()
+
     private var isAllocatedByAgones = false
     private var acceptingPlayers = true
 
     init {
+        this.externalClusterAddress.ifPresentOrElse({ addr ->
+            this.agent.logger.info("Found fleet's external address: ${addr.hostName}")
+        }, {
+            this.agent.logger.info(
+                "Fleet external address was not found, transfer capabilities will be disabled",
+            )
+        })
+
         this.agent.proxyInterface.addProxyPingHook(this::onProxyPing, HookPostOrder.FIRST)
         this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin, HookPostOrder.FIRST)
         this.agent.proxyInterface.addPlayerLoginHook(this::onPlayerLogin, HookPostOrder.EARLY)
@@ -71,6 +83,24 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             this.agent.fileSystem.createReadinessLock()
             this.agent.logger.info("Proxy is no longer accepting players")
         }
+    }
+
+    fun reconnectPlayerToCluster(playerId: UUID) {
+        Preconditions.checkState(
+            this.externalClusterAddress.isPresent,
+            "This ProxyFleet is not operating under a LoadBalancer Service",
+        )
+
+        this.agent.proxyInterface.transferPlayerToAddress(playerId, this.externalClusterAddress.get())
+    }
+
+    fun reconnectEveryoneToCluster() {
+        Preconditions.checkState(
+            this.externalClusterAddress.isPresent,
+            "This ProxyFleet is not operating under a LoadBalancer Service",
+        )
+
+        this.agent.proxyInterface.transferEveryoneToAddress(this.externalClusterAddress.get())
     }
 
     private fun onProxyPing(): ProxyPingHookResult {

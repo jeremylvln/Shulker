@@ -162,6 +162,21 @@ class ProxyInterfaceVelocity(
         }
     }
 
+    override fun transferPlayerToAddress(
+        playerId: UUID,
+        address: InetSocketAddress,
+    ) {
+        this.proxy.getPlayer(playerId).ifPresent { player ->
+            player.transferToHost(address)
+        }
+    }
+
+    override fun transferEveryoneToAddress(address: InetSocketAddress) {
+        this.proxy.allPlayers.forEach { player ->
+            player.transferToHost(address)
+        }
+    }
+
     override fun getPlayerCount(): Int {
         return this.proxy.playerCount
     }

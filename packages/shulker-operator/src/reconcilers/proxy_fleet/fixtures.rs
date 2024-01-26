@@ -94,7 +94,8 @@ lazy_static! {
                     "service.beta.kubernetes.io/load-balancer".to_string(),
                     "internal".to_string()
                 )])),
-                external_traffic_policy: Some(ProxyFleetServiceExternalTrafficPolicy::Cluster)
+                external_traffic_policy: Some(ProxyFleetServiceExternalTrafficPolicy::Cluster),
+                preferred_reconnection_address: Some("127.0.0.1".to_string())
             }),
             autoscaling: Some(FleetAutoscalingSpec {
                 agones_policy: Some(FleetAutoscalerPolicySpec {

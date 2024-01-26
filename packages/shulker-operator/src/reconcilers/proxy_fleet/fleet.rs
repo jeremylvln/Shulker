@@ -27,6 +27,7 @@ use kube::Client;
 use kube::ResourceExt;
 use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
+use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetServiceSpec;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 use url::Url;
 
@@ -212,7 +213,11 @@ impl<'a> FleetBuilder {
                     container_port: 25577,
                     ..ContainerPort::default()
                 }]),
-                env: Some(self.get_env(context, &proxy_fleet.spec.template.spec)?),
+                env: Some(self.get_env(
+                    context,
+                    &proxy_fleet.spec.template.spec,
+                    &proxy_fleet.spec.service,
+                )?),
                 readiness_probe: Some(Probe {
                     exec: Some(ExecAction {
                         command: Some(vec![
@@ -448,6 +453,7 @@ impl<'a> FleetBuilder {
         &self,
         context: &FleetBuilderContext<'a>,
         spec: &ProxyFleetTemplateSpec,
+        service_spec: &Option<ProxyFleetServiceSpec>,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let redis_ref = RedisRef::from_cluster(context.cluster)?;
 
@@ -528,6 +534,17 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
         ];
+
+        if let Some(preferred_reconnection_address) = service_spec
+            .as_ref()
+            .and_then(|x| x.preferred_reconnection_address.as_ref())
+        {
+            env.push(EnvVar {
+                name: "SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS".to_string(),
+                value: Some(preferred_reconnection_address.clone()),
+                ..EnvVar::default()
+            })
+        }
 
         if let Some(redis_ref_credentials_secret_name) = redis_ref.credentials_secret_name.as_ref()
         {
@@ -1091,6 +1108,42 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn get_env_contains_preferred_reconnect_address() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut spec = TEST_PROXY_FLEET.spec.clone();
+        spec.service
+            .as_mut()
+            .unwrap()
+            .preferred_reconnection_address = Some("127.0.0.1".to_string());
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let env = builder
+            .get_env(&context, &spec.template.spec, &spec.service)
+            .unwrap();
+
+        // T
+        spec.template
+            .spec
+            .pod_overrides
+            .unwrap()
+            .env
+            .unwrap()
+            .iter()
+            .for_each(|env_override| {
+                assert!(env.contains(env_override));
+            });
+    }
+
+    #[tokio::test]
     async fn get_env_merges_env_overrides() {
         // G
         let client = create_client_mock();
@@ -1105,19 +1158,16 @@ mod tests {
         };
 
         // W
-        let env = builder.get_env(&context, &spec.template.spec).unwrap();
+        let env = builder
+            .get_env(&context, &spec.template.spec, &spec.service)
+            .unwrap();
 
         // T
-        spec.template
-            .spec
-            .pod_overrides
-            .unwrap()
-            .env
-            .unwrap()
+        let address_env = env
             .iter()
-            .for_each(|env_override| {
-                assert!(env.contains(env_override));
-            });
+            .find(|env| env.name == "SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS")
+            .unwrap();
+        assert_eq!(address_env.value.as_ref().unwrap(), "127.0.0.1");
     }
 
     #[tokio::test]

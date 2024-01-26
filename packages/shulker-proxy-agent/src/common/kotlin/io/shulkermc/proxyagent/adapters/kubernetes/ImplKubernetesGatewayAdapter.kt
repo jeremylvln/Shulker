@@ -6,7 +6,10 @@ import io.fabric8.kubernetes.client.KubernetesClient
 import io.fabric8.kubernetes.client.KubernetesClientBuilder
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler
 import io.fabric8.kubernetes.client.okhttp.OkHttpClientFactory
+import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
+import java.net.InetSocketAddress
+import java.util.Optional
 import java.util.concurrent.CompletionStage
 
 class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : KubernetesGatewayAdapter {
@@ -43,6 +46,29 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
             "app.kubernetes.io/component",
             "minecraft-server",
         ).list()
+    }
+
+    override fun getFleetServiceAddress(): Optional<InetSocketAddress> {
+        if (Configuration.PROXY_PREFERRED_RECONNECT_ADDRESS.isPresent) {
+            return Configuration.PROXY_PREFERRED_RECONNECT_ADDRESS
+        }
+
+        val service =
+            this.kubernetesClient.services()
+                .inNamespace(Configuration.PROXY_NAMESPACE)
+                .withName(Configuration.PROXY_FLEET_NAME)
+                .get()
+
+        if (service.spec.type !== "LoadBalancer") {
+            return Optional.empty()
+        }
+
+        return try {
+            val ingress = service.status.loadBalancer.ingress[0]
+            Optional.of(InetSocketAddress(ingress.ip, ingress.ports[0].port))
+        } catch (_: NullPointerException) {
+            Optional.empty()
+        }
     }
 
     override fun watchProxyEvents(

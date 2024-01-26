@@ -110,6 +110,17 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
     fun shutdown() {
         try {
+            this.playerMovementService.setAcceptingPlayers(false)
+
+            try {
+                this.logger.info("Trying to reconnect everyone to cluster")
+                this.playerMovementService.reconnectEveryoneToCluster()
+            } catch (
+                @Suppress("TooGenericExceptionCaught") e: Exception,
+            ) {
+                this.logger.warning("Failed to reconnect everyone to cluster, connected players will be disconnected")
+            }
+
             this.cache.unregisterProxy(Configuration.PROXY_NAME)
             this.pubSub.close()
             this.agonesGateway.askShutdown()
@@ -121,6 +132,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
                 e,
             )
+
             exitProcess(0)
         }
     }

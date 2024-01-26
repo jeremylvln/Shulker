@@ -87,6 +87,8 @@ spec:
                   value: latest
                 - name: HEALTH_USE_PROXY
                   value: "true"
+                - name: SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS
+                  value: 127.0.0.1
                 - name: EXTRA_ENV
                   value: my_value
               image: "itzg/mc-proxy:2024.6.0-java21"
