@@ -502,7 +502,7 @@ mod velocity {
                 .unwrap_or(false);
 
             VelocityToml {
-                config_version: "2.5".to_string(),
+                config_version: "2.6".to_string(),
                 bind: "0.0.0.0:25577".to_string(),
                 motd: spec.motd.clone(),
                 show_max_players: spec.max_players,
@@ -614,7 +614,7 @@ mod velocity {
         fn to_string() {
             // G
             let config = super::VelocityToml {
-                config_version: "2.5".to_string(),
+                config_version: "2.6".to_string(),
                 bind: "0.0.0.0:25577".to_string(),
                 motd: "A Motd".to_string(),
                 show_max_players: 100,
