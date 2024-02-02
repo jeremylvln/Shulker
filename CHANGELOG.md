@@ -1,3 +1,13 @@
+## [0.6.1](https://github.com/jeremylvln/Shulker/compare/v0.6.0...v0.6.1) (2024-02-02)
+
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.31.0 ([#383](https://github.com/jeremylvln/Shulker/issues/383)) ([0dfc375](https://github.com/jeremylvln/Shulker/commit/0dfc3750722a580373305c7470de9f0ab2c50272))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v3.25.2 ([#361](https://github.com/jeremylvln/Shulker/issues/361)) ([493ba07](https://github.com/jeremylvln/Shulker/commit/493ba078e07f9f35c9e32242f3928fb99ba9424f))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.10.0 ([#360](https://github.com/jeremylvln/Shulker/issues/360)) ([63548a2](https://github.com/jeremylvln/Shulker/commit/63548a2eba0ce24f904fbac1a30f06cf2dd29cc3))
+* **shulker-operator:** set velocity config file version to 2.6 to avoid motd migration ([40b90fc](https://github.com/jeremylvln/Shulker/commit/40b90fc8ff2ca3eb640b47e3fd104a7eacd48e7d))
+
 ## [0.6.0](https://github.com/jeremylvln/Shulker/compare/v0.5.3...v0.6.0) (2024-01-22)
 
 
