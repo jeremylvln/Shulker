@@ -726,7 +726,7 @@ checksum = "4271d37baee1b8c7e4b708028c57d816cf9d2434acb33a549475f78c181f6253"
 name = "google-agones-crds"
 version = "0.6.1"
 dependencies = [
- "k8s-openapi",
+ "k8s-openapi 0.20.0",
  "kube",
  "schemars",
  "serde",
@@ -1132,9 +1132,9 @@ dependencies = [
 
 [[package]]
 name = "jsonpath-rust"
-version = "0.3.5"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06cc127b7c3d270be504572364f9569761a180b981919dd0d87693a7f5fb7829"
+checksum = "96acbc6188d3bd83519d053efec756aa4419de62ec47be7f28dec297f7dc9eb0"
 dependencies = [
  "pest",
  "pest_derive",
@@ -1159,12 +1159,25 @@ dependencies = [
 ]
 
 [[package]]
-name = "kube"
-version = "0.87.2"
+name = "k8s-openapi"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3499c8d60c763246c7a213f51caac1e9033f46026904cb89bc8951ae8601f26e"
+checksum = "301f367a36090b7dfdaac248ee3ed4f14a6a8292e7bec0f1c5e6e2e1f181cd33"
 dependencies = [
- "k8s-openapi",
+ "base64",
+ "chrono",
+ "serde",
+ "serde-value",
+ "serde_json",
+]
+
+[[package]]
+name = "kube"
+version = "0.88.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "462fe330a0617b276ec864c2255810adcdf519ecb6844253c54074b2086a97bc"
+dependencies = [
+ "k8s-openapi 0.21.0",
  "kube-client",
  "kube-core",
  "kube-derive",
@@ -1173,9 +1186,9 @@ dependencies = [
 
 [[package]]
 name = "kube-client"
-version = "0.87.2"
+version = "0.88.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "033450dfa0762130565890dadf2f8835faedf749376ca13345bcd8ecd6b5f29f"
+checksum = "7fe0d65dd6f3adba29cfb84f19dfe55449c7f6c35425f9d8294bec40313e0b64"
 dependencies = [
  "base64",
  "bytes",
@@ -1189,7 +1202,7 @@ dependencies = [
  "hyper-rustls",
  "hyper-timeout",
  "jsonpath-rust",
- "k8s-openapi",
+ "k8s-openapi 0.21.0",
  "kube-core",
  "pem",
  "pin-project",
@@ -1209,15 +1222,15 @@ dependencies = [
 
 [[package]]
 name = "kube-core"
-version = "0.87.2"
+version = "0.88.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5bba93d054786eba7994d03ce522f368ef7d48c88a1826faa28478d85fb63ae"
+checksum = "a6b42844e9172f631b8263ea9ce003b9251da13beb1401580937ad206dd82f4c"
 dependencies = [
  "chrono",
  "form_urlencoded",
  "http 0.2.11",
  "json-patch",
- "k8s-openapi",
+ "k8s-openapi 0.21.0",
  "once_cell",
  "schemars",
  "serde",
@@ -1227,9 +1240,9 @@ dependencies = [
 
 [[package]]
 name = "kube-derive"
-version = "0.87.2"
+version = "0.88.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91e98dd5e5767c7b894c1f0e41fd628b145f808e981feb8b08ed66455d47f1a4"
+checksum = "f5b5a111ee287bd237b8190b8c39543ea9fd22f79e9c32a36c24e08234bcda22"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -1240,9 +1253,9 @@ dependencies = [
 
 [[package]]
 name = "kube-runtime"
-version = "0.87.2"
+version = "0.88.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d8893eb18fbf6bb6c80ef6ee7dd11ec32b1dc3c034c988ac1b3a84d46a230ae"
+checksum = "2bc06275064c81056fbb28ea876b3fb339d970e8132282119359afca0835c0ea"
 dependencies = [
  "ahash",
  "async-trait",
@@ -1251,7 +1264,7 @@ dependencies = [
  "futures",
  "hashbrown 0.14.3",
  "json-patch",
- "k8s-openapi",
+ "k8s-openapi 0.21.0",
  "kube-client",
  "parking_lot",
  "pin-project",
@@ -2163,7 +2176,7 @@ version = "0.6.1"
 dependencies = [
  "base64",
  "google-agones-crds",
- "k8s-openapi",
+ "k8s-openapi 0.20.0",
  "kube",
  "schemars",
  "serde",
@@ -2182,7 +2195,7 @@ dependencies = [
  "axum 0.7.4",
  "chrono",
  "hostname",
- "k8s-openapi",
+ "k8s-openapi 0.20.0",
  "kube",
  "prometheus",
  "serde",
@@ -2209,7 +2222,7 @@ dependencies = [
  "http 0.2.11",
  "hyper 0.14.28",
  "insta",
- "k8s-openapi",
+ "k8s-openapi 0.20.0",
  "kube",
  "lazy_static",
  "rand",
