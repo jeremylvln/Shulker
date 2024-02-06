@@ -448,6 +448,11 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
+                name: "SHULKER_PROXY_PLAYER_DELTA_BEFORE_EXCLUSION".to_string(),
+                value: Some(spec.config.players_delta_before_exclusion.to_string()),
+                ..EnvVar::default()
+            },
+            EnvVar {
                 name: "SHULKER_NETWORK_ADMINS".to_string(),
                 value: Some(
                     context

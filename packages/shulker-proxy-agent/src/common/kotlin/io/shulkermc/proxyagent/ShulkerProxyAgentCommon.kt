@@ -87,7 +87,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             }
 
             this.cache.registerProxy(Configuration.PROXY_NAME, this.proxyInterface.getPlayerCapacity())
-            this.agonesGateway.setAllocated()
+            this.agonesGateway.setReady()
         } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
             this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping proxy", e)
             this.shutdown()

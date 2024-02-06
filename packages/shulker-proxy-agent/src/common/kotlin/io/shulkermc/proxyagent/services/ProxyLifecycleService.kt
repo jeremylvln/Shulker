@@ -43,7 +43,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         }
         this.drained = true
 
-        this.agent.fileSystem.createDrainFile()
+        this.agent.fileSystem.createDrainLock()
         this.agent.playerMovementService.setAcceptingPlayers(false)
 
         this.agent.proxyInterface.scheduleRepeatingTask(

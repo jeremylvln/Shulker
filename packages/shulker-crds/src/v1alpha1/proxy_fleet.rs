@@ -130,6 +130,15 @@ pub struct ProxyFleetTemplateConfigurationSpec {
     /// drained automatically
     #[schemars(default = "ProxyFleetTemplateConfigurationSpec::default_ttl_seconds")]
     pub ttl_seconds: u32,
+
+    /// Number of player slots to reserve when exclusing a proxy
+    /// from the load balancer. This will allow load balancer
+    /// implementations to update itself while still being able
+    /// to accept some players
+    #[schemars(
+        default = "ProxyFleetTemplateConfigurationSpec::default_players_delta_before_exclusion"
+    )]
+    pub players_delta_before_exclusion: u32,
 }
 
 #[cfg(not(tarpaulin_include))]
@@ -152,6 +161,10 @@ impl ProxyFleetTemplateConfigurationSpec {
 
     fn default_ttl_seconds() -> u32 {
         86400
+    }
+
+    fn default_players_delta_before_exclusion() -> u32 {
+        15
     }
 }
 
