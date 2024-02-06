@@ -31,6 +31,7 @@ use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 use url::Url;
 
 use crate::agent::AgentConfig;
+use crate::constants;
 use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
 use crate::reconcilers::redis_ref::RedisRef;
@@ -47,7 +48,6 @@ use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 use super::config_map::ConfigMapBuilder;
 use super::ProxyFleetReconciler;
 
-const PROXY_IMAGE: &str = "itzg/bungeecord:java17-2022.4.1";
 const PROXY_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const PROXY_SHULKER_FORWARDING_SECRET_DIR: &str = "/mnt/shulker/forwarding-secret";
 const PROXY_DATA_DIR: &str = "/server";
@@ -205,7 +205,7 @@ impl<'a> FleetBuilder {
                 ..Container::default()
             }]),
             containers: vec![Container {
-                image: Some(PROXY_IMAGE.to_string()),
+                image: Some(constants::PROXY_IMAGE.to_string()),
                 name: "proxy".to_string(),
                 ports: Some(vec![ContainerPort {
                     name: Some("minecraft".to_string()),

@@ -24,6 +24,7 @@ use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
 use url::Url;
 
 use crate::agent::AgentConfig;
+use crate::constants;
 use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
@@ -37,7 +38,6 @@ use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 use super::config_map::ConfigMapBuilder;
 use super::MinecraftServerReconciler;
 
-const MINECRAFT_SERVER_IMAGE: &str = "itzg/minecraft-server:2023.10.1-java17";
 const MINECRAFT_SERVER_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const MINECRAFT_SERVER_CONFIG_DIR: &str = "/config";
 const MINECRAFT_SERVER_DATA_DIR: &str = "/data";
@@ -185,7 +185,7 @@ impl<'a> GameServerBuilder {
                 ..Container::default()
             }]),
             containers: vec![Container {
-                image: Some(MINECRAFT_SERVER_IMAGE.to_string()),
+                image: Some(constants::MINECRAFT_SERVER_IMAGE.to_string()),
                 name: "minecraft-server".to_string(),
                 ports: Some(vec![ContainerPort {
                     name: Some("minecraft".to_string()),
