@@ -64,6 +64,7 @@ lazy_static! {
                         server_icon: "abc==".to_string(),
                         proxy_protocol: true,
                         ttl_seconds: 3600,
+                        players_delta_before_exclusion: 15,
                     },
                     pod_overrides: Some(ProxyFleetTemplatePodOverridesSpec {
                         image: None,
