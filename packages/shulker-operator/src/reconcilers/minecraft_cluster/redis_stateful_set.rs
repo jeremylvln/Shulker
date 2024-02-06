@@ -10,9 +10,9 @@ use k8s_openapi::api::core::v1::PersistentVolumeClaim;
 use k8s_openapi::api::core::v1::PersistentVolumeClaimSpec;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
-use k8s_openapi::api::core::v1::ResourceRequirements;
 use k8s_openapi::api::core::v1::SecurityContext;
 use k8s_openapi::api::core::v1::VolumeMount;
+use k8s_openapi::api::core::v1::VolumeResourceRequirements;
 use k8s_openapi::apimachinery::pkg::api::resource::Quantity;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
 use kube::core::ObjectMeta;
@@ -164,12 +164,12 @@ impl RedisStatefulSetBuilder {
             },
             spec: Some(PersistentVolumeClaimSpec {
                 access_modes: Some(vec!["ReadWriteOnce".to_string()]),
-                resources: Some(ResourceRequirements {
+                resources: Some(VolumeResourceRequirements {
                     requests: Some(BTreeMap::from([(
                         "storage".to_string(),
                         Quantity("1Gi".to_string()),
                     )])),
-                    ..ResourceRequirements::default()
+                    ..VolumeResourceRequirements::default()
                 }),
                 ..PersistentVolumeClaimSpec::default()
             }),
