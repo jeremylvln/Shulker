@@ -87,7 +87,7 @@ spec:
                   value: "true"
                 - name: EXTRA_ENV
                   value: my_value
-              image: "itzg/bungeecord:java17-2022.4.1"
+              image: "itzg/bungeecord:java17-2023.11.0"
               imagePullPolicy: IfNotPresent
               name: proxy
               ports:
