@@ -1,7 +1,7 @@
 apiVersion: v2
 type: application
-version: '0.6.1'
-appVersion: '0.6.1'
+version: '0.7.0'
+appVersion: '0.7.0'
 name: shulker-operator
 description: A Kubernetes operator for managing complex and dynamic Minecraft infrastructures.
 home: https://shulker.jeremylvln.fr

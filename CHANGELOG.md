@@ -1,3 +1,17 @@
+## [0.7.0](https://github.com/jeremylvln/Shulker/compare/v0.6.1...v0.7.0) (2024-02-06)
+
+
+### :sparkles: Features :sparkles:
+
+* exclude proxy from load balancer when full ([#396](https://github.com/jeremylvln/Shulker/issues/396)) ([e53e9f3](https://github.com/jeremylvln/Shulker/commit/e53e9f31d61f42b853c1c2616d5ab2dfcf047886))
+* **shulker-proxy-agent:** use proxy capacities as max slots in ping requests ([#394](https://github.com/jeremylvln/Shulker/issues/394)) ([235e6ba](https://github.com/jeremylvln/Shulker/commit/235e6ba39cd93bac7451b6f912a82b5e7a26a795))
+
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency net.md-5:bungeecord-api to v1.20-r0.2 ([#386](https://github.com/jeremylvln/Shulker/issues/386)) ([7d96f9b](https://github.com/jeremylvln/Shulker/commit/7d96f9b423a859c4857ab6b94229df857e563056))
+* **shulker-operator:** bump proxy image to fix motd parsing error ([#397](https://github.com/jeremylvln/Shulker/issues/397)) ([35437b2](https://github.com/jeremylvln/Shulker/commit/35437b2bd3b1feb125ceb2585932a8e9d2a006d0))
+
 ## [0.6.1](https://github.com/jeremylvln/Shulker/compare/v0.6.0...v0.6.1) (2024-02-02)
 
 
