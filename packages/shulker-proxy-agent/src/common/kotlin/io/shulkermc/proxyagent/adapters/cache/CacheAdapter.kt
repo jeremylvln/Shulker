@@ -5,7 +5,7 @@ import java.util.Optional
 import java.util.UUID
 
 interface CacheAdapter {
-    fun registerProxy(proxyName: String)
+    fun registerProxy(proxyName: String, proxyCapacity: Int)
     fun unregisterProxy(proxyName: String)
     fun updateProxyLastSeen(proxyName: String)
     fun listRegisteredProxies(): List<RegisteredProxy>
@@ -25,8 +25,9 @@ interface CacheAdapter {
     fun getPlayerNamesFromIds(playerIds: List<UUID>): Map<UUID, String>
 
     fun countOnlinePlayers(): Int
+    fun countPlayerCapacity(): Int
 
-    data class RegisteredProxy(val proxyName: String, val lastSeenMillis: Long)
+    data class RegisteredProxy(val proxyName: String, val proxyCapacity: Int, val lastSeenMillis: Long)
 
     interface Lock : AutoCloseable
 }

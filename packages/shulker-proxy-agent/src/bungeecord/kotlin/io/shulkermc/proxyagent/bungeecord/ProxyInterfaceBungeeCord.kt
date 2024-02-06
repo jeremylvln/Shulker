@@ -14,6 +14,7 @@ import io.shulkermc.proxyagent.platform.ServerPreConnectHook
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer
 import net.md_5.bungee.api.ProxyServer
+import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.PermissionCheckEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
@@ -56,7 +57,8 @@ class ProxyInterfaceBungeeCord(
                 @EventHandler(priority = EventPriority.LOWEST)
                 fun onPreLogin(event: ProxyPingEvent) {
                     val result = hook()
-                    event.response.players.online = result.playerCount
+                    event.response.players.online = result.onlinePlayerCount
+                    event.response.players.max = result.maxPlayerCount
                 }
             }
         )
@@ -73,8 +75,9 @@ class ProxyInterfaceBungeeCord(
                     val result = hook()
 
                     if (!result.allowed) {
-                        @Suppress("UnsafeCallOnNullableType")
-                        event.setCancelReason(*BungeeComponentSerializer.get().serialize(result.rejectComponent!!))
+                        event.reason = TextComponent.fromArray(
+                            *BungeeComponentSerializer.get().serialize(result.rejectComponent!!)
+                        )
                     }
                 }
             }
@@ -164,6 +167,10 @@ class ProxyInterfaceBungeeCord(
 
     override fun getPlayerCount(): Int {
         return this.proxy.players.size
+    }
+
+    override fun getPlayerCapacity(): Int {
+        return this.proxy.config.playerLimit
     }
 
     override fun scheduleDelayedTask(

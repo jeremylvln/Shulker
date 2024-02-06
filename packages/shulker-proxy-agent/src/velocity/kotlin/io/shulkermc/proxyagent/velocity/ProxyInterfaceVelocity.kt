@@ -53,7 +53,10 @@ class ProxyInterfaceVelocity(
             this.mapPostOrder(postOrder)
         ) { event ->
             val result = hook()
-            event.ping = event.ping.asBuilder().onlinePlayers(result.playerCount).build()
+            event.ping = event.ping.asBuilder()
+                .onlinePlayers(result.onlinePlayerCount)
+                .maximumPlayers(result.maxPlayerCount)
+                .build()
         }
     }
 
@@ -135,6 +138,10 @@ class ProxyInterfaceVelocity(
 
     override fun getPlayerCount(): Int {
         return this.proxy.playerCount
+    }
+
+    override fun getPlayerCapacity(): Int {
+        return this.proxy.configuration.showMaxPlayers
     }
 
     override fun scheduleDelayedTask(

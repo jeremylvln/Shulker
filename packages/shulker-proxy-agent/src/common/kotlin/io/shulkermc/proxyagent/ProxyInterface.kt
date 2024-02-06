@@ -27,6 +27,7 @@ interface ProxyInterface {
     fun prepareNetworkAdminsPermissions(playerIds: List<UUID>)
     fun teleportPlayerOnServer(playerName: String, serverName: String)
     fun getPlayerCount(): Int
+    fun getPlayerCapacity(): Int
 
     fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask
     fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask

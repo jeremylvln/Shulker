@@ -18,6 +18,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         private const val LIMBO_TAG = "limbo"
 
         private const val ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS = 10L
+        private const val PLAYER_CAPACITY_COUNT_MEMOIZE_SECONDS = 60L
 
         private val MSG_NOT_ACCEPTING_PLAYERS = createDisconnectMessage(
             "Proxy is not accepting players, try reconnect.",
@@ -35,6 +36,12 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS,
         java.util.concurrent.TimeUnit.SECONDS
     )
+    private val playerCapacityCountSupplier = Suppliers.memoizeWithExpiration(
+        { this.agent.cache.countPlayerCapacity() },
+        PLAYER_CAPACITY_COUNT_MEMOIZE_SECONDS,
+        java.util.concurrent.TimeUnit.SECONDS
+    )
+
     private var acceptingPlayers = true
 
     init {
@@ -57,7 +64,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onProxyPing(): ProxyPingHookResult {
-        return ProxyPingHookResult(this.onlinePlayerCountSupplier.get())
+        return ProxyPingHookResult(this.onlinePlayerCountSupplier.get(), this.playerCapacityCountSupplier.get())
     }
 
     private fun onPlayerPreLogin(): PlayerPreLoginHookResult {
