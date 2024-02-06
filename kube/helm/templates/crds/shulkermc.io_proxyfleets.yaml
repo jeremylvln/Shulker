@@ -337,6 +337,12 @@ spec:
                               type: object
                             nullable: true
                             type: array
+                          playersDeltaBeforeExclusion:
+                            default: 15
+                            description: Number of player slots to reserve when exclusing a proxy from the load balancer. This will allow load balancer implementations to update itself while still being able to accept some players
+                            format: uint32
+                            minimum: 0.0
+                            type: integer
                           plugins:
                             description: List of references to plugins to download
                             items:

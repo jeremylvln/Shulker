@@ -283,6 +283,13 @@ spec:
                             description: Name of an optional ConfigMap already containing the server configuration
                             nullable: true
                             type: string
+                          lifecycleStrategy:
+                            default: AllocateWhenNotEmpty
+                            description: Strategy to apply concerning Agones `GameServer` lifecycle management
+                            enum:
+                            - AllocateWhenNotEmpty
+                            - Manual
+                            type: string
                           maxPlayers:
                             default: 20
                             description: Number of maximum players that can connect to the MinecraftServer Deployment
