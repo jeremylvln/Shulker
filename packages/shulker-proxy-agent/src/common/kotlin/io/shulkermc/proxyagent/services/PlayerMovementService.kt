@@ -45,6 +45,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         java.util.concurrent.TimeUnit.SECONDS
     )
 
+    private var isAllocatedByAgones = false
     private var acceptingPlayers = true
 
     init {
@@ -76,11 +77,17 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         if (!this.acceptingPlayers) {
             return PlayerPreLoginHookResult.disallow(MSG_NOT_ACCEPTING_PLAYERS)
         }
+
         return PlayerPreLoginHookResult.allow()
     }
 
     private fun onPlayerLogin(player: Player) {
         this.agent.cache.updateCachedPlayerName(player.uniqueId, player.name)
+
+        if (!this.isAllocatedByAgones) {
+            this.isAllocatedByAgones = true
+            this.agent.agonesGateway.setAllocated()
+        }
 
         if (this.isProxyConsideredFull()) {
             this.setAcceptingPlayers(false)
@@ -89,6 +96,11 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
 
     private fun onPlayerDisconnect(player: Player) {
         this.agent.cache.unsetPlayerPosition(player.uniqueId)
+
+        if (this.isAllocatedByAgones && this.agent.proxyInterface.getPlayerCount() == 0) {
+            this.isAllocatedByAgones = false
+            this.agent.agonesGateway.setReady()
+        }
 
         if (!this.isProxyConsideredFull()) {
             this.setAcceptingPlayers(true)
