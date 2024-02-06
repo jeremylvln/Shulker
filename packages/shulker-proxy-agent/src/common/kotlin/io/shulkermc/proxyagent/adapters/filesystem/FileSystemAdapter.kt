@@ -1,5 +1,8 @@
 package io.shulkermc.proxyagent.adapters.filesystem
 
 interface FileSystemAdapter {
-    fun createDrainFile()
+    fun createDrainLock()
+
+    fun createReadinessLock()
+    fun deleteReadinessLock()
 }
