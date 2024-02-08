@@ -724,7 +724,7 @@ checksum = "4271d37baee1b8c7e4b708028c57d816cf9d2434acb33a549475f78c181f6253"
 
 [[package]]
 name = "google-agones-crds"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "k8s-openapi",
  "kube",
@@ -736,7 +736,7 @@ dependencies = [
 
 [[package]]
 name = "google-agones-sdk"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -746,7 +746,7 @@ dependencies = [
 
 [[package]]
 name = "google-open-match-sdk"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -967,10 +967,10 @@ dependencies = [
  "http 0.2.11",
  "hyper 0.14.28",
  "log",
- "rustls",
+ "rustls 0.21.9",
  "rustls-native-certs",
  "tokio",
- "tokio-rustls",
+ "tokio-rustls 0.24.1",
 ]
 
 [[package]]
@@ -1192,8 +1192,8 @@ dependencies = [
  "kube-core",
  "pem",
  "pin-project",
- "rustls",
- "rustls-pemfile",
+ "rustls 0.21.9",
+ "rustls-pemfile 1.0.4",
  "secrecy",
  "serde",
  "serde_json",
@@ -1811,16 +1811,16 @@ dependencies = [
  "once_cell",
  "percent-encoding",
  "pin-project-lite",
- "rustls",
+ "rustls 0.21.9",
  "rustls-native-certs",
- "rustls-pemfile",
+ "rustls-pemfile 1.0.4",
  "serde",
  "serde_json",
  "serde_urlencoded",
  "sync_wrapper",
  "system-configuration",
  "tokio",
- "tokio-rustls",
+ "tokio-rustls 0.24.1",
  "tower-service",
  "url",
  "wasm-bindgen",
@@ -1870,8 +1870,22 @@ checksum = "629648aced5775d558af50b2b4c7b02983a04b312126d45eeead26e7caa498b9"
 dependencies = [
  "log",
  "ring",
- "rustls-webpki",
+ "rustls-webpki 0.101.7",
  "sct",
+]
+
+[[package]]
+name = "rustls"
+version = "0.22.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e87c9956bd9807afa1f77e0f7594af32566e830e088a5576d27c5b6f30f49d41"
+dependencies = [
+ "log",
+ "ring",
+ "rustls-pki-types",
+ "rustls-webpki 0.102.2",
+ "subtle",
+ "zeroize",
 ]
 
 [[package]]
@@ -1881,7 +1895,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9aace74cb666635c918e9c12bc0d348266037aa8eb599b5cba565709a8dff00"
 dependencies = [
  "openssl-probe",
- "rustls-pemfile",
+ "rustls-pemfile 1.0.4",
  "schannel",
  "security-framework",
 ]
@@ -1896,12 +1910,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustls-pemfile"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "35e4980fa29e4c4b212ffb3db068a564cbf560e51d3944b7c88bd8bf5bec64f4"
+dependencies = [
+ "base64",
+ "rustls-pki-types",
+]
+
+[[package]]
+name = "rustls-pki-types"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0a716eb65e3158e90e17cd93d855216e27bde02745ab842f2cab4a39dba1bacf"
+
+[[package]]
 name = "rustls-webpki"
 version = "0.101.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b6275d1ee7a1cd780b64aca7726599a1dbc893b1e64144529e55c3c2f745765"
 dependencies = [
  "ring",
+ "untrusted",
+]
+
+[[package]]
+name = "rustls-webpki"
+version = "0.102.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "faaa0a62740bedb9b2ef5afa303da42764c012f743917351dc9a237ea1663610"
+dependencies = [
+ "ring",
+ "rustls-pki-types",
  "untrusted",
 ]
 
@@ -2130,7 +2171,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-addon-matchmaking"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2158,7 +2199,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-crds"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "base64",
  "google-agones-crds",
@@ -2174,7 +2215,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-kube-utils"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2196,7 +2237,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-operator"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2233,7 +2274,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-sdk"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "prost",
  "tonic",
@@ -2241,7 +2282,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-utils"
-version = "0.6.1"
+version = "0.7.0"
 dependencies = [
  "chrono",
  "tracing",
@@ -2321,6 +2362,12 @@ dependencies = [
  "rustversion",
  "syn 2.0.46",
 ]
+
+[[package]]
+name = "subtle"
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "81cdd64d312baedb58e21336b31bc043b77e01cc99033ce76ef539f78e965ebc"
 
 [[package]]
 name = "syn"
@@ -2473,7 +2520,18 @@ version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c28327cf380ac148141087fbfb9de9d7bd4e84ab5d2c28fbc911d753de8a7081"
 dependencies = [
- "rustls",
+ "rustls 0.21.9",
+ "tokio",
+]
+
+[[package]]
+name = "tokio-rustls"
+version = "0.25.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "775e0c0f0adb3a2f22a00c4745d728b479985fc15ee7ca6a2608388c5569860f"
+dependencies = [
+ "rustls 0.22.2",
+ "rustls-pki-types",
  "tokio",
 ]
 
@@ -2561,9 +2619,9 @@ dependencies = [
 
 [[package]]
 name = "tonic"
-version = "0.10.2"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d560933a0de61cf715926b9cac824d4c883c2c43142f787595e48280c40a1d0e"
+checksum = "76c4eb7a4e9ef9d4763600161f12f5070b92a578e1b634db88a6887844c91a13"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -2579,10 +2637,10 @@ dependencies = [
  "percent-encoding",
  "pin-project",
  "prost",
- "rustls",
- "rustls-pemfile",
+ "rustls-pemfile 2.0.0",
+ "rustls-pki-types",
  "tokio",
- "tokio-rustls",
+ "tokio-rustls 0.25.0",
  "tokio-stream",
  "tower",
  "tower-layer",
