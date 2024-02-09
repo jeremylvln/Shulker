@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 node scripts/generate_codecov_config.cjs
 git add codecov.yml scripts/upload_codecov_files.sh
 
