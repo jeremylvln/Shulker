@@ -21,15 +21,21 @@ if (
   showUsage();
 }
 
+const gitSha = execSync('git rev-parse HEAD').toString().trim();
+const gitShaShort = gitSha.slice(0, 7);
+
 const baseTag = `ghcr.io/jeremylvln/${appName}`;
-const tags =
-  typeof version === 'string'
+const tags = [
+  `${baseTag}:sha-${gitSha}`,
+  `${baseTag}:sha-${gitShaShort}`,
+  ...(typeof version === 'string'
     ? [
         `${baseTag}:latest`,
         `${baseTag}:${version.split('.')[0]}-latest`,
         `${baseTag}:${version}`,
       ]
-    : [`${baseTag}:next`];
+    : [`${baseTag}:next`]),
+];
 
 const command = [
   'docker',

@@ -10,7 +10,7 @@
     "url": "git@github.com:jeremylvln/Shulker.git"
   },
   "scripts": {
-    "prepare": "husky install && npm run proto:build",
+    "prepare": "husky && npm run proto:build",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
     "format": "prettier --ignore-unknown --write '**/*'",
@@ -25,7 +25,7 @@
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "husky": "8.0.3",
+    "husky": "9.0.6",
     "lint-staged": "15.2.0",
     "nx": "17.2.8",
     "prettier": "3.2.4",
