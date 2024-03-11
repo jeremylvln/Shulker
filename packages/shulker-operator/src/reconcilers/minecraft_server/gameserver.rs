@@ -227,7 +227,14 @@ impl<'a> GameServerBuilder {
                 Volume {
                     name: "shulker-config".to_string(),
                     config_map: Some(ConfigMapVolumeSource {
-                        name: Some(ConfigMapBuilder::name(minecraft_server)),
+                        name: Some(
+                            minecraft_server
+                                .spec
+                                .config
+                                .existing_config_map_name
+                                .clone()
+                                .unwrap_or_else(|| ConfigMapBuilder::name(minecraft_server)),
+                        ),
                         ..ConfigMapVolumeSource::default()
                     }),
                     ..Volume::default()
@@ -632,6 +639,54 @@ mod tests {
 
         // T
         insta::assert_yaml_snapshot!(game_server);
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_use_config_override() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.config.existing_config_map_name = Some("my_way_better_config".to_string());
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = super::GameServerBuilder::get_pod_template_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        let shulker_config_volume = pod_template
+            .spec
+            .as_ref()
+            .unwrap()
+            .volumes
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|volume: &&Volume| volume.name == "shulker-config");
+        assert!(shulker_config_volume.is_some());
+        assert!(
+            shulker_config_volume
+                .unwrap()
+                .config_map
+                .as_ref()
+                .unwrap()
+                .name
+                .as_ref()
+                .unwrap()
+                == "my_way_better_config"
+        )
     }
 
     #[tokio::test]
