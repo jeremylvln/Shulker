@@ -8,6 +8,7 @@ use k8s_openapi::api::core::v1::ContainerPort;
 use k8s_openapi::api::core::v1::EnvVar;
 use k8s_openapi::api::core::v1::PersistentVolumeClaim;
 use k8s_openapi::api::core::v1::PersistentVolumeClaimSpec;
+use k8s_openapi::api::core::v1::PodSecurityContext;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
 use k8s_openapi::api::core::v1::SecurityContext;
@@ -31,11 +32,16 @@ const REDIS_IMAGE: &str = "redis:7-alpine";
 const REDIS_DATA_DIR: &str = "/data";
 
 lazy_static! {
+    static ref REDIS_POD_SECURITY_CONTEXT: PodSecurityContext = PodSecurityContext {
+        run_as_user: Some(1000),
+        run_as_group: Some(1000),
+        run_as_non_root: Some(true),
+        fs_group: Some(1000),
+        ..PodSecurityContext::default()
+    };
     static ref REDIS_SECURITY_CONTEXT: SecurityContext = SecurityContext {
         allow_privilege_escalation: Some(false),
         read_only_root_filesystem: Some(true),
-        run_as_non_root: Some(true),
-        run_as_user: Some(1000),
         capabilities: Some(Capabilities {
             drop: Some(vec!["ALL".to_string()]),
             ..Capabilities::default()
@@ -140,6 +146,7 @@ impl RedisStatefulSetBuilder {
                 }]),
                 ..Container::default()
             }],
+            security_context: Some(REDIS_POD_SECURITY_CONTEXT.clone()),
             ..PodSpec::default()
         };
 
