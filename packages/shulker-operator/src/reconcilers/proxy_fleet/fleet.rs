@@ -261,7 +261,16 @@ impl<'a> FleetBuilder {
                 Volume {
                     name: "shulker-config".to_string(),
                     config_map: Some(ConfigMapVolumeSource {
-                        name: Some(ConfigMapBuilder::name(proxy_fleet)),
+                        name: Some(
+                            proxy_fleet
+                                .spec
+                                .template
+                                .spec
+                                .config
+                                .existing_config_map_name
+                                .clone()
+                                .unwrap_or_else(|| ConfigMapBuilder::name(proxy_fleet)),
+                        ),
                         ..ConfigMapVolumeSource::default()
                     }),
                     ..Volume::default()
@@ -587,6 +596,7 @@ impl<'a> FleetBuilder {
 
 #[cfg(test)]
 mod tests {
+    use k8s_openapi::api::core::v1::Volume;
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
@@ -725,6 +735,56 @@ mod tests {
                 value
             );
         });
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_use_config_override() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet
+            .spec
+            .template
+            .spec
+            .config
+            .existing_config_map_name = Some("my_way_better_config".to_string());
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = builder
+            .get_pod_template_spec(&context, &proxy_fleet)
+            .await
+            .unwrap();
+
+        // T
+        let shulker_config_volume = pod_template
+            .spec
+            .as_ref()
+            .unwrap()
+            .volumes
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|volume| volume.name == "shulker-config");
+        assert!(shulker_config_volume.is_some());
+        assert!(
+            shulker_config_volume
+                .unwrap()
+                .config_map
+                .as_ref()
+                .unwrap()
+                .name
+                .as_ref()
+                .unwrap()
+                == "my_way_better_config"
+        )
     }
 
     #[tokio::test]

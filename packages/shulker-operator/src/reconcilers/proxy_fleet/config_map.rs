@@ -33,6 +33,16 @@ impl<'a> ResourceBuilder<'a> for ConfigMapBuilder {
         )
     }
 
+    fn is_needed(&self, proxy_fleet: &Self::OwnerType) -> bool {
+        proxy_fleet
+            .spec
+            .template
+            .spec
+            .config
+            .existing_config_map_name
+            .is_none()
+    }
+
     async fn build(
         &self,
         proxy_fleet: &Self::OwnerType,
