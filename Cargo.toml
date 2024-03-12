@@ -59,7 +59,7 @@ serde-xml-rs = "0.6.0"
 serde_yaml = "0.9.32"
 strum = { version = "0.26.2", features = ["derive"] }
 tempfile = "3.10.1"
-thiserror = "1.0.57"
+thiserror = "1.0.58"
 tonic = { version = "0.11.0", features = ["gzip", "tls"] }
 tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1.14"
