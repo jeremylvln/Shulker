@@ -31,7 +31,7 @@
     "prettier": "3.2.5",
     "semantic-release": "23.0.2",
     "semantic-release-replace-plugin": "1.2.7",
-    "yaml": "2.3.4"
+    "yaml": "2.4.0"
   },
   "workspaces": [
     "packages/*",
