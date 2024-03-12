@@ -5,7 +5,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlin", "1.9.10")
             version("kubernetes-client", "6.10.0")
-            version("grpc", "1.61.1")
+            version("grpc", "1.62.2")
 
             library("adventure-api", "net.kyori:adventure-api:4.16.0")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.3.2")
