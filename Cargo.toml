@@ -62,7 +62,7 @@ tempfile = "3.10.1"
 thiserror = "1.0.58"
 tonic = { version = "0.11.0", features = ["gzip", "tls"] }
 tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread"] }
-tokio-stream = "0.1.14"
+tokio-stream = "0.1.15"
 tokio-util = "0.7.10"
 toml = "0.8.12"
 tower = "0.4.13"
