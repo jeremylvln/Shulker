@@ -330,6 +330,22 @@ impl<'a> FleetBuilder {
             }
 
             pod_spec.tolerations = pod_overrides.tolerations.clone();
+
+            if let Some(volume_mounts_overrides) = &pod_overrides.volume_mounts {
+                pod_spec.containers[0]
+                    .volume_mounts
+                    .as_mut()
+                    .unwrap()
+                    .append(&mut volume_mounts_overrides.clone());
+            }
+
+            if let Some(volumes_override) = &pod_overrides.volumes {
+                pod_spec
+                    .volumes
+                    .as_mut()
+                    .unwrap()
+                    .append(&mut volumes_override.clone());
+            }
         }
 
         let mut pod_labels =
@@ -596,7 +612,7 @@ impl<'a> FleetBuilder {
 
 #[cfg(test)]
 mod tests {
-    use k8s_openapi::api::core::v1::Volume;
+    use k8s_openapi::api::core::v1::{EmptyDirVolumeSource, Volume, VolumeMount};
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
@@ -785,6 +801,93 @@ mod tests {
                 .unwrap()
                 == "my_way_better_config"
         )
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_volume_mounts() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet
+            .spec
+            .template
+            .spec
+            .pod_overrides
+            .as_mut()
+            .unwrap()
+            .volume_mounts = Some(vec![VolumeMount {
+            name: "my_extra_volume".to_string(),
+            mount_path: "/mnt/path".to_string(),
+            ..VolumeMount::default()
+        }]);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = builder
+            .get_pod_template_spec(&context, &proxy_fleet)
+            .await
+            .unwrap();
+
+        // T
+        let extra_volume_mount = pod_template.spec.as_ref().unwrap().containers[0]
+            .volume_mounts
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|volume_mount| volume_mount.name == "my_extra_volume");
+        assert!(extra_volume_mount.is_some());
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_volumes() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet
+            .spec
+            .template
+            .spec
+            .pod_overrides
+            .as_mut()
+            .unwrap()
+            .volumes = Some(vec![Volume {
+            name: "my_extra_volume".to_string(),
+            empty_dir: Some(EmptyDirVolumeSource::default()),
+            ..Volume::default()
+        }]);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = builder
+            .get_pod_template_spec(&context, &proxy_fleet)
+            .await
+            .unwrap();
+
+        // T
+        let extra_volume = pod_template
+            .spec
+            .as_ref()
+            .unwrap()
+            .volumes
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|volume| volume.name == "my_extra_volume");
+        assert!(extra_volume.is_some());
     }
 
     #[tokio::test]
