@@ -18,7 +18,7 @@ dependencyResolutionManagement {
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
             library("grpc-services", "io.grpc", "grpc-services").versionRef("grpc")
             library("grpc-stub", "io.grpc", "grpc-stub").versionRef("grpc")
-            library("jedis", "redis.clients:jedis:5.1.1")
+            library("jedis", "redis.clients:jedis:5.1.2")
             library("kubernetes-client", "io.fabric8", "kubernetes-client").versionRef("kubernetes-client")
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
