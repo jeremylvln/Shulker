@@ -15,7 +15,7 @@
     "test": "nx run-many --target=test --all",
     "format": "prettier --ignore-unknown --write '**/*'",
     "lint": "nx run-many --target=lint --all",
-    "proto:build": "nx run-many --target=buf --all"
+    "proto:build": "nx run-many --target=buf --all --skipNxCache"
   },
   "devDependencies": {
     "@bufbuild/buf": "1.29.0",
