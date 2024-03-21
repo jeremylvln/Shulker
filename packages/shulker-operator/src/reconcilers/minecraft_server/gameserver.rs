@@ -260,12 +260,16 @@ impl<'a> GameServerBuilder {
 
         if let Some(pod_overrides) = &minecraft_server.spec.pod_overrides {
             if let Some(image_overrides) = &pod_overrides.image {
-                pod_spec.containers[0].image = Some(image_overrides.name.clone());
-                pod_spec.containers[0].image_pull_policy =
-                    Some(image_overrides.pull_policy.clone());
+                if let Some(name) = image_overrides.name.as_ref() {
+                    pod_spec.containers[0].image = Some(name.clone())
+                }
 
-                if let Some(image_pull_secrets) = pod_spec.image_pull_secrets.as_mut() {
-                    image_pull_secrets.append(&mut image_overrides.image_pull_secrets.clone());
+                if let Some(pull_policy) = image_overrides.pull_policy.as_ref() {
+                    pod_spec.containers[0].image_pull_policy = Some(pull_policy.clone())
+                }
+
+                if let Some(image_pull_secrets) = image_overrides.image_pull_secrets.as_ref() {
+                    pod_spec.image_pull_secrets = Some(image_pull_secrets.clone())
                 }
             }
 
@@ -594,8 +598,10 @@ impl<'a> GameServerBuilder {
 
 #[cfg(test)]
 mod tests {
-    use k8s_openapi::api::core::v1::{EmptyDirVolumeSource, Volume, VolumeMount};
-    use shulker_crds::resourceref::ResourceRefSpec;
+    use k8s_openapi::api::core::v1::{
+        EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
+    };
+    use shulker_crds::{resourceref::ResourceRefSpec, schemas::ImageOverrideSpec};
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
     use crate::{
@@ -687,6 +693,78 @@ mod tests {
                 .unwrap()
                 == "my_way_better_config"
         )
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_image_override() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.pod_overrides.as_mut().unwrap().image = Some(ImageOverrideSpec {
+            name: Some("my_better_image".to_string()),
+            ..ImageOverrideSpec::default()
+        });
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = super::GameServerBuilder::get_pod_template_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        assert_eq!(
+            pod_template.spec.as_ref().unwrap().containers[0].image,
+            Some("my_better_image".to_string())
+        );
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_image_pull_secrets() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.pod_overrides.as_mut().unwrap().image = Some(ImageOverrideSpec {
+            image_pull_secrets: Some(vec![LocalObjectReference {
+                name: Some("my_pull_secret".to_string()),
+            }]),
+            ..ImageOverrideSpec::default()
+        });
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = super::GameServerBuilder::get_pod_template_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        assert_eq!(
+            pod_template.spec.as_ref().unwrap().image_pull_secrets,
+            Some(vec![LocalObjectReference {
+                name: Some("my_pull_secret".to_string())
+            }])
+        );
     }
 
     #[tokio::test]

@@ -219,7 +219,7 @@ impl LeaseLock {
         } = lease.spec.as_ref().unwrap();
 
         let utc_now = time::now();
-        let lease_duration = Duration::seconds(lease_duration_seconds.unwrap() as i64);
+        let lease_duration = Duration::try_seconds(lease_duration_seconds.unwrap() as i64).unwrap();
 
         if let Some(MicroTime(time)) = renew_time {
             let renew_expire = time.checked_add_signed(lease_duration).unwrap();
