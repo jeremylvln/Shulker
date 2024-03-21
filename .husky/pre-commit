@@ -1,4 +1,13 @@
+#!/usr/bin/env bash
+
 node scripts/generate_codecov_config.cjs
 git add codecov.yml scripts/upload_codecov_files.sh
+
+files_modified=$(git diff --cached --name-only --diff-filter=ACM)
+if [[ $files_modified == *"packages/shulker-crds/src"* ]]; then
+  echo "Regenerating CRDs because package was modified..."
+  cargo run --bin crdgen
+  git add "kube/helm/**/crds/*.yaml"
+fi
 
 npx --no -- lint-staged

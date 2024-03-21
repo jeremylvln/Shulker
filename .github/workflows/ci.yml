@@ -102,11 +102,9 @@ jobs:
 
       - name: Run clippy
         run: cargo clippy --all-features --message-format=json -- --deny warnings | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
-        continue-on-error: true
 
       - name: Run detekt
         run: ./gradlew detektAll
-        continue-on-error: true
 
       - name: Upload Clippy analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v3
