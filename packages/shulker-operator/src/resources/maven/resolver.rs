@@ -1,5 +1,4 @@
-use http::StatusCode;
-use reqwest::Client;
+use reqwest::{Client, StatusCode};
 use thiserror::Error;
 use tracing::*;
 
