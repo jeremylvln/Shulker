@@ -1,6 +1,5 @@
 use clap::Parser;
 use google_agones_sdk::allocation::allocation_service_client::AllocationServiceClient;
-use http::Uri;
 use kube::Client;
 use shulker_kube_utils::{lease, metrics};
 use shulker_operator::{
@@ -9,6 +8,7 @@ use shulker_operator::{
     constants, reconcilers,
 };
 use shulker_utils::telemetry;
+use tonic::transport::Uri;
 use tonic::transport::{Channel, ClientTlsConfig, Identity};
 
 const LEASE_NAME: &str = "shulker-operator.shulkermc.io";
