@@ -65,6 +65,7 @@ lazy_static! {
                         proxy_protocol: true,
                         ttl_seconds: 3600,
                         players_delta_before_exclusion: 15,
+                        skip_agent_download: false
                     },
                     pod_overrides: Some(ProxyFleetTemplatePodOverridesSpec {
                         image: None,

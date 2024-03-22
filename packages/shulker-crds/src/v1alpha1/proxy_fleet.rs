@@ -139,6 +139,12 @@ pub struct ProxyFleetTemplateConfigurationSpec {
         default = "ProxyFleetTemplateConfigurationSpec::default_players_delta_before_exclusion"
     )]
     pub players_delta_before_exclusion: u32,
+
+    /// Whether to skip downloading the agent plugin on Pod startup. It way
+    /// be useful if you are already building your own image with the agent
+    /// plugin bundled
+    #[schemars(default = "ProxyFleetTemplateConfigurationSpec::default_skip_agent_download")]
+    pub skip_agent_download: bool,
 }
 
 #[cfg(not(tarpaulin_include))]
@@ -165,6 +171,10 @@ impl ProxyFleetTemplateConfigurationSpec {
 
     fn default_players_delta_before_exclusion() -> u32 {
         15
+    }
+
+    fn default_skip_agent_download() -> bool {
+        false
     }
 }
 

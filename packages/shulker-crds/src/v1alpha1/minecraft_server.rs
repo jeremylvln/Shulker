@@ -118,6 +118,12 @@ pub struct MinecraftServerConfigurationSpec {
     /// Strategy to apply concerning Agones `GameServer` lifecycle management
     #[serde(default)]
     pub lifecycle_strategy: MinecraftServerConfigurationLifecycleStrategy,
+
+    /// Whether to skip downloading the agent plugin on Pod startup. It way
+    /// be useful if you are already building your own image with the agent
+    /// plugin bundled
+    #[schemars(default = "MinecraftServerConfigurationSpec::default_skip_agent_download")]
+    pub skip_agent_download: bool,
 }
 
 #[cfg(not(tarpaulin_include))]
@@ -132,6 +138,10 @@ impl MinecraftServerConfigurationSpec {
 
     fn default_disable_end() -> bool {
         true
+    }
+
+    fn default_skip_agent_download() -> bool {
+        false
     }
 }
 

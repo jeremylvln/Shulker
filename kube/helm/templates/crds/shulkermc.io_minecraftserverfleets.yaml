@@ -382,6 +382,10 @@ spec:
                             description: 'Custom properties to set inside the server.properties file of the Pod. Note: Shulker may override some values'
                             nullable: true
                             type: object
+                          skipAgentDownload:
+                            default: false
+                            description: Whether to skip downloading the agent plugin on Pod startup. It way be useful if you are already building your own image with the agent plugin bundled
+                            type: boolean
                           world:
                             description: Reference to a world to download and extract. Gzipped tarball only
                             nullable: true

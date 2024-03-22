@@ -561,16 +561,18 @@ impl<'a> GameServerBuilder {
 
         let mut plugin_refs: Vec<Url> = vec![];
 
-        if let Some(agent_platform) = agent_platform {
-            plugin_refs.push(
-                get_agent_plugin_url(
-                    resourceref_resolver,
-                    context.agent_config,
-                    AgentSide::Server,
-                    agent_platform,
+        if !minecraft_server.spec.config.skip_agent_download {
+            if let Some(agent_platform) = agent_platform {
+                plugin_refs.push(
+                    get_agent_plugin_url(
+                        resourceref_resolver,
+                        context.agent_config,
+                        AgentSide::Server,
+                        agent_platform,
+                    )
+                    .await?,
                 )
-                .await?,
-            )
+            }
         }
 
         if let Some(plugins) = &minecraft_server.spec.config.plugins {
@@ -1000,5 +1002,31 @@ mod tests {
             .for_each(|env_override| {
                 assert!(env.contains(env_override));
             });
+    }
+
+    #[tokio::test]
+    async fn get_plugin_urls_skip_agent() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.config.skip_agent_download = true;
+        server.spec.config.plugins = None;
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let plugin_urls =
+            super::GameServerBuilder::get_plugin_urls(&resourceref_resolver, &context, &server)
+                .await
+                .unwrap();
+
+        // T
+        assert!(plugin_urls.is_empty())
     }
 }

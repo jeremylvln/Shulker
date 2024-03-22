@@ -359,6 +359,7 @@ mod bungeecord {
                 proxy_protocol: true,
                 ttl_seconds: 300,
                 players_delta_before_exclusion: 15,
+                skip_agent_download: false,
             };
             let service_spec = Some(ProxyFleetServiceSpec {
                 type_: ProxyFleetServiceType::LoadBalancer,
@@ -564,6 +565,7 @@ mod velocity {
                 proxy_protocol: true,
                 ttl_seconds: 300,
                 players_delta_before_exclusion: 15,
+                skip_agent_download: false,
             };
             let service_spec = Some(ProxyFleetServiceSpec {
                 type_: ProxyFleetServiceType::LoadBalancer,

@@ -574,16 +574,18 @@ impl<'a> FleetBuilder {
 
         let mut plugin_refs: Vec<Url> = vec![];
 
-        if let Some(agent_platform) = agent_platform {
-            plugin_refs.push(
-                get_agent_plugin_url(
-                    resourceref_resolver,
-                    context.agent_config,
-                    AgentSide::Proxy,
-                    agent_platform,
+        if !proxy_fleet.spec.template.spec.config.skip_agent_download {
+            if let Some(agent_platform) = agent_platform {
+                plugin_refs.push(
+                    get_agent_plugin_url(
+                        resourceref_resolver,
+                        context.agent_config,
+                        AgentSide::Proxy,
+                        agent_platform,
+                    )
+                    .await?,
                 )
-                .await?,
-            )
+            }
         }
 
         if let Some(plugins) = &proxy_fleet.spec.template.spec.config.plugins {
@@ -629,6 +631,7 @@ mod tests {
             minecraft_cluster::fixtures::TEST_CLUSTER,
             proxy_fleet::fixtures::{create_client_mock, TEST_PROXY_FLEET},
         },
+        resources::resourceref_resolver::ResourceRefResolver,
     };
 
     #[test]
@@ -1065,5 +1068,31 @@ mod tests {
             .for_each(|env_override| {
                 assert!(env.contains(env_override));
             });
+    }
+
+    #[tokio::test]
+    async fn get_plugin_urls_skip_agent() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet.spec.template.spec.config.skip_agent_download = true;
+        proxy_fleet.spec.template.spec.config.plugins = None;
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let plugin_urls =
+            super::FleetBuilder::get_plugin_urls(&resourceref_resolver, &context, &proxy_fleet)
+                .await
+                .unwrap();
+
+        // T
+        assert!(plugin_urls.is_empty())
     }
 }
