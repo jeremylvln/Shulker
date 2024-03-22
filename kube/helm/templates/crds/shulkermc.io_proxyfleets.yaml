@@ -387,6 +387,10 @@ spec:
                             default: iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEUAAABSNGCrhKqXaZdsSGtDJlCEUomPY4/////HT7OpAAAACXRSTlMA//////////83ApvUAAAAh0lEQVRYhe3Qyw6AIAxEURTQ//9jmYQmE1IeWwbvytD2LAzhb9JFnQTw0U0tIxsD3lGkUmmIbA7wYRwEJJdUgac0A7qIEDBCEqUKYMlDkpMqgENG8MZHb00ZQBgYYoAdYmZvqoA94tsOsNzOVAHUA3hZHfCW2uVc6x4fACwlABiy9MOEgaP6APk1HDGFXeaaAAAAAElFTkSuQmCC
                             description: Server icon image in base64 format
                             type: string
+                          skipAgentDownload:
+                            default: false
+                            description: Whether to skip downloading the agent plugin on Pod startup. It way be useful if you are already building your own image with the agent plugin bundled
+                            type: boolean
                           ttlSeconds:
                             default: 86400
                             description: Number of seconds the proxy will live before being drained automatically

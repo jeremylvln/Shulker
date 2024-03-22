@@ -12,17 +12,15 @@ else
   cp "${SHULKER_CONFIG_DIR}/bungeecord-config.yml" "${SHULKER_PROXY_DATA_DIR}/config.yml"
 fi
 
-if [ -z "${SHULKER_SKIP_ANY_DOWNLOAD}" ]; then
-  if [ ! -z "${SHULKER_PROXY_PLUGIN_URLS}" ]; then
-    mkdir -p "${SHULKER_PROXY_DATA_DIR}/plugins"
-    for plugin_url in ${SHULKER_PROXY_PLUGIN_URLS//;/ }; do
-      (cd "${SHULKER_PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
-    done
-  fi
+if [ ! -z "${SHULKER_PROXY_PLUGIN_URLS}" ]; then
+  mkdir -p "${SHULKER_PROXY_DATA_DIR}/plugins"
+  for plugin_url in ${SHULKER_PROXY_PLUGIN_URLS//;/ }; do
+    (cd "${SHULKER_PROXY_DATA_DIR}/plugins" && wget "${plugin_url}")
+  done
+fi
 
-  if [ ! -z "${SHULKER_PROXY_PATCH_URLS}" ]; then
-    for patch_url in ${SHULKER_PROXY_PATCH_URLS//;/ }; do
-      (cd "${SHULKER_PROXY_DATA_DIR}" && wget "${patch_url}" -O - | tar -xzv)
-    done
-  fi
+if [ ! -z "${SHULKER_PROXY_PATCH_URLS}" ]; then
+  for patch_url in ${SHULKER_PROXY_PATCH_URLS//;/ }; do
+    (cd "${SHULKER_PROXY_DATA_DIR}" && wget "${patch_url}" -O - | tar -xzv)
+  done
 fi

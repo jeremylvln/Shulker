@@ -74,7 +74,8 @@ lazy_static! {
                         proxy_forwarding_mode:
                             MinecraftServerConfigurationProxyForwardingMode::Velocity,
                         lifecycle_strategy:
-                            MinecraftServerConfigurationLifecycleStrategy::AllocateWhenNotEmpty
+                            MinecraftServerConfigurationLifecycleStrategy::AllocateWhenNotEmpty,
+                        skip_agent_download: false
                     },
                     pod_overrides: Some(MinecraftServerPodOverridesSpec {
                         image: None,
