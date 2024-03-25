@@ -195,10 +195,16 @@ pub struct MinecraftServerPodOverridesSpec {
     pub service_account_name: Option<String>,
 
     /// Extra volumesmounts to add to the created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_mounts: Option<Vec<k8s_openapi::api::core::v1::VolumeMount>>,
 
     /// Extra volumes to add to the created `Pod`
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub volumes: Option<Vec<k8s_openapi::api::core::v1::Volume>>,
+
+    /// Extra ports to add to the created `Pod`'s main container
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ports: Option<Vec<k8s_openapi::api::core::v1::ContainerPort>>,
 }
 
 /// The status object of `MinecraftServer`

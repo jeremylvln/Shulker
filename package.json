@@ -36,8 +36,5 @@
   "workspaces": [
     "packages/*",
     "docs"
-  ],
-  "lint-staged": {
-    "*": "prettier --ignore-unknown --write"
-  }
+  ]
 }
