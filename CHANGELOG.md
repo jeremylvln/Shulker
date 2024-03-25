@@ -1,3 +1,30 @@
+## [0.8.0](https://github.com/jeremylvln/Shulker/compare/v0.7.0...v0.8.0) (2024-03-25)
+
+
+### :sparkles: Features :sparkles:
+
+* **shulker-operator:** add a magic env var to skip any download in init-fs ([#479](https://github.com/jeremylvln/Shulker/issues/479)) ([6831492](https://github.com/jeremylvln/Shulker/commit/6831492d083058858c148c671c61ec881e5b3eda))
+* **shulker-operator:** support additional ports in overrides ([#485](https://github.com/jeremylvln/Shulker/issues/485)) ([39c5b81](https://github.com/jeremylvln/Shulker/commit/39c5b817b6947d7f37cdd1017e09d43af8c3de06))
+* **shulker-operator:** support volume and volume mounts on proxy fleets ([#470](https://github.com/jeremylvln/Shulker/issues/470)) ([90b93a1](https://github.com/jeremylvln/Shulker/commit/90b93a18c53fa97b753b43b0af0657606de0faa3))
+
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.32.0 ([#400](https://github.com/jeremylvln/Shulker/issues/400)) ([e18f0fe](https://github.com/jeremylvln/Shulker/commit/e18f0fe37c90f810995fd833e9c788605e601405))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.33.0 ([#410](https://github.com/jeremylvln/Shulker/issues/410)) ([8f338a9](https://github.com/jeremylvln/Shulker/commit/8f338a968f4f88d44930bc1788e9a8873b29298e))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.34.0 ([#431](https://github.com/jeremylvln/Shulker/issues/431)) ([e9b429b](https://github.com/jeremylvln/Shulker/commit/e9b429b619940a3cffe069afcfbd88902526add5))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.36.0 ([#462](https://github.com/jeremylvln/Shulker/issues/462)) ([444b453](https://github.com/jeremylvln/Shulker/commit/444b453dbaf67e663de9cc5926ad13b3a8ed2402))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v3.25.3 ([#434](https://github.com/jeremylvln/Shulker/issues/434)) ([ac60862](https://github.com/jeremylvln/Shulker/commit/ac6086226c574258dd9b06be8e4d78ea705aed3d))
+* **deps:** update dependency net.kyori:adventure-api to v4.16.0 ([#442](https://github.com/jeremylvln/Shulker/issues/442)) ([79e48d8](https://github.com/jeremylvln/Shulker/commit/79e48d8cfa2c381868e24952f99d323a0b63a600))
+* **deps:** update dependency redis.clients:jedis to v5.1.1 ([#453](https://github.com/jeremylvln/Shulker/issues/453)) ([2971258](https://github.com/jeremylvln/Shulker/commit/2971258a685392ec4b54b93569202f1c477ba8f2))
+* **deps:** update dependency redis.clients:jedis to v5.1.2 ([#473](https://github.com/jeremylvln/Shulker/issues/473)) ([1c887b6](https://github.com/jeremylvln/Shulker/commit/1c887b6785b5de1df45e0dc6d68ee66408716c9d))
+* **deps:** update grpc-java monorepo to v1.61.1 ([#415](https://github.com/jeremylvln/Shulker/issues/415)) ([d836094](https://github.com/jeremylvln/Shulker/commit/d83609446abb1808afbad794d29aa7854cd1d294))
+* **deps:** update grpc-java monorepo to v1.62.2 ([#455](https://github.com/jeremylvln/Shulker/issues/455)) ([350437d](https://github.com/jeremylvln/Shulker/commit/350437dc15c44ee96069d747a50c4422a9643a59))
+* **shulker-operator:** add back fallbacks on init scripts ([0b46ed5](https://github.com/jeremylvln/Shulker/commit/0b46ed5fe6eb2e24f0fc983bb56c09a16542b08a))
+* **shulker-operator:** add back fallbacks on init scripts ([b237790](https://github.com/jeremylvln/Shulker/commit/b237790f9670c336335d5a44dcacd5ea64f37d40))
+* **shulker-operator:** set fs group to Redis container to fix persistence permissions ([#451](https://github.com/jeremylvln/Shulker/issues/451)) ([6f8eacf](https://github.com/jeremylvln/Shulker/commit/6f8eacf66e27ba6de16966436168405b0f849c00))
+* **shulker-operator:** use existing config maps if given ([#452](https://github.com/jeremylvln/Shulker/issues/452)) ([b511151](https://github.com/jeremylvln/Shulker/commit/b511151ff9e24af3e25fb5b88bbc4752058b9519))
+
 ## [0.7.0](https://github.com/jeremylvln/Shulker/compare/v0.6.1...v0.7.0) (2024-02-06)
 
 
