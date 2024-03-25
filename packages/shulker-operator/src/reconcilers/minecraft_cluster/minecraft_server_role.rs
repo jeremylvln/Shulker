@@ -49,10 +49,7 @@ impl<'a> ResourceBuilder<'a> for MinecraftServerRoleBuilder {
                 PolicyRule {
                     api_groups: Some(vec!["".to_string()]),
                     resources: Some(vec!["events".to_string()]),
-                    verbs: vec![
-                        "create".to_string(),
-                        "patch".to_string()
-                    ],
+                    verbs: vec!["create".to_string(), "patch".to_string()],
                     ..PolicyRule::default()
                 },
                 PolicyRule {

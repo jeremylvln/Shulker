@@ -303,6 +303,14 @@ impl<'a> GameServerBuilder {
                     .unwrap()
                     .append(&mut volumes_override.clone());
             }
+
+            if let Some(ports_overrides) = &pod_overrides.ports {
+                pod_spec.containers[0]
+                    .ports
+                    .as_mut()
+                    .unwrap()
+                    .append(&mut ports_overrides.clone());
+            }
         }
 
         let mut pod_labels = minecraft_server.labels().clone();
@@ -601,7 +609,7 @@ impl<'a> GameServerBuilder {
 #[cfg(test)]
 mod tests {
     use k8s_openapi::api::core::v1::{
-        EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
+        Container, ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
     };
     use shulker_crds::{resourceref::ResourceRefSpec, schemas::ImageOverrideSpec};
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
@@ -846,6 +854,44 @@ mod tests {
             .iter()
             .find(|volume| volume.name == "my_extra_volume");
         assert!(extra_volume.is_some());
+    }
+
+    #[tokio::test]
+    async fn get_pod_template_spec_contains_ports() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.pod_overrides.as_mut().unwrap().ports = Some(vec![ContainerPort {
+            name: Some("metrics".to_owned()),
+            container_port: 9090,
+            ..ContainerPort::default()
+        }]);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let pod_template = super::GameServerBuilder::get_pod_template_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        let extra_port = pod_template.spec.as_ref().unwrap().containers[0]
+            .ports
+            .as_ref()
+            .unwrap()
+            .iter()
+            .find(|port| port.name == Some("metrics".to_owned()));
+        assert!(extra_port.is_some());
     }
 
     #[tokio::test]
