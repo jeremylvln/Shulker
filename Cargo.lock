@@ -721,7 +721,7 @@ checksum = "4271d37baee1b8c7e4b708028c57d816cf9d2434acb33a549475f78c181f6253"
 
 [[package]]
 name = "google-agones-crds"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "k8s-openapi",
  "kube",
@@ -733,7 +733,7 @@ dependencies = [
 
 [[package]]
 name = "google-agones-sdk"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -743,7 +743,7 @@ dependencies = [
 
 [[package]]
 name = "google-open-match-sdk"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -1794,9 +1794,9 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "reqwest"
-version = "0.12.1"
+version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e333b1eb9fe677f6893a9efcb0d277a2d3edd83f358a236b657c32301dc6e5f6"
+checksum = "2d66674f2b6fb864665eea7a3c1ac4e3dfacd2fda83cf6f935a612e01b0e3338"
 dependencies = [
  "base64 0.21.7",
  "bytes",
@@ -2188,7 +2188,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-addon-matchmaking"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2216,7 +2216,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-crds"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "base64 0.22.0",
  "google-agones-crds",
@@ -2232,7 +2232,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-kube-utils"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2254,7 +2254,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-operator"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2291,7 +2291,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-sdk"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "prost",
  "tonic",
@@ -2299,7 +2299,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-utils"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "chrono",
  "tracing",
