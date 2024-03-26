@@ -1,3 +1,11 @@
+## [0.8.1](https://github.com/jeremylvln/Shulker/compare/v0.8.0...v0.8.1) (2024-03-26)
+
+
+### :bug: Bug Fixes :bug:
+
+* align protobuf dependencies versions to fix Protobuf crash ([e6a1c0c](https://github.com/jeremylvln/Shulker/commit/e6a1c0cb515cd102c5c4e2b12b854ca338def808))
+* align protobuf dependencies versions to fix Protobuf crash ([f4cc054](https://github.com/jeremylvln/Shulker/commit/f4cc0548249c8ec85f7f3ac8ba7e490bf56b514c))
+
 ## [0.8.0](https://github.com/jeremylvln/Shulker/compare/v0.7.0...v0.8.0) (2024-03-25)
 
 
