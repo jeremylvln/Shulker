@@ -3,8 +3,8 @@ rootProject.name = "shulker"
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "1.9.10")
-            version("kubernetes-client", "6.10.0")
+            version("kotlin", "1.9.23")
+            version("kubernetes-client", "6.11.0")
             version("grpc", "1.62.2")
 
             library("adventure-api", "net.kyori:adventure-api:4.16.0")
@@ -13,7 +13,7 @@ dependencyResolutionManagement {
             library("bungeecord-api", "net.md-5:bungeecord-api:1.20-R0.2")
             library("folia-api", "dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
             library("guava", "com.google.guava:guava:33.0.0-jre")
-            library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.36.0")
+            library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.37.1")
             library("grpc-netty-shaded", "io.grpc", "grpc-netty-shaded").versionRef("grpc")
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
             library("grpc-services", "io.grpc", "grpc-services").versionRef("grpc")
