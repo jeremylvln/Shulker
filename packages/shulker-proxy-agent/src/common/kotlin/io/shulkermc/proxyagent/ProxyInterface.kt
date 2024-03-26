@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
 interface ProxyInterface {
+    val capabilities: Array<ProxyCapability>
+
     fun registerServer(name: String, address: InetSocketAddress)
     fun unregisterServer(name: String): Boolean
     fun hasServer(name: String): Boolean
@@ -28,6 +30,9 @@ interface ProxyInterface {
     fun teleportPlayerOnServer(playerName: String, serverName: String)
     fun getPlayerCount(): Int
     fun getPlayerCapacity(): Int
+
+    fun reconnectPlayerToCluster(playerId: UUID)
+    fun reconnectEveryoneToCluster()
 
     fun scheduleDelayedTask(delay: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask
     fun scheduleRepeatingTask(delay: Long, interval: Long, timeUnit: TimeUnit, runnable: Runnable): ScheduledTask

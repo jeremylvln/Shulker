@@ -2,7 +2,9 @@
 
 package io.shulkermc.proxyagent.bungeecord
 
+import io.shulkermc.proxyagent.ProxyCapability
 import io.shulkermc.proxyagent.ProxyInterface
+import io.shulkermc.proxyagent.bungeecord.extensions.TransferExtension
 import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.Player
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
@@ -24,7 +26,6 @@ import net.md_5.bungee.api.event.ProxyPingEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
 import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
-import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.scheduler.ScheduledTask
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
@@ -34,9 +35,21 @@ import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
 class ProxyInterfaceBungeeCord(
-    private val plugin: Plugin,
+    private val plugin: ShulkerProxyAgentBungeeCord,
     private val proxy: ProxyServer
 ) : ProxyInterface {
+    private val transferExtension = TransferExtension(this.plugin)
+
+    override val capabilities: Array<ProxyCapability>
+
+    init {
+        val testingCapabilities = mutableListOf<ProxyCapability>()
+        if (this.transferExtension.isSupported) {
+            testingCapabilities.add(ProxyCapability.TRANSFER_PLAYER)
+        }
+        this.capabilities = testingCapabilities.toTypedArray()
+    }
+
     override fun registerServer(name: String, address: InetSocketAddress) {
         this.proxy.servers[name] = this.proxy.constructServerInfo(name, address, "", false)
     }
@@ -163,6 +176,14 @@ class ProxyInterfaceBungeeCord(
         if (server != null) {
             this.proxy.getPlayer(playerName)?.connect(server)
         }
+    }
+
+    override fun reconnectPlayerToCluster(playerId: UUID) {
+        this.transferExtension.tryReconnectPlayerToCluster(playerId)
+    }
+
+    override fun reconnectEveryoneToCluster() {
+        this.transferExtension.tryReconnectEveryoneToCluster()
     }
 
     override fun getPlayerCount(): Int {

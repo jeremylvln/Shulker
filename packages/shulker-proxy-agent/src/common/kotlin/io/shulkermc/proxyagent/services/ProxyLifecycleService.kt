@@ -1,6 +1,7 @@
 package io.shulkermc.proxyagent.services
 
 import io.shulkermc.proxyagent.Configuration
+import io.shulkermc.proxyagent.ProxyCapability
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
@@ -13,7 +14,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private val ttlTask: ProxyInterface.ScheduledTask
-    private var drained = false
+    private var draining = false
 
     init {
         this.agent.kubernetesGateway.watchProxyEvents { action, proxy ->
@@ -30,7 +31,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         this.ttlTask = this.agent.proxyInterface.scheduleDelayedTask(
             Configuration.PROXY_TTL_SECONDS,
             TimeUnit.SECONDS
-        ) { this.agent.shutdown() }
+        ) { this.onDrainDelayExpired() }
     }
 
     fun destroy() {
@@ -38,10 +39,11 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun drain() {
-        if (this.drained) {
+        if (this.draining) {
             return
         }
-        this.drained = true
+
+        this.draining = true
 
         this.agent.fileSystem.createDrainLock()
         this.agent.playerMovementService.setAcceptingPlayers(false)
@@ -60,5 +62,14 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
                 this.agent.logger.info("There are still $playerCount players connected, waiting")
             }
         }
+    }
+
+    private fun onDrainDelayExpired() {
+        if (this.agent.proxyInterface.capabilities.contains(ProxyCapability.TRANSFER_PLAYER)) {
+            this.agent.logger.info("Sending transfer packet to every player still connected")
+            this.agent.proxyInterface.reconnectEveryoneToCluster()
+        }
+
+        this.agent.shutdown()
     }
 }

@@ -55,6 +55,8 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 "Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}"
             )
 
+            this.logger.info("Supported proxy capabilities: [${this.proxyInterface.capabilities.joinToString(", ")}]")
+
             ShulkerProxyAPI.INSTANCE = ShulkerProxyAPIImpl(this)
 
             this.logger.fine("Creating Redis pool")
