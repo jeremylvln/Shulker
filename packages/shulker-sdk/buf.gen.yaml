@@ -16,7 +16,7 @@ plugins:
       - extern_path=.google.protobuf=::pbjson_types
       - server_mod_attribute=.=#[cfg(feature = "server")]
       - client_mod_attribute=.=#[cfg(feature = "client")]
-  - plugin: buf.build/protocolbuffers/java:v26.0
+  - plugin: buf.build/protocolbuffers/java:v25.3
     out: bindings/java/src/generated/java
   - plugin: buf.build/grpc/java:v1.62.2
     out: bindings/java/src/generated/grpc
