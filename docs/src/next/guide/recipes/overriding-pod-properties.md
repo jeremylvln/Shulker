@@ -89,10 +89,10 @@ spec:
     name: my-cluster
   podOverrides: // [!code focus]
     volumeMounts: // [!code focus]
-      - name: my_extra_volume // [!code focus]
+      - name: my-extra-volume // [!code focus]
         mountPath: /mnt/path // [!code focus]
     volumes: // [!code focus]
-      - name: my_extra_volume // [!code focus]
+      - name: my-extra-volume // [!code focus]
         emptyDir: {} // [!code focus]
 ```
 
