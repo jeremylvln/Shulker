@@ -52,3 +52,9 @@ Shulker is distributed under the [AGPL 3.0](LICENSE.txt).
 
 > Want to use Shulker for commercial purposes? Contact me so we can discuss about
 > that together!
+
+## Sponsors
+
+Thanks a lot to my sponsors, it really means a lot to me!
+
+<!-- sponsors --><!-- sponsors -->

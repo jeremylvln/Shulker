@@ -1,0 +1,28 @@
+name: update-sponsors
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 10 * * *
+
+jobs:
+  update-sponsors:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update README's sponsors
+        uses: JamesIves/github-sponsors-readme-action@v1
+        with:
+          token: ${{ secrets.SPONSORS_PAT }}
+          file: "README.md"
+          active-only: false
+
+      - name: Commit updated README.md
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: README.md
+          message: "chore: update README sponsors"
+          push: true
