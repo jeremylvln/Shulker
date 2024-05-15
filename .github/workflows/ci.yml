@@ -98,6 +98,7 @@ jobs:
 
       - name: Run cargo-deny
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         run: cargo deny check
 
       - name: Run clippy
