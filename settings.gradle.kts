@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("kotlin", "1.9.23")
-            version("kubernetes-client", "6.11.0")
+            version("kubernetes-client", "6.12.1")
             version("grpc", "1.62.2")
 
             library("adventure-api", "net.kyori:adventure-api:4.16.0")
