@@ -166,7 +166,7 @@ dependencies = [
  "futures-util",
  "http 0.2.12",
  "http-body 0.4.5",
- "hyper 0.14.28",
+ "hyper 0.14.29",
  "itoa",
  "matchit",
  "memchr",
@@ -900,9 +900,9 @@ checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
 
 [[package]]
 name = "hyper"
-version = "0.14.28"
+version = "0.14.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf96e135eb83a2a8ddf766e426a841d8ddd7449d5f00d34ea02b41d2f19eef80"
+checksum = "f361cde2f109281a220d4307746cdfd5ee3f410da58a70377762396775634b33"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -950,7 +950,7 @@ checksum = "ec3efd23720e2049821a693cbc7e65ea87c72f1c58ff2f9522ff332b1491e590"
 dependencies = [
  "futures-util",
  "http 0.2.12",
- "hyper 0.14.28",
+ "hyper 0.14.29",
  "log",
  "rustls 0.21.9",
  "rustls-native-certs 0.6.3",
@@ -981,7 +981,7 @@ version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbb958482e8c7be4bc3cf272a766a2b0bf1a6755e7a6ae777f017a31d11b13b1"
 dependencies = [
- "hyper 0.14.28",
+ "hyper 0.14.29",
  "pin-project-lite",
  "tokio",
  "tokio-io-timeout",
@@ -1187,7 +1187,7 @@ dependencies = [
  "home",
  "http 0.2.12",
  "http-body 0.4.5",
- "hyper 0.14.28",
+ "hyper 0.14.29",
  "hyper-rustls 0.24.2",
  "hyper-timeout",
  "jsonpath-rust",
@@ -2257,7 +2257,7 @@ dependencies = [
  "google-agones-crds",
  "google-agones-sdk",
  "http 0.2.12",
- "hyper 0.14.28",
+ "hyper 0.14.29",
  "insta",
  "k8s-openapi",
  "kube",
@@ -2632,7 +2632,7 @@ dependencies = [
  "h2",
  "http 0.2.12",
  "http-body 0.4.5",
- "hyper 0.14.28",
+ "hyper 0.14.29",
  "hyper-timeout",
  "percent-encoding",
  "pin-project",
