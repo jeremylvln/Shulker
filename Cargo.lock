@@ -971,18 +971,19 @@ dependencies = [
 
 [[package]]
 name = "hyper-rustls"
-version = "0.26.0"
+version = "0.27.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0bea761b46ae2b24eb4aef630d8d1c398157b6fc29e6350ecf090a0b70c952c"
+checksum = "5ee4be2c948921a1a5320b629c4193916ed787a7f7f293fd3f7f5a6c9de74155"
 dependencies = [
  "futures-util",
  "http 1.1.0",
  "hyper 1.2.0",
  "hyper-util",
- "rustls 0.22.2",
+ "rustls 0.23.7",
+ "rustls-native-certs 0.7.0",
  "rustls-pki-types",
  "tokio",
- "tokio-rustls 0.25.0",
+ "tokio-rustls 0.26.0",
  "tower-service",
 ]
 
@@ -1536,9 +1537,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.18.0"
+version = "1.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd8b5dd2ae5ed71462c540258bedcb51965123ad7e7ccf4b9a8cafaa4a63576d"
+checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
 
 [[package]]
 name = "openssl-probe"
@@ -1831,6 +1832,53 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "106dd99e98437432fed6519dedecfade6a06a73bb7b2a1e019fdd2bee5778d94"
 
 [[package]]
+name = "quinn"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e4ceeeeabace7857413798eb1ffa1e9c905a9946a57d81fb69b4b71c4d8eb3ad"
+dependencies = [
+ "bytes",
+ "pin-project-lite",
+ "quinn-proto",
+ "quinn-udp",
+ "rustc-hash",
+ "rustls 0.23.7",
+ "thiserror",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "quinn-proto"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ddf517c03a109db8100448a4be38d498df8a210a99fe0e1b9eaf39e78c640efe"
+dependencies = [
+ "bytes",
+ "rand",
+ "ring",
+ "rustc-hash",
+ "rustls 0.23.7",
+ "slab",
+ "thiserror",
+ "tinyvec",
+ "tracing",
+]
+
+[[package]]
+name = "quinn-udp"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9096629c45860fc7fb143e125eb826b5e721e10be3263160c7d60ca832cf8c46"
+dependencies = [
+ "libc",
+ "once_cell",
+ "socket2",
+ "tracing",
+ "windows-sys 0.52.0",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1924,9 +1972,9 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "reqwest"
-version = "0.12.4"
+version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "566cafdd92868e0939d3fb961bd0dc25fcfaaed179291093b3d43e6b3150ea10"
+checksum = "c7d6d2a27d57148378eb5e111173f4276ad26340ecc5c49a4a2152167a2d6a37"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -1936,7 +1984,7 @@ dependencies = [
  "http-body 1.0.0",
  "http-body-util",
  "hyper 1.2.0",
- "hyper-rustls 0.26.0",
+ "hyper-rustls 0.27.2",
  "hyper-util",
  "ipnet",
  "js-sys",
@@ -1945,16 +1993,17 @@ dependencies = [
  "once_cell",
  "percent-encoding",
  "pin-project-lite",
- "rustls 0.22.2",
+ "quinn",
+ "rustls 0.23.7",
  "rustls-native-certs 0.7.0",
  "rustls-pemfile 2.0.0",
  "rustls-pki-types",
  "serde",
  "serde_json",
  "serde_urlencoded",
- "sync_wrapper 0.1.2",
+ "sync_wrapper 1.0.0",
  "tokio",
- "tokio-rustls 0.25.0",
+ "tokio-rustls 0.26.0",
  "tower-service",
  "url",
  "wasm-bindgen",
@@ -1982,6 +2031,12 @@ name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
+
+[[package]]
+name = "rustc-hash"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustix"
@@ -2015,6 +2070,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e87c9956bd9807afa1f77e0f7594af32566e830e088a5576d27c5b6f30f49d41"
 dependencies = [
  "log",
+ "ring",
+ "rustls-pki-types",
+ "rustls-webpki 0.102.2",
+ "subtle",
+ "zeroize",
+]
+
+[[package]]
+name = "rustls"
+version = "0.23.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebbbdb961df0ad3f2652da8f3fdc4b36122f568f968f45ad3316f26c025c677b"
+dependencies = [
+ "once_cell",
  "ring",
  "rustls-pki-types",
  "rustls-webpki 0.102.2",
@@ -2626,6 +2695,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "tinyvec"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87cc5ceb3875bb20c2890005a4e226a4651264a5c75edb2421b52861a0a0cb50"
+dependencies = [
+ "tinyvec_macros",
+]
+
+[[package]]
+name = "tinyvec_macros"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
+
+[[package]]
 name = "tokio"
 version = "1.38.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2681,6 +2765,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "775e0c0f0adb3a2f22a00c4745d728b479985fc15ee7ca6a2608388c5569860f"
 dependencies = [
  "rustls 0.22.2",
+ "rustls-pki-types",
+ "tokio",
+]
+
+[[package]]
+name = "tokio-rustls"
+version = "0.26.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c7bc40d0e5a97695bb96e27995cd3a08538541b0a846f65bba7a359f36700d4"
+dependencies = [
+ "rustls 0.23.7",
  "rustls-pki-types",
  "tokio",
 ]
