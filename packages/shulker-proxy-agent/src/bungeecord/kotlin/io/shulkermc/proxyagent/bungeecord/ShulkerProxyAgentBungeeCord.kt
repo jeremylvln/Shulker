@@ -9,7 +9,7 @@ import net.md_5.bungee.api.plugin.Plugin
 
 @Suppress("unused")
 class ShulkerProxyAgentBungeeCord : Plugin() {
-    private val agent = ShulkerProxyAgentCommon(ProxyInterfaceBungeeCord(this, this.proxy), this.logger)
+    val agent = ShulkerProxyAgentCommon(ProxyInterfaceBungeeCord(this, this.proxy), this.logger)
     private lateinit var adventure: BungeeAudiences
 
     override fun onEnable() {
