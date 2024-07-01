@@ -47,7 +47,7 @@ runs:
 
     - name: Prepare sccache-cache
       if: ${{ inputs.install-rust == 'true' }}
-      uses: mozilla-actions/sccache-action@v0.0.4
+      uses: mozilla-actions/sccache-action@v0.0.5
 
     - name: Install Node.js dependencies
       shell: bash
