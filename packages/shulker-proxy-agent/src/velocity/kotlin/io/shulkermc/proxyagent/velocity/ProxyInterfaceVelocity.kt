@@ -12,6 +12,7 @@ import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
 import com.velocitypowered.api.scheduler.ScheduledTask
+import io.shulkermc.proxyagent.ProxyCapability
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
@@ -20,6 +21,7 @@ import io.shulkermc.proxyagent.platform.PlayerPreLoginHook
 import io.shulkermc.proxyagent.platform.ProxyPingHook
 import io.shulkermc.proxyagent.platform.ServerPostConnectHook
 import io.shulkermc.proxyagent.platform.ServerPreConnectHook
+import io.shulkermc.proxyagent.velocity.extensions.TransferExtension
 import net.kyori.adventure.text.Component
 import java.net.InetSocketAddress
 import java.util.UUID
@@ -31,6 +33,18 @@ class ProxyInterfaceVelocity(
     private val plugin: ShulkerProxyAgentVelocity,
     private val proxy: ProxyServer
 ) : ProxyInterface {
+    private val transferExtension = TransferExtension(this.plugin)
+
+    override val capabilities: Array<ProxyCapability>
+
+    init {
+        val testingCapabilities = mutableListOf<ProxyCapability>()
+        if (this.transferExtension.isSupported) {
+            testingCapabilities.add(ProxyCapability.TRANSFER_PLAYER)
+        }
+        this.capabilities = testingCapabilities.toTypedArray()
+    }
+
     override fun registerServer(name: String, address: InetSocketAddress) {
         this.proxy.registerServer(ServerInfo(name, address))
     }
@@ -134,6 +148,14 @@ class ProxyInterfaceVelocity(
                 player.createConnectionRequest(server).fireAndForget()
             }
         }
+    }
+
+    override fun reconnectPlayerToCluster(playerId: UUID) {
+        this.transferExtension.tryReconnectPlayerToCluster(playerId)
+    }
+
+    override fun reconnectEveryoneToCluster() {
+        this.transferExtension.tryReconnectEveryoneToCluster()
     }
 
     override fun getPlayerCount(): Int {

@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent.api;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -8,6 +9,8 @@ import java.util.UUID;
 
 public abstract class ShulkerProxyAPI {
     public static ShulkerProxyAPI INSTANCE;
+
+    abstract public void reconnectPlayerToCluster(@NotNull UUID playerId) throws UnsupportedOperationException;
 
     abstract public @NotNull Set<String> getServersByTag(@NotNull String tag);
 
