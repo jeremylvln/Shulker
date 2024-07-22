@@ -44,7 +44,7 @@ http = "0.2.12"
 hyper = "0.14.28"
 insta = { version = "1.38.0", features = ["yaml", "toml", "redactions"] }
 k8s-openapi = { version = "0.21.1", features = ["latest", "schemars"] }
-kube = { version = "0.88.1", features = ["runtime", "client", "derive" ] }
+kube = { version = "0.93.0", features = ["runtime", "client", "derive" ] }
 lazy_static = "1.4.0"
 paste = "1.0.14"
 pbjson-types = "0.6.0"
