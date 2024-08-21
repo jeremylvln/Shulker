@@ -105,6 +105,10 @@ export default defineConfig({
       },
     ],
 
+    search: {
+      provider: 'local'
+    }
+
     sidebar: versions.sidebars,
   },
 });
