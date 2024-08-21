@@ -106,8 +106,8 @@ export default defineConfig({
     ],
 
     search: {
-      provider: 'local'
-    }
+      provider: 'local',
+    },
 
     sidebar: versions.sidebars,
   },
