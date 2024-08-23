@@ -17,6 +17,7 @@ use crate::{
     version = "v1alpha1",
     namespaced,
     status = "MinecraftServerFleetStatus",
+    scale = r#"{"specReplicasPath": ".spec.replicas", "statusReplicasPath": ".status.replicas"}"#,
     printcolumn = r#"{"name": "Replicas", "type": "integer", "jsonPath": ".status.replicas"}, {"name": "Age", "type": "date", "jsonPath": ".metadata.creationTimestamp"}"#
 )]
 #[serde(rename_all = "camelCase")]
