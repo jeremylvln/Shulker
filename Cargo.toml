@@ -16,7 +16,7 @@ members = [
 version = "0.8.1"
 authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
 edition = "2021"
-rust-version = "1.74.0"
+rust-version = "1.80.1"
 publish = false
 
 [workspace.dependencies]
