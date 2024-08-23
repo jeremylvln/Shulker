@@ -14,3 +14,6 @@ server = []
 [dependencies]
 tonic.workspace = true
 prost.workspace = true
+
+[lints]
+workspace = true

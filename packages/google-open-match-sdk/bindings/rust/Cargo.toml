@@ -16,3 +16,6 @@ futures-core.workspace = true
 tonic.workspace = true
 pbjson-types.workspace = true
 prost.workspace = true
+
+[lints]
+workspace = true

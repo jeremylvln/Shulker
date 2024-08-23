@@ -4,8 +4,8 @@ use google_agones_crds::v1::fleet_autoscaler::{
     FleetAutoscalerPolicy, FleetAutoscalerPolicyBufferSpec, FleetAutoscalerPolicySpec,
 };
 use http::{Request, Response};
-use hyper::Body;
 use k8s_openapi::{api::core::v1::EnvVar, apimachinery::pkg::util::intstr::IntOrString};
+use kube::client::Body;
 use kube::{core::ObjectMeta, Client};
 use lazy_static::lazy_static;
 use shulker_crds::{

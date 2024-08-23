@@ -89,7 +89,7 @@ spec:
                   value: "true"
                 - name: EXTRA_ENV
                   value: my_value
-              image: "itzg/bungeecord:java17-2024.2.0"
+              image: "itzg/mc-proxy:2024.6.0-java21"
               imagePullPolicy: IfNotPresent
               name: proxy
               ports:
@@ -171,4 +171,3 @@ spec:
               name: proxy-tmp
       eviction:
         safe: OnUpgrade
-

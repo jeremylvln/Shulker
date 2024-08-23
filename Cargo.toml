@@ -65,9 +65,12 @@ tokio = { version = "1.39.3", features = ["macros", "rt-multi-thread"] }
 tokio-stream = "0.1.15"
 tokio-util = "0.7.11"
 toml = "0.8.19"
-tower = "0.5.0"
+tower = { version = "0.5.0", features = ["util"] }
 tower-test = "0.4.0"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["json", "env-filter"] }
 url = "2.5.2"
 uuid = { version = "1.10.0", features = ["v4"] }
+
+[workspace.lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tarpaulin_include)'] }
