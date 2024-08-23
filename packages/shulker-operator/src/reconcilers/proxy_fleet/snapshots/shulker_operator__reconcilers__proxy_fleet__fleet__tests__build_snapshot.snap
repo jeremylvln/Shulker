@@ -123,6 +123,9 @@ spec:
                   readOnly: true
                 - mountPath: /tmp
                   name: proxy-tmp
+                - mountPath: /mnt/shulker/external-servers
+                  name: shulker-external-servers
+                  readOnly: true
           initContainers:
             - command:
                 - sh
@@ -171,5 +174,8 @@ spec:
               name: proxy-drain-lock
             - emptyDir: {}
               name: proxy-tmp
+            - configMap:
+                name: my-cluster-external-servers
+              name: shulker-external-servers
       eviction:
         safe: OnUpgrade

@@ -2,7 +2,9 @@ use http::{Request, Response};
 use kube::client::Body;
 use kube::{core::ObjectMeta, Client};
 use lazy_static::lazy_static;
-use shulker_crds::v1alpha1::minecraft_cluster::{MinecraftCluster, MinecraftClusterSpec};
+use shulker_crds::v1alpha1::minecraft_cluster::{
+    MinecraftCluster, MinecraftClusterExternalServerSpec, MinecraftClusterSpec,
+};
 
 lazy_static! {
     pub static ref TEST_CLUSTER: MinecraftCluster = MinecraftCluster {
@@ -13,7 +15,12 @@ lazy_static! {
         },
         spec: MinecraftClusterSpec {
             network_admins: None,
-            redis: None
+            redis: None,
+            external_servers: Some(vec![MinecraftClusterExternalServerSpec {
+                name: "my-external-server".to_string(),
+                address: "127.0.0.1:25565".to_string(),
+                tags: vec!["game".to_string()]
+            }])
         },
         status: None,
     };

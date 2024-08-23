@@ -1,9 +1,10 @@
 use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
+use external_servers_config_map::ExternalServersConfigMapBuilder;
 use futures::StreamExt;
 use k8s_openapi::api::{
     apps::v1::StatefulSet,
-    core::v1::{Secret, Service, ServiceAccount},
+    core::v1::{ConfigMap, Secret, Service, ServiceAccount},
     rbac::v1::{Role, RoleBinding},
 };
 use kube::{
@@ -35,6 +36,7 @@ use self::{
 
 use super::Result;
 
+pub mod external_servers_config_map;
 mod forwarding_secret;
 mod headless_service;
 mod minecraft_server_role;
@@ -65,6 +67,7 @@ struct MinecraftClusterReconciler {
     minecraft_server_role_binding_builder: MinecraftServerRoleBindingBuilder,
     redis_service_builder: RedisServiceBuilder,
     redis_stateful_set_builder: RedisStatefulSetBuilder,
+    external_servers_config_map_builder: ExternalServersConfigMapBuilder,
 }
 
 impl MinecraftClusterReconciler {
@@ -111,6 +114,13 @@ impl MinecraftClusterReconciler {
         reconcile_builder(&self.redis_stateful_set_builder, cluster.as_ref(), None)
             .await
             .map_err(ReconcilerError::BuilderError)?;
+        reconcile_builder(
+            &self.external_servers_config_map_builder,
+            cluster.as_ref(),
+            None,
+        )
+        .await
+        .map_err(ReconcilerError::BuilderError)?;
 
         Ok(Action::requeue(Duration::from_secs(5 * 60)))
     }
@@ -210,9 +220,15 @@ pub async fn run(client: Client) {
         ),
         redis_service_builder: RedisServiceBuilder::new(client.clone()),
         redis_stateful_set_builder: RedisStatefulSetBuilder::new(client.clone()),
+
+        external_servers_config_map_builder: ExternalServersConfigMapBuilder::new(client.clone()),
     };
 
     Controller::new(clusters_api, Config::default().any_semantic())
+        .owns(
+            Api::<ConfigMap>::all(client.clone()),
+            Config::default().any_semantic(),
+        )
         .owns(
             Api::<Secret>::all(client.clone()),
             Config::default().any_semantic(),

@@ -34,6 +34,7 @@ use crate::agent::AgentConfig;
 use crate::constants;
 use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
+use crate::reconcilers::minecraft_cluster::external_servers_config_map::ExternalServersConfigMapBuilder;
 use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::fleet::Fleet;
@@ -51,6 +52,7 @@ const PROXY_SHULKER_CONFIG_DIR: &str = "/mnt/shulker/config";
 const PROXY_SHULKER_FORWARDING_SECRET_DIR: &str = "/mnt/shulker/forwarding-secret";
 const PROXY_DATA_DIR: &str = "/server";
 const PROXY_DRAIN_LOCK_DIR: &str = "/mnt/drain-lock";
+const PROXY_SHULKER_EXTERNAL_SERVERS_DIR: &str = "/mnt/shulker/external-servers";
 
 lazy_static! {
     static ref PROXY_SECURITY_CONTEXT: SecurityContext = SecurityContext {
@@ -225,30 +227,7 @@ impl<'a> FleetBuilder {
                 }),
                 image_pull_policy: Some("IfNotPresent".to_string()),
                 security_context: Some(PROXY_SECURITY_CONTEXT.clone()),
-                volume_mounts: Some(vec![
-                    VolumeMount {
-                        name: "shulker-forwarding-secret".to_string(),
-                        mount_path: PROXY_SHULKER_FORWARDING_SECRET_DIR.to_string(),
-                        read_only: Some(true),
-                        ..VolumeMount::default()
-                    },
-                    VolumeMount {
-                        name: "proxy-data".to_string(),
-                        mount_path: PROXY_DATA_DIR.to_string(),
-                        ..VolumeMount::default()
-                    },
-                    VolumeMount {
-                        name: "proxy-drain-lock".to_string(),
-                        mount_path: PROXY_DRAIN_LOCK_DIR.to_string(),
-                        read_only: Some(true),
-                        ..VolumeMount::default()
-                    },
-                    VolumeMount {
-                        name: "proxy-tmp".to_string(),
-                        mount_path: "/tmp".to_string(),
-                        ..VolumeMount::default()
-                    },
-                ]),
+                volume_mounts: Some(self.get_volume_mounts(context, proxy_fleet)),
                 ..Container::default()
             }],
             service_account_name: Some(format!(
@@ -256,51 +235,7 @@ impl<'a> FleetBuilder {
                 &proxy_fleet.spec.cluster_ref.name
             )),
             restart_policy: Some("Never".to_string()),
-            volumes: Some(vec![
-                Volume {
-                    name: "shulker-config".to_string(),
-                    config_map: Some(ConfigMapVolumeSource {
-                        name: Some(
-                            proxy_fleet
-                                .spec
-                                .template
-                                .spec
-                                .config
-                                .existing_config_map_name
-                                .clone()
-                                .unwrap_or_else(|| ConfigMapBuilder::name(proxy_fleet)),
-                        ),
-                        ..ConfigMapVolumeSource::default()
-                    }),
-                    ..Volume::default()
-                },
-                Volume {
-                    name: "shulker-forwarding-secret".to_string(),
-                    secret: Some(SecretVolumeSource {
-                        secret_name: Some(format!(
-                            "{}-forwarding-secret",
-                            &proxy_fleet.spec.cluster_ref.name
-                        )),
-                        ..SecretVolumeSource::default()
-                    }),
-                    ..Volume::default()
-                },
-                Volume {
-                    name: "proxy-data".to_string(),
-                    empty_dir: Some(EmptyDirVolumeSource::default()),
-                    ..Volume::default()
-                },
-                Volume {
-                    name: "proxy-drain-lock".to_string(),
-                    empty_dir: Some(EmptyDirVolumeSource::default()),
-                    ..Volume::default()
-                },
-                Volume {
-                    name: "proxy-tmp".to_string(),
-                    empty_dir: Some(EmptyDirVolumeSource::default()),
-                    ..Volume::default()
-                },
-            ]),
+            volumes: Some(self.get_volumes(context, proxy_fleet)),
             ..PodSpec::default()
         };
 
@@ -634,6 +569,127 @@ impl<'a> FleetBuilder {
             ProxyFleetTemplateVersion::BungeeCord => "BUNGEE_JOB_ID".to_string(),
             ProxyFleetTemplateVersion::Waterfall => "WATERFALL_BUILD_ID".to_string(),
         }
+    }
+
+    fn get_volumes(
+        &self,
+        context: &FleetBuilderContext<'a>,
+        proxy_fleet: &ProxyFleet,
+    ) -> Vec<Volume> {
+        let mut volumes = vec![
+            Volume {
+                name: "shulker-config".to_string(),
+                config_map: Some(ConfigMapVolumeSource {
+                    name: Some(
+                        proxy_fleet
+                            .spec
+                            .template
+                            .spec
+                            .config
+                            .existing_config_map_name
+                            .clone()
+                            .unwrap_or_else(|| ConfigMapBuilder::name(proxy_fleet)),
+                    ),
+                    ..ConfigMapVolumeSource::default()
+                }),
+                ..Volume::default()
+            },
+            Volume {
+                name: "shulker-forwarding-secret".to_string(),
+                secret: Some(SecretVolumeSource {
+                    secret_name: Some(format!(
+                        "{}-forwarding-secret",
+                        &proxy_fleet.spec.cluster_ref.name
+                    )),
+                    ..SecretVolumeSource::default()
+                }),
+                ..Volume::default()
+            },
+            Volume {
+                name: "proxy-data".to_string(),
+                empty_dir: Some(EmptyDirVolumeSource::default()),
+                ..Volume::default()
+            },
+            Volume {
+                name: "proxy-drain-lock".to_string(),
+                empty_dir: Some(EmptyDirVolumeSource::default()),
+                ..Volume::default()
+            },
+            Volume {
+                name: "proxy-tmp".to_string(),
+                empty_dir: Some(EmptyDirVolumeSource::default()),
+                ..Volume::default()
+            },
+        ];
+
+        let has_external_servers = context
+            .cluster
+            .spec
+            .external_servers
+            .as_ref()
+            .map_or(false, |list| !list.is_empty());
+
+        if has_external_servers {
+            volumes.push(Volume {
+                name: "shulker-external-servers".to_string(),
+                config_map: Some(ConfigMapVolumeSource {
+                    name: Some(ExternalServersConfigMapBuilder::name(context.cluster)),
+                    ..ConfigMapVolumeSource::default()
+                }),
+                ..Volume::default()
+            })
+        }
+
+        volumes
+    }
+
+    fn get_volume_mounts(
+        &self,
+        context: &FleetBuilderContext<'a>,
+        _proxy_fleet: &ProxyFleet,
+    ) -> Vec<VolumeMount> {
+        let mut volume_mounts = vec![
+            VolumeMount {
+                name: "shulker-forwarding-secret".to_string(),
+                mount_path: PROXY_SHULKER_FORWARDING_SECRET_DIR.to_string(),
+                read_only: Some(true),
+                ..VolumeMount::default()
+            },
+            VolumeMount {
+                name: "proxy-data".to_string(),
+                mount_path: PROXY_DATA_DIR.to_string(),
+                ..VolumeMount::default()
+            },
+            VolumeMount {
+                name: "proxy-drain-lock".to_string(),
+                mount_path: PROXY_DRAIN_LOCK_DIR.to_string(),
+                read_only: Some(true),
+                ..VolumeMount::default()
+            },
+            VolumeMount {
+                name: "proxy-tmp".to_string(),
+                mount_path: "/tmp".to_string(),
+                ..VolumeMount::default()
+            },
+        ];
+
+        let has_external_servers = context
+            .cluster
+            .spec
+            .external_servers
+            .as_ref()
+            .map_or(false, |list| !list.is_empty());
+
+        if has_external_servers {
+            volume_mounts.push(VolumeMount {
+                name: "shulker-external-servers".to_string(),
+                mount_path: PROXY_SHULKER_EXTERNAL_SERVERS_DIR.to_string(),
+                read_only: Some(true),
+                ..VolumeMount::default()
+            })
+        }
+
+        volume_mounts
     }
 }
 
