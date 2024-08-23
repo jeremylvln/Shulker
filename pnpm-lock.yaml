@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  conventional-changelog-conventionalcommits: ">= 8.0.0"
+
 importers:
   .:
     devDependencies:
@@ -53,8 +56,8 @@ importers:
   docs:
     devDependencies:
       vitepress:
-        specifier: 1.3.3
-        version: 1.3.3(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.41)(search-insights@2.17.0)(typescript@5.5.4)
+        specifier: 1.3.4
+        version: 1.3.4(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.41)(search-insights@2.17.0)(typescript@5.5.4)
 
 packages:
   "@algolia/autocomplete-core@1.9.3":
@@ -1803,12 +1806,12 @@ packages:
       }
     engines: { node: ">=18" }
 
-  conventional-changelog-conventionalcommits@7.0.2:
+  conventional-changelog-conventionalcommits@8.0.0:
     resolution:
       {
-        integrity: sha512-NKXYmMR/Hr1DevQegFB4MwfM5Vv0m4UIxKZTTYuD98lpTknaZlSRrDOG4X7wIXpGkfsYxZTghUN+Qq+T0YQI7w==,
+        integrity: sha512-eOvlTO6OcySPyyyk8pKz2dP4jjElYunj9hn9/s0OB+gapTO8zwS9UQWrZ1pmF2hFs3vw1xhonOLGcGjy/zgsuA==,
       }
-    engines: { node: ">=16" }
+    engines: { node: ">=18" }
 
   conventional-changelog-writer@8.0.0:
     resolution:
@@ -4315,10 +4318,10 @@ packages:
       terser:
         optional: true
 
-  vitepress@1.3.3:
+  vitepress@1.3.4:
     resolution:
       {
-        integrity: sha512-6UzEw/wZ41S/CATby7ea7UlffvRER/uekxgN6hbEvSys9ukmLOKsz87Ehq9yOx1Rwiw+Sj97yjpivP8w1sUmng==,
+        integrity: sha512-I1/F6OW1xl3kW4PaIMC6snxjWgf3qfziq2aqsDoFc/Gt41WbcRv++z8zjw8qGRIJ+I4bUW7ZcKFDHHN/jkH9DQ==,
       }
     hasBin: true
     peerDependencies:
@@ -4636,7 +4639,7 @@ snapshots:
   "@commitlint/config-conventional@19.2.2":
     dependencies:
       "@commitlint/types": 19.0.3
-      conventional-changelog-conventionalcommits: 7.0.2
+      conventional-changelog-conventionalcommits: 8.0.0
 
   "@commitlint/config-validator@19.0.3":
     dependencies:
@@ -5549,7 +5552,7 @@ snapshots:
     dependencies:
       compare-func: 2.0.0
 
-  conventional-changelog-conventionalcommits@7.0.2:
+  conventional-changelog-conventionalcommits@8.0.0:
     dependencies:
       compare-func: 2.0.0
 
@@ -6894,7 +6897,7 @@ snapshots:
       "@types/node": 22.5.0
       fsevents: 2.3.3
 
-  vitepress@1.3.3(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.41)(search-insights@2.17.0)(typescript@5.5.4):
+  vitepress@1.3.4(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.41)(search-insights@2.17.0)(typescript@5.5.4):
     dependencies:
       "@docsearch/css": 3.6.1
       "@docsearch/js": 3.6.1(@algolia/client-search@4.24.0)(search-insights@2.17.0)
