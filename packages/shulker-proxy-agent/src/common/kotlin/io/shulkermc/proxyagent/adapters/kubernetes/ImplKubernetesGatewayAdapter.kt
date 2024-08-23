@@ -59,7 +59,7 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
                 .withName(Configuration.PROXY_FLEET_NAME)
                 .get()
 
-        if (service.spec.type !== "LoadBalancer") {
+        if (service.spec.type != "LoadBalancer") {
             return Optional.empty()
         }
 

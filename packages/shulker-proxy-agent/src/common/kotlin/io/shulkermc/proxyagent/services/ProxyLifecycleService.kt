@@ -14,7 +14,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private val ttlTask: ProxyInterface.ScheduledTask
-    private var drainingFuture: CompletableFuture<Void>? = null
+    private var drainingFuture: CompletableFuture<Unit>? = null
 
     init {
         this.agent.kubernetesGateway.watchProxyEvents { action, proxy ->
@@ -40,15 +40,15 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         this.ttlTask.cancel()
     }
 
-    fun drain(): CompletableFuture<Void> {
+    fun drain(): CompletableFuture<Unit> {
         if (this.drainingFuture != null) {
             return this.drainingFuture!!
         }
 
-        this.drainingFuture = CompletableFuture<Void>()
+        this.drainingFuture = CompletableFuture<Unit>()
         this.agent.fileSystem.createDrainLock()
 
-        // FIXME: Rather than hardcoding a task, wait for Kubernetes to
+        // TODO: Rather than hardcoding a task, wait for Kubernetes to
         // exclude the proxy from the Service.
         this.agent.proxyInterface.scheduleDelayedTask(
             @Suppress("MagicNumber") 30L,
@@ -59,7 +59,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
 
         this.agent.logger.info("Proxy is now draining")
 
-        return this.drainingFuture!!.thenAccept {
+        return this.drainingFuture!!.thenApply {
             this.onExcludedFromKubernetes()
         }
     }
