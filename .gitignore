@@ -322,3 +322,4 @@ gradle-app.setting
 scripts/.tools/
 *.sarif
 .nx/cache
+.nx/workspace-data
