@@ -36,18 +36,20 @@ class LocalFileSystemAdapter : FileSystemAdapter {
     }
 
     override fun watchExternalServersUpdates(
-        callback: (servers: Map<String, FileSystemAdapter.ExternalServer>) -> Unit
+        callback: (servers: Map<String, FileSystemAdapter.ExternalServer>) -> Unit,
     ) {
         val observer = FileAlterationObserver(EXTERNAL_SERVERS_PATH.parent.toFile())
-        observer.addListener(object : FileAlterationListenerAdaptor() {
-            override fun onFileChange(file: File) {
-                callback(parseExternalServersFile(file))
-            }
+        observer.addListener(
+            object : FileAlterationListenerAdaptor() {
+                override fun onFileChange(file: File) {
+                    callback(parseExternalServersFile(file))
+                }
 
-            override fun onFileDelete(file: File) {
-                callback(emptyMap())
-            }
-        })
+                override fun onFileDelete(file: File) {
+                    callback(emptyMap())
+                }
+            },
+        )
 
         val monitor = FileAlterationMonitor(EXTERNAL_SERVERS_WATCH_INTERVAL_MS, observer)
         monitor.start()
@@ -69,15 +71,16 @@ class LocalFileSystemAdapter : FileSystemAdapter {
 
             val addressParts = address.split(":")
 
-            name to FileSystemAdapter.ExternalServer(
-                name,
-                if (addressParts.size == 2) {
-                    InetSocketAddress(addressParts[0], addressParts[1].toInt())
-                } else {
-                    InetSocketAddress(address, 25565)
-                },
-                tags.toSet(),
-            )
+            name to
+                FileSystemAdapter.ExternalServer(
+                    name,
+                    if (addressParts.size == 2) {
+                        InetSocketAddress(addressParts[0], addressParts[1].toInt())
+                    } else {
+                        InetSocketAddress(address, 25565)
+                    },
+                    tags.toSet(),
+                )
         }
     }
 }

@@ -10,7 +10,7 @@ interface FileSystemAdapter {
     fun deleteReadinessLock()
 
     fun watchExternalServersUpdates(
-        callback: (servers: Map<String, ExternalServer>) -> Unit
+        callback: (servers: Map<String, ExternalServer>) -> Unit,
     )
 
     data class ExternalServer(val name: String, val address: InetSocketAddress, val tags: Set<String>)
