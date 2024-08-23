@@ -34,7 +34,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm exec nx build shulker-operator -- --target=$(cat /.rust-triple) \
+RUN --mount=type=cache,id=rust,target=dist/rust/$(cat /.rust-triple) \
+  pnpm exec nx build shulker-operator -- --target=$(cat /.rust-triple) \
   && cp dist/rust/$(cat /.rust-triple)/release/shulker-operator dist/rust/release/shulker-operator
 
 FROM gcr.io/distroless/cc-debian12:nonroot

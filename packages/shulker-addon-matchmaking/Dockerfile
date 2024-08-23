@@ -33,9 +33,9 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
-RUN npm run prepare
 
-RUN pnpm exec nx build shulker-addon-matchmaking -- --target=$(cat /.rust-triple) \
+RUN --mount=type=cache,id=rust,target=dist/rust/$(cat /.rust-triple) \
+  pnpm exec nx build shulker-addon-matchmaking -- --target=$(cat /.rust-triple) \
   && cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-director dist/rust/release/shulker-addon-matchmaking-director \
   && cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-mmf dist/rust/release/shulker-addon-matchmaking-mmf
 
