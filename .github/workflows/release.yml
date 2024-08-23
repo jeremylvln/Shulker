@@ -56,7 +56,7 @@ jobs:
         uses: nrwl/nx-set-shas@v4
 
       - name: Publish Docker images
-        run: npx nx affected --target=docker --parallel 1 --output-style stream
+        run: pnpm exec nx affected --target=docker --parallel 1 --output-style stream
         env:
           DOCKER_BUILD_PLATFORMS: linux/amd64,linux/arm64/v8
 
@@ -125,7 +125,7 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Release with semantic-release
-        run: npx semantic-release
+        run: pnpm exec semantic-release
         env:
           HUSKY: "0"
           DOCKER_BUILD_PLATFORMS: linux/amd64,linux/arm64/v8

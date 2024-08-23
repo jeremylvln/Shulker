@@ -33,7 +33,7 @@ jobs:
         uses: nrwl/nx-set-shas@v4
 
       - name: Run build
-        run: npx nx affected --target=build --parallel=1
+        run: pnpm exec nx affected --target=build --parallel=1
 
       - name: Print sccache stats
         shell: bash
@@ -60,7 +60,7 @@ jobs:
         uses: nrwl/nx-set-shas@v4
 
       - name: Run tests
-        run: npx nx affected --target=test --parallel=1
+        run: pnpm exec nx affected --target=test --parallel=1
 
       - name: Upload coverage reports to Codecov
         run: |
@@ -137,7 +137,7 @@ jobs:
         uses: nrwl/nx-set-shas@v4
 
       - name: Run lint
-        run: npx nx affected --target=lint --parallel=1
+        run: pnpm exec nx affected --target=lint --parallel=1
 
   semantic:
     runs-on: ubuntu-latest
