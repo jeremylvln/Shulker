@@ -4,10 +4,14 @@ WORKDIR /build
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-RUN case "$TARGETPLATFORM" in \
+RUN corepack enable \
+  && case "$TARGETPLATFORM" in \
     "linux/amd64") \
       echo "x86_64-unknown-linux-gnu" > /.rust-triple; \
       echo "gcc-x86-64-linux-gnu" > /.rust-compiler \
@@ -25,13 +29,13 @@ RUN case "$TARGETPLATFORM" in \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*; \
   fi
 
-COPY package.json package-lock.json ./
-RUN npm i --ignore-scripts
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 RUN npm run prepare
 
-RUN npx nx build shulker-addon-matchmaking --target=$(cat /.rust-triple) \
+RUN pnpm exec nx build shulker-addon-matchmaking -- --target=$(cat /.rust-triple) \
   && cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-director dist/rust/release/shulker-addon-matchmaking-director \
   && cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-mmf dist/rust/release/shulker-addon-matchmaking-mmf
 
