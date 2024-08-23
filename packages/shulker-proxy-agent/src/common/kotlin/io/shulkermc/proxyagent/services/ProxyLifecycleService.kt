@@ -4,6 +4,7 @@ import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
@@ -13,7 +14,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private val ttlTask: ProxyInterface.ScheduledTask
-    private var draining = false
+    private var drainingFuture: CompletableFuture<Void>? = null
 
     init {
         this.agent.kubernetesGateway.watchProxyEvents { action, proxy ->
@@ -39,14 +40,34 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         this.ttlTask.cancel()
     }
 
-    private fun drain() {
-        if (this.draining) {
-            return
+    fun drain(): CompletableFuture<Void> {
+        if (this.drainingFuture != null) {
+            return this.drainingFuture!!
         }
 
-        this.draining = true
-
+        this.drainingFuture = CompletableFuture<Void>()
         this.agent.fileSystem.createDrainLock()
+
+        // FIXME: Rather than hardcoding a task, wait for Kubernetes to
+        // exclude the proxy from the Service.
+        this.agent.proxyInterface.scheduleDelayedTask(
+            @Suppress("MagicNumber") 30L,
+            TimeUnit.SECONDS,
+        ) {
+            this.drainingFuture?.complete(null)
+        }
+
+        this.agent.logger.info("Proxy is now draining")
+
+        return this.drainingFuture!!.thenAccept {
+            this.onExcludedFromKubernetes()
+        }
+    }
+
+    fun isDraining() = this.drainingFuture != null
+
+    private fun onExcludedFromKubernetes() {
+        this.agent.logger.info("Proxy was excluded from Kubernetes Service")
         this.agent.playerMovementService.setAcceptingPlayers(false)
 
         this.agent.proxyInterface.scheduleRepeatingTask(

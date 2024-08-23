@@ -255,6 +255,7 @@ mod bungeecord {
         prevent_proxy_connections: bool,
         enforce_secure_profile: bool,
         log_pings: bool,
+        reject_transfers: bool,
     }
 
     #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -325,6 +326,7 @@ mod bungeecord {
                 prevent_proxy_connections: disallow_proxy_connections,
                 enforce_secure_profile: true,
                 log_pings: false,
+                reject_transfers: false,
             }
         }
     }
@@ -446,6 +448,7 @@ mod bungeecord {
                 prevent_proxy_connections: true,
                 enforce_secure_profile: true,
                 log_pings: false,
+                reject_transfers: false,
             };
 
             // W
@@ -499,6 +502,7 @@ mod velocity {
     pub struct VelocityAdvancedToml {
         haproxy_protocol: bool,
         tcp_fast_open: bool,
+        accepts_transfers: bool,
     }
 
     impl VelocityToml {
@@ -514,7 +518,7 @@ mod velocity {
                 .unwrap_or(false);
 
             VelocityToml {
-                config_version: "2.6".to_string(),
+                config_version: "2.7".to_string(),
                 bind: "0.0.0.0:25577".to_string(),
                 motd: spec.motd.clone(),
                 show_max_players: spec.max_players,
@@ -532,6 +536,7 @@ mod velocity {
                 advanced: VelocityAdvancedToml {
                     haproxy_protocol: spec.proxy_protocol,
                     tcp_fast_open: true,
+                    accepts_transfers: true,
                 },
             }
         }
@@ -646,6 +651,7 @@ mod velocity {
                 advanced: super::VelocityAdvancedToml {
                     haproxy_protocol: true,
                     tcp_fast_open: true,
+                    accepts_transfers: true,
                 },
             };
 

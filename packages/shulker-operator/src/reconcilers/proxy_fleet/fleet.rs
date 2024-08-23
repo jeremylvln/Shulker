@@ -27,7 +27,6 @@ use kube::Client;
 use kube::ResourceExt;
 use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
-use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetServiceSpec;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateVersion;
 use url::Url;
 
@@ -496,19 +495,6 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_NETWORK_ADMINS".to_string(),
-                value: Some(
-                    context
-                        .cluster
-                        .spec
-                        .network_admins
-                        .as_ref()
-                        .map(|list| list.join(","))
-                        .unwrap_or("".to_string()),
-                ),
-                ..EnvVar::default()
-            },
-            EnvVar {
                 name: "SHULKER_PROXY_REDIS_HOST".to_string(),
                 value: Some(redis_ref.host),
                 ..EnvVar::default()
@@ -534,6 +520,14 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
         ];
+
+        if let Some(network_admins) = context.cluster.spec.network_admins.as_ref() {
+            env.push(EnvVar {
+                name: "SHULKER_NETWORK_ADMINS".to_string(),
+                value: Some(network_admins.join(",")),
+                ..EnvVar::default()
+            })
+        }
 
         if let Some(preferred_reconnection_address) = proxy_fleet
             .spec

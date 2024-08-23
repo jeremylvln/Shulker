@@ -138,7 +138,9 @@ class ProxyInterfaceBungeeCord(
                     if (event.isCancelled) return
                     val result = hook(wrapPlayer(event.player), event.target.name)
 
-                    if (result.newServerName.isPresent) {
+                    if (!result.allowed) {
+                        event.isCancelled = true
+                    } else if (result.newServerName.isPresent) {
                         @Suppress("UnsafeCallOnNullableType")
                         event.target = proxy.servers[result.newServerName.get()]!!
                     }

@@ -123,7 +123,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             this.agent.agonesGateway.setAllocated()
         }
 
-        if (this.isProxyConsideredFull()) {
+        if (this.acceptingPlayers && this.isProxyConsideredFull()) {
             this.setAcceptingPlayers(false)
         }
     }
@@ -136,7 +136,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             this.agent.agonesGateway.setReady()
         }
 
-        if (!this.isProxyConsideredFull()) {
+        if (!this.acceptingPlayers && !this.agent.proxyLifecycleService.isDraining() && !this.isProxyConsideredFull()) {
             this.setAcceptingPlayers(true)
         }
     }
@@ -148,20 +148,23 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         if (originalServerName == LOBBY_TAG) {
             val firstLobbyServer = this.agent.serverDirectoryService.getServersByTag(LOBBY_TAG).firstOrNull()
             if (firstLobbyServer != null) {
-                return ServerPreConnectHookResult(Optional.of(firstLobbyServer))
+                return ServerPreConnectHookResult(true, Optional.of(firstLobbyServer))
             }
+
+            return this.onServerPreConnect(player, LIMBO_TAG)
         }
 
         if (originalServerName == LIMBO_TAG) {
             val firstLimboServer = this.agent.serverDirectoryService.getServersByTag(LIMBO_TAG).firstOrNull()
             if (firstLimboServer != null) {
-                return ServerPreConnectHookResult(Optional.of(firstLimboServer))
+                return ServerPreConnectHookResult(true, Optional.of(firstLimboServer))
             }
 
             player.disconnect(MSG_NO_LIMBO_FOUND)
+            return ServerPreConnectHookResult(false, Optional.empty())
         }
 
-        return ServerPreConnectHookResult(Optional.empty())
+        return ServerPreConnectHookResult(true, Optional.empty())
     }
 
     private fun onServerPostConnect(
