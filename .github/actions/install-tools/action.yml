@@ -12,7 +12,7 @@ inputs:
   node-version:
     description: "The Node.js version to use"
     required: true
-    default: "20"
+    default: "22"
   rust-version:
     description: "The Rust version to use"
     required: true
@@ -24,11 +24,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
     - name: Use Node.js ${{ inputs.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        cache: npm
+        cache: pnpm
 
     - name: Use Rust ${{ inputs.rust-version }}
       if: ${{ inputs.install-rust == 'true' }}
