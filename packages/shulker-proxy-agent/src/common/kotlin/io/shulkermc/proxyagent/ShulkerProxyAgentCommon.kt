@@ -52,7 +52,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
             val gameServer = this.agonesGateway.getGameServer().get()
             this.logger.info(
-                "Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}"
+                "Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}",
             )
 
             ShulkerProxyAPI.INSTANCE = ShulkerProxyAPIImpl(this)
@@ -61,10 +61,11 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.jedisPool = this.createJedisPool()
             this.jedisPool.resource.use { jedis -> jedis.ping() }
 
-            this.kubernetesGateway = ImplKubernetesGatewayAdapter(
-                Configuration.PROXY_NAMESPACE,
-                Configuration.PROXY_NAME
-            )
+            this.kubernetesGateway =
+                ImplKubernetesGatewayAdapter(
+                    Configuration.PROXY_NAMESPACE,
+                    Configuration.PROXY_NAME,
+                )
             this.fileSystem = LocalFileSystemAdapter()
             this.mojangGateway = HttpMojangGatewayAdapter()
             this.cache = RedisCacheAdapter(this.jedisPool)
@@ -82,13 +83,15 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             if (Configuration.NETWORK_ADMINS.isNotEmpty()) {
                 this.proxyInterface.prepareNetworkAdminsPermissions(Configuration.NETWORK_ADMINS)
                 this.logger.info(
-                    "Created listener for ${Configuration.NETWORK_ADMINS.size} network administrators"
+                    "Created listener for ${Configuration.NETWORK_ADMINS.size} network administrators",
                 )
             }
 
             this.cache.registerProxy(Configuration.PROXY_NAME, this.proxyInterface.getPlayerCapacity())
             this.agonesGateway.setReady()
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
             this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping proxy", e)
             this.shutdown()
         }
@@ -110,11 +113,13 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.cache.unregisterProxy(Configuration.PROXY_NAME)
             this.pubSub.close()
             this.agonesGateway.askShutdown()
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
             this.logger.log(
                 Level.SEVERE,
                 "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
-                e
+                e,
             )
             exitProcess(0)
         }
@@ -126,7 +131,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 Configuration.REDIS_HOST,
                 Configuration.REDIS_PORT,
                 Configuration.REDIS_USERNAME.get(),
-                Configuration.REDIS_PASSWORD.get()
+                Configuration.REDIS_PASSWORD.get(),
             )
         }
 

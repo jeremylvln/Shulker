@@ -31,11 +31,12 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
 
     private val eventListener = object : Listener {}
 
-    private val scheduler: ServerScheduler = if (isFoliaContext()) {
-        ServerSchedulerFolia(this.plugin)
-    } else {
-        ServerSchedulerPaper(this.plugin)
-    }
+    private val scheduler: ServerScheduler =
+        if (isFoliaContext()) {
+            ServerSchedulerFolia(this.plugin)
+        } else {
+            ServerSchedulerPaper(this.plugin)
+        }
 
     override fun prepareNetworkAdminsPermissions(playerIds: List<UUID>) {
         this.registerEventWithPriority(PlayerLoginEvent::class.java, HookPostOrder.FIRST) { event ->
@@ -47,13 +48,19 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
         }
     }
 
-    override fun addPlayerJoinHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
+    override fun addPlayerJoinHook(
+        hook: PlayerLoginHook,
+        postOrder: HookPostOrder,
+    ) {
         this.registerEventWithPriority(PlayerJoinEvent::class.java, postOrder) {
             hook()
         }
     }
 
-    override fun addPlayerQuitHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
+    override fun addPlayerQuitHook(
+        hook: PlayerDisconnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.registerEventWithPriority(PlayerQuitEvent::class.java, postOrder) {
             hook()
         }
@@ -66,32 +73,33 @@ class ServerInterfacePaper(private val plugin: ShulkerServerAgentPaper) : Server
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ServerInterface.ScheduledTask = this.scheduler.scheduleDelayedTask(delay, timeUnit, runnable)
 
     override fun scheduleRepeatingTask(
         delay: Long,
         interval: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ServerInterface.ScheduledTask = this.scheduler.scheduleRepeatingTask(delay, interval, timeUnit, runnable)
 
     private fun <T : Event> registerEventWithPriority(
         clazz: Class<T>,
         postOrder: HookPostOrder,
-        callback: (event: T) -> Unit
+        callback: (event: T) -> Unit,
     ) {
-        val executor = EventExecutor { _, event ->
-            @Suppress("UNCHECKED_CAST")
-            callback(event as T)
-        }
+        val executor =
+            EventExecutor { _, event ->
+                @Suppress("UNCHECKED_CAST")
+                callback(event as T)
+            }
 
         this.plugin.server.pluginManager.registerEvent(
             clazz,
             this.eventListener,
             this.mapPostOrder(postOrder),
             executor,
-            this.plugin
+            this.plugin,
         )
     }
 

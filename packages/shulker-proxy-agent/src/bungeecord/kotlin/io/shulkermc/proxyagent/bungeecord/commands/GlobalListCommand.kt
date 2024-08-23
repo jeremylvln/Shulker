@@ -10,9 +10,12 @@ import net.md_5.bungee.api.plugin.Command
 class GlobalListCommand(
     private val agent: ShulkerProxyAgentCommon,
     private val adventure: BungeeAudiences,
-    private val proxyServer: ProxyServer
+    private val proxyServer: ProxyServer,
 ) : Command(ListCommandHandler.NAME, ListCommandHandler.PERMISSION) {
-    override fun execute(sender: CommandSender, args: Array<out String>) {
+    override fun execute(
+        sender: CommandSender,
+        args: Array<out String>,
+    ) {
         val audience = this.adventure.sender(sender)
         if (!BungeeCordCommandHelper.testPermissionOrMessage(sender, audience, this.permission)) {
             return

@@ -7,7 +7,7 @@ import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 import java.net.InetSocketAddress
 
 class ServerDirectoryService(
-    private val agent: ShulkerProxyAgentCommon
+    private val agent: ShulkerProxyAgentCommon,
 ) {
     private val serversByTag = HashMap<String, MutableSet<String>>()
     private val tagsByServer = HashMap<String, Set<String>>()
@@ -47,15 +47,19 @@ class ServerDirectoryService(
             this.registerServer(
                 minecraftServer.metadata.name,
                 InetSocketAddress(
-                    "${minecraftServer.metadata.name}.${Configuration.CLUSTER_NAME}-cluster.${minecraftServer.metadata.namespace}", // ktlint-disable standard_max-line-length
-                    DEFAULT_MINECRAFT_PORT
+                    "${minecraftServer.metadata.name}.${Configuration.CLUSTER_NAME}-cluster.${minecraftServer.metadata.namespace}",
+                    DEFAULT_MINECRAFT_PORT,
                 ),
-                tags?.split(",")?.toSet().orEmpty()
+                tags?.split(",")?.toSet().orEmpty(),
             )
         }
     }
 
-    private fun registerServer(name: String, address: InetSocketAddress, tags: Set<String>) {
+    private fun registerServer(
+        name: String,
+        address: InetSocketAddress,
+        tags: Set<String>,
+    ) {
         this.agent.proxyInterface.registerServer(name, address)
 
         for (tag in tags) {

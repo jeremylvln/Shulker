@@ -29,9 +29,12 @@ import kotlin.jvm.optionals.getOrElse
 @Suppress("TooManyFunctions")
 class ProxyInterfaceVelocity(
     private val plugin: ShulkerProxyAgentVelocity,
-    private val proxy: ProxyServer
+    private val proxy: ProxyServer,
 ) : ProxyInterface {
-    override fun registerServer(name: String, address: InetSocketAddress) {
+    override fun registerServer(
+        name: String,
+        address: InetSocketAddress,
+    ) {
         this.proxy.registerServer(ServerInfo(name, address))
     }
 
@@ -46,25 +49,32 @@ class ProxyInterfaceVelocity(
         return this.proxy.getServer(name).isPresent
     }
 
-    override fun addProxyPingHook(hook: ProxyPingHook, postOrder: HookPostOrder) {
+    override fun addProxyPingHook(
+        hook: ProxyPingHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.eventManager.register(
             this.plugin,
             ProxyPingEvent::class.java,
-            this.mapPostOrder(postOrder)
+            this.mapPostOrder(postOrder),
         ) { event ->
             val result = hook()
-            event.ping = event.ping.asBuilder()
-                .onlinePlayers(result.onlinePlayerCount)
-                .maximumPlayers(result.maxPlayerCount)
-                .build()
+            event.ping =
+                event.ping.asBuilder()
+                    .onlinePlayers(result.onlinePlayerCount)
+                    .maximumPlayers(result.maxPlayerCount)
+                    .build()
         }
     }
 
-    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook, postOrder: HookPostOrder) {
+    override fun addPlayerPreLoginHook(
+        hook: PlayerPreLoginHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.eventManager.register(
             this.plugin,
             PreLoginEvent::class.java,
-            this.mapPostOrder(postOrder)
+            this.mapPostOrder(postOrder),
         ) { event ->
             if (!event.result.isAllowed) return@register
             val result = hook()
@@ -75,43 +85,56 @@ class ProxyInterfaceVelocity(
         }
     }
 
-    override fun addPlayerLoginHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
+    override fun addPlayerLoginHook(
+        hook: PlayerLoginHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.eventManager.register(this.plugin, LoginEvent::class.java, this.mapPostOrder(postOrder)) { event ->
             hook(wrapPlayer(event.player))
         }
     }
 
-    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
+    override fun addPlayerDisconnectHook(
+        hook: PlayerDisconnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.eventManager.register(
             this.plugin,
             DisconnectEvent::class.java,
-            this.mapPostOrder(postOrder)
+            this.mapPostOrder(postOrder),
         ) { event -> hook(this.wrapPlayer(event.player)) }
     }
 
-    override fun addServerPreConnectHook(hook: ServerPreConnectHook, postOrder: HookPostOrder) {
+    override fun addServerPreConnectHook(
+        hook: ServerPreConnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.eventManager.register(
             this.plugin,
             ServerPreConnectEvent::class.java,
-            this.mapPostOrder(postOrder)
+            this.mapPostOrder(postOrder),
         ) { event ->
             if (!event.result.isAllowed) return@register
             val result = hook(this.wrapPlayer(event.player), event.originalServer.serverInfo.name)
 
             if (result.newServerName.isPresent) {
-                event.result = ServerPreConnectEvent.ServerResult.allowed(
-                    this.proxy.getServer(result.newServerName.get()).get()
-                )
+                event.result =
+                    ServerPreConnectEvent.ServerResult.allowed(
+                        this.proxy.getServer(result.newServerName.get()).get(),
+                    )
             }
         }
     }
 
     @Suppress("UnstableApiUsage")
-    override fun addServerPostConnectHook(hook: ServerPostConnectHook, postOrder: HookPostOrder) {
+    override fun addServerPostConnectHook(
+        hook: ServerPostConnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.eventManager.register(
             this.plugin,
             ServerPostConnectEvent::class.java,
-            this.mapPostOrder(postOrder)
+            this.mapPostOrder(postOrder),
         ) { event -> hook(this.wrapPlayer(event.player), event.player.currentServer.get().serverInfo.name) }
     }
 
@@ -119,7 +142,7 @@ class ProxyInterfaceVelocity(
         this.proxy.eventManager.register(
             this.plugin,
             PermissionsSetupEvent::class.java,
-            PostOrder.LAST
+            PostOrder.LAST,
         ) { event ->
             val player = event.subject as? Player ?: return@register
             if (playerIds.contains(player.uniqueId)) {
@@ -128,7 +151,10 @@ class ProxyInterfaceVelocity(
         }
     }
 
-    override fun teleportPlayerOnServer(playerName: String, serverName: String) {
+    override fun teleportPlayerOnServer(
+        playerName: String,
+        serverName: String,
+    ) {
         this.proxy.getPlayer(playerName).ifPresent { player ->
             this.proxy.getServer(serverName).ifPresent { server ->
                 player.createConnectionRequest(server).fireAndForget()
@@ -147,13 +173,13 @@ class ProxyInterfaceVelocity(
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ProxyInterface.ScheduledTask {
         return VelocityScheduledTask(
             this.proxy.scheduler
                 .buildTask(this.plugin, runnable)
                 .delay(delay, timeUnit)
-                .schedule()
+                .schedule(),
         )
     }
 
@@ -161,14 +187,14 @@ class ProxyInterfaceVelocity(
         delay: Long,
         interval: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ProxyInterface.ScheduledTask {
         return VelocityScheduledTask(
             this.proxy.scheduler
                 .buildTask(this.plugin, runnable)
                 .delay(delay, timeUnit)
                 .repeat(interval, timeUnit)
-                .schedule()
+                .schedule(),
         )
     }
 

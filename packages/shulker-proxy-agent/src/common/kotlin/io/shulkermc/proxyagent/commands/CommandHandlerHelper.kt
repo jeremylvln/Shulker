@@ -11,10 +11,11 @@ object CommandHandlerHelper {
     fun findPlayerOrMessage(
         agent: ShulkerProxyAgentCommon,
         source: Audience,
-        playerName: String
+        playerName: String,
     ): Optional<PlayerPosition> {
-        val playerPosition = agent.cache.getPlayerIdFromName(playerName)
-            .flatMap { playerId -> agent.cache.getPlayerPosition(playerId) }
+        val playerPosition =
+            agent.cache.getPlayerIdFromName(playerName)
+                .flatMap { playerId -> agent.cache.getPlayerPosition(playerId) }
 
         if (playerPosition.isEmpty) {
             source.sendMessage(Component.text("Player $playerName not found", NamedTextColor.RED))

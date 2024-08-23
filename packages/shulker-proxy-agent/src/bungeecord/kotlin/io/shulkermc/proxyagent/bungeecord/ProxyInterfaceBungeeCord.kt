@@ -35,9 +35,12 @@ import java.util.concurrent.TimeUnit
 @Suppress("TooManyFunctions")
 class ProxyInterfaceBungeeCord(
     private val plugin: Plugin,
-    private val proxy: ProxyServer
+    private val proxy: ProxyServer,
 ) : ProxyInterface {
-    override fun registerServer(name: String, address: InetSocketAddress) {
+    override fun registerServer(
+        name: String,
+        address: InetSocketAddress,
+    ) {
         this.proxy.servers[name] = this.proxy.constructServerInfo(name, address, "", false)
     }
 
@@ -49,7 +52,10 @@ class ProxyInterfaceBungeeCord(
         return this.proxy.servers.containsKey(name)
     }
 
-    override fun addProxyPingHook(hook: ProxyPingHook, postOrder: HookPostOrder) {
+    override fun addProxyPingHook(
+        hook: ProxyPingHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
@@ -60,11 +66,14 @@ class ProxyInterfaceBungeeCord(
                     event.response.players.online = result.onlinePlayerCount
                     event.response.players.max = result.maxPlayerCount
                 }
-            }
+            },
         )
     }
 
-    override fun addPlayerPreLoginHook(hook: PlayerPreLoginHook, postOrder: HookPostOrder) {
+    override fun addPlayerPreLoginHook(
+        hook: PlayerPreLoginHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
@@ -75,16 +84,20 @@ class ProxyInterfaceBungeeCord(
                     val result = hook()
 
                     if (!result.allowed) {
-                        event.reason = TextComponent.fromArray(
-                            *BungeeComponentSerializer.get().serialize(result.rejectComponent!!)
-                        )
+                        event.reason =
+                            TextComponent.fromArray(
+                                *BungeeComponentSerializer.get().serialize(result.rejectComponent!!),
+                            )
                     }
                 }
-            }
+            },
         )
     }
 
-    override fun addPlayerLoginHook(hook: PlayerLoginHook, postOrder: HookPostOrder) {
+    override fun addPlayerLoginHook(
+        hook: PlayerLoginHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
@@ -93,11 +106,14 @@ class ProxyInterfaceBungeeCord(
                 fun onLogin(event: PostLoginEvent) {
                     hook(wrapPlayer(event.player))
                 }
-            }
+            },
         )
     }
 
-    override fun addPlayerDisconnectHook(hook: PlayerDisconnectHook, postOrder: HookPostOrder) {
+    override fun addPlayerDisconnectHook(
+        hook: PlayerDisconnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
@@ -106,11 +122,14 @@ class ProxyInterfaceBungeeCord(
                 fun onPlayerDisconnect(event: PlayerDisconnectEvent) {
                     hook(wrapPlayer(event.player))
                 }
-            }
+            },
         )
     }
 
-    override fun addServerPreConnectHook(hook: ServerPreConnectHook, postOrder: HookPostOrder) {
+    override fun addServerPreConnectHook(
+        hook: ServerPreConnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
@@ -125,11 +144,14 @@ class ProxyInterfaceBungeeCord(
                         event.target = proxy.servers[result.newServerName.get()]!!
                     }
                 }
-            }
+            },
         )
     }
 
-    override fun addServerPostConnectHook(hook: ServerPostConnectHook, postOrder: HookPostOrder) {
+    override fun addServerPostConnectHook(
+        hook: ServerPostConnectHook,
+        postOrder: HookPostOrder,
+    ) {
         this.proxy.pluginManager.registerListener(
             this.plugin,
             object : Listener {
@@ -138,7 +160,7 @@ class ProxyInterfaceBungeeCord(
                 fun onServerConnected(event: ServerConnectedEvent) {
                     hook(wrapPlayer(event.player), event.server.info.name)
                 }
-            }
+            },
         )
     }
 
@@ -153,11 +175,14 @@ class ProxyInterfaceBungeeCord(
                         event.setHasPermission(true)
                     }
                 }
-            }
+            },
         )
     }
 
-    override fun teleportPlayerOnServer(playerName: String, serverName: String) {
+    override fun teleportPlayerOnServer(
+        playerName: String,
+        serverName: String,
+    ) {
         val server = this.proxy.getServerInfo(serverName)
 
         if (server != null) {
@@ -176,7 +201,7 @@ class ProxyInterfaceBungeeCord(
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ProxyInterface.ScheduledTask {
         return BungeeCordScheduledTask(this.proxy.scheduler.schedule(this.plugin, runnable, delay, timeUnit))
     }
@@ -185,7 +210,7 @@ class ProxyInterfaceBungeeCord(
         delay: Long,
         interval: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ProxyInterface.ScheduledTask {
         return BungeeCordScheduledTask(this.proxy.scheduler.schedule(this.plugin, runnable, delay, interval, timeUnit))
     }

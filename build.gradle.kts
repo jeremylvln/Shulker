@@ -45,7 +45,7 @@ subprojects {
     group = "io.shulkermc"
 
     project.layout.buildDirectory.set(File("$rootDir/dist/java${project.path.replace(":", "/")}"))
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
     repositories {
         mavenCentral()
@@ -176,11 +176,12 @@ subprojects {
             maven {
                 name = "shulker"
 
-                url = if ((version as String).endsWith("-SNAPSHOT")) {
-                    uri("https://maven.jeremylvln.fr/artifactory/shulker-snapshots")
-                } else {
-                    uri("https://maven.jeremylvln.fr/artifactory/shulker-releases")
-                }
+                url =
+                    if ((version as String).endsWith("-SNAPSHOT")) {
+                        uri("https://maven.jeremylvln.fr/artifactory/shulker-snapshots")
+                    } else {
+                        uri("https://maven.jeremylvln.fr/artifactory/shulker-releases")
+                    }
 
                 credentials {
                     username = findProperty("artifactory.username")?.toString() ?: System.getenv("ARTIFACTORY_USERNAME")
@@ -195,22 +196,27 @@ subprojects {
         sign(publishing.publications["mavenJava"])
     }
 
-    fun registerPluginProvider(providerName: String, commonSourceSet: SourceSet) {
-        val providerSourceSet = sourceSets.create(providerName) {
-            compileClasspath += commonSourceSet.output
-            runtimeClasspath += commonSourceSet.output
-        }
+    fun registerPluginProvider(
+        providerName: String,
+        commonSourceSet: SourceSet,
+    ) {
+        val providerSourceSet =
+            sourceSets.create(providerName) {
+                compileClasspath += commonSourceSet.output
+                runtimeClasspath += commonSourceSet.output
+            }
 
         configurations
             .filter { it.name.startsWith(providerName) }
             .forEach { it.extendsFrom(configurations.getByName("common${it.name.removePrefix(providerName)}")) }
 
-        val providerJar = tasks.register("${providerName}Jar", ShadowJar::class.java) {
-            archiveClassifier = providerName
-            from(commonSourceSet.output)
-            from(providerSourceSet.output)
-            configurations = listOf(project.configurations.getByName("${providerName}RuntimeClasspath"))
-        }
+        val providerJar =
+            tasks.register("${providerName}Jar", ShadowJar::class.java) {
+                archiveClassifier = providerName
+                from(commonSourceSet.output)
+                from(providerSourceSet.output)
+                configurations = listOf(project.configurations.getByName("${providerName}RuntimeClasspath"))
+            }
 
         artifacts.add("archives", providerJar)
         tasks.assemble {

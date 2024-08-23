@@ -20,30 +20,34 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         private const val ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS = 10L
         private const val PLAYER_CAPACITY_COUNT_MEMOIZE_SECONDS = 60L
 
-        private val MSG_NOT_ACCEPTING_PLAYERS = createDisconnectMessage(
-            "Proxy is not accepting players, try reconnect.",
-            NamedTextColor.RED
-        )
+        private val MSG_NOT_ACCEPTING_PLAYERS =
+            createDisconnectMessage(
+                "Proxy is not accepting players, try reconnect.",
+                NamedTextColor.RED,
+            )
 
-        private val MSG_NO_LIMBO_FOUND = createDisconnectMessage(
-            "No limbo server found, please check your cluster configuration.",
-            NamedTextColor.RED
-        )
+        private val MSG_NO_LIMBO_FOUND =
+            createDisconnectMessage(
+                "No limbo server found, please check your cluster configuration.",
+                NamedTextColor.RED,
+            )
     }
 
     private val maxPlayersWithExclusionDelta =
         this.agent.proxyInterface.getPlayerCapacity() - Configuration.PROXY_PLAYER_DELTA_BEFORE_EXCLUSION
 
-    private val onlinePlayerCountSupplier = Suppliers.memoizeWithExpiration(
-        { this.agent.cache.countOnlinePlayers() },
-        ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS,
-        java.util.concurrent.TimeUnit.SECONDS
-    )
-    private val playerCapacityCountSupplier = Suppliers.memoizeWithExpiration(
-        { this.agent.cache.countPlayerCapacity() },
-        PLAYER_CAPACITY_COUNT_MEMOIZE_SECONDS,
-        java.util.concurrent.TimeUnit.SECONDS
-    )
+    private val onlinePlayerCountSupplier =
+        Suppliers.memoizeWithExpiration(
+            { this.agent.cache.countOnlinePlayers() },
+            ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS,
+            java.util.concurrent.TimeUnit.SECONDS,
+        )
+    private val playerCapacityCountSupplier =
+        Suppliers.memoizeWithExpiration(
+            { this.agent.cache.countPlayerCapacity() },
+            PLAYER_CAPACITY_COUNT_MEMOIZE_SECONDS,
+            java.util.concurrent.TimeUnit.SECONDS,
+        )
 
     private var isAllocatedByAgones = false
     private var acceptingPlayers = true
@@ -107,7 +111,10 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         }
     }
 
-    private fun onServerPreConnect(player: Player, originalServerName: String): ServerPreConnectHookResult {
+    private fun onServerPreConnect(
+        player: Player,
+        originalServerName: String,
+    ): ServerPreConnectHookResult {
         if (originalServerName == LOBBY_TAG) {
             val firstLobbyServer = this.agent.serverDirectoryService.getServersByTag(LOBBY_TAG).firstOrNull()
             if (firstLobbyServer != null) {
@@ -127,7 +134,10 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         return ServerPreConnectHookResult(Optional.empty())
     }
 
-    private fun onServerPostConnect(player: Player, serverName: String) {
+    private fun onServerPostConnect(
+        player: Player,
+        serverName: String,
+    ) {
         this.agent.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
     }
 

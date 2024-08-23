@@ -17,25 +17,31 @@ import java.util.logging.Logger
     id = "shulker-proxy-agent",
     name = "ShulkerProxyAgent",
     version = VelocityBuildConfig.VERSION,
-    authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"]
+    authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"],
 )
-class ShulkerProxyAgentVelocity @Inject constructor(
-    val proxy: ProxyServer,
-    logger: Logger
-) {
-    val agent = ShulkerProxyAgentCommon(ProxyInterfaceVelocity(this, proxy), logger)
+class ShulkerProxyAgentVelocity
+    @Inject
+    constructor(
+        val proxy: ProxyServer,
+        logger: Logger,
+    ) {
+        val agent = ShulkerProxyAgentCommon(ProxyInterfaceVelocity(this, proxy), logger)
 
-    @Subscribe
-    fun onProxyInitialization(@Suppress("UNUSED_PARAMETER") event: ProxyInitializeEvent) {
-        this.agent.onProxyInitialization()
+        @Subscribe
+        fun onProxyInitialization(
+            @Suppress("UNUSED_PARAMETER") event: ProxyInitializeEvent,
+        ) {
+            this.agent.onProxyInitialization()
 
-        GlobalListCommand.register(this)
-        GlobalTeleportCommand.register(this)
-        GlobalFindCommand.register(this)
+            GlobalListCommand.register(this)
+            GlobalTeleportCommand.register(this)
+            GlobalFindCommand.register(this)
+        }
+
+        @Subscribe
+        fun onProxyShutdown(
+            @Suppress("UNUSED_PARAMETER") event: ProxyShutdownEvent,
+        ) {
+            this.agent.onProxyShutdown()
+        }
     }
-
-    @Subscribe
-    fun onProxyShutdown(@Suppress("UNUSED_PARAMETER") event: ProxyShutdownEvent) {
-        this.agent.onProxyShutdown()
-    }
-}

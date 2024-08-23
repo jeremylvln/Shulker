@@ -9,10 +9,10 @@ class ServerSchedulerFolia(private val plugin: ShulkerServerAgentPaper) : Server
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ServerInterface.ScheduledTask {
         return FoliaScheduledTask(
-            this.plugin.server.asyncScheduler.runDelayed(this.plugin, { runnable.run() }, delay, timeUnit)
+            this.plugin.server.asyncScheduler.runDelayed(this.plugin, { runnable.run() }, delay, timeUnit),
         )
     }
 
@@ -20,12 +20,12 @@ class ServerSchedulerFolia(private val plugin: ShulkerServerAgentPaper) : Server
         delay: Long,
         interval: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ServerInterface.ScheduledTask {
         return FoliaScheduledTask(
             this.plugin.server.asyncScheduler.runAtFixedRate(this.plugin, {
                 runnable.run()
-            }, delay, interval, timeUnit)
+            }, delay, interval, timeUnit),
         )
     }
 

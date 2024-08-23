@@ -40,12 +40,13 @@ class HttpMojangGatewayAdapter : MojangGatewayAdapter {
     }
 
     private fun getProfileFromJson(json: JsonObject): MojangGatewayAdapter.MojangProfile {
-        val uuid = UUID.fromString(
-            json.get("id").asString.replaceFirst(
-                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-                "$1-$2-$3-$4-$5"
+        val uuid =
+            UUID.fromString(
+                json.get("id").asString.replaceFirst(
+                    "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                    "$1-$2-$3-$4-$5",
+                ),
             )
-        )
         val name = json.get("name").asString
 
         return MojangGatewayAdapter.MojangProfile(uuid, name)

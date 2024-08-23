@@ -1,5 +1,6 @@
 name: Install Tools & Dependencies
 description: Install required tools and dependencies
+
 inputs:
   install-rust:
     description: "Whether to install Rust"
@@ -20,9 +21,11 @@ inputs:
   java-version:
     description: "The Java version to use"
     required: true
-    default: "17"
+    default: "21"
+
 runs:
   using: composite
+
   steps:
     - name: Install pnpm
       uses: pnpm/action-setup@v4

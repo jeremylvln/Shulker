@@ -17,7 +17,7 @@ class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable 
             PROXY_LOST_PURGE_INTERVAL_MINUTES,
             PROXY_LOST_PURGE_INTERVAL_MINUTES,
             TimeUnit.MINUTES,
-            this
+            this,
         )
     }
 

@@ -14,7 +14,7 @@ class HealthcheckTask(private val agent: ShulkerServerAgentCommon) : Runnable {
             0L,
             HEALTHCHECK_INTERVAL_SECONDS,
             TimeUnit.SECONDS,
-            this
+            this,
         )
     }
 

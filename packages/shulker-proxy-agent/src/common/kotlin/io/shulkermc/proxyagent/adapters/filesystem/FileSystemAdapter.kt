@@ -4,5 +4,6 @@ interface FileSystemAdapter {
     fun createDrainLock()
 
     fun createReadinessLock()
+
     fun deleteReadinessLock()
 }
