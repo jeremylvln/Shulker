@@ -7,6 +7,10 @@ plugins {
 dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
 
+    // Filesystem
+    commonImplementation(libs.apache.commons.io)
+    commonImplementation(libs.snakeyaml)
+
     // Kubernetes
     commonCompileOnly(libs.kubernetes.client.api)
     commonRuntimeOnly(libs.kubernetes.client)

@@ -2,19 +2,23 @@ package io.shulkermc.proxyagent.services
 
 import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
+import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
 import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 import java.net.InetSocketAddress
+import java.util.Optional
 
 class ServerDirectoryService(
     private val agent: ShulkerProxyAgentCommon,
 ) {
-    private val serversByTag = HashMap<String, MutableSet<String>>()
-    private val tagsByServer = HashMap<String, Set<String>>()
-
     companion object {
         private const val DEFAULT_MINECRAFT_PORT = 25565
     }
+
+    private val serversByTag = HashMap<String, MutableSet<String>>()
+    private val tagsByServer = HashMap<String, Set<String>>()
+
+    private var externalServers: Optional<Map<String, FileSystemAdapter.ExternalServer>> = Optional.empty()
 
     init {
         this.agent.kubernetesGateway.watchMinecraftServerEvents { action, minecraftServer ->
@@ -30,6 +34,8 @@ class ServerDirectoryService(
         existingMinecraftServers.items
             .filterNotNull()
             .forEach(this::registerServer)
+
+        this.agent.fileSystem.watchExternalServersUpdates(this::onExternalServersUpdate)
     }
 
     fun getServersByTag(tag: String): Set<String> = this.serversByTag.getOrDefault(tag, setOf())
@@ -80,6 +86,20 @@ class ServerDirectoryService(
 
             this.agent.cache.unregisterServer(name)
             this.agent.logger.info("Removed server '$name' from directory")
+        }
+    }
+
+    private fun onExternalServersUpdate(servers: Map<String, FileSystemAdapter.ExternalServer>) {
+        this.agent.logger.info("External servers file was updated, updating directory")
+
+        this.externalServers.ifPresent { existingServer ->
+            existingServer.keys.forEach(this::unregisterServer)
+        }
+
+        this.externalServers = Optional.of(servers)
+
+        servers.values.forEach { server ->
+            this.registerServer(server.name, server.address, server.tags)
         }
     }
 }

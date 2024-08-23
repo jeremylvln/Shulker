@@ -10,6 +10,7 @@ dependencyResolutionManagement {
             library("adventure-api", "net.kyori:adventure-api:4.17.0")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.3.4")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
+            library("apache-commons-io", "commons-io:commons-io:2.16.1")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT")
             library("folia-api", "dev.folia:folia-api:1.20.6-R0.1-SNAPSHOT")
             library("guava", "com.google.guava:guava:33.3.0-jre")
@@ -23,6 +24,7 @@ dependencyResolutionManagement {
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
             library("protobuf", "com.google.protobuf:protobuf-java:3.25.4")
+            library("snakeyaml", "org.yaml:snakeyaml:2.2")
             library("velocity-api", "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
             plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.4.0")
