@@ -10,13 +10,16 @@ import net.md_5.bungee.api.plugin.Command
 
 class GlobalTeleportCommand(
     private val agent: ShulkerProxyAgentCommon,
-    private val adventure: BungeeAudiences
+    private val adventure: BungeeAudiences,
 ) : Command(TeleportCommandHandler.NAME, TeleportCommandHandler.PERMISSION) {
     companion object {
         private val USAGE_MESSAGE = Component.text("Usage: /gtp <player> [<server>]").color(NamedTextColor.RED)
     }
 
-    override fun execute(sender: CommandSender, args: Array<out String>) {
+    override fun execute(
+        sender: CommandSender,
+        args: Array<out String>,
+    ) {
         val audience = this.adventure.sender(sender)
         if (!BungeeCordCommandHelper.testPermissionOrMessage(sender, audience, this.permission)) {
             return

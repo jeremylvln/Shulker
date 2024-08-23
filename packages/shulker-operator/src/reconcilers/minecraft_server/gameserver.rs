@@ -609,7 +609,7 @@ impl<'a> GameServerBuilder {
 #[cfg(test)]
 mod tests {
     use k8s_openapi::api::core::v1::{
-        Container, ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
+        ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
     };
     use shulker_crds::{resourceref::ResourceRefSpec, schemas::ImageOverrideSpec};
     use shulker_kube_utils::reconcilers::builder::ResourceBuilder;

@@ -39,7 +39,7 @@ class AgonesV1GameServer : CustomResource<AgonesV1GameServer.Spec, AgonesV1GameS
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonPropertyOrder(
-        "state"
+        "state",
     )
     class Status : KubernetesResource {
         @set:JsonProperty("state")

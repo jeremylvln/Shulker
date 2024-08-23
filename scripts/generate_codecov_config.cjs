@@ -1,3 +1,5 @@
+process.env.NX_DAEMON = 'false';
+
 const fs = require('node:fs');
 const path = require('node:path');
 const YAML = require('yaml');

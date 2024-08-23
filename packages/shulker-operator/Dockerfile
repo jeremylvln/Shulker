@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:20 AS builder
+FROM --platform=$BUILDPLATFORM node:22 AS builder
 WORKDIR /build
 
 ARG BUILDPLATFORM

@@ -33,7 +33,7 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
             this.agonesGateway = AgonesSDKImpl.createFromEnvironment()
             val gameServer = this.agonesGateway.getGameServer().get()
             this.logger.info(
-                "Identified Shulker server: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}"
+                "Identified Shulker server: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}",
             )
 
             ShulkerServerAPI.INSTANCE = ShulkerServerAPIImpl(this)
@@ -45,19 +45,21 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
             if (Configuration.NETWORK_ADMINS.isNotEmpty()) {
                 this.serverInterface.prepareNetworkAdminsPermissions(Configuration.NETWORK_ADMINS)
                 this.logger.info(
-                    "Created listener for ${Configuration.NETWORK_ADMINS.size} network administrators"
+                    "Created listener for ${Configuration.NETWORK_ADMINS.size} network administrators",
                 )
             }
 
             if (gameServer.objectMeta.containsLabels(SUMMON_LABEL_NAME)) {
                 this.logger.info(
-                    "This server was summoned manually, it will be shutdown automatically in $SUMMON_TIMEOUT_MINUTES minutes" // ktlint-disable standard_max-line-length
+                    "This server was summoned manually, it will be shutdown automatically in $SUMMON_TIMEOUT_MINUTES minutes",
                 )
                 this.summonTimeoutTask = this.createSummonTimeoutTask()
             }
 
             this.agonesGateway.setReady()
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
             this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping server", e)
             this.shutdown()
         }
@@ -73,25 +75,30 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
     fun shutdown() {
         try {
             this.agonesGateway.askShutdown()
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
             this.logger.log(
                 Level.SEVERE,
                 "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
-                e
+                e,
             )
             exitProcess(0)
         }
     }
 
-    private fun createSummonTimeoutTask() = this.serverInterface.scheduleDelayedTask(
-        SUMMON_TIMEOUT_MINUTES,
-        TimeUnit.MINUTES
-    ) {
-        this.agonesGateway.getState().thenAccept { state ->
-            if (state == "Ready") {
-                this.logger.info("Server still in Ready state after $SUMMON_TIMEOUT_MINUTES minutes, asking shutdown")
-                this.agonesGateway.askShutdown()
+    private fun createSummonTimeoutTask() =
+        this.serverInterface.scheduleDelayedTask(
+            SUMMON_TIMEOUT_MINUTES,
+            TimeUnit.MINUTES,
+        ) {
+            this.agonesGateway.getState().thenAccept { state ->
+                if (state == "Ready") {
+                    this.logger.info(
+                        "Server still in Ready state after $SUMMON_TIMEOUT_MINUTES minutes, asking shutdown",
+                    )
+                    this.agonesGateway.askShutdown()
+                }
             }
         }
-    }
 }

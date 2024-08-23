@@ -9,14 +9,16 @@ class ServerSchedulerPaper(private val plugin: ShulkerServerAgentPaper) : Server
     companion object {
         private const val TICKS_PER_SECOND = 20L
 
-        private fun timeUnitToTicks(value: Long, timeUnit: TimeUnit): Long =
-            timeUnit.toSeconds(value) * TICKS_PER_SECOND
+        private fun timeUnitToTicks(
+            value: Long,
+            timeUnit: TimeUnit,
+        ): Long = timeUnit.toSeconds(value) * TICKS_PER_SECOND
     }
 
     override fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ServerInterface.ScheduledTask {
         return PaperBukkitTask(
             this.plugin.server.scheduler.runTaskLaterAsynchronously(
@@ -24,8 +26,8 @@ class ServerSchedulerPaper(private val plugin: ShulkerServerAgentPaper) : Server
                 Runnable {
                     runnable.run()
                 },
-                timeUnitToTicks(delay, timeUnit)
-            )
+                timeUnitToTicks(delay, timeUnit),
+            ),
         )
     }
 
@@ -33,7 +35,7 @@ class ServerSchedulerPaper(private val plugin: ShulkerServerAgentPaper) : Server
         delay: Long,
         interval: Long,
         timeUnit: TimeUnit,
-        runnable: Runnable
+        runnable: Runnable,
     ): ServerInterface.ScheduledTask {
         return PaperBukkitTask(
             this.plugin.server.scheduler.runTaskTimerAsynchronously(
@@ -42,8 +44,8 @@ class ServerSchedulerPaper(private val plugin: ShulkerServerAgentPaper) : Server
                     runnable.run()
                 },
                 timeUnitToTicks(delay, timeUnit),
-                timeUnitToTicks(interval, timeUnit)
-            )
+                timeUnitToTicks(interval, timeUnit),
+            ),
         )
     }
 

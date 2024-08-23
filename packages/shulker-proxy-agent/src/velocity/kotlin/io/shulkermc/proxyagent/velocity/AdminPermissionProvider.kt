@@ -11,5 +11,6 @@ class AdminPermissionProvider : PermissionProvider, PermissionFunction {
     }
 
     override fun createFunction(subject: PermissionSubject?): PermissionFunction = this
+
     override fun getPermissionValue(permission: String?): Tristate = Tristate.TRUE
 }

@@ -36,10 +36,10 @@ jobs:
           install-java: false
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Build documentation
-        run: npx nx build docs && touch docs/src/.vitepress/dist/.nojekyll
+        run: pnpm exec nx build docs && touch docs/src/.vitepress/dist/.nojekyll
 
       - name: Push build output to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4

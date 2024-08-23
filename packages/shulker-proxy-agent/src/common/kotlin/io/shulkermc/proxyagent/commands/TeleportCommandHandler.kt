@@ -10,7 +10,11 @@ object TeleportCommandHandler {
     const val NAME = "gtp"
     const val PERMISSION = "shulker.command.gtp"
 
-    fun executeTeleportToPlayer(agent: ShulkerProxyAgentCommon, source: Audience, playerName: String) {
+    fun executeTeleportToPlayer(
+        agent: ShulkerProxyAgentCommon,
+        source: Audience,
+        playerName: String,
+    ) {
         val playerPosition = CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
         val server = playerPosition.serverName
 
@@ -22,13 +26,13 @@ object TeleportCommandHandler {
         agent: ShulkerProxyAgentCommon,
         source: Audience,
         playerName: String,
-        serverName: String
+        serverName: String,
     ) {
         CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
 
         agent.pubSub.teleportPlayerOnServer(playerName, serverName)
         source.sendMessage(
-            Component.text("Teleported $playerName to server $serverName", NamedTextColor.GREEN)
+            Component.text("Teleported $playerName to server $serverName", NamedTextColor.GREEN),
         )
     }
 }

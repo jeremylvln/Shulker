@@ -15,21 +15,24 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
         private const val SERVER_INFORMER_SYNC_MS = 10L * 1000
     }
 
-    private val kubernetesClient: KubernetesClient = KubernetesClientBuilder()
-        .withHttpClientFactory(OkHttpClientFactory())
-        .build()
+    private val kubernetesClient: KubernetesClient =
+        KubernetesClientBuilder()
+            .withHttpClientFactory(OkHttpClientFactory())
+            .build()
 
-    private val gameServerApi = this.kubernetesClient.resources(
-        AgonesV1GameServer::class.java,
-        AgonesV1GameServer.List::class.java
-    )
+    private val gameServerApi =
+        this.kubernetesClient.resources(
+            AgonesV1GameServer::class.java,
+            AgonesV1GameServer.List::class.java,
+        )
 
-    private val proxyReference: ObjectReference = ObjectReferenceBuilder()
-        .withApiVersion("${AgonesV1GameServer.GROUP}/${AgonesV1GameServer.VERSION}")
-        .withKind(AgonesV1GameServer.KIND)
-        .withNamespace(proxyNamespace)
-        .withName(proxyName)
-        .build()
+    private val proxyReference: ObjectReference =
+        ObjectReferenceBuilder()
+            .withApiVersion("${AgonesV1GameServer.GROUP}/${AgonesV1GameServer.VERSION}")
+            .withKind(AgonesV1GameServer.KIND)
+            .withNamespace(proxyNamespace)
+            .withName(proxyName)
+            .build()
 
     override fun destroy() {
         this.kubernetesClient.informers().stopAllRegisteredInformers()
@@ -38,18 +41,19 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     override fun listMinecraftServers(): AgonesV1GameServer.List {
         return this.gameServerApi.inNamespace(this.proxyReference.namespace).withLabel(
             "app.kubernetes.io/component",
-            "minecraft-server"
+            "minecraft-server",
         ).list()
     }
 
     override fun watchProxyEvents(
-        callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit
+        callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit,
     ): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {
         val eventHandler = this.createEventHandler(callback)
-        val proxyInformer = this.gameServerApi
-            .inNamespace(this.proxyReference.namespace)
-            .withLabel("app.kubernetes.io/component", "proxy")
-            .inform(eventHandler, PROXY_INFORMER_SYNC_MS)
+        val proxyInformer =
+            this.gameServerApi
+                .inNamespace(this.proxyReference.namespace)
+                .withLabel("app.kubernetes.io/component", "proxy")
+                .inform(eventHandler, PROXY_INFORMER_SYNC_MS)
 
         return proxyInformer.start()
             .thenApply {
@@ -62,13 +66,14 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     }
 
     override fun watchMinecraftServerEvents(
-        callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit
+        callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit,
     ): CompletionStage<KubernetesGatewayAdapter.EventWatcher> {
         val eventHandler = this.createEventHandler(callback)
-        val minecraftServerInformer = this.gameServerApi
-            .inNamespace(this.proxyReference.namespace)
-            .withLabel("app.kubernetes.io/component", "minecraft-server")
-            .inform(eventHandler, SERVER_INFORMER_SYNC_MS)
+        val minecraftServerInformer =
+            this.gameServerApi
+                .inNamespace(this.proxyReference.namespace)
+                .withLabel("app.kubernetes.io/component", "minecraft-server")
+                .inform(eventHandler, SERVER_INFORMER_SYNC_MS)
 
         return minecraftServerInformer.start().thenApply {
             object : KubernetesGatewayAdapter.EventWatcher {
@@ -85,11 +90,17 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
                 callback(WatchAction.ADDED, obj)
             }
 
-            override fun onUpdate(oldObj: T, newObj: T) {
+            override fun onUpdate(
+                oldObj: T,
+                newObj: T,
+            ) {
                 callback(WatchAction.MODIFIED, newObj)
             }
 
-            override fun onDelete(obj: T, deletedFinalStateUnknown: Boolean) {
+            override fun onDelete(
+                obj: T,
+                deletedFinalStateUnknown: Boolean,
+            ) {
                 callback(WatchAction.DELETED, obj)
             }
         }

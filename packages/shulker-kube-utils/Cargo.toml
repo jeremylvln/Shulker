@@ -33,3 +33,6 @@ uuid.workspace = true
 
 [dev-dependencies]
 shulker-utils = { workspace = true, features = ["testing"] }
+
+[lints]
+workspace = true

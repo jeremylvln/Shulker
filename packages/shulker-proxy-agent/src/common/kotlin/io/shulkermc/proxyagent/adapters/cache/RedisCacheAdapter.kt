@@ -40,7 +40,10 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         private const val LOCKS_LOST_PROXIES_PURGE_KEY = "$LOCKS_KEY_PREFIX:lost-proxies-purge"
     }
 
-    override fun registerProxy(proxyName: String, proxyCapacity: Int) {
+    override fun registerProxy(
+        proxyName: String,
+        proxyCapacity: Int,
+    ) {
         this.jedisPool.resource.use { jedis ->
             val pipeline = jedis.pipelined()
             pipeline.sadd(PROXIES_SET_KEY, proxyName)
@@ -108,7 +111,11 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    override fun setPlayerPosition(playerId: UUID, proxyName: String, serverName: String) {
+    override fun setPlayerPosition(
+        playerId: UUID,
+        proxyName: String,
+        serverName: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
             val playerIdString = playerId.toString()
             val oldProxyName = jedis.hget(PLAYERS_CURRENT_PROXY_HASH_KEY, playerIdString)
@@ -176,7 +183,10 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    override fun updateCachedPlayerName(playerId: UUID, playerName: String) {
+    override fun updateCachedPlayerName(
+        playerId: UUID,
+        playerName: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
             val playerIdString = playerId.toString()
             val params = SetParams().ex(PLAYER_ID_CACHE_TTL_SECONDS)
@@ -222,16 +232,22 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    private fun tryLock(ownerProxyName: String, key: String, ttlSeconds: Long): Optional<CacheAdapter.Lock> {
+    private fun tryLock(
+        ownerProxyName: String,
+        key: String,
+        ttlSeconds: Long,
+    ): Optional<CacheAdapter.Lock> {
         this.jedisPool.resource.use { jedis ->
             val success = jedis.set(key, ownerProxyName, SetParams().nx().ex(ttlSeconds)) != null
 
             if (success) {
-                return Optional.of(object : CacheAdapter.Lock {
-                    override fun close() {
-                        jedisPool.resource.use { jedis -> jedis.del(key) }
-                    }
-                })
+                return Optional.of(
+                    object : CacheAdapter.Lock {
+                        override fun close() {
+                            jedisPool.resource.use { jedis -> jedis.del(key) }
+                        }
+                    },
+                )
             }
 
             return Optional.empty()

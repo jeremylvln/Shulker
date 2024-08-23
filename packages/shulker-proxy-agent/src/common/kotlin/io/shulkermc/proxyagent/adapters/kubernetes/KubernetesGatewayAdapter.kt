@@ -4,7 +4,9 @@ import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
 import java.util.concurrent.CompletionStage
 
 enum class WatchAction {
-    ADDED, MODIFIED, DELETED
+    ADDED,
+    MODIFIED,
+    DELETED,
 }
 
 interface KubernetesGatewayAdapter {
@@ -12,10 +14,13 @@ interface KubernetesGatewayAdapter {
 
     fun listMinecraftServers(): AgonesV1GameServer.List
 
-    fun watchProxyEvents(callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit):
-        CompletionStage<EventWatcher>
-    fun watchMinecraftServerEvents(callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit):
-        CompletionStage<EventWatcher>
+    fun watchProxyEvents(
+        callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit,
+    ): CompletionStage<EventWatcher>
+
+    fun watchMinecraftServerEvents(
+        callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit,
+    ): CompletionStage<EventWatcher>
 
     interface EventWatcher {
         fun stop()

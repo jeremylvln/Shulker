@@ -33,5 +33,6 @@
       "{projectRoot}/gradle.properties"
     ],
     "docker:dependencies": ["{projectRoot}/Dockerfile"]
-  }
+  },
+  "useInferencePlugins": false
 }

@@ -10,13 +10,16 @@ import net.md_5.bungee.api.plugin.Command
 
 class GlobalFindCommand(
     private val agent: ShulkerProxyAgentCommon,
-    private val adventure: BungeeAudiences
+    private val adventure: BungeeAudiences,
 ) : Command(FindCommandHandler.NAME, FindCommandHandler.PERMISSION) {
     companion object {
         private val USAGE_MESSAGE = Component.text("Usage: /gfind <player>").color(NamedTextColor.RED)
     }
 
-    override fun execute(sender: CommandSender, args: Array<out String>) {
+    override fun execute(
+        sender: CommandSender,
+        args: Array<out String>,
+    ) {
         val audience = this.adventure.sender(sender)
         if (!BungeeCordCommandHelper.testPermissionOrMessage(sender, audience, this.permission)) {
             return

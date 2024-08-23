@@ -52,3 +52,6 @@ uuid.workspace = true
 tempfile.workspace = true
 tokio-stream = { workspace = true, features = ["net"] }
 tower.workspace = true
+
+[lints]
+workspace = true

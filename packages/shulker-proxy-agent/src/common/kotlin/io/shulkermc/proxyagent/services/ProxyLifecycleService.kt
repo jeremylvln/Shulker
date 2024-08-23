@@ -27,10 +27,11 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         }
 
         this.agent.logger.info("Proxy will be force stopped in ${Configuration.PROXY_TTL_SECONDS} seconds")
-        this.ttlTask = this.agent.proxyInterface.scheduleDelayedTask(
-            Configuration.PROXY_TTL_SECONDS,
-            TimeUnit.SECONDS
-        ) { this.agent.shutdown() }
+        this.ttlTask =
+            this.agent.proxyInterface.scheduleDelayedTask(
+                Configuration.PROXY_TTL_SECONDS,
+                TimeUnit.SECONDS,
+            ) { this.agent.shutdown() }
     }
 
     fun destroy() {
@@ -49,7 +50,7 @@ class ProxyLifecycleService(private val agent: ShulkerProxyAgentCommon) {
         this.agent.proxyInterface.scheduleRepeatingTask(
             PROXY_DRAIN_CHECK_DELAY_SECONDS,
             PROXY_DRAIN_CHECK_DELAY_SECONDS,
-            TimeUnit.SECONDS
+            TimeUnit.SECONDS,
         ) {
             val playerCount = this.agent.proxyInterface.getPlayerCount()
 

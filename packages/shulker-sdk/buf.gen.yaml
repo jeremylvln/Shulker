@@ -1,22 +1,24 @@
-version: v1
+version: v2
 managed:
   enabled: true
-  java_package_prefix: io
+  override:
+    - file_option: java_package_prefix
+      value: io
 plugins:
-  - plugin: buf.build/community/neoeinstein-prost:v0.2.3
+  - remote: buf.build/community/neoeinstein-prost:v0.2.3
     out: bindings/rust/src/gen
     opt:
       - compile_well_known_types
       - extern_path=.google.protobuf=::pbjson_types
       - file_descriptor_set
-  - plugin: buf.build/community/neoeinstein-tonic:v0.3.0
+  - remote: buf.build/community/neoeinstein-tonic:v0.3.0
     out: bindings/rust/src/gen
     opt:
       - compile_well_known_types
       - extern_path=.google.protobuf=::pbjson_types
       - server_mod_attribute=.=#[cfg(feature = "server")]
       - client_mod_attribute=.=#[cfg(feature = "client")]
-  - plugin: buf.build/protocolbuffers/java:v25.3
+  - remote: buf.build/protocolbuffers/java:v25.3
     out: bindings/java/src/generated/java
-  - plugin: buf.build/grpc/java:v1.62.2
+  - remote: buf.build/grpc/java:v1.62.2
     out: bindings/java/src/generated/grpc

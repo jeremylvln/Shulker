@@ -10,14 +10,18 @@ object FindCommandHandler {
     const val NAME = "gfind"
     const val PERMISSION = "shulker.command.gfind"
 
-    fun executeFind(agent: ShulkerProxyAgentCommon, source: Audience, playerName: String) {
+    fun executeFind(
+        agent: ShulkerProxyAgentCommon,
+        source: Audience,
+        playerName: String,
+    ) {
         val playerPosition = CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
 
         source.sendMessage(
             Component.text(
-                "Player $playerName is connected on proxy ${playerPosition.proxyName} and located on server ${playerPosition.serverName}", // ktlint-disable standard_max-line-length
-                NamedTextColor.YELLOW
-            )
+                "Player $playerName is connected on proxy ${playerPosition.proxyName} and located on server ${playerPosition.serverName}",
+                NamedTextColor.YELLOW,
+            ),
         )
     }
 }

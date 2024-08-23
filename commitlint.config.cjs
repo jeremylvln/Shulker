@@ -1,3 +1,5 @@
+process.env.NX_DAEMON = 'false';
+
 const {
   buildProjectGraphAndSourceMapsWithoutDaemon,
 } = require('nx/src/project-graph/project-graph');

@@ -11,7 +11,10 @@ class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter, Auto
         this.executor.shutdownNow()
     }
 
-    override fun teleportPlayerOnServer(playerId: String, serverName: String) {
+    override fun teleportPlayerOnServer(
+        playerId: String,
+        serverName: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
             jedis.publish("shulker:teleport", "$playerId:$serverName")
         }
@@ -22,12 +25,15 @@ class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter, Auto
             this.jedisPool.resource.use { jedis ->
                 jedis.subscribe(
                     object : JedisPubSub() {
-                        override fun onMessage(channel: String, message: String) {
+                        override fun onMessage(
+                            channel: String,
+                            message: String,
+                        ) {
                             val (playerId, serverName) = message.split(":")
                             callback(playerId, serverName)
                         }
                     },
-                    "shulker:teleport"
+                    "shulker:teleport",
                 )
             }
         }

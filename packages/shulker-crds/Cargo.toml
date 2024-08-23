@@ -34,3 +34,6 @@ strum.workspace = true
 
 [build-dependencies]
 base64.workspace = true
+
+[lints]
+workspace = true

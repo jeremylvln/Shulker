@@ -92,8 +92,8 @@ impl ResourceRefResolver {
 #[cfg(test)]
 mod tests {
     use http::{Request, Response};
-    use hyper::Body;
     use k8s_openapi::{api::core::v1::Secret, ByteString};
+    use kube::client::Body;
     use kube::{core::ObjectMeta, Client, ResourceExt};
     use shulker_crds::resourceref::{ResourceRefFromSpec, ResourceRefSpec};
     use url::Url;
