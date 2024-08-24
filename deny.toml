@@ -1,3 +1,4 @@
+[graph]
 # We only target the architectures of the Kubernetes Linux nodes that we support
 targets = [
     { triple = "x86_64-unknown-linux-gnu" },
@@ -6,9 +7,7 @@ targets = [
 all-features = true
 
 [advisories]
-vulnerability = "deny"
-unmaintained = "warn"
-notice = "deny"
+version = 2
 
 [bans]
 multiple-versions = "warn"
@@ -22,9 +21,7 @@ unknown-registry = "deny"
 unknown-git = "deny"
 
 [licenses]
-unlicensed = "deny"
-copyleft = "deny"
-allow-osi-fsf-free = "neither"
+version = 2
 confidence-threshold = 0.8
 allow = [
     "MIT",
