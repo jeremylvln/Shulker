@@ -16,6 +16,7 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     companion object {
         private const val PROXY_INFORMER_SYNC_MS = 30L * 1000
         private const val SERVER_INFORMER_SYNC_MS = 10L * 1000
+        private const val MINECRAFT_DEFAULT_PORT = 25565
     }
 
     private val kubernetesClient: KubernetesClient =
@@ -63,12 +64,8 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
             return Optional.empty()
         }
 
-        return try {
-            val ingress = service.status.loadBalancer.ingress[0]
-            Optional.of(InetSocketAddress(ingress.ip, ingress.ports[0].port))
-        } catch (_: NullPointerException) {
-            Optional.empty()
-        }
+        return Optional.ofNullable(service.status.loadBalancer?.ingress?.firstOrNull())
+            .map { ingress -> InetSocketAddress(ingress.ip, MINECRAFT_DEFAULT_PORT) }
     }
 
     override fun watchProxyEvents(
