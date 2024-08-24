@@ -225,7 +225,7 @@ pub struct ProxyFleetTemplatePodOverridesSpec {
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ProxyFleetServiceSpec {
-    /// Type of Service to create.
+    /// Type of Service to create
     /// Must be one of: ClusterIP, LoadBalancer, NodePort
     #[serde(default)]
     pub type_: ProxyFleetServiceType,
@@ -234,10 +234,15 @@ pub struct ProxyFleetServiceSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotations: Option<BTreeMap<String, String>>,
 
-    // Describe how nodes distribute service traffic to the proxy.
+    // Describe how nodes distribute service traffic to the proxy
     // #[schemars(schema_with = "ProxyFleetServiceSpec::schema_external_traffic_policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_traffic_policy: Option<ProxyFleetServiceExternalTrafficPolicy>,
+
+    // An alternative address that should be used internally that
+    // can be different that the one provided by Kubernetes
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_reconnection_address: Option<String>,
 }
 
 #[derive(

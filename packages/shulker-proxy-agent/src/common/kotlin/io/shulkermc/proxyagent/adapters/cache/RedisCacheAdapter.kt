@@ -150,8 +150,15 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
             pipeline.srem(PLAYERS_ONLINE_SET_KEY, playerIdString)
             pipeline.hdel(PLAYERS_CURRENT_PROXY_HASH_KEY, playerIdString)
             pipeline.hdel(PLAYERS_CURRENT_SERVER_HASH_KEY, playerIdString)
-            pipeline.srem(PROXIES_PLAYERS_SET_KEY(currentProxyName), playerIdString)
-            pipeline.srem(SERVERS_PLAYERS_SET_KEY(currentServerName), playerIdString)
+
+            if (currentProxyName != null) {
+                pipeline.srem(PROXIES_PLAYERS_SET_KEY(currentProxyName), playerIdString)
+            }
+
+            if (currentServerName != null) {
+                pipeline.srem(SERVERS_PLAYERS_SET_KEY(currentServerName), playerIdString)
+            }
+
             pipeline.sync()
         }
     }

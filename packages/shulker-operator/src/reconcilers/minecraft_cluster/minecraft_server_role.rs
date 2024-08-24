@@ -47,19 +47,20 @@ impl<'a> ResourceBuilder<'a> for MinecraftServerRoleBuilder {
             },
             rules: Some(vec![
                 PolicyRule {
-                    api_groups: Some(vec!["".to_string()]),
-                    resources: Some(vec!["events".to_string()]),
-                    verbs: vec!["create".to_string(), "patch".to_string()],
-                    ..PolicyRule::default()
-                },
-                PolicyRule {
                     api_groups: Some(vec!["agones.dev".to_string()]),
                     resources: Some(vec!["gameservers".to_string()]),
                     verbs: vec![
                         "list".to_string(),
                         "watch".to_string(),
                         "update".to_string(),
+                        "patch".to_string(),
                     ],
+                    ..PolicyRule::default()
+                },
+                PolicyRule {
+                    api_groups: Some(vec!["".to_string()]),
+                    resources: Some(vec!["events".to_string()]),
+                    verbs: vec!["create".to_string(), "patch".to_string()],
                     ..PolicyRule::default()
                 },
             ]),

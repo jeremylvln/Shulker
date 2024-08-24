@@ -14,7 +14,7 @@ spec:
         - lobby
       version:
         channel: Paper
-        name: "1.20.2"
+        name: "1.21.1"
         customJar:
           url: https://api.infernalsuite.com/v1/projects/asp/5118810e-2397-48f2-a725-89372c6d3756/download/e2eab933-7e5c-4a1f-8776-89a6624283a0
       config: {}

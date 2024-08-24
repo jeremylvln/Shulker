@@ -63,20 +63,20 @@ spec:
             - env:
                 - name: SHULKER_CLUSTER_NAME
                   value: my-cluster
-                - name: SHULKER_PROXY_NAME
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.name
                 - name: SHULKER_PROXY_NAMESPACE
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.namespace
+                - name: SHULKER_PROXY_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: SHULKER_PROXY_FLEET_NAME
+                  value: my-proxy
                 - name: SHULKER_PROXY_TTL_SECONDS
                   value: "3600"
                 - name: SHULKER_PROXY_PLAYER_DELTA_BEFORE_EXCLUSION
                   value: "15"
-                - name: SHULKER_NETWORK_ADMINS
-                  value: ""
                 - name: SHULKER_PROXY_REDIS_HOST
                   value: my-cluster-redis-managed
                 - name: SHULKER_PROXY_REDIS_PORT
@@ -87,6 +87,8 @@ spec:
                   value: latest
                 - name: HEALTH_USE_PROXY
                   value: "true"
+                - name: SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS
+                  value: 127.0.0.1
                 - name: EXTRA_ENV
                   value: my_value
               image: "itzg/mc-proxy:2024.6.0-java21"

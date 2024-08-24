@@ -23,7 +23,7 @@ dependencyResolutionManagement {
             library("kubernetes-client-api", "io.fabric8", "kubernetes-client-api").versionRef("kubernetes-client")
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
             library("protobuf", "com.google.protobuf:protobuf-java:3.25.4")
-            library("velocity-api", "com.velocitypowered:velocity-api:3.1.1")
+            library("velocity-api", "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
             plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.4.0")
             plugin("shadow", "com.gradleup.shadow").version("8.3.0")

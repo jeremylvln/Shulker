@@ -63,6 +63,13 @@ interface ProxyInterface {
 
     fun getPlayerCapacity(): Int
 
+    fun transferPlayerToAddress(
+        playerId: UUID,
+        address: InetSocketAddress,
+    )
+
+    fun transferEveryoneToAddress(address: InetSocketAddress)
+
     fun scheduleDelayedTask(
         delay: Long,
         timeUnit: TimeUnit,

@@ -42,7 +42,6 @@ use google_agones_crds::v1::game_server::GameServerEvictionSpec;
 use google_agones_crds::v1::game_server::GameServerHealthSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::proxy_fleet::ProxyFleet;
-use shulker_crds::v1alpha1::proxy_fleet::ProxyFleetTemplateSpec;
 use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use super::config_map::ConfigMapBuilder;
@@ -212,7 +211,7 @@ impl<'a> FleetBuilder {
                     container_port: 25577,
                     ..ContainerPort::default()
                 }]),
-                env: Some(self.get_env(context, &proxy_fleet.spec.template.spec)?),
+                env: Some(self.get_env(context, proxy_fleet)?),
                 readiness_probe: Some(Probe {
                     exec: Some(ExecAction {
                         command: Some(vec![
@@ -447,25 +446,15 @@ impl<'a> FleetBuilder {
     fn get_env(
         &self,
         context: &FleetBuilderContext<'a>,
-        spec: &ProxyFleetTemplateSpec,
+        proxy_fleet: &ProxyFleet,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
+        let spec = &proxy_fleet.spec.template.spec;
         let redis_ref = RedisRef::from_cluster(context.cluster)?;
 
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
                 name: "SHULKER_CLUSTER_NAME".to_string(),
                 value: Some(context.cluster.name_any()),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_PROXY_NAME".to_string(),
-                value_from: Some(EnvVarSource {
-                    field_ref: Some(ObjectFieldSelector {
-                        field_path: "metadata.name".to_string(),
-                        ..ObjectFieldSelector::default()
-                    }),
-                    ..EnvVarSource::default()
-                }),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -480,6 +469,22 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
+                name: "SHULKER_PROXY_NAME".to_string(),
+                value_from: Some(EnvVarSource {
+                    field_ref: Some(ObjectFieldSelector {
+                        field_path: "metadata.name".to_string(),
+                        ..ObjectFieldSelector::default()
+                    }),
+                    ..EnvVarSource::default()
+                }),
+                ..EnvVar::default()
+            },
+            EnvVar {
+                name: "SHULKER_PROXY_FLEET_NAME".to_string(),
+                value: Some(proxy_fleet.name_any()),
+                ..EnvVar::default()
+            },
+            EnvVar {
                 name: "SHULKER_PROXY_TTL_SECONDS".to_string(),
                 value: Some(spec.config.ttl_seconds.to_string()),
                 ..EnvVar::default()
@@ -487,19 +492,6 @@ impl<'a> FleetBuilder {
             EnvVar {
                 name: "SHULKER_PROXY_PLAYER_DELTA_BEFORE_EXCLUSION".to_string(),
                 value: Some(spec.config.players_delta_before_exclusion.to_string()),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_NETWORK_ADMINS".to_string(),
-                value: Some(
-                    context
-                        .cluster
-                        .spec
-                        .network_admins
-                        .as_ref()
-                        .map(|list| list.join(","))
-                        .unwrap_or("".to_string()),
-                ),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -528,6 +520,27 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
         ];
+
+        if let Some(network_admins) = context.cluster.spec.network_admins.as_ref() {
+            env.push(EnvVar {
+                name: "SHULKER_NETWORK_ADMINS".to_string(),
+                value: Some(network_admins.join(",")),
+                ..EnvVar::default()
+            })
+        }
+
+        if let Some(preferred_reconnection_address) = proxy_fleet
+            .spec
+            .service
+            .as_ref()
+            .and_then(|x| x.preferred_reconnection_address.as_ref())
+        {
+            env.push(EnvVar {
+                name: "SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS".to_string(),
+                value: Some(preferred_reconnection_address.clone()),
+                ..EnvVar::default()
+            })
+        }
 
         if let Some(redis_ref_credentials_secret_name) = redis_ref.credentials_secret_name.as_ref()
         {
@@ -1091,11 +1104,17 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn get_env_merges_env_overrides() {
+    async fn get_env_contains_preferred_reconnect_address() {
         // G
         let client = create_client_mock();
         let builder = super::FleetBuilder::new(client);
-        let spec = TEST_PROXY_FLEET.spec.clone();
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet
+            .spec
+            .service
+            .as_mut()
+            .unwrap()
+            .preferred_reconnection_address = Some("127.0.0.1".to_string());
         let context = super::FleetBuilderContext {
             cluster: &TEST_CLUSTER,
             agent_config: &AgentConfig {
@@ -1105,14 +1124,42 @@ mod tests {
         };
 
         // W
-        let env = builder.get_env(&context, &spec.template.spec).unwrap();
+        let env = builder.get_env(&context, &proxy_fleet).unwrap();
 
         // T
-        spec.template
+        let address_env = env
+            .iter()
+            .find(|env| env.name == "SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS")
+            .unwrap();
+        assert_eq!(address_env.value.as_ref().unwrap(), "127.0.0.1");
+    }
+
+    #[tokio::test]
+    async fn get_env_merges_env_overrides() {
+        // G
+        let client = create_client_mock();
+        let builder = super::FleetBuilder::new(client);
+        let context = super::FleetBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let env = builder.get_env(&context, &TEST_PROXY_FLEET).unwrap();
+
+        // T
+        TEST_PROXY_FLEET
+            .spec
+            .template
             .spec
             .pod_overrides
+            .as_ref()
             .unwrap()
             .env
+            .as_ref()
             .unwrap()
             .iter()
             .for_each(|env_override| {

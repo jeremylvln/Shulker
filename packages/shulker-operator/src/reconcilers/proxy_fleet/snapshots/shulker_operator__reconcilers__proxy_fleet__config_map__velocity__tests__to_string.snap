@@ -22,5 +22,4 @@ try = ["lobby", "limbo"]
 [advanced]
 haproxy-protocol = true
 tcp-fast-open = true
-
-
+accepts-transfers = true

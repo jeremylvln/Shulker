@@ -24,7 +24,6 @@ import net.md_5.bungee.api.event.ProxyPingEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
 import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
-import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.scheduler.ScheduledTask
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
@@ -34,7 +33,7 @@ import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
 class ProxyInterfaceBungeeCord(
-    private val plugin: Plugin,
+    private val plugin: ShulkerProxyAgentBungeeCord,
     private val proxy: ProxyServer,
 ) : ProxyInterface {
     override fun registerServer(
@@ -139,7 +138,9 @@ class ProxyInterfaceBungeeCord(
                     if (event.isCancelled) return
                     val result = hook(wrapPlayer(event.player), event.target.name)
 
-                    if (result.newServerName.isPresent) {
+                    if (!result.allowed) {
+                        event.isCancelled = true
+                    } else if (result.newServerName.isPresent) {
                         @Suppress("UnsafeCallOnNullableType")
                         event.target = proxy.servers[result.newServerName.get()]!!
                     }
@@ -187,6 +188,21 @@ class ProxyInterfaceBungeeCord(
 
         if (server != null) {
             this.proxy.getPlayer(playerName)?.connect(server)
+        }
+    }
+
+    @Suppress("UnstableApiUsage")
+    override fun transferPlayerToAddress(
+        playerId: UUID,
+        address: InetSocketAddress,
+    ) {
+        this.proxy.getPlayer(playerId)?.transfer(address.hostName, address.port)
+    }
+
+    @Suppress("UnstableApiUsage")
+    override fun transferEveryoneToAddress(address: InetSocketAddress) {
+        this.proxy.players.forEach { player ->
+            player.transfer(address.hostName, address.port)
         }
     }
 

@@ -16,13 +16,6 @@ metadata:
   namespace: default
 rules:
   - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
-      - patch
-  - apiGroups:
       - agones.dev
     resources:
       - gameservers
@@ -30,4 +23,11 @@ rules:
       - list
       - watch
       - update
-
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch

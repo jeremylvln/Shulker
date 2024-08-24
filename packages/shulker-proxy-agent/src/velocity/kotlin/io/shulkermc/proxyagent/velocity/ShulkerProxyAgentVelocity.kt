@@ -8,6 +8,7 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.VelocityBuildConfig
+import io.shulkermc.proxyagent.velocity.commands.GlobalControlCommand
 import io.shulkermc.proxyagent.velocity.commands.GlobalFindCommand
 import io.shulkermc.proxyagent.velocity.commands.GlobalListCommand
 import io.shulkermc.proxyagent.velocity.commands.GlobalTeleportCommand
@@ -36,6 +37,7 @@ class ShulkerProxyAgentVelocity
             GlobalListCommand.register(this)
             GlobalTeleportCommand.register(this)
             GlobalFindCommand.register(this)
+            GlobalControlCommand.register(this)
         }
 
         @Subscribe

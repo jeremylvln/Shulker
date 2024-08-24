@@ -7,4 +7,12 @@ interface PubSubAdapter {
     )
 
     fun onTeleportPlayerOnServer(callback: (playerId: String, serverName: String) -> Unit)
+
+    fun drainProxy(proxyName: String)
+
+    fun onDrainProxy(callback: (proxyName: String) -> Unit)
+
+    fun reconnectProxy(proxyName: String)
+
+    fun onReconnectProxy(callback: (proxyName: String) -> Unit)
 }

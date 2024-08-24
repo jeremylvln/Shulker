@@ -66,13 +66,22 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
     }
 
     fun onServerShutdown() {
-        this.summonTimeoutTask?.cancel()
-        this.healthcheckTask.cancel()
-        this.agonesGateway.askShutdown()
-        this.agonesGateway.destroy()
+        this.shutdown()
     }
 
     fun shutdown() {
+        try {
+            this.summonTimeoutTask?.cancel()
+
+            if (this::healthcheckTask.isInitialized) {
+                this.healthcheckTask.cancel()
+            }
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
+            this.logger.log(Level.SEVERE, "Failed to properly terminate services", e)
+        }
+
         try {
             this.agonesGateway.askShutdown()
         } catch (
@@ -83,6 +92,7 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
                 "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
                 e,
             )
+
             exitProcess(0)
         }
     }

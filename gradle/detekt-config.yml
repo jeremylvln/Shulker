@@ -14,3 +14,9 @@ style:
     ignoreOverridden: true
   ReturnCount:
     active: false
+  ForbiddenComment:
+    active: false
+
+potential-bugs:
+  UnsafeCallOnNullableType:
+    active: false

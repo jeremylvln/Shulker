@@ -28,4 +28,4 @@ ip_forward: true
 prevent_proxy_connections: true
 enforce_secure_profile: true
 log_pings: false
-
+reject_transfers: false

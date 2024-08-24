@@ -13,6 +13,8 @@ import io.shulkermc.proxyagent.adapters.mojang.MojangGatewayAdapter
 import io.shulkermc.proxyagent.adapters.pubsub.RedisPubSubAdapter
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI
 import io.shulkermc.proxyagent.api.ShulkerProxyAPIImpl
+import io.shulkermc.proxyagent.handlers.DrainProxyHandler
+import io.shulkermc.proxyagent.handlers.ReconnectProxyHandler
 import io.shulkermc.proxyagent.handlers.TeleportPlayerOnServerHandler
 import io.shulkermc.proxyagent.services.PlayerMovementService
 import io.shulkermc.proxyagent.services.ProxyLifecycleService
@@ -39,7 +41,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     // Services
     lateinit var serverDirectoryService: ServerDirectoryService
     lateinit var playerMovementService: PlayerMovementService
-    private lateinit var proxyLifecycleService: ProxyLifecycleService
+    lateinit var proxyLifecycleService: ProxyLifecycleService
 
     // Tasks
     private lateinit var healthcheckTask: ProxyInterface.ScheduledTask
@@ -76,6 +78,8 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.proxyLifecycleService = ProxyLifecycleService(this)
 
             this.pubSub.onTeleportPlayerOnServer(TeleportPlayerOnServerHandler(this)::handle)
+            this.pubSub.onDrainProxy(DrainProxyHandler(this)::handle)
+            this.pubSub.onReconnectProxy(ReconnectProxyHandler(this)::handle)
 
             this.healthcheckTask = HealthcheckTask(this).schedule()
             this.lostProxyPurgeTask = LostProxyPurgeTask(this).schedule()
@@ -89,29 +93,58 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
             this.cache.registerProxy(Configuration.PROXY_NAME, this.proxyInterface.getPlayerCapacity())
             this.agonesGateway.setReady()
+
+            this.logger.info("Proxy is ready")
         } catch (
             @Suppress("TooGenericExceptionCaught") e: Exception,
         ) {
             this.logger.log(Level.SEVERE, "Shulker Agent crashed, stopping proxy", e)
-            this.shutdown()
         }
     }
 
     fun onProxyShutdown() {
-        this.cache.unregisterProxy(Configuration.PROXY_NAME)
-
-        this.healthcheckTask.cancel()
-        this.proxyLifecycleService.destroy()
-        this.kubernetesGateway.destroy()
-        this.jedisPool.destroy()
-        this.agonesGateway.askShutdown()
-        this.agonesGateway.destroy()
+        this.shutdown()
     }
 
     fun shutdown() {
+        this.cache.unregisterProxy(Configuration.PROXY_NAME)
+
         try {
-            this.cache.unregisterProxy(Configuration.PROXY_NAME)
-            this.pubSub.close()
+            this.logger.info("Trying to reconnect everyone to cluster")
+            this.playerMovementService.reconnectEveryoneToCluster()
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
+            this.logger.log(Level.WARNING, "Failed to reconnect everyone to cluster, connected players will be disconnected", e)
+        }
+
+        try {
+            if (this::healthcheckTask.isInitialized) {
+                this.healthcheckTask.cancel()
+            }
+
+            if (this::proxyLifecycleService.isInitialized) {
+                this.proxyLifecycleService.destroy()
+            }
+
+            if (this::kubernetesGateway.isInitialized) {
+                this.kubernetesGateway.destroy()
+            }
+
+            if (this::pubSub.isInitialized) {
+                this.pubSub.destroy()
+            }
+
+            if (this::jedisPool.isInitialized) {
+                this.jedisPool.destroy()
+            }
+        } catch (
+            @Suppress("TooGenericExceptionCaught") e: Exception,
+        ) {
+            this.logger.log(Level.SEVERE, "Failed to properly terminate services", e)
+        }
+
+        try {
             this.agonesGateway.askShutdown()
         } catch (
             @Suppress("TooGenericExceptionCaught") e: Exception,
@@ -121,6 +154,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 "Failed to ask Agones sidecar to shutdown properly, stopping process manually",
                 e,
             )
+
             exitProcess(0)
         }
     }

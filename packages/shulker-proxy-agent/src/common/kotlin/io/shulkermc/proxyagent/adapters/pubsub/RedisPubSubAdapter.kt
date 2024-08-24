@@ -4,10 +4,10 @@ import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPubSub
 import java.util.concurrent.Executors
 
-class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter, AutoCloseable {
+class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter {
     private val executor = Executors.newCachedThreadPool()
 
-    override fun close() {
+    fun destroy() {
         this.executor.shutdownNow()
     }
 
@@ -34,6 +34,54 @@ class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter, Auto
                         }
                     },
                     "shulker:teleport",
+                )
+            }
+        }
+    }
+
+    override fun drainProxy(proxyName: String) {
+        this.jedisPool.resource.use { jedis ->
+            jedis.publish("shulker:drain", proxyName)
+        }
+    }
+
+    override fun onDrainProxy(callback: (proxyName: String) -> Unit) {
+        this.executor.submit {
+            this.jedisPool.resource.use { jedis ->
+                jedis.subscribe(
+                    object : JedisPubSub() {
+                        override fun onMessage(
+                            channel: String,
+                            message: String,
+                        ) {
+                            callback(message)
+                        }
+                    },
+                    "shulker:drain",
+                )
+            }
+        }
+    }
+
+    override fun reconnectProxy(proxyName: String) {
+        this.jedisPool.resource.use { jedis ->
+            jedis.publish("shulker:reconnect-proxy", proxyName)
+        }
+    }
+
+    override fun onReconnectProxy(callback: (proxyName: String) -> Unit) {
+        this.executor.submit {
+            this.jedisPool.resource.use { jedis ->
+                jedis.subscribe(
+                    object : JedisPubSub() {
+                        override fun onMessage(
+                            channel: String,
+                            message: String,
+                        ) {
+                            callback(message)
+                        }
+                    },
+                    "shulker:reconnect-proxy",
                 )
             }
         }
