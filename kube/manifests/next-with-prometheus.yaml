@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 ---
@@ -18,10 +18,10 @@ kind: ServiceAccount
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 ---
@@ -795,12 +795,12 @@ spec:
                                                     type: object
                                                 type: object
                                               matchLabelKeys:
-                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
                                               mismatchLabelKeys:
-                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
@@ -890,12 +890,12 @@ spec:
                                                 type: object
                                             type: object
                                           matchLabelKeys:
-                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
                                           mismatchLabelKeys:
-                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
@@ -984,12 +984,12 @@ spec:
                                                     type: object
                                                 type: object
                                               matchLabelKeys:
-                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
                                               mismatchLabelKeys:
-                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
@@ -1079,12 +1079,12 @@ spec:
                                                 type: object
                                             type: object
                                           matchLabelKeys:
-                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
                                           mismatchLabelKeys:
-                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
@@ -1337,7 +1337,7 @@ spec:
                                     description: Path within the container at which the volume should be mounted.  Must not contain ':'.
                                     type: string
                                   mountPropagation:
-                                    description: mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10.
+                                    description: mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10. When RecursiveReadOnly is set to IfPossible or to Enabled, MountPropagation must be None or unspecified (which defaults to None).
                                     type: string
                                   name:
                                     description: This must match the Name of a Volume.
@@ -1345,6 +1345,18 @@ spec:
                                   readOnly:
                                     description: Mounted read-only if true, read-write otherwise (false or unspecified). Defaults to false.
                                     type: boolean
+                                  recursiveReadOnly:
+                                    description: |-
+                                      RecursiveReadOnly specifies whether read-only mounts should be handled recursively.
+
+                                      If ReadOnly is false, this field has no meaning and must be unspecified.
+
+                                      If ReadOnly is true, and this field is set to Disabled, the mount is not made recursively read-only.  If this field is set to IfPossible, the mount is made recursively read-only, if it is supported by the container runtime.  If this field is set to Enabled, the mount is made recursively read-only if it is supported by the container runtime, otherwise the pod will not be started and an error will be generated to indicate the reason.
+
+                                      If this field is set to IfPossible or Enabled, MountPropagation must be set to None (or be unspecified, which defaults to None).
+
+                                      If this field is not specified, it is treated as an equivalent of Disabled.
+                                    type: string
                                   subPath:
                                     description: Path within the volume from which the container's volume should be mounted. Defaults to "" (volume's root).
                                     type: string
@@ -1548,7 +1560,7 @@ spec:
                                           description: DownwardAPIVolumeFile represents information to create the file containing the pod field
                                           properties:
                                             fieldRef:
-                                              description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+                                              description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported."
                                               properties:
                                                 apiVersion:
                                                   description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -1856,7 +1868,7 @@ spec:
                                                 description: "storageClassName is the name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1"
                                                 type: string
                                               volumeAttributesClassName:
-                                                description: "volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#volumeattributesclass (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled."
+                                                description: "volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/ (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled."
                                                 type: string
                                               volumeMode:
                                                 description: volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec.
@@ -2204,7 +2216,7 @@ spec:
                                                     description: DownwardAPIVolumeFile represents information to create the file containing the pod field
                                                     properties:
                                                       fieldRef:
-                                                        description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+                                                        description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported."
                                                         properties:
                                                           apiVersion:
                                                             description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -2601,6 +2613,9 @@ spec:
       served: true
       storage: true
       subresources:
+        scale:
+          specReplicasPath: .spec.replicas
+          statusReplicasPath: .status.replicas
         status: {}
 ---
 # Source: shulker-operator/templates/crds/shulkermc.io_minecraftservers.yaml
@@ -2968,12 +2983,12 @@ spec:
                                             type: object
                                         type: object
                                       matchLabelKeys:
-                                        description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                         items:
                                           type: string
                                         type: array
                                       mismatchLabelKeys:
-                                        description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                         items:
                                           type: string
                                         type: array
@@ -3063,12 +3078,12 @@ spec:
                                         type: object
                                     type: object
                                   matchLabelKeys:
-                                    description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                    description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                     items:
                                       type: string
                                     type: array
                                   mismatchLabelKeys:
-                                    description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                    description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                     items:
                                       type: string
                                     type: array
@@ -3157,12 +3172,12 @@ spec:
                                             type: object
                                         type: object
                                       matchLabelKeys:
-                                        description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                         items:
                                           type: string
                                         type: array
                                       mismatchLabelKeys:
-                                        description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                         items:
                                           type: string
                                         type: array
@@ -3252,12 +3267,12 @@ spec:
                                         type: object
                                     type: object
                                   matchLabelKeys:
-                                    description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                    description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                     items:
                                       type: string
                                     type: array
                                   mismatchLabelKeys:
-                                    description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                    description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                     items:
                                       type: string
                                     type: array
@@ -3510,7 +3525,7 @@ spec:
                             description: Path within the container at which the volume should be mounted.  Must not contain ':'.
                             type: string
                           mountPropagation:
-                            description: mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10.
+                            description: mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10. When RecursiveReadOnly is set to IfPossible or to Enabled, MountPropagation must be None or unspecified (which defaults to None).
                             type: string
                           name:
                             description: This must match the Name of a Volume.
@@ -3518,6 +3533,18 @@ spec:
                           readOnly:
                             description: Mounted read-only if true, read-write otherwise (false or unspecified). Defaults to false.
                             type: boolean
+                          recursiveReadOnly:
+                            description: |-
+                              RecursiveReadOnly specifies whether read-only mounts should be handled recursively.
+
+                              If ReadOnly is false, this field has no meaning and must be unspecified.
+
+                              If ReadOnly is true, and this field is set to Disabled, the mount is not made recursively read-only.  If this field is set to IfPossible, the mount is made recursively read-only, if it is supported by the container runtime.  If this field is set to Enabled, the mount is made recursively read-only if it is supported by the container runtime, otherwise the pod will not be started and an error will be generated to indicate the reason.
+
+                              If this field is set to IfPossible or Enabled, MountPropagation must be set to None (or be unspecified, which defaults to None).
+
+                              If this field is not specified, it is treated as an equivalent of Disabled.
+                            type: string
                           subPath:
                             description: Path within the volume from which the container's volume should be mounted. Defaults to "" (volume's root).
                             type: string
@@ -3721,7 +3748,7 @@ spec:
                                   description: DownwardAPIVolumeFile represents information to create the file containing the pod field
                                   properties:
                                     fieldRef:
-                                      description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+                                      description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported."
                                       properties:
                                         apiVersion:
                                           description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -4029,7 +4056,7 @@ spec:
                                         description: "storageClassName is the name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1"
                                         type: string
                                       volumeAttributesClassName:
-                                        description: "volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#volumeattributesclass (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled."
+                                        description: "volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/ (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled."
                                         type: string
                                       volumeMode:
                                         description: volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec.
@@ -4377,7 +4404,7 @@ spec:
                                             description: DownwardAPIVolumeFile represents information to create the file containing the pod field
                                             properties:
                                               fieldRef:
-                                                description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+                                                description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported."
                                                 properties:
                                                   apiVersion:
                                                     description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -4901,9 +4928,12 @@ spec:
                         - Local
                       nullable: true
                       type: string
+                    preferredReconnectionAddress:
+                      nullable: true
+                      type: string
                     type:
                       default: LoadBalancer
-                      description: "Type of Service to create. Must be one of: ClusterIP, LoadBalancer, NodePort"
+                      description: "Type of Service to create Must be one of: ClusterIP, LoadBalancer, NodePort"
                       enum:
                         - ClusterIP
                         - NodePort
@@ -5334,12 +5364,12 @@ spec:
                                                     type: object
                                                 type: object
                                               matchLabelKeys:
-                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
                                               mismatchLabelKeys:
-                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
@@ -5429,12 +5459,12 @@ spec:
                                                 type: object
                                             type: object
                                           matchLabelKeys:
-                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
                                           mismatchLabelKeys:
-                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
@@ -5523,12 +5553,12 @@ spec:
                                                     type: object
                                                 type: object
                                               matchLabelKeys:
-                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
                                               mismatchLabelKeys:
-                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                                description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                                 items:
                                                   type: string
                                                 type: array
@@ -5618,12 +5648,12 @@ spec:
                                                 type: object
                                             type: object
                                           matchLabelKeys:
-                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MatchLabelKeys and LabelSelector. Also, MatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both matchLabelKeys and labelSelector. Also, matchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
                                           mismatchLabelKeys:
-                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both MismatchLabelKeys and LabelSelector. Also, MismatchLabelKeys cannot be set when LabelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            description: MismatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty. The same key is forbidden to exist in both mismatchLabelKeys and labelSelector. Also, mismatchLabelKeys cannot be set when labelSelector isn't set. This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
                                             items:
                                               type: string
                                             type: array
@@ -5876,7 +5906,7 @@ spec:
                                     description: Path within the container at which the volume should be mounted.  Must not contain ':'.
                                     type: string
                                   mountPropagation:
-                                    description: mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10.
+                                    description: mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10. When RecursiveReadOnly is set to IfPossible or to Enabled, MountPropagation must be None or unspecified (which defaults to None).
                                     type: string
                                   name:
                                     description: This must match the Name of a Volume.
@@ -5884,6 +5914,18 @@ spec:
                                   readOnly:
                                     description: Mounted read-only if true, read-write otherwise (false or unspecified). Defaults to false.
                                     type: boolean
+                                  recursiveReadOnly:
+                                    description: |-
+                                      RecursiveReadOnly specifies whether read-only mounts should be handled recursively.
+
+                                      If ReadOnly is false, this field has no meaning and must be unspecified.
+
+                                      If ReadOnly is true, and this field is set to Disabled, the mount is not made recursively read-only.  If this field is set to IfPossible, the mount is made recursively read-only, if it is supported by the container runtime.  If this field is set to Enabled, the mount is made recursively read-only if it is supported by the container runtime, otherwise the pod will not be started and an error will be generated to indicate the reason.
+
+                                      If this field is set to IfPossible or Enabled, MountPropagation must be set to None (or be unspecified, which defaults to None).
+
+                                      If this field is not specified, it is treated as an equivalent of Disabled.
+                                    type: string
                                   subPath:
                                     description: Path within the volume from which the container's volume should be mounted. Defaults to "" (volume's root).
                                     type: string
@@ -6087,7 +6129,7 @@ spec:
                                           description: DownwardAPIVolumeFile represents information to create the file containing the pod field
                                           properties:
                                             fieldRef:
-                                              description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+                                              description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported."
                                               properties:
                                                 apiVersion:
                                                   description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -6395,7 +6437,7 @@ spec:
                                                 description: "storageClassName is the name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1"
                                                 type: string
                                               volumeAttributesClassName:
-                                                description: "volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#volumeattributesclass (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled."
+                                                description: "volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/ (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled."
                                                 type: string
                                               volumeMode:
                                                 description: volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec.
@@ -6743,7 +6785,7 @@ spec:
                                                     description: DownwardAPIVolumeFile represents information to create the file containing the pod field
                                                     properties:
                                                       fieldRef:
-                                                        description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+                                                        description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported."
                                                         properties:
                                                           apiVersion:
                                                             description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -7100,6 +7142,9 @@ spec:
       served: true
       storage: true
       subresources:
+        scale:
+          specReplicasPath: .spec.replicas
+          statusReplicasPath: .status.replicas
         status: {}
 ---
 # Source: shulker-operator/charts/shulker-addon-matchmaking/templates/rbac_workload.yaml
@@ -7111,7 +7156,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -7143,10 +7188,10 @@ kind: ClusterRole
 metadata:
   name: shulker-operator:workload
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -7211,7 +7256,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -7230,10 +7275,10 @@ kind: ClusterRoleBinding
 metadata:
   name: shulker-operator:workload
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -7255,7 +7300,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -7278,10 +7323,10 @@ kind: Role
 metadata:
   name: shulker-operator:leader-election
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -7307,7 +7352,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -7326,10 +7371,10 @@ kind: RoleBinding
 metadata:
   name: shulker-operator:leader-election
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -7351,7 +7396,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
 spec:
@@ -7375,7 +7420,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -7400,10 +7445,10 @@ kind: Service
 metadata:
   name: shulker-operator-metrics
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
 spec:
@@ -7424,10 +7469,10 @@ kind: Service
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -7451,7 +7496,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 spec:
@@ -7467,7 +7512,7 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.8.1"
+        app.kubernetes.io/version: "0.9.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-director
     spec:
@@ -7550,7 +7595,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -7566,7 +7611,7 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.8.1"
+        app.kubernetes.io/version: "0.9.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-mmf
     spec:
@@ -7649,10 +7694,10 @@ kind: Deployment
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -7665,10 +7710,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: shulker-operator-0.8.1
+        helm.sh/chart: shulker-operator-0.9.0
         app.kubernetes.io/name: shulker-operator
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.8.1"
+        app.kubernetes.io/version: "0.9.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-operator
     spec:
@@ -7761,7 +7806,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
     prometheus: default
@@ -7785,10 +7830,10 @@ kind: ServiceMonitor
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.8.1
+    helm.sh/chart: shulker-operator-0.9.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.8.1"
+    app.kubernetes.io/version: "0.9.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
     prometheus: default

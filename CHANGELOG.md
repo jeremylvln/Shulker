@@ -1,3 +1,41 @@
+## [0.9.0](https://github.com/jeremylvln/Shulker/compare/v0.8.1...v0.9.0) (2024-08-24)
+
+### ⚠ BREAKING CHANGES
+
+* upgrade all workspace (#618)
+
+### :sparkles: Features :sparkles:
+
+* **shulker-crds:** specify scale subresource for ProxyFleet and MinecraftServerFleet ([#623](https://github.com/jeremylvln/Shulker/issues/623)) ([569e010](https://github.com/jeremylvln/Shulker/commit/569e010cd05273f77114ec6b9bf45fab11803e86))
+* support reconnecting players to cluster ([#364](https://github.com/jeremylvln/Shulker/issues/364)) ([1a2266e](https://github.com/jeremylvln/Shulker/commit/1a2266ee27ac930606f7bcc5447e1ccfb00d0b63))
+* upgrade all workspace ([#618](https://github.com/jeremylvln/Shulker/issues/618)) ([6a34b62](https://github.com/jeremylvln/Shulker/commit/6a34b621ee1b78e557e471e4e0d79b717920c94b))
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.38.0 ([#545](https://github.com/jeremylvln/Shulker/issues/545)) ([d5e1ad0](https://github.com/jeremylvln/Shulker/commit/d5e1ad09357165b7edc0552172cc6198005a0911))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.39.0 ([#547](https://github.com/jeremylvln/Shulker/issues/547)) ([d786cb6](https://github.com/jeremylvln/Shulker/commit/d786cb696acb494d18e657aca0d48abda091c615))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.39.1 ([#561](https://github.com/jeremylvln/Shulker/issues/561)) ([b0745b4](https://github.com/jeremylvln/Shulker/commit/b0745b4361f184a9294da6ed9a3613c0b6bc5704))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.40.0 ([#580](https://github.com/jeremylvln/Shulker/issues/580)) ([469fb17](https://github.com/jeremylvln/Shulker/commit/469fb1709445ea4ae290fec40583a6183fe01092))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.42.0 ([#620](https://github.com/jeremylvln/Shulker/issues/620)) ([f13cd98](https://github.com/jeremylvln/Shulker/commit/f13cd98aeb78c2aa501f07c17e60f29f7d756ce5))
+* **deps:** update dependency com.google.guava:guava to v33.1.0-jre ([#500](https://github.com/jeremylvln/Shulker/issues/500)) ([d865881](https://github.com/jeremylvln/Shulker/commit/d865881bb2dee1e94cfa611d8fc122a0ac242555))
+* **deps:** update dependency com.google.guava:guava to v33.2.0-jre ([#546](https://github.com/jeremylvln/Shulker/issues/546)) ([bfbb4aa](https://github.com/jeremylvln/Shulker/commit/bfbb4aa96af1f2327f366f088570b330b675a476))
+* **deps:** update dependency com.google.guava:guava to v33.2.1-android ([#577](https://github.com/jeremylvln/Shulker/issues/577)) ([c0858d9](https://github.com/jeremylvln/Shulker/commit/c0858d9723f102ebd85f87b8e60ef34f6dd8d38c))
+* **deps:** update dependency com.google.guava:guava to v33.2.1-jre ([#578](https://github.com/jeremylvln/Shulker/issues/578)) ([2a3a7b9](https://github.com/jeremylvln/Shulker/commit/2a3a7b9e3de178cc93a24c1871bda4e100d2e069))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v3.25.4 ([#619](https://github.com/jeremylvln/Shulker/issues/619)) ([266a85e](https://github.com/jeremylvln/Shulker/commit/266a85e526bc51f2a97b79c75ab582794e5c6a51))
+* **deps:** update dependency net.kyori:adventure-api to v4.17.0 ([#556](https://github.com/jeremylvln/Shulker/issues/556)) ([52e3b0e](https://github.com/jeremylvln/Shulker/commit/52e3b0e239fc74d6ed6918b577a3848ea4f54365))
+* **deps:** update dependency net.kyori:adventure-platform-bungeecord to v4.3.3 ([#582](https://github.com/jeremylvln/Shulker/issues/582)) ([05e3471](https://github.com/jeremylvln/Shulker/commit/05e3471b21b3f8ce93e8a703d49d2168e2d9b2a7))
+* **deps:** update dependency redis.clients:jedis to v5.1.3 ([#568](https://github.com/jeremylvln/Shulker/issues/568)) ([90745de](https://github.com/jeremylvln/Shulker/commit/90745dedbbcb59470d2bd8a328876bb79eb02376))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.12.1 ([#548](https://github.com/jeremylvln/Shulker/issues/548)) ([dfc3b98](https://github.com/jeremylvln/Shulker/commit/dfc3b98a938971e96c99c4baa6a3e8ff16b3088a))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.13.0 ([#576](https://github.com/jeremylvln/Shulker/issues/576)) ([a9a13d7](https://github.com/jeremylvln/Shulker/commit/a9a13d7da745a77df8b0bc279069be56afcfbe8e))
+* **deps:** update grpc-java monorepo to v1.63.0 ([#549](https://github.com/jeremylvln/Shulker/issues/549)) ([c45fea4](https://github.com/jeremylvln/Shulker/commit/c45fea416cc941729781ab3331dbc41db36e0253))
+* **deps:** update grpc-java monorepo to v1.64.0 ([#560](https://github.com/jeremylvln/Shulker/issues/560)) ([f714fe1](https://github.com/jeremylvln/Shulker/commit/f714fe119befb2b7dda67303cc3113fbb88eb1ce))
+
+### :books: Documentation :books:
+
+* add search ([#616](https://github.com/jeremylvln/Shulker/issues/616)) ([9a6813b](https://github.com/jeremylvln/Shulker/commit/9a6813b84bd0ae2995b17e726a3f2e03080e13ba))
+* change "Mounting volumes" example text ([#526](https://github.com/jeremylvln/Shulker/issues/526)) ([f271222](https://github.com/jeremylvln/Shulker/commit/f271222cc086ca371cdf18991edec010089d0f8a))
+* fix Mincraft typo ([#527](https://github.com/jeremylvln/Shulker/issues/527)) ([875de67](https://github.com/jeremylvln/Shulker/commit/875de67ba389dade286c48598044a475737b9115))
+
 ## [0.8.1](https://github.com/jeremylvln/Shulker/compare/v0.8.0...v0.8.1) (2024-03-26)
 
 
