@@ -7,7 +7,7 @@ pub fn now() -> DateTime<Utc> {
 
 #[cfg(feature = "testing")]
 thread_local! {
-    pub static UTC_TIME_SECONDS: std::sync::atomic::AtomicI64 = std::sync::atomic::AtomicI64::new(0);
+    pub static UTC_TIME_SECONDS: std::sync::atomic::AtomicI64 = const { std::sync::atomic::AtomicI64::new(0) };
 }
 
 #[cfg(feature = "testing")]
