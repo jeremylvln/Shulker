@@ -154,10 +154,10 @@ class ProxyInterfaceVelocity(
     }
 
     override fun teleportPlayerOnServer(
-        playerName: String,
+        playerId: UUID,
         serverName: String,
     ) {
-        this.proxy.getPlayer(playerName).ifPresent { player ->
+        this.proxy.getPlayer(playerId).ifPresent { player ->
             this.proxy.getServer(serverName).ifPresent { server ->
                 player.createConnectionRequest(server).fireAndForget()
             }

@@ -1,12 +1,14 @@
 package io.shulkermc.proxyagent.adapters.pubsub
 
+import java.util.UUID
+
 interface PubSubAdapter {
     fun teleportPlayerOnServer(
-        playerId: String,
+        playerId: UUID,
         serverName: String,
     )
 
-    fun onTeleportPlayerOnServer(callback: (playerId: String, serverName: String) -> Unit)
+    fun onTeleportPlayerOnServer(callback: (playerId: UUID, serverName: String) -> Unit)
 
     fun drainProxy(proxyName: String)
 

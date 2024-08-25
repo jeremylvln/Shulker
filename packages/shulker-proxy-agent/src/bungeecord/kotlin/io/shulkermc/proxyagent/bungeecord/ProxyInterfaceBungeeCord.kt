@@ -181,13 +181,13 @@ class ProxyInterfaceBungeeCord(
     }
 
     override fun teleportPlayerOnServer(
-        playerName: String,
+        playerId: UUID,
         serverName: String,
     ) {
         val server = this.proxy.getServerInfo(serverName)
 
         if (server != null) {
-            this.proxy.getPlayer(playerName)?.connect(server)
+            this.proxy.getPlayer(playerId)?.connect(server)
         }
     }
 
