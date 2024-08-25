@@ -2,6 +2,7 @@ package io.shulkermc.proxyagent.adapters.pubsub
 
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPubSub
+import java.util.UUID
 import java.util.concurrent.Executors
 
 class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter {
@@ -12,7 +13,7 @@ class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter {
     }
 
     override fun teleportPlayerOnServer(
-        playerId: String,
+        playerId: UUID,
         serverName: String,
     ) {
         this.jedisPool.resource.use { jedis ->
@@ -20,7 +21,7 @@ class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter {
         }
     }
 
-    override fun onTeleportPlayerOnServer(callback: (playerId: String, serverName: String) -> Unit) {
+    override fun onTeleportPlayerOnServer(callback: (playerId: UUID, serverName: String) -> Unit) {
         this.executor.submit {
             this.jedisPool.resource.use { jedis ->
                 jedis.subscribe(
@@ -30,7 +31,7 @@ class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter {
                             message: String,
                         ) {
                             val (playerId, serverName) = message.split(":")
-                            callback(playerId, serverName)
+                            callback(UUID.fromString(playerId), serverName)
                         }
                     },
                     "shulker:teleport",

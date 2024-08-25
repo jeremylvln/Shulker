@@ -1,12 +1,13 @@
 package io.shulkermc.proxyagent.handlers
 
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
+import java.util.UUID
 
 class TeleportPlayerOnServerHandler(private val agent: ShulkerProxyAgentCommon) {
     fun handle(
-        playerName: String,
+        playerId: UUID,
         serverName: String,
     ) {
-        this.agent.proxyInterface.teleportPlayerOnServer(playerName, serverName)
+        this.agent.proxyInterface.teleportPlayerOnServer(playerId, serverName)
     }
 }

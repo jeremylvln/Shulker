@@ -15,7 +15,7 @@ object FindCommandHandler {
         source: Audience,
         playerName: String,
     ) {
-        val playerPosition = CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
+        val (_, playerPosition) = CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
 
         source.sendMessage(
             Component.text(

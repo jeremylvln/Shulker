@@ -11,6 +11,12 @@ class ShulkerProxyAPIImpl(private val agent: ShulkerProxyAgentCommon) : ShulkerP
 
     override fun getServersByTag(tag: String): Set<String> = this.agent.serverDirectoryService.getServersByTag(tag)
 
+    override fun teleportPlayerOnServer(
+        playerId: UUID,
+        serverName: String,
+    ) =
+        this.agent.proxyInterface.teleportPlayerOnServer(playerId, serverName)
+
     override fun getPlayerPosition(playerId: UUID): Optional<PlayerPosition> =
         this.agent.cache.getPlayerPosition(
             playerId,

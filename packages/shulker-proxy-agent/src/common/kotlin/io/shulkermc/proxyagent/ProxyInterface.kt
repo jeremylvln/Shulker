@@ -55,7 +55,7 @@ interface ProxyInterface {
     fun prepareNetworkAdminsPermissions(playerIds: List<UUID>)
 
     fun teleportPlayerOnServer(
-        playerName: String,
+        playerId: UUID,
         serverName: String,
     )
 

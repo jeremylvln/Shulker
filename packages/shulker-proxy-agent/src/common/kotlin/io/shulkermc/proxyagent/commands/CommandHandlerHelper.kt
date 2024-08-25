@@ -6,21 +6,22 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import java.util.Optional
+import java.util.UUID
 
 object CommandHandlerHelper {
     fun findPlayerOrMessage(
         agent: ShulkerProxyAgentCommon,
         source: Audience,
         playerName: String,
-    ): Optional<PlayerPosition> {
-        val playerPosition =
-            agent.cache.getPlayerIdFromName(playerName)
-                .flatMap { playerId -> agent.cache.getPlayerPosition(playerId) }
+    ): Optional<Pair<UUID, PlayerPosition>> {
+        val playerId = agent.cache.getPlayerIdFromName(playerName)
+        val playerPosition = playerId.flatMap { agent.cache.getPlayerPosition(it) }
 
-        if (playerPosition.isEmpty) {
+        if (playerId.isEmpty || playerPosition.isEmpty) {
             source.sendMessage(Component.text("Player $playerName not found", NamedTextColor.RED))
+            return Optional.empty()
         }
 
-        return playerPosition
+        return Optional.of(Pair(playerId.get(), playerPosition.get()))
     }
 }
