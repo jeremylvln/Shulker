@@ -10,6 +10,7 @@ import io.fabric8.kubernetes.client.informers.SharedIndexInformer
 import io.fabric8.kubernetes.client.okhttp.OkHttpClientFactory
 import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
+import io.shulkermc.proxyagent.utils.addressFromHostString
 import java.net.InetSocketAddress
 import java.util.Optional
 import java.util.concurrent.CompletionStage
@@ -107,7 +108,7 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     private fun getExternalAddressFromService(service: Service): Optional<InetSocketAddress> {
         return if (service.spec.type == "LoadBalancer") {
             Optional.ofNullable(service.status.loadBalancer?.ingress?.firstOrNull())
-                .map { ingress -> InetSocketAddress(ingress.ip, MINECRAFT_DEFAULT_PORT) }
+                .map { ingress -> addressFromHostString(ingress.ip) }
         } else {
             Optional.empty()
         }

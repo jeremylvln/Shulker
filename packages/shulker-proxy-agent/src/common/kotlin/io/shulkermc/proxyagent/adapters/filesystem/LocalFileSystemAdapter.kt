@@ -1,11 +1,11 @@
 package io.shulkermc.proxyagent.adapters.filesystem
 
+import io.shulkermc.proxyagent.utils.addressFromHostString
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.apache.commons.io.monitor.FileAlterationObserver
 import org.yaml.snakeyaml.Yaml
 import java.io.File
-import java.net.InetSocketAddress
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.exists
@@ -69,16 +69,10 @@ class LocalFileSystemAdapter : FileSystemAdapter {
             val address = entry["address"] as String
             val tags = entry.getOrDefault("tags", emptyList<String>()) as List<String>
 
-            val addressParts = address.split(":")
-
             name to
                 FileSystemAdapter.ExternalServer(
                     name,
-                    if (addressParts.size == 2) {
-                        InetSocketAddress(addressParts[0], addressParts[1].toInt())
-                    } else {
-                        InetSocketAddress(address, 25565)
-                    },
+                    addressFromHostString(address),
                     tags.toSet(),
                 )
         }

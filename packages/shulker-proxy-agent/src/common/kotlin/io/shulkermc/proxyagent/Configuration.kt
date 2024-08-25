@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent
 
+import io.shulkermc.proxyagent.utils.addressFromHostString
 import java.net.InetSocketAddress
 import java.util.Optional
 import java.util.UUID
@@ -18,15 +19,7 @@ object Configuration {
             .getOrDefault(15)
     val PROXY_PREFERRED_RECONNECT_ADDRESS: Optional<InetSocketAddress> =
         getOptionalStringEnv("SHULKER_PROXY_PREFERRED_RECONNECT_ADDRESS")
-            .map {
-                val parts = it.split(":")
-
-                if (parts.size == 2) {
-                    InetSocketAddress(parts[0], parts[1].toInt())
-                } else {
-                    InetSocketAddress(parts[0], 25565)
-                }
-            }
+            .map { str -> addressFromHostString(str) }
 
     val NETWORK_ADMINS: List<UUID> =
         getOptionalStringEnv("SHULKER_NETWORK_ADMINS")

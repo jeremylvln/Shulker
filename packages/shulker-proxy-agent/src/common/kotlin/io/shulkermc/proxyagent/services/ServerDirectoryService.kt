@@ -5,16 +5,13 @@ import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
 import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
+import io.shulkermc.proxyagent.utils.addressFromHostString
 import java.net.InetSocketAddress
 import java.util.Optional
 
 class ServerDirectoryService(
     private val agent: ShulkerProxyAgentCommon,
 ) {
-    companion object {
-        private const val DEFAULT_MINECRAFT_PORT = 25565
-    }
-
     private val serversByTag = HashMap<String, MutableSet<String>>()
     private val tagsByServer = HashMap<String, Set<String>>()
 
@@ -52,9 +49,8 @@ class ServerDirectoryService(
 
             this.registerServer(
                 minecraftServer.metadata.name,
-                InetSocketAddress(
+                addressFromHostString(
                     "${minecraftServer.metadata.name}.${Configuration.CLUSTER_NAME}-cluster.${minecraftServer.metadata.namespace}",
-                    DEFAULT_MINECRAFT_PORT,
                 ),
                 tags?.split(",")?.toSet().orEmpty(),
             )
