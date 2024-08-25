@@ -752,7 +752,7 @@ checksum = "40ecd4077b5ae9fd2e9e169b102c6c330d0605168eb0e8bf79952b256dbefffd"
 
 [[package]]
 name = "google-agones-crds"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "k8s-openapi",
  "kube",
@@ -764,7 +764,7 @@ dependencies = [
 
 [[package]]
 name = "google-agones-sdk"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -774,7 +774,7 @@ dependencies = [
 
 [[package]]
 name = "google-open-match-sdk"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -2238,7 +2238,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "shulker-addon-matchmaking"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2266,7 +2266,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-crds"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "base64 0.22.1",
  "google-agones-crds",
@@ -2282,7 +2282,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-kube-utils"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2304,7 +2304,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-operator"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2341,7 +2341,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-sdk"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "prost",
  "tonic",
@@ -2349,7 +2349,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-utils"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "chrono",
  "tracing",

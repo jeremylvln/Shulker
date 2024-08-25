@@ -52,7 +52,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             java.util.concurrent.TimeUnit.SECONDS,
         )
 
-    private var externalClusterAddress: Optional<InetSocketAddress> = Optional.empty()
+    private var externalClusterAddress: Optional<InetSocketAddress>
     private var isAllocatedByAgones = false
     private var acceptingPlayers = true
 
@@ -64,8 +64,23 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         this.agent.proxyInterface.addServerPreConnectHook(this::onServerPreConnect, HookPostOrder.EARLY)
         this.agent.proxyInterface.addServerPostConnectHook(this::onServerPostConnect, HookPostOrder.LATE)
 
-        this.onExternalAddressUpdate(this.agent.kubernetesGateway.getExternalAddress())
-        this.agent.kubernetesGateway.watchExternalAddressUpdates(this::onExternalAddressUpdate)
+        if (Configuration.PROXY_PREFERRED_RECONNECT_ADDRESS.isPresent) {
+            this.externalClusterAddress = Configuration.PROXY_PREFERRED_RECONNECT_ADDRESS
+            this.agent.logger.info("Using preferred fleet external address: ${this.externalClusterAddress.get()}")
+        } else {
+            this.agent.logger.info("Proxy will watch fleet's Service to extract external address")
+
+            this.externalClusterAddress = this.agent.kubernetesGateway.getExternalAddress()
+            this.externalClusterAddress.ifPresentOrElse({ address ->
+                this.agent.logger.info("Updated fleet's external address: $address")
+            }, {
+                this.agent.logger.warning(
+                    "Fleet's external address was not found, the Service may not be ready yet or is not a LoadBalancer",
+                )
+            })
+
+            this.agent.kubernetesGateway.watchExternalAddressUpdates(this::onExternalAddressUpdate)
+        }
     }
 
     fun setAcceptingPlayers(acceptingPlayers: Boolean) {
@@ -83,7 +98,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     fun reconnectPlayerToCluster(playerId: UUID) {
         Preconditions.checkState(
             this.externalClusterAddress.isPresent,
-            "This ProxyFleet is not operating under a LoadBalancer Service",
+            "This ProxyFleet is not operating under a LoadBalancer Service nor have a preferred address configured",
         )
 
         this.agent.proxyInterface.transferPlayerToAddress(playerId, this.externalClusterAddress.get())
@@ -92,7 +107,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     fun reconnectEveryoneToCluster() {
         Preconditions.checkState(
             this.externalClusterAddress.isPresent,
-            "This ProxyFleet is not operating under a LoadBalancer Service",
+            "This ProxyFleet is not operating under a LoadBalancer Service nor have a preferred address configured",
         )
 
         this.agent.proxyInterface.transferEveryoneToAddress(this.externalClusterAddress.get())
@@ -170,15 +185,15 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onExternalAddressUpdate(address: Optional<InetSocketAddress>) {
-        this.externalClusterAddress = address
-
-        if (address.isPresent) {
+        if (address.isPresent && (this.externalClusterAddress.isEmpty || address.get() != this.externalClusterAddress.get())) {
             this.agent.logger.info("Updated fleet's external address: ${address.get()}")
-        } else {
+        } else if (address.isEmpty && this.externalClusterAddress.isPresent) {
             this.agent.logger.warning(
-                "Fleet external address was not found or removed, transfer capabilities are disabled",
+                "Fleet external address was removed, transfer capabilities will be disabled",
             )
         }
+
+        this.externalClusterAddress = address
     }
 
     private fun isProxyConsideredFull(): Boolean {
