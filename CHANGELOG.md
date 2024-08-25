@@ -1,3 +1,15 @@
+## [0.10.0](https://github.com/jeremylvln/Shulker/compare/v0.9.0...v0.10.0) (2024-08-25)
+
+### :sparkles: Features :sparkles:
+
+* **shulker-proxy-agent:** expose player teleporting in API ([#629](https://github.com/jeremylvln/Shulker/issues/629)) ([111ca37](https://github.com/jeremylvln/Shulker/commit/111ca37f1985a2a0aa64f0d613d7736abb2d7d41))
+* support providing external servers ([#631](https://github.com/jeremylvln/Shulker/issues/631)) ([86b4804](https://github.com/jeremylvln/Shulker/commit/86b48045761ccaad7685c5e3cc26a5a8d2af2f08))
+
+### :bug: Bug Fixes :bug:
+
+* **shulker-proxy-agent:** crash when LoadBalancer service does not have any ingress in status ([#627](https://github.com/jeremylvln/Shulker/issues/627)) ([8be044a](https://github.com/jeremylvln/Shulker/commit/8be044a5544e9b52decbe968b9980ad26ff14713))
+* **shulker-proxy-agent:** do not watch service if preferred address is provided ([a8e2e70](https://github.com/jeremylvln/Shulker/commit/a8e2e70a29431409f6be6a0983ca42e78d003513))
+
 ## [0.9.0](https://github.com/jeremylvln/Shulker/compare/v0.8.1...v0.9.0) (2024-08-24)
 
 ### ⚠ BREAKING CHANGES
