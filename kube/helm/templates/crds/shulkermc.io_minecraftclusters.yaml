@@ -23,6 +23,28 @@ spec:
         properties:
           spec:
             properties:
+              externalServers:
+                description: List of servers that should be registered on the proxies that are not managed by Shulker
+                items:
+                  properties:
+                    address:
+                      description: Address of the server, may contain a port after a colon
+                      type: string
+                    name:
+                      description: Name of the server, as the proxies will register it. Allowed names only are lowercased, dash-separated alphanumerical string
+                      pattern: ^[a-z0-9\-]+$
+                      type: string
+                    tags:
+                      description: Tags associated to the server
+                      items:
+                        type: string
+                      type: array
+                  required:
+                  - address
+                  - name
+                  type: object
+                nullable: true
+                type: array
               networkAdmins:
                 description: List of player UUIDs that are automatically promoted as network administrators, which are granted all the permissions by default on all the proxies and servers
                 items:

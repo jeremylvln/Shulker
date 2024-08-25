@@ -24,6 +24,11 @@ pub struct MinecraftClusterSpec {
     /// for the different Shulker components
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redis: Option<MinecraftClusterRedisSpec>,
+
+    /// List of servers that should be registered on the proxies
+    /// that are not managed by Shulker
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_servers: Option<Vec<MinecraftClusterExternalServerSpec>>,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
@@ -70,6 +75,23 @@ impl MinecraftClusterRedisProvidedSpec {
     fn default_port() -> u16 {
         6379
     }
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct MinecraftClusterExternalServerSpec {
+    /// Name of the server, as the proxies will register it.
+    /// Allowed names only are lowercased, dash-separated
+    /// alphanumerical string
+    #[schemars(regex(pattern = r"^[a-z0-9\-]+$"))]
+    pub name: String,
+
+    /// Address of the server, may contain a port after a colon
+    pub address: String,
+
+    /// Tags associated to the server
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
 }
 
 /// The status object of `MinecraftCluster`

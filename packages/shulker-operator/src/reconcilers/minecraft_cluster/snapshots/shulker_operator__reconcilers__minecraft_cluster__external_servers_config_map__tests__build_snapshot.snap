@@ -1,0 +1,18 @@
+---
+source: packages/shulker-operator/src/reconcilers/minecraft_cluster/external_servers_config_map.rs
+expression: config_map
+---
+apiVersion: v1
+kind: ConfigMap
+data:
+  external-servers.yaml: "- name: my-external-server\n  address: 127.0.0.1:25565\n  tags:\n  - game\n"
+metadata:
+  labels:
+    app.kubernetes.io/component: proxy
+    app.kubernetes.io/instance: external-servers-my-cluster
+    app.kubernetes.io/managed-by: shulker-operator
+    app.kubernetes.io/name: external-servers
+    app.kubernetes.io/part-of: cluster-my-cluster
+    minecraftcluster.shulkermc.io/name: my-cluster
+  name: my-cluster-external-servers
+  namespace: default
