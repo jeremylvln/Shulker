@@ -11,6 +11,7 @@ import io.shulkermc.proxyagent.platform.ProxyPingHookResult
 import io.shulkermc.proxyagent.platform.ServerPreConnectHookResult
 import io.shulkermc.proxyagent.utils.createDisconnectMessage
 import net.kyori.adventure.text.format.NamedTextColor
+import java.net.InetSocketAddress
 import java.util.Optional
 import java.util.UUID
 
@@ -51,26 +52,20 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
             java.util.concurrent.TimeUnit.SECONDS,
         )
 
-    private val externalClusterAddress = this.agent.kubernetesGateway.getFleetServiceAddress()
-
+    private var externalClusterAddress: Optional<InetSocketAddress> = Optional.empty()
     private var isAllocatedByAgones = false
     private var acceptingPlayers = true
 
     init {
-        this.externalClusterAddress.ifPresentOrElse({ addr ->
-            this.agent.logger.info("Found fleet's external address: ${addr.hostName}")
-        }, {
-            this.agent.logger.info(
-                "Fleet external address was not found, transfer capabilities will be disabled",
-            )
-        })
-
         this.agent.proxyInterface.addProxyPingHook(this::onProxyPing, HookPostOrder.FIRST)
         this.agent.proxyInterface.addPlayerPreLoginHook(this::onPlayerPreLogin, HookPostOrder.FIRST)
         this.agent.proxyInterface.addPlayerLoginHook(this::onPlayerLogin, HookPostOrder.EARLY)
         this.agent.proxyInterface.addPlayerDisconnectHook(this::onPlayerDisconnect, HookPostOrder.LATE)
         this.agent.proxyInterface.addServerPreConnectHook(this::onServerPreConnect, HookPostOrder.EARLY)
         this.agent.proxyInterface.addServerPostConnectHook(this::onServerPostConnect, HookPostOrder.LATE)
+
+        this.onExternalAddressUpdate(this.agent.kubernetesGateway.getExternalAddress())
+        this.agent.kubernetesGateway.watchExternalAddressUpdates(this::onExternalAddressUpdate)
     }
 
     fun setAcceptingPlayers(acceptingPlayers: Boolean) {
@@ -172,6 +167,18 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         serverName: String,
     ) {
         this.agent.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
+    }
+
+    private fun onExternalAddressUpdate(address: Optional<InetSocketAddress>) {
+        this.externalClusterAddress = address
+
+        if (address.isPresent) {
+            this.agent.logger.info("Updated fleet's external address: ${address.get()}")
+        } else {
+            this.agent.logger.warning(
+                "Fleet external address was not found or removed, transfer capabilities are disabled",
+            )
+        }
     }
 
     private fun isProxyConsideredFull(): Boolean {

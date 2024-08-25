@@ -60,7 +60,7 @@ impl<'a> ResourceBuilder<'a> for ProxyRoleBuilder {
                 PolicyRule {
                     api_groups: Some(vec!["".to_string()]),
                     resources: Some(vec!["services".to_string()]),
-                    verbs: vec!["get".to_string()],
+                    verbs: vec!["get".to_string(), "watch".to_string()],
                     ..PolicyRule::default()
                 },
                 PolicyRule {

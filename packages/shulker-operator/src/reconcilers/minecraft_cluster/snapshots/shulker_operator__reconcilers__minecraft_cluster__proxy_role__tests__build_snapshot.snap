@@ -30,6 +30,7 @@ rules:
       - services
     verbs:
       - get
+      - watch
   - apiGroups:
       - ""
     resources:
