@@ -3,7 +3,7 @@ set -euo pipefail
 set -o xtrace
 
 cp "${SHULKER_CONFIG_DIR}/server.properties" "${SHULKER_SERVER_CONFIG_DIR}/server.properties"
-if [ "${SHULKER_VERSION_CHANNEL}" == "Paper" ] || [ "${SHULKER_VERSION_CHANNEL}" == "Folia" ]; then
+if [ "${SHULKER_VERSION_CHANNEL}" == "Paper" ] || [ "${SHULKER_VERSION_CHANNEL}" == "Folia" ] || [ "${SHULKER_VERSION_CHANNEL}" == "Minestom" ]; then
   cp "${SHULKER_CONFIG_DIR}/bukkit-config.yml" "${SHULKER_SERVER_CONFIG_DIR}/bukkit.yml"
   cp "${SHULKER_CONFIG_DIR}/spigot-config.yml" "${SHULKER_SERVER_CONFIG_DIR}/spigot.yml"
   mkdir -p "${SHULKER_SERVER_CONFIG_DIR}/config"
