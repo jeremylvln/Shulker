@@ -21,6 +21,7 @@ use kube::ResourceExt;
 use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
+use shulker_kube_utils::reconcilers::BuilderReconcilerError;
 use url::Url;
 
 use crate::agent::AgentConfig;
@@ -91,6 +92,8 @@ impl<'a> ResourceBuilder<'a> for GameServerBuilder {
         _existing_game_server: Option<&Self::ResourceType>,
         context: Option<GameServerBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
+        GameServerBuilder::validate_spec(context.as_ref().unwrap(), minecraft_server)?;
+
         let game_server = GameServer {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
@@ -125,6 +128,22 @@ impl<'a> GameServerBuilder {
             client: client.clone(),
             resourceref_resolver: ResourceRefResolver::new(client.clone()),
         }
+    }
+
+    pub fn validate_spec(
+        _context: &GameServerBuilderContext<'a>,
+        minecraft_server: &MinecraftServer,
+    ) -> Result<(), BuilderReconcilerError> {
+        if minecraft_server.spec.version.channel == MinecraftServerVersion::Minestom
+            && minecraft_server.spec.version.custom_jar.is_none()
+        {
+            return Err(BuilderReconcilerError::ValidationError(
+                std::any::type_name::<GameServerBuilder>(),
+                "a Minestom-based server requires a custom JAR to be provided".to_string(),
+            ));
+        }
+
+        Ok(())
     }
 
     pub async fn get_game_server_spec(
@@ -612,8 +631,11 @@ mod tests {
     use k8s_openapi::api::core::v1::{
         ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
     };
-    use shulker_crds::{resourceref::ResourceRefSpec, schemas::ImageOverrideSpec};
-    use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
+    use shulker_crds::{
+        resourceref::ResourceRefSpec, schemas::ImageOverrideSpec,
+        v1alpha1::minecraft_server::MinecraftServerVersion,
+    };
+    use shulker_kube_utils::reconcilers::{builder::ResourceBuilder, BuilderReconcilerError};
 
     use crate::{
         agent::AgentConfig,
@@ -625,6 +647,8 @@ mod tests {
         resources::resourceref_resolver::ResourceRefResolver,
     };
 
+    use super::GameServerBuilder;
+
     #[test]
     fn name_contains_server_name() {
         // W
@@ -632,6 +656,37 @@ mod tests {
 
         // T
         assert_eq!(name, "my-server");
+    }
+
+    #[test]
+    fn validate_rejects_minestom_without_custom_jar() {
+        // G
+        let mut server = TEST_SERVER.clone();
+        server.spec.version.channel = MinecraftServerVersion::Minestom;
+        server.spec.version.custom_jar = None;
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let is_valid = GameServerBuilder::validate_spec(&context, &server);
+
+        // T
+        match is_valid.unwrap_err() {
+            BuilderReconcilerError::ValidationError(_, message) => {
+                assert_eq!(
+                    message,
+                    "a Minestom-based server requires a custom JAR to be provided"
+                );
+            }
+            _ => {
+                unreachable!("Error mismatch")
+            }
+        }
     }
 
     #[tokio::test]
