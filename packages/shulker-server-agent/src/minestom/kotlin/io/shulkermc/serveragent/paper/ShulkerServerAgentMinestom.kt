@@ -4,6 +4,7 @@ import io.shulkermc.serveragent.ShulkerServerAgentCommon
 import io.shulkermc.serveragent.paper.config.PaperConfiguration
 import io.shulkermc.serveragent.paper.config.ServerProperties
 import net.minestom.server.MinecraftServer
+import net.minestom.server.extras.bungee.BungeeCordProxy
 import net.minestom.server.extras.velocity.VelocityProxy
 import java.util.logging.Logger
 
@@ -50,6 +51,9 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
         if (this.paperConfig.proxies.velocity.enabled) {
             this.logger.info("Enabling Velocity middleware")
             VelocityProxy.enable(this.paperConfig.proxies.velocity.secret!!)
+        } else {
+            this.logger.info("Enabling BungeeCord middleware")
+            BungeeCordProxy.enable()
         }
 
         this.agent.onServerInitialization()
