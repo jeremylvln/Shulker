@@ -565,6 +565,7 @@ impl<'a> GameServerBuilder {
             MinecraftServerVersion::Paper | MinecraftServerVersion::Folia => {
                 Some("paper".to_string())
             }
+            MinecraftServerVersion::Minestom => None,
         };
 
         let mut plugin_refs: Vec<Url> = vec![];
@@ -596,7 +597,7 @@ impl<'a> GameServerBuilder {
 
     fn get_type_from_version_channel(channel: &MinecraftServerVersion) -> String {
         match channel {
-            MinecraftServerVersion::Paper => "PAPER".to_string(),
+            MinecraftServerVersion::Paper | MinecraftServerVersion::Minestom => "PAPER".to_string(),
             MinecraftServerVersion::Folia => "FOLIA".to_string(),
         }
     }
