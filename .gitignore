@@ -323,3 +323,4 @@ scripts/.tools/
 *.sarif
 .nx/cache
 .nx/workspace-data
+examples/local/
