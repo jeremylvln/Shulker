@@ -1,4 +1,4 @@
-package io.shulkermc.serveragent.paper
+package io.shulkermc.serveragent.minestom
 
 import io.shulkermc.serveragent.ServerInterface
 import io.shulkermc.serveragent.platform.HookPostOrder

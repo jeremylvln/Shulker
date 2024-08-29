@@ -24,12 +24,6 @@ dependencies {
     commonImplementation(libs.guava)
 }
 
-setOf("bungeecordJar", "velocityJar").forEach { taskName ->
-    tasks.named(taskName, ShadowJar::class.java) {
-        mergeServiceFiles()
-    }
-}
-
 tasks.named("processBungeecordResources", ProcessResources::class.java) {
     inputs.property("version", project.version)
     expand("version" to project.version)

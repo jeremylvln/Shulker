@@ -1,4 +1,4 @@
-package io.shulkermc.serveragent.paper.config
+package io.shulkermc.serveragent.minestom.config
 
 import java.nio.file.Paths
 import java.util.Properties

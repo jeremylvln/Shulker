@@ -212,6 +212,8 @@ subprojects {
 
         val providerJar =
             tasks.register("${providerName}Jar", ShadowJar::class.java) {
+                mergeServiceFiles()
+
                 archiveClassifier = providerName
                 from(commonSourceSet.output)
                 from(providerSourceSet.output)

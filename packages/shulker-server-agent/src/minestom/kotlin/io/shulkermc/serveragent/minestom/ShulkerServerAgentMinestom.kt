@@ -1,8 +1,8 @@
-package io.shulkermc.serveragent.paper
+package io.shulkermc.serveragent.minestom
 
 import io.shulkermc.serveragent.ShulkerServerAgentCommon
-import io.shulkermc.serveragent.paper.config.PaperConfiguration
-import io.shulkermc.serveragent.paper.config.ServerProperties
+import io.shulkermc.serveragent.minestom.config.PaperConfiguration
+import io.shulkermc.serveragent.minestom.config.ServerProperties
 import net.minestom.server.MinecraftServer
 import net.minestom.server.extras.bungee.BungeeCordProxy
 import net.minestom.server.extras.velocity.VelocityProxy
