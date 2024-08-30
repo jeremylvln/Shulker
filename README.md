@@ -57,4 +57,4 @@ Shulker is distributed under the [AGPL 3.0](LICENSE.txt).
 
 Thanks to my sponsors, it really means a lot to me!
 
-<!-- sponsors --><a href="https://github.com/TropicLegend"><img src="https://github.com/TropicLegend.png" width="60px" alt="Tropic Legend" /></a><a href="https://github.com/Rigner"><img src="https://github.com/Rigner.png" width="60px" alt="Rigner" /></a><a href="https://github.com/TheCodedOne"><img src="https://github.com/TheCodedOne.png" width="60px" alt="Coded" /></a><!-- sponsors -->
+<!-- sponsors --><a href="https://github.com/TropicLegend"><img src="https://github.com/TropicLegend.png" width="60px" alt="Tropic Legend" /></a><a href="https://github.com/Rigner"><img src="https://github.com/Rigner.png" width="60px" alt="Rigner" /></a><a href="https://github.com/TheCodedOne"><img src="https://github.com/TheCodedOne.png" width="60px" alt="Coded" /></a><a href="https://github.com/Rynf0rce"><img src="https://github.com/Rynf0rce.png" width="60px" alt="RYNF0RCE" /></a><!-- sponsors -->
