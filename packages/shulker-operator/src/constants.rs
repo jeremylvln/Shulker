@@ -1,9 +1,9 @@
 #[cfg(any(test, debug_assertions))]
 pub const SHULKER_PLUGIN_REPOSITORY: &str =
-    "https://maven.jeremylvln.fr/artifactory/shulker-snapshots";
+    "https://maven.jeremylvln.fr/repository/shulker-snapshots";
 #[cfg(not(debug_assertions))]
 pub const SHULKER_PLUGIN_REPOSITORY: &str =
-    "https://maven.jeremylvln.fr/artifactory/shulker-releases";
+    "https://maven.jeremylvln.fr/repository/shulker-releases";
 
 #[cfg(test)]
 pub const SHULKER_PLUGIN_VERSION: &str = "0.0.0-test-cfg";

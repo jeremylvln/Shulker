@@ -178,14 +178,14 @@ subprojects {
 
                 url =
                     if ((version as String).endsWith("-SNAPSHOT")) {
-                        uri("https://maven.jeremylvln.fr/artifactory/shulker-snapshots")
+                        uri("https://maven.jeremylvln.fr/repository/shulker-snapshots")
                     } else {
-                        uri("https://maven.jeremylvln.fr/artifactory/shulker-releases")
+                        uri("https://maven.jeremylvln.fr/repository/shulker-releases")
                     }
 
                 credentials {
-                    username = findProperty("artifactory.username")?.toString() ?: System.getenv("ARTIFACTORY_USERNAME")
-                    password = findProperty("artifactory.password")?.toString() ?: System.getenv("ARTIFACTORY_PASSWORD")
+                    username = findProperty("nexus.username")?.toString() ?: System.getenv("NEXUS_USERNAME")
+                    password = findProperty("nexus.password")?.toString() ?: System.getenv("NEXUS_PASSWORD")
                 }
             }
         }

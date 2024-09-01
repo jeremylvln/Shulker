@@ -138,7 +138,7 @@ spec:
                 - name: SHULKER_VERSION_CHANNEL
                   value: Velocity
                 - name: SHULKER_PROXY_PLUGIN_URLS
-                  value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar"
+                  value: "https://maven.jeremylvln.fr/repository/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar"
                 - name: SHULKER_PROXY_PATCH_URLS
                   value: "https://example.com/my_patch.tar.gz"
               image: "alpine:latest"

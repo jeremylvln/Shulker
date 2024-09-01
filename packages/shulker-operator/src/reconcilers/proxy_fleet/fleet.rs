@@ -1125,7 +1125,7 @@ mod tests {
             .unwrap();
         assert_eq!(
             plugins_env.value.as_ref().unwrap(),
-            "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar"
+            "https://maven.jeremylvln.fr/repository/shulker-snapshots/io/shulkermc/shulker-proxy-agent/0.0.0-test-cfg/shulker-proxy-agent-0.0.0-test-cfg-velocity.jar;https://example.com/my_plugin.jar"
         );
     }
 

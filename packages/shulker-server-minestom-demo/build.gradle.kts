@@ -11,6 +11,7 @@ tasks {
     }
 
     shadowJar {
+        dependsOn(":packages:shulker-server-agent:shadowJar")
         mergeServiceFiles()
     }
 }

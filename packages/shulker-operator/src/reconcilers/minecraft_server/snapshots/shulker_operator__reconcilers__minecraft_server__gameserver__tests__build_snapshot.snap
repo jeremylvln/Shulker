@@ -113,7 +113,7 @@ spec:
             - name: SHULKER_SERVER_WORLD_URL
               value: "https://example.com/my_world.tar.gz"
             - name: SHULKER_SERVER_PLUGIN_URLS
-              value: "https://maven.jeremylvln.fr/artifactory/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar"
+              value: "https://maven.jeremylvln.fr/repository/shulker-snapshots/io/shulkermc/shulker-server-agent/0.0.0-test-cfg/shulker-server-agent-0.0.0-test-cfg-paper.jar;https://example.com/my_plugin.jar"
             - name: SHULKER_SERVER_PATCH_URLS
               value: "https://example.com/my_patch.tar.gz"
           image: "alpine:latest"
