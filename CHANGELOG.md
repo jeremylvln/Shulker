@@ -1,3 +1,14 @@
+## [0.11.0](https://github.com/jeremylvln/Shulker/compare/v0.10.0...v0.11.0) (2024-09-01)
+
+### :sparkles: Features :sparkles:
+
+* add first-party support for Minestom servers ([#634](https://github.com/jeremylvln/Shulker/issues/634)) ([3874320](https://github.com/jeremylvln/Shulker/commit/38743203c18c5d590d2c1bbda7d0acd8ce31e455))
+* add minestom-demo implementation ([50e5263](https://github.com/jeremylvln/Shulker/commit/50e5263b884677d25249c6f020f8b5bb908ee991))
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.43.0 ([#639](https://github.com/jeremylvln/Shulker/issues/639)) ([9870f8d](https://github.com/jeremylvln/Shulker/commit/9870f8ded295f3ae150cb0c4cdf842c443397bec))
+
 ## [0.10.0](https://github.com/jeremylvln/Shulker/compare/v0.9.0...v0.10.0) (2024-08-25)
 
 ### :sparkles: Features :sparkles:
