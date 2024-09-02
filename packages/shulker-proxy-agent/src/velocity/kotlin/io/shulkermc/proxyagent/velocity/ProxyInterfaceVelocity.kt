@@ -8,6 +8,7 @@ import com.velocitypowered.api.event.permission.PermissionsSetupEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import com.velocitypowered.api.event.proxy.ProxyPingEvent
+import com.velocitypowered.api.network.ProtocolVersion
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.ServerInfo
@@ -169,13 +170,17 @@ class ProxyInterfaceVelocity(
         address: InetSocketAddress,
     ) {
         this.proxy.getPlayer(playerId).ifPresent { player ->
-            player.transferToHost(address)
+            if (player.protocolVersion >= ProtocolVersion.MINECRAFT_1_20_5) {
+                player.transferToHost(address)
+            }
         }
     }
 
     override fun transferEveryoneToAddress(address: InetSocketAddress) {
         this.proxy.allPlayers.forEach { player ->
-            player.transferToHost(address)
+            if (player.protocolVersion >= ProtocolVersion.MINECRAFT_1_20_5) {
+                player.transferToHost(address)
+            }
         }
     }
 
