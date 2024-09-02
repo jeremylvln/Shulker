@@ -27,6 +27,7 @@ import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.scheduler.ScheduledTask
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
+import net.md_5.bungee.protocol.ProtocolConstants
 import java.net.InetSocketAddress
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -196,13 +197,19 @@ class ProxyInterfaceBungeeCord(
         playerId: UUID,
         address: InetSocketAddress,
     ) {
-        this.proxy.getPlayer(playerId)?.transfer(address.hostName, address.port)
+        this.proxy.getPlayer(playerId)?.let { player ->
+            if (player.pendingConnection.version >= ProtocolConstants.MINECRAFT_1_20_5) {
+                player.transfer(address.hostName, address.port)
+            }
+        }
     }
 
     @Suppress("UnstableApiUsage")
     override fun transferEveryoneToAddress(address: InetSocketAddress) {
         this.proxy.players.forEach { player ->
-            player.transfer(address.hostName, address.port)
+            if (player.pendingConnection.version >= ProtocolConstants.MINECRAFT_1_20_5) {
+                player.transfer(address.hostName, address.port)
+            }
         }
     }
 
