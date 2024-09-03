@@ -776,6 +776,30 @@ spec:
                       type: object
                     nullable: true
                     type: array
+                  health:
+                    description: Overrides Agones Health checks
+                    nullable: true
+                    properties:
+                      disabled:
+                        description: Specify whether the health check should be disabled.
+                        nullable: true
+                        type: boolean
+                      failureThreshold:
+                        description: Specify how much health failure is tolerated before the GameServer is considered unhealthy.
+                        format: int32
+                        nullable: true
+                        type: integer
+                      initialDelaySeconds:
+                        description: Specify the initial delay in seconds before the first health check is performed.
+                        format: int32
+                        nullable: true
+                        type: integer
+                      periodSeconds:
+                        description: Specify the period in seconds between health checks.
+                        format: int32
+                        nullable: true
+                        type: integer
+                    type: object
                   image:
                     description: Image to use as replacement for the built-in one
                     nullable: true
