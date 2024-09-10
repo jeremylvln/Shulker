@@ -29,6 +29,7 @@ body:
         - Proxy Agent (Velocity)
         - Server API
         - Server Agent (Paper)
+        - Server Agent (Minestom)
 
   - type: input
     id: version
