@@ -31,7 +31,7 @@ dependencyResolutionManagement {
             plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.4.0")
             plugin("shadow", "com.gradleup.shadow").version("8.3.0")
             plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("12.1.1")
-            plugin("detekt", "io.gitlab.arturbosch.detekt").version("1.23.6")
+            plugin("detekt", "io.gitlab.arturbosch.detekt").version("1.23.7")
         }
     }
 }
