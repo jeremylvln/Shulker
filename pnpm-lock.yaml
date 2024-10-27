@@ -57,8 +57,8 @@ importers:
   docs:
     devDependencies:
       vitepress:
-        specifier: 1.4.0
-        version: 1.4.0(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.47)(search-insights@2.17.0)(typescript@5.5.4)
+        specifier: 1.4.1
+        version: 1.4.1(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.47)(search-insights@2.17.0)(typescript@5.5.4)
 
 packages:
 
@@ -2385,10 +2385,6 @@ packages:
     resolution: {integrity: sha512-bSiSngZ/jWeX93BqeIAbImyTbEihizcwNjFoRUIY/T1wWQsfsm2Vw1agPKylXvQTU7iASGdHhyqRlqQzfz+Htg==}
     engines: {node: '>=18'}
 
-  source-map-js@1.2.0:
-    resolution: {integrity: sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==}
-    engines: {node: '>=0.10.0'}
-
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -2677,8 +2673,8 @@ packages:
       terser:
         optional: true
 
-  vitepress@1.4.0:
-    resolution: {integrity: sha512-JXCv4EsKTDyAFb6C/UjZr7nsGAzZ6mafVk2rx7rG5o8N+B/4QstIk+iEOe/9dKoU6V624UIC6g1pZ+K63rxhlw==}
+  vitepress@1.4.1:
+    resolution: {integrity: sha512-C2rQ7PMlDVqgsaHOa0uJtgGGWaGv74QMaGL62lxKbtFkYtosJB5HAfZ8+pEbfzzvLemYaYwaiQdFLBlexK2sFw==}
     hasBin: true
     peerDependencies:
       markdown-it-mathjax3: ^4
@@ -3553,7 +3549,7 @@ snapshots:
       '@vue/shared': 3.5.12
       entities: 4.5.0
       estree-walker: 2.0.2
-      source-map-js: 1.2.0
+      source-map-js: 1.2.1
 
   '@vue/compiler-dom@3.5.12':
     dependencies:
@@ -3570,7 +3566,7 @@ snapshots:
       estree-walker: 2.0.2
       magic-string: 0.30.11
       postcss: 8.4.47
-      source-map-js: 1.2.0
+      source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.5.12':
     dependencies:
@@ -5121,8 +5117,6 @@ snapshots:
       ansi-styles: 6.2.1
       is-fullwidth-code-point: 5.0.0
 
-  source-map-js@1.2.0: {}
-
   source-map-js@1.2.1: {}
 
   source-map@0.6.1: {}
@@ -5371,7 +5365,7 @@ snapshots:
       '@types/node': 22.5.0
       fsevents: 2.3.3
 
-  vitepress@1.4.0(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.47)(search-insights@2.17.0)(typescript@5.5.4):
+  vitepress@1.4.1(@algolia/client-search@4.24.0)(@types/node@22.5.0)(axios@1.7.4)(postcss@8.4.47)(search-insights@2.17.0)(typescript@5.5.4):
     dependencies:
       '@docsearch/css': 3.6.2
       '@docsearch/js': 3.6.2(@algolia/client-search@4.24.0)(search-insights@2.17.0)
