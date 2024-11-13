@@ -6,6 +6,7 @@ import io.shulkermc.serveragent.platform.PlayerDisconnectHook
 import io.shulkermc.serveragent.platform.PlayerLoginHook
 import net.minestom.server.MinecraftServer
 import net.minestom.server.event.EventNode
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerDisconnectEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
 import net.minestom.server.permission.Permission
@@ -23,7 +24,7 @@ class ServerInterfaceMinestom : ServerInterface {
     private val eventNode = EventNode.all("shulker-server-agent-minestom")
 
     override fun prepareNetworkAdminsPermissions(playerIds: List<UUID>) {
-        this.eventNode.addListener(PlayerSpawnEvent::class.java) { event: PlayerSpawnEvent ->
+        this.eventNode.addListener(AsyncPlayerConfigurationEvent::class.java) { event ->
             if (playerIds.contains(event.player.uuid)) {
                 event.player.permissionLevel = ADMIN_PERMISSION_LEVEL
                 event.player.addPermission(Permission("*"))
