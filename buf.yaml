@@ -5,7 +5,6 @@ modules:
   - path: packages/shulker-sdk/proto
 deps:
   - buf.build/googleapis/googleapis
-  - buf.build/grpc-ecosystem/grpc-gateway
 lint:
   use:
     - DEFAULT
