@@ -246,14 +246,12 @@ impl<'a> GameServerBuilder {
                 Volume {
                     name: "shulker-config".to_string(),
                     config_map: Some(ConfigMapVolumeSource {
-                        name: Some(
-                            minecraft_server
-                                .spec
-                                .config
-                                .existing_config_map_name
-                                .clone()
-                                .unwrap_or_else(|| ConfigMapBuilder::name(minecraft_server)),
-                        ),
+                        name: minecraft_server
+                            .spec
+                            .config
+                            .existing_config_map_name
+                            .clone()
+                            .unwrap_or_else(|| ConfigMapBuilder::name(minecraft_server)),
                         ..ConfigMapVolumeSource::default()
                     }),
                     ..Volume::default()
@@ -512,7 +510,7 @@ impl<'a> GameServerBuilder {
                 name: "CFG_VELOCITY_FORWARDING_SECRET".to_string(),
                 value_from: Some(EnvVarSource {
                     secret_key_ref: Some(SecretKeySelector {
-                        name: Some(format!("{}-forwarding-secret", spec.cluster_ref.name)),
+                        name: format!("{}-forwarding-secret", spec.cluster_ref.name),
                         key: "key".to_string(),
                         ..SecretKeySelector::default()
                     }),
@@ -755,8 +753,6 @@ mod tests {
                 .as_ref()
                 .unwrap()
                 .name
-                .as_ref()
-                .unwrap()
                 == "my_way_better_config"
         )
     }
@@ -803,7 +799,7 @@ mod tests {
         let mut server = TEST_SERVER.clone();
         server.spec.pod_overrides.as_mut().unwrap().image = Some(ImageOverrideSpec {
             image_pull_secrets: Some(vec![LocalObjectReference {
-                name: Some("my_pull_secret".to_string()),
+                name: "my_pull_secret".to_string(),
             }]),
             ..ImageOverrideSpec::default()
         });
@@ -828,7 +824,7 @@ mod tests {
         assert_eq!(
             pod_template.spec.as_ref().unwrap().image_pull_secrets,
             Some(vec![LocalObjectReference {
-                name: Some("my_pull_secret".to_string())
+                name: "my_pull_secret".to_string()
             }])
         );
     }

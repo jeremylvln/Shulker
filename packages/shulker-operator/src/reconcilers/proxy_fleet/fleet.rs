@@ -484,7 +484,7 @@ impl<'a> FleetBuilder {
                     name: "SHULKER_PROXY_REDIS_USERNAME".to_string(),
                     value_from: Some(EnvVarSource {
                         secret_key_ref: Some(SecretKeySelector {
-                            name: Some(redis_ref_credentials_secret_name.clone()),
+                            name: redis_ref_credentials_secret_name.clone(),
                             key: "username".to_string(),
                             ..SecretKeySelector::default()
                         }),
@@ -496,7 +496,7 @@ impl<'a> FleetBuilder {
                     name: "SHULKER_PROXY_REDIS_PASSWORD".to_string(),
                     value_from: Some(EnvVarSource {
                         secret_key_ref: Some(SecretKeySelector {
-                            name: Some(redis_ref_credentials_secret_name.clone()),
+                            name: redis_ref_credentials_secret_name.clone(),
                             key: "password".to_string(),
                             ..SecretKeySelector::default()
                         }),
@@ -580,16 +580,14 @@ impl<'a> FleetBuilder {
             Volume {
                 name: "shulker-config".to_string(),
                 config_map: Some(ConfigMapVolumeSource {
-                    name: Some(
-                        proxy_fleet
-                            .spec
-                            .template
-                            .spec
-                            .config
-                            .existing_config_map_name
-                            .clone()
-                            .unwrap_or_else(|| ConfigMapBuilder::name(proxy_fleet)),
-                    ),
+                    name: proxy_fleet
+                        .spec
+                        .template
+                        .spec
+                        .config
+                        .existing_config_map_name
+                        .clone()
+                        .unwrap_or_else(|| ConfigMapBuilder::name(proxy_fleet)),
                     ..ConfigMapVolumeSource::default()
                 }),
                 ..Volume::default()
@@ -633,7 +631,7 @@ impl<'a> FleetBuilder {
             volumes.push(Volume {
                 name: "shulker-external-servers".to_string(),
                 config_map: Some(ConfigMapVolumeSource {
-                    name: Some(ExternalServersConfigMapBuilder::name(context.cluster)),
+                    name: ExternalServersConfigMapBuilder::name(context.cluster),
                     ..ConfigMapVolumeSource::default()
                 }),
                 ..Volume::default()
@@ -884,8 +882,6 @@ mod tests {
                 .as_ref()
                 .unwrap()
                 .name
-                .as_ref()
-                .unwrap()
                 == "my_way_better_config"
         )
     }
@@ -943,7 +939,7 @@ mod tests {
             .unwrap()
             .image = Some(ImageOverrideSpec {
             image_pull_secrets: Some(vec![LocalObjectReference {
-                name: Some("my_pull_secret".to_string()),
+                name: "my_pull_secret".to_string(),
             }]),
             ..ImageOverrideSpec::default()
         });
@@ -965,7 +961,7 @@ mod tests {
         assert_eq!(
             pod_template.spec.as_ref().unwrap().image_pull_secrets,
             Some(vec![LocalObjectReference {
-                name: Some("my_pull_secret".to_string())
+                name: "my_pull_secret".to_string()
             }])
         );
     }
