@@ -13,7 +13,7 @@ dependencyResolutionManagement {
             library("apache-commons-io", "commons-io:commons-io:2.18.0")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT")
             library("folia-api", "dev.folia:folia-api:1.20.6-R0.1-SNAPSHOT")
-            library("guava", "com.google.guava:guava:33.3.1-jre")
+            library("guava", "com.google.guava:guava:33.4.0-jre")
             library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.50.0")
             library("grpc-netty-shaded", "io.grpc", "grpc-netty-shaded").versionRef("grpc")
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
