@@ -6,6 +6,8 @@ import java.util.concurrent.CompletableFuture
 class ShulkerServerAPIImpl(private val agent: ShulkerServerAgentCommon) : ShulkerServerAPI() {
     override fun askShutdown() = this.agent.shutdown()
 
+    override fun setReady(): CompletableFuture<Void> = this.agent.agonesGateway.setReady().thenAccept {}
+
     override fun setAllocated(): CompletableFuture<Void> = this.agent.agonesGateway.setAllocated().thenAccept {}
 
     override fun setReserved(seconds: Long): CompletableFuture<Void> =
