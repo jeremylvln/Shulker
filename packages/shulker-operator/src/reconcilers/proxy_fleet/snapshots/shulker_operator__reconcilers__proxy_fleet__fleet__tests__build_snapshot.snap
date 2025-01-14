@@ -91,7 +91,7 @@ spec:
                   value: 127.0.0.1
                 - name: EXTRA_ENV
                   value: my_value
-              image: "itzg/mc-proxy:2024.6.0-java21"
+              image: "itzg/mc-proxy:2025.1.0-java21"
               imagePullPolicy: IfNotPresent
               name: proxy
               ports:
