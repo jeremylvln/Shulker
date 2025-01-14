@@ -52,9 +52,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Install Rust tools
-        run: cargo binstall -y cargo-tarpaulin
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        run: cargo install cargo-tarpaulin
 
       - name: Prepare Git boundaries for affected projects
         uses: nrwl/nx-set-shas@v4
