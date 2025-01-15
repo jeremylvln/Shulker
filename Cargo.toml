@@ -32,7 +32,7 @@ shulker-utils = { path = "./packages/shulker-utils" }
 # External
 anyhow = "1.0.86"
 async-trait = "0.1.81"
-axum = "0.7.5"
+axum = "0.8.0"
 base64 = "0.22.1"
 chrono = { version = "0.4.38", features = ["serde"] }
 clap = { version = "4.5.16", features = ["derive", "env"] }
