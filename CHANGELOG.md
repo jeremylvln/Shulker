@@ -1,3 +1,40 @@
+## [0.12.0](https://github.com/jeremylvln/Shulker/compare/v0.11.0...v0.12.0) (2025-01-15)
+
+### :sparkles: Features :sparkles:
+
+* **shulker-server-agent:** add setReady method to api ([6a2a5a8](https://github.com/jeremylvln/Shulker/commit/6a2a5a82261efdf6427f21a2c7b5a443a9be87cc))
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.44.0 ([#678](https://github.com/jeremylvln/Shulker/issues/678)) ([11a171d](https://github.com/jeremylvln/Shulker/commit/11a171de161a4ae9c399507945abb7d1f3a66d69))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.45.1 ([#691](https://github.com/jeremylvln/Shulker/issues/691)) ([74eda87](https://github.com/jeremylvln/Shulker/commit/74eda87261db6e3132a025053883dc3e29c8ae02))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.46.0 ([#702](https://github.com/jeremylvln/Shulker/issues/702)) ([e664b58](https://github.com/jeremylvln/Shulker/commit/e664b584ed1b89424b03383693ead5f280a5adfb))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.47.0 ([#724](https://github.com/jeremylvln/Shulker/issues/724)) ([1ed7064](https://github.com/jeremylvln/Shulker/commit/1ed706451f80f83897415e3de91ef44139b2c858))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.48.0 ([#726](https://github.com/jeremylvln/Shulker/issues/726)) ([e699fce](https://github.com/jeremylvln/Shulker/commit/e699fce2c726312a4d52a809df5105529aff6d82))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.49.0 ([#763](https://github.com/jeremylvln/Shulker/issues/763)) ([2c3503a](https://github.com/jeremylvln/Shulker/commit/2c3503adfede2f0af8c93b0accc23a1f190bcbdb))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.50.0 ([#804](https://github.com/jeremylvln/Shulker/issues/804)) ([61590bc](https://github.com/jeremylvln/Shulker/commit/61590bcdfbd36054651114bec5ec930b7393670c))
+* **deps:** update dependency com.google.guava:guava to v33.3.1-jre ([#687](https://github.com/jeremylvln/Shulker/issues/687)) ([f5c4102](https://github.com/jeremylvln/Shulker/commit/f5c410254023c54e08baa8de7b17deb1552b594f))
+* **deps:** update dependency com.google.guava:guava to v33.4.0-jre ([#807](https://github.com/jeremylvln/Shulker/issues/807)) ([c9e6b13](https://github.com/jeremylvln/Shulker/commit/c9e6b138d5a7e3c7a2b85237588fc4d45e8e28c5))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v3.25.5 ([#688](https://github.com/jeremylvln/Shulker/issues/688)) ([09a4545](https://github.com/jeremylvln/Shulker/commit/09a45454aada3b0f7af2532e7883bd5e6b225f18))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4 ([#499](https://github.com/jeremylvln/Shulker/issues/499)) ([834136e](https://github.com/jeremylvln/Shulker/commit/834136ed5aa4b04a0a206cc9482ec884a4181e19))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4.29.0 ([#780](https://github.com/jeremylvln/Shulker/issues/780)) ([5c66c21](https://github.com/jeremylvln/Shulker/commit/5c66c213ae4d089b9b61c4474a55d7ce36fce825))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4.29.1 ([#792](https://github.com/jeremylvln/Shulker/issues/792)) ([42fb5b6](https://github.com/jeremylvln/Shulker/commit/42fb5b6ec38b1f412de283399ae758fa58d2dca5))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4.29.2 ([#810](https://github.com/jeremylvln/Shulker/issues/810)) ([6308033](https://github.com/jeremylvln/Shulker/commit/63080338d5cf5a452b056f77199534061741709b))
+* **deps:** update dependency commons-io:commons-io to v2.17.0 ([#693](https://github.com/jeremylvln/Shulker/issues/693)) ([254b2fe](https://github.com/jeremylvln/Shulker/commit/254b2fe5bab61e46e8626a4692d7e751129c71d9))
+* **deps:** update dependency commons-io:commons-io to v2.18.0 ([#766](https://github.com/jeremylvln/Shulker/issues/766)) ([62853d9](https://github.com/jeremylvln/Shulker/commit/62853d9b5ff1188dbe55d86aad92cf7b758ad68c))
+* **deps:** update dependency net.kyori:adventure-api to v4.18.0 ([#817](https://github.com/jeremylvln/Shulker/issues/817)) ([b04d516](https://github.com/jeremylvln/Shulker/commit/b04d516d10af3fd1dd24f533f88211cf735959cc))
+* **deps:** update dependency org.yaml:snakeyaml to v2.3 ([#655](https://github.com/jeremylvln/Shulker/issues/655)) ([68799c7](https://github.com/jeremylvln/Shulker/commit/68799c776c4163440a21f0e7c54192043fb4fcb4))
+* **deps:** update dependency redis.clients:jedis to v5.2.0 ([#694](https://github.com/jeremylvln/Shulker/issues/694)) ([4f9b52e](https://github.com/jeremylvln/Shulker/commit/4f9b52e0da825866ef6aeae859e2a09eeef707f0))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.13.4 ([#689](https://github.com/jeremylvln/Shulker/issues/689)) ([74251d9](https://github.com/jeremylvln/Shulker/commit/74251d951f873d14e9a897e4377d4f6162d55daa))
+* **deps:** update grpc-java monorepo to v1.68.0 ([#692](https://github.com/jeremylvln/Shulker/issues/692)) ([2f65d34](https://github.com/jeremylvln/Shulker/commit/2f65d34c88bb624f8df8a2b02591ff5b327f8907))
+* **deps:** update grpc-java monorepo to v1.68.1 ([#733](https://github.com/jeremylvln/Shulker/issues/733)) ([4a0ff0d](https://github.com/jeremylvln/Shulker/commit/4a0ff0d6d8c2786dff34fd33b09989ac54f89e02))
+* **deps:** update grpc-java monorepo to v1.68.2 ([#781](https://github.com/jeremylvln/Shulker/issues/781)) ([21dcf5b](https://github.com/jeremylvln/Shulker/commit/21dcf5b8204bca23e24d4ad675dc06521f524e2c))
+* **deps:** update grpc-java monorepo to v1.69.0 ([#800](https://github.com/jeremylvln/Shulker/issues/800)) ([b744072](https://github.com/jeremylvln/Shulker/commit/b744072cc320f30573a8ab4c8bd12fc288a54815))
+* **deps:** update rust crate tokio to v1.42.0 ([#786](https://github.com/jeremylvln/Shulker/issues/786)) ([ff93b88](https://github.com/jeremylvln/Shulker/commit/ff93b8894f4f8efbe1bdf4364cfcd53f657388cb))
+* **shulker-operator:** upgrade itzg docker images ([#823](https://github.com/jeremylvln/Shulker/issues/823)) ([961bf54](https://github.com/jeremylvln/Shulker/commit/961bf548f0c9fa58ab203131625cf0773ea35533))
+* **shulker-proxy-agent:** verify player version before sending a transfer packet ([#644](https://github.com/jeremylvln/Shulker/issues/644)) ([09c0fe9](https://github.com/jeremylvln/Shulker/commit/09c0fe9b1ef534fbcff26939083be01b37eb9222))
+* **shulker-server-agent:** using correct Minestom event to set player as admin ([#741](https://github.com/jeremylvln/Shulker/issues/741)) ([0179a6a](https://github.com/jeremylvln/Shulker/commit/0179a6a921ed4a12eaaeca681c9a9131ff4bac6c))
+
 ## [0.11.0](https://github.com/jeremylvln/Shulker/compare/v0.10.0...v0.11.0) (2024-09-01)
 
 ### :sparkles: Features :sparkles:
