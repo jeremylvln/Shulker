@@ -108,7 +108,8 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
     private fun getExternalAddressFromService(service: Service): Optional<InetSocketAddress> {
         return if (service.spec.type == "LoadBalancer") {
             Optional.ofNullable(service.status.loadBalancer?.ingress?.firstOrNull())
-                .map { ingress -> addressFromHostString(ingress.ip) }
+                .flatMap { ingress -> Optional.of(ingress.ip) }
+                .map { ip -> addressFromHostString(ip) }
         } else {
             Optional.empty()
         }
