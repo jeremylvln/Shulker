@@ -20,7 +20,7 @@ pub struct ForwardingSecretBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for ForwardingSecretBuilder {
+impl ResourceBuilder<'_> for ForwardingSecretBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Secret;
     type Context = ();

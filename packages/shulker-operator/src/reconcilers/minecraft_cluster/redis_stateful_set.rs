@@ -55,7 +55,7 @@ pub struct RedisStatefulSetBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for RedisStatefulSetBuilder {
+impl ResourceBuilder<'_> for RedisStatefulSetBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = StatefulSet;
     type Context = ();

@@ -16,7 +16,7 @@ pub struct FleetAutoscalerBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for FleetAutoscalerBuilder {
+impl ResourceBuilder<'_> for FleetAutoscalerBuilder {
     type OwnerType = ProxyFleet;
     type ResourceType = FleetAutoscaler;
     type Context = ();

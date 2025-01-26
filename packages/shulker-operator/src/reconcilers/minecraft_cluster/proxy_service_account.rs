@@ -13,7 +13,7 @@ pub struct ProxyServiceAccountBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for ProxyServiceAccountBuilder {
+impl ResourceBuilder<'_> for ProxyServiceAccountBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = ServiceAccount;
     type Context = ();

@@ -18,7 +18,7 @@ pub struct RedisServiceBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for RedisServiceBuilder {
+impl ResourceBuilder<'_> for RedisServiceBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Service;
     type Context = ();

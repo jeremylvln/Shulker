@@ -16,7 +16,7 @@ pub struct ExternalServersConfigMapBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for ExternalServersConfigMapBuilder {
+impl ResourceBuilder<'_> for ExternalServersConfigMapBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = ConfigMap;
     type Context = ();

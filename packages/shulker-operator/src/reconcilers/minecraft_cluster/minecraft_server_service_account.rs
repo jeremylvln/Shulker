@@ -13,7 +13,7 @@ pub struct MinecraftServerServiceAccountBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for MinecraftServerServiceAccountBuilder {
+impl ResourceBuilder<'_> for MinecraftServerServiceAccountBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = ServiceAccount;
     type Context = ();

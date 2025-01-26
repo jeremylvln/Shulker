@@ -14,7 +14,7 @@ pub struct MinecraftServerRoleBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for MinecraftServerRoleBuilder {
+impl ResourceBuilder<'_> for MinecraftServerRoleBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Role;
     type Context = ();

@@ -17,7 +17,7 @@ pub struct ConfigMapBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for ConfigMapBuilder {
+impl ResourceBuilder<'_> for ConfigMapBuilder {
     type OwnerType = MinecraftServer;
     type ResourceType = ConfigMap;
     type Context = ();

@@ -17,7 +17,7 @@ pub struct MinecraftServerRoleBindingBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for MinecraftServerRoleBindingBuilder {
+impl ResourceBuilder<'_> for MinecraftServerRoleBindingBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = RoleBinding;
     type Context = ();

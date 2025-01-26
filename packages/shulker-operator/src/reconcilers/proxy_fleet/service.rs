@@ -17,7 +17,7 @@ pub struct ServiceBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for ServiceBuilder {
+impl ResourceBuilder<'_> for ServiceBuilder {
     type OwnerType = ProxyFleet;
     type ResourceType = Service;
     type Context = ();

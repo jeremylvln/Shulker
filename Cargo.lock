@@ -1373,9 +1373,9 @@ dependencies = [
 
 [[package]]
 name = "k8s-openapi"
-version = "0.23.0"
+version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c8847402328d8301354c94d605481f25a6bdc1ed65471fd96af8eca71141b13"
+checksum = "2c75b990324f09bef15e791606b7b7a296d02fc88a344f6eba9390970a870ad5"
 dependencies = [
  "base64 0.22.1",
  "chrono",
@@ -1387,9 +1387,9 @@ dependencies = [
 
 [[package]]
 name = "kube"
-version = "0.97.0"
+version = "0.98.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5fd2596428f922f784ca43907c449f104d69055c811135684474143736c67ae"
+checksum = "32053dc495efad4d188c7b33cc7c02ef4a6e43038115348348876efd39a53cba"
 dependencies = [
  "k8s-openapi",
  "kube-client",
@@ -1400,9 +1400,9 @@ dependencies = [
 
 [[package]]
 name = "kube-client"
-version = "0.97.0"
+version = "0.98.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d539b6493d162ae5ab691762be972b6a1c20f6d8ddafaae305c0e2111b589d99"
+checksum = "9d34ad38cdfbd1fa87195d42569f57bb1dda6ba5f260ee32fef9570b7937a0c9"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -1428,7 +1428,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "thiserror 2.0.4",
+ "thiserror 2.0.11",
  "tokio",
  "tokio-util",
  "tower 0.5.2",
@@ -1438,9 +1438,9 @@ dependencies = [
 
 [[package]]
 name = "kube-core"
-version = "0.97.0"
+version = "0.98.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98a87cc0046cf6b62cbb63ae1fbc366ee8ba29269f575289679473754ff5d7a7"
+checksum = "97aa830b288a178a90e784d1b0f1539f2d200d2188c7b4a3146d9dc983d596f3"
 dependencies = [
  "chrono",
  "form_urlencoded",
@@ -1451,14 +1451,14 @@ dependencies = [
  "serde",
  "serde-value",
  "serde_json",
- "thiserror 2.0.4",
+ "thiserror 2.0.11",
 ]
 
 [[package]]
 name = "kube-derive"
-version = "0.97.0"
+version = "0.98.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65576922713e6154a89b5a8d2747adca15725b90fa64fc2b828774bf96d6acd8"
+checksum = "37745d8a4076b77e0b1952e94e358726866c8e14ec94baaca677d47dcdb98658"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -1469,9 +1469,9 @@ dependencies = [
 
 [[package]]
 name = "kube-runtime"
-version = "0.97.0"
+version = "0.98.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f348cc3e6c9be0ae17f300594bde541b667d10ab8934a119edd61ab5123c43e"
+checksum = "7a41af186a0fe80c71a13a13994abdc3ebff80859ca6a4b8a6079948328c135b"
 dependencies = [
  "ahash",
  "async-broadcast",
@@ -1481,6 +1481,7 @@ dependencies = [
  "educe",
  "futures",
  "hashbrown 0.15.2",
+ "hostname",
  "json-patch",
  "jsonptr",
  "k8s-openapi",
@@ -1489,7 +1490,7 @@ dependencies = [
  "pin-project",
  "serde",
  "serde_json",
- "thiserror 2.0.4",
+ "thiserror 2.0.11",
  "tokio",
  "tokio-util",
  "tracing",
@@ -2481,7 +2482,7 @@ dependencies = [
  "shulker-sdk",
  "shulker-utils",
  "tempfile",
- "thiserror 1.0.69",
+ "thiserror 2.0.11",
  "tokio",
  "tokio-stream",
  "tokio-util",
@@ -2522,7 +2523,7 @@ dependencies = [
  "serde",
  "serde_json",
  "shulker-utils",
- "thiserror 1.0.69",
+ "thiserror 2.0.11",
  "tokio",
  "tokio-util",
  "tracing",
@@ -2556,7 +2557,7 @@ dependencies = [
  "shulker-kube-utils",
  "shulker-sdk",
  "shulker-utils",
- "thiserror 1.0.69",
+ "thiserror 2.0.11",
  "tokio",
  "tokio-util",
  "toml 0.8.19",
@@ -2725,11 +2726,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.4"
+version = "2.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f49a1853cf82743e3b7950f77e0f4d622ca36cf4317cba00c767838bac8d490"
+checksum = "d452f284b73e6d76dd36758a0c8684b1d5be31f92b89d07fd5822175732206fc"
 dependencies = [
- "thiserror-impl 2.0.4",
+ "thiserror-impl 2.0.11",
 ]
 
 [[package]]
@@ -2745,9 +2746,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.4"
+version = "2.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8381894bb3efe0c4acac3ded651301ceee58a15d47c2e34885ed1908ad667061"
+checksum = "26afc1baea8a989337eeb52b6e72a039780ce45c3edfcc9c5b9d112feeb173c2"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -107,7 +107,7 @@ impl PreparedQueue {
         mmf_registry: &MMFRegistry,
         matchmaking_queue: &MatchmakingQueue,
     ) -> Result<FunctionConfig, RegistryError> {
-        return if let Some(built_in) = matchmaking_queue.spec.mmf.built_in.as_ref() {
+        if let Some(built_in) = matchmaking_queue.spec.mmf.built_in.as_ref() {
             Ok(mmf_registry
                 .get_mmf_config_for_type(&built_in.type_)
                 .ok_or_else(|| RegistryError::BuiltInMMFNotFound(built_in.type_.to_string()))?
@@ -122,7 +122,7 @@ impl PreparedQueue {
             Err(RegistryError::NoValidMMFConfiguration(
                 matchmaking_queue.name_any(),
             ))
-        };
+        }
     }
 
     fn create_match_profile(matchmaking_queue: &MatchmakingQueue) -> MatchProfile {

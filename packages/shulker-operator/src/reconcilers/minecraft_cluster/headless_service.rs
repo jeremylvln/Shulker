@@ -17,7 +17,7 @@ pub struct HeadlessServiceBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for HeadlessServiceBuilder {
+impl ResourceBuilder<'_> for HeadlessServiceBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Service;
     type Context = ();

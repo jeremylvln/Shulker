@@ -14,7 +14,7 @@ pub struct ProxyRoleBuilder {
 }
 
 #[async_trait::async_trait]
-impl<'a> ResourceBuilder<'a> for ProxyRoleBuilder {
+impl ResourceBuilder<'_> for ProxyRoleBuilder {
     type OwnerType = MinecraftCluster;
     type ResourceType = Role;
     type Context = ();
