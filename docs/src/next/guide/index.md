@@ -18,7 +18,7 @@ servers a player can connect to, or if you have the ambition of handling a bigge
 number of players, **things gets complicated at best**.
 
 Managing proxies like Velocity or BungeeCord is still manageable by hand, while
-their number is still reasonnable. The same apply for servers that are persistent
+their number is still reasonable. The same apply for servers that are persistent
 as they should only be started once and then kept alive. This will only **cost you
 money and time**, things that you'll not be able to invest on something else.
 
