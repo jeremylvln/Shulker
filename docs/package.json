@@ -5,6 +5,6 @@
     "node": "^22"
   },
   "devDependencies": {
-    "vitepress": "1.6.1"
+    "vitepress": "1.6.2"
   }
 }
