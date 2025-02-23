@@ -42,8 +42,8 @@ importers:
         specifier: 20.1.0
         version: 20.1.0
       prettier:
-        specifier: 3.4.2
-        version: 3.4.2
+        specifier: 3.5.0
+        version: 3.5.0
       semantic-release:
         specifier: 24.2.1
         version: 24.2.1(typescript@5.5.4)
@@ -2248,8 +2248,8 @@ packages:
   preact@10.23.2:
     resolution: {integrity: sha512-kKYfePf9rzKnxOAKDpsWhg/ysrHPqT+yQ7UW4JjdnqjFIeNUnNcEJvhuA8fDenxAGWzUqtd51DfVg7xp/8T9NA==}
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+  prettier@3.5.0:
+    resolution: {integrity: sha512-quyMrVt6svPS7CjQ9gKb3GLEX/rl3BCL2oa/QkNcXv4YNVBC9olt3s+H7ukto06q7B1Qz46PbrKLO34PR6vXcA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -4930,7 +4930,7 @@ snapshots:
 
   preact@10.23.2: {}
 
-  prettier@3.4.2: {}
+  prettier@3.5.0: {}
 
   pretty-format@29.7.0:
     dependencies:
