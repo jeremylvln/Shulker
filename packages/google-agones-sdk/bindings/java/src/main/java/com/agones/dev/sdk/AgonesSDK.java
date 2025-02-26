@@ -2,6 +2,7 @@ package com.agones.dev.sdk;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public interface AgonesSDK {
     void destroy();
@@ -12,6 +13,7 @@ public interface AgonesSDK {
     CompletableFuture<Void> setReady();
     CompletableFuture<Void> setAllocated();
     CompletableFuture<Void> setReserved(long seconds);
+    void watchGameServer(Consumer<GameServer> consumer);
     void askShutdown();
 
     void sendHealthcheck();
