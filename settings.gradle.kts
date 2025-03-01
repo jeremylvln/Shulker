@@ -25,7 +25,7 @@ dependencyResolutionManagement {
             library("kubernetes-client-http", "io.fabric8", "kubernetes-httpclient-okhttp").versionRef("kubernetes-client")
             library("minestom", "net.minestom:minestom-snapshots:a521c4e7cd")
             library("protobuf", "com.google.protobuf:protobuf-java:4.29.3")
-            library("snakeyaml", "org.yaml:snakeyaml:2.3")
+            library("snakeyaml", "org.yaml:snakeyaml:2.4")
             library("velocity-api", "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
             plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.5.0")
