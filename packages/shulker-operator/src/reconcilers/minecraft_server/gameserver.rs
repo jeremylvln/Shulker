@@ -207,7 +207,6 @@ impl<'a> GameServerBuilder {
                         ..VolumeMount::default()
                     },
                 ]),
-                security_context: Some(PROXY_POD_SECURITY_CONTEXT.clone()),
                 ..Container::default()
             }]),
             containers: vec![Container {
@@ -238,7 +237,6 @@ impl<'a> GameServerBuilder {
                         ..VolumeMount::default()
                     },
                 ]),
-                security_context: Some(PROXY_POD_SECURITY_CONTEXT.clone()),
                 ..Container::default()
             }],
             subdomain: Some(format!(
@@ -280,6 +278,7 @@ impl<'a> GameServerBuilder {
                     ..Volume::default()
                 },
             ]),
+            security_context: Some(PROXY_POD_SECURITY_CONTEXT.clone()),
             ..PodSpec::default()
         };
 
