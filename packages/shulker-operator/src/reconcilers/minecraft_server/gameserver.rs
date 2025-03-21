@@ -30,7 +30,7 @@ use crate::constants;
 use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
-use google_agones_crds::v1::game_server::GameServer;
+use google_agones_crds::v1::game_server::GameServerPortSpec;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
 use google_agones_crds::v1::game_server::GameServerHealthSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
@@ -161,7 +161,14 @@ impl<'a> GameServerBuilder {
             Self::get_pod_template_spec(resourceref_resolver, context, minecraft_server).await?;
 
         let game_server_spec = GameServerSpec {
-            ports: Some(vec![]),
+            ports: Some(vec![GameServerPortSpec {
+                name: "minecraft".to_string(),
+                container: "minecraft-server".to_string(),
+                container_port: 25565,
+                protocol: "TCP".to_string(),
+                port_policy: "None".to_string(),
+                ..GameServerPort::default()
+            }]),
             eviction: Some(GameServerEvictionSpec {
                 safe: "OnUpgrade".to_string(),
             }),
