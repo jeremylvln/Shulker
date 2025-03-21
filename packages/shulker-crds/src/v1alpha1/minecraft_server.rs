@@ -214,8 +214,8 @@ pub struct MinecraftServerPodOverridesSpec {
 pub struct MinecraftServerStatus {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub conditions: Vec<Condition>,
-    pub address: String,
-    pub port: i32,
+    pub address: Option<String>,
+    pub port: Option<u16>,
 }
 
 #[cfg(not(tarpaulin_include))]
