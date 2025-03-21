@@ -4,7 +4,6 @@ const showUsage = () => {
   console.log(
     'Usage: node build_docker.cjs <appName> <dockerfilePath> <version>',
   );
-
   process.exit(1);
 };
 
@@ -24,7 +23,13 @@ if (
 const gitSha = execSync('git rev-parse HEAD').toString().trim();
 const gitShaShort = gitSha.slice(0, 7);
 
-const baseTag = `ghcr.io/jeremylvln/${appName}`;
+// Use the owner from GitHub Actions (GITHUB_REPOSITORY format: "owner/repository")
+// or fall back to a default (e.g. "jeremylvln")
+const owner = process.env.GITHUB_REPOSITORY
+  ? process.env.GITHUB_REPOSITORY.split('/')[0]
+  : 'jeremylvln';
+const baseTag = `ghcr.io/${owner}/${appName}`;
+
 const tags = [
   `${baseTag}:sha-${gitSha}`,
   `${baseTag}:sha-${gitShaShort}`,
@@ -52,7 +57,4 @@ const command = [
 ].join(' ');
 
 console.log(`Executing command: ${command}`);
-
-execSync(command, {
-  stdio: 'inherit',
-});
+execSync(command, { stdio: 'inherit' });
