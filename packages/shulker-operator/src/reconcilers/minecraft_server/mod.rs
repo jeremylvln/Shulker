@@ -85,7 +85,7 @@ impl MinecraftServerReconciler {
                 let status = minecraft_server.status.as_mut().unwrap();
 
                 status.address = gameserver_status.address.clone();
-                status.port = gameserver_status.ports.first().map(|p| p.port);
+                status.port = gameserver_status.ports.first().unwrap().port;
 
                 if gameserver_status.state == "Ready" || gameserver_status.state == "Allocated" {
                     status.set_condition(
