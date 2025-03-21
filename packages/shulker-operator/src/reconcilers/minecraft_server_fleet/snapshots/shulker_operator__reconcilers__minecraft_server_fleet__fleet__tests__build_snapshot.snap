@@ -150,14 +150,14 @@ spec:
                   readOnly: true
                 - mountPath: /config
                   name: server-config
+          nodeSelector:
+            beta.kubernetes.io/os: linux
+          restartPolicy: Never
           securityContext:
             fsGroup: 1000
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
-          nodeSelector:
-            beta.kubernetes.io/os: linux
-          restartPolicy: Never
           serviceAccountName: shulker-my-cluster-server
           subdomain: my-cluster-cluster
           volumes:
