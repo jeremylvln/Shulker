@@ -17,7 +17,12 @@ metadata:
   name: my-server
   namespace: default
 spec:
-  ports: []
+  ports:
+    - name: minecraft
+      container: minecraft-server
+      containerPort: 25565
+      portPolicy: None
+      protocol: TCP
   health:
     disabled: false
     periodSeconds: 15

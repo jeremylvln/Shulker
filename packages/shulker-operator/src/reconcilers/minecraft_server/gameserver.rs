@@ -168,7 +168,7 @@ impl<'a> GameServerBuilder {
                 container_port: 25565,
                 protocol: "TCP".to_string(),
                 port_policy: "None".to_string(),
-                ..GameServerPort::default()
+                ..GameServerPortSpec::default()
             }]),
             eviction: Some(GameServerEvictionSpec {
                 safe: "OnUpgrade".to_string(),

@@ -35,7 +35,12 @@ spec:
         minecraftserverfleet.shulkermc.io/name: my-server
         test-label/shulkermc.io: my-value
     spec:
-      ports: []
+      ports:
+        - name: minecraft
+          container: minecraft-server
+          containerPort: 25565
+          portPolicy: None
+          protocol: TCP
       health:
         disabled: false
         periodSeconds: 15
