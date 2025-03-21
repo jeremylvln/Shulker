@@ -215,7 +215,7 @@ pub struct MinecraftServerStatus {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub conditions: Vec<Condition>,
     pub address: String,
-    pub port: u32,
+    pub port: i32,
 }
 
 #[cfg(not(tarpaulin_include))]
