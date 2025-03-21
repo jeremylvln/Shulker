@@ -26,7 +26,9 @@ pub struct GameServerSpec {
 #[serde(rename_all = "camelCase")]
 pub struct GameServerPortSpec {
     pub name: String,
+    pub container: String,
     pub container_port: i32,
+    pub port_policy: String,
     pub protocol: String,
 }
 
