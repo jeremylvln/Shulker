@@ -110,8 +110,6 @@ spec:
                   drop:
                     - ALL
                 readOnlyRootFilesystem: true
-                runAsNonRoot: true
-                runAsUser: 1000
               volumeMounts:
                 - mountPath: /config
                   name: server-config
@@ -146,14 +144,17 @@ spec:
                   drop:
                     - ALL
                 readOnlyRootFilesystem: true
-                runAsNonRoot: true
-                runAsUser: 1000
               volumeMounts:
                 - mountPath: /mnt/shulker/config
                   name: shulker-config
                   readOnly: true
                 - mountPath: /config
                   name: server-config
+          securityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
           nodeSelector:
             beta.kubernetes.io/os: linux
           restartPolicy: Never
