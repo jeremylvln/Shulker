@@ -18,25 +18,29 @@
     "proto:build": "nx run-many --target=buf --all --skipNxCache"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.50.0",
-    "@commitlint/cli": "19.7.1",
-    "@commitlint/config-conventional": "19.7.1",
-    "@nx/devkit": "20.1.0",
+    "@bufbuild/buf": "1.50.1",
+    "@commitlint/cli": "19.8.0",
+    "@commitlint/config-conventional": "19.8.0",
+    "@nx/devkit": "20.7.1",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "husky": "9.1.7",
-    "lint-staged": "15.4.3",
-    "nx": "20.1.0",
+    "lint-staged": "15.5.0",
+    "nx": "20.7.1",
     "prettier": "3.5.3",
     "semantic-release": "24.2.3",
     "semantic-release-replace-plugin": "1.2.7",
     "yaml": "2.7.0"
   },
-  "packageManager": "pnpm@9.15.7+sha512.ed98f9c748442673c46964b70345bd2282c9b305e8eae539b34ab31d6ef24ef8dd59d8b55f27466f705500b009d9c113471cf87e544f3d5036b297330c26e996",
+  "packageManager": "pnpm@10.7.1+sha512.2d92c86b7928dc8284f53494fb4201f983da65f0fb4f0d40baafa5cf628fa31dae3e5968f12466f17df7e97310e30f343a648baea1b9b350685dafafffdf5808",
   "pnpm": {
     "overrides": {
       "conventional-changelog-conventionalcommits": "8.0.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@bufbuild/buf",
+      "nx"
+    ]
   }
 }

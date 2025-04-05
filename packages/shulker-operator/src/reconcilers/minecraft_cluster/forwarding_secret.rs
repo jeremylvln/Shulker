@@ -5,8 +5,9 @@ use kube::core::ObjectMeta;
 use kube::Api;
 use kube::Client;
 use kube::ResourceExt;
-use rand::distributions::{Alphanumeric, DistString};
 
+use rand::distr::Alphanumeric;
+use rand::distr::SampleString;
 use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
 
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
@@ -97,7 +98,7 @@ impl ForwardingSecretBuilder {
     }
 
     fn create_forwarding_secret() -> String {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         Alphanumeric.sample_string(&mut rng, 64)
     }
 }
