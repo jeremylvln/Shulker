@@ -24,6 +24,7 @@ default = []
 [dependencies]
 anyhow.workspace = true
 async-trait.workspace = true
+backon.workspace = true
 clap.workspace = true
 const_format.workspace = true
 futures.workspace = true

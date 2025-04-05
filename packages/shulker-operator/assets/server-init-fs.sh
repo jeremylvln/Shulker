@@ -10,8 +10,8 @@ if [ "${SHULKER_VERSION_CHANNEL}" == "Paper" ] || [ "${SHULKER_VERSION_CHANNEL}"
   cp "${SHULKER_CONFIG_DIR}/paper-global-config.yml" "${SHULKER_SERVER_CONFIG_DIR}/config/paper-global.yml"
 fi
 
-if [ ! -z "${SERVER_WORLD_URL:-}" ]; then
-  (cd "${SHULKER_SERVER_CONFIG_DIR}" && wget "${SERVER_WORLD_URL}" -O - | tar -xzv)
+if [ ! -z "${SHULKER_SERVER_WORLD_URL:-}" ]; then
+  (cd "${SHULKER_SERVER_CONFIG_DIR}" && wget "${SHULKER_SERVER_WORLD_URL}" -O - | tar -xzv)
 fi
 
 if [ ! -z "${SHULKER_SERVER_PLUGIN_URLS:-}" ]; then

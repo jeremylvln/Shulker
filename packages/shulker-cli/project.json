@@ -1,0 +1,35 @@
+{
+  "name": "shulker-cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shulker-cli/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo build --release --bins",
+        "cwd": "packages/shulker-cli"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo tarpaulin",
+        "cwd": "packages/shulker-cli"
+      },
+      "inputs": ["default", "rust:dependencies", "rust:test:dependencies"],
+      "outputs": ["{workspaceRoot}/coverage/rust/shulker-cli/cobertura.xml"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo fmt",
+        "cwd": "packages/shulker-cli"
+      },
+      "inputs": ["default", "rust:dependencies"]
+    }
+  },
+  "implicitDependencies": ["shulker-crds", "shulker-sdk-bindings-rust"],
+  "tags": ["lang:rust"]
+}

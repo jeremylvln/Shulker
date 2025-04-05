@@ -1,0 +1,36 @@
+[package]
+name = "shulker-cli"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+default-run = "shulker-cli"
+
+[[bin]]
+name = "shulker-cli"
+path = "src/main.rs"
+doc = false
+
+[lib]
+name = "shulker_cli"
+path = "src/lib.rs"
+
+[features]
+default = []
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+k8s-openapi.workspace = true
+kube.workspace = true
+shulker-sdk = { workspace = true, features = ["client"] }
+tonic.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+
+[lints]
+workspace = true
