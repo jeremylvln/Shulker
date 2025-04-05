@@ -2,8 +2,27 @@ apiVersion: v1
 entries:
   shulker-operator:
   - apiVersion: v2
+    appVersion: 0.13.0
+    created: "2025-04-05T18:41:49.209974492Z"
+    dependencies:
+    - condition: shulker-addon-matchmaking.enabled
+      name: shulker-addon-matchmaking
+      repository: file://./charts/shulker-addon-matchmaking
+      version: 0.0.0-internal
+    description: A Kubernetes operator for managing complex and dynamic Minecraft
+      infrastructures.
+    digest: d0e9cfffddef6c7783e17ce5dbae18e478fcf10864c09efd738f9c439e384ae7
+    home: https://shulker.jeremylvln.fr
+    name: shulker-operator
+    sources:
+    - https://github.com/jeremylvln/Shulker
+    type: application
+    urls:
+    - https://shulker.jeremylvln.fr/helm-charts/shulker-operator-0.13.0.tgz
+    version: 0.13.0
+  - apiVersion: v2
     appVersion: 0.12.0
-    created: "2025-01-26T15:53:10.413327+01:00"
+    created: "2025-04-05T18:41:49.205948153Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -22,7 +41,7 @@ entries:
     version: 0.12.0
   - apiVersion: v2
     appVersion: 0.11.0
-    created: "2025-01-26T15:53:10.410381+01:00"
+    created: "2025-04-05T18:41:49.202562236Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -41,7 +60,7 @@ entries:
     version: 0.11.0
   - apiVersion: v2
     appVersion: 0.10.0
-    created: "2025-01-26T15:53:10.407769+01:00"
+    created: "2025-04-05T18:41:49.198573926Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -60,7 +79,7 @@ entries:
     version: 0.10.0
   - apiVersion: v2
     appVersion: 0.9.0
-    created: "2025-01-26T15:53:10.431472+01:00"
+    created: "2025-04-05T18:41:49.233932998Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -79,7 +98,7 @@ entries:
     version: 0.9.0
   - apiVersion: v2
     appVersion: 0.8.1
-    created: "2025-01-26T15:53:10.429522+01:00"
+    created: "2025-04-05T18:41:49.230373522Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -98,7 +117,7 @@ entries:
     version: 0.8.1
   - apiVersion: v2
     appVersion: 0.8.0
-    created: "2025-01-26T15:53:10.426542+01:00"
+    created: "2025-04-05T18:41:49.227067344Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -117,7 +136,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: 0.7.0
-    created: "2025-01-26T15:53:10.424232+01:00"
+    created: "2025-04-05T18:41:49.223202584Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -136,7 +155,7 @@ entries:
     version: 0.7.0
   - apiVersion: v2
     appVersion: 0.6.1
-    created: "2025-01-26T15:53:10.421526+01:00"
+    created: "2025-04-05T18:41:49.220282276Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -155,7 +174,7 @@ entries:
     version: 0.6.1
   - apiVersion: v2
     appVersion: 0.6.0
-    created: "2025-01-26T15:53:10.418137+01:00"
+    created: "2025-04-05T18:41:49.216636662Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -174,7 +193,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: 0.5.3
-    created: "2025-01-26T15:53:10.415559+01:00"
+    created: "2025-04-05T18:41:49.213715332Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -193,7 +212,7 @@ entries:
     version: 0.5.3
   - apiVersion: v2
     appVersion: 0.5.3
-    created: "2025-01-26T15:53:10.404229+01:00"
+    created: "2025-04-05T18:41:49.195175486Z"
     dependencies:
     - condition: shulker-addon-matchmaking.enabled
       name: shulker-addon-matchmaking
@@ -210,4 +229,4 @@ entries:
     urls:
     - https://shulker.jeremylvln.fr/helm-charts/shulker-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-01-26T15:53:10.401718+01:00"
+generated: "2025-04-05T18:41:49.191148074Z"
