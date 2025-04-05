@@ -1,3 +1,35 @@
+## [0.13.0](https://github.com/jeremylvln/Shulker/compare/v0.12.0...v0.13.0) (2025-04-05)
+
+### :sparkles: Features :sparkles:
+
+* **shulker-cli:** create cli app ([#943](https://github.com/jeremylvln/Shulker/issues/943)) ([0177c24](https://github.com/jeremylvln/Shulker/commit/0177c2430eb752519ea58b7c97a4b540429b29c7))
+
+### :bug: Bug Fixes :bug:
+
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.50.1 ([#839](https://github.com/jeremylvln/Shulker/issues/839)) ([6d57eb6](https://github.com/jeremylvln/Shulker/commit/6d57eb6755c241218af151ae788486401bb949eb))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.51.0 ([#865](https://github.com/jeremylvln/Shulker/issues/865)) ([65357d6](https://github.com/jeremylvln/Shulker/commit/65357d6773a95bbd7e5fa4a0774ffe650680b272))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.52.0 ([#884](https://github.com/jeremylvln/Shulker/issues/884)) ([dc2ba30](https://github.com/jeremylvln/Shulker/commit/dc2ba309857a43b3a34fb1d9c512b6053128103e))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.53.0 ([#900](https://github.com/jeremylvln/Shulker/issues/900)) ([74276bd](https://github.com/jeremylvln/Shulker/commit/74276bd3cf17b60052311603e89a02ec09855324))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.54.0 ([#927](https://github.com/jeremylvln/Shulker/issues/927)) ([2f03266](https://github.com/jeremylvln/Shulker/commit/2f032668b1575aa242c2035c927401b7df43470d))
+* **deps:** update dependency com.google.api.grpc:proto-google-common-protos to v2.54.1 ([#930](https://github.com/jeremylvln/Shulker/issues/930)) ([bc5f0af](https://github.com/jeremylvln/Shulker/commit/bc5f0af150c214f70da9cf9a0c52988105e685b6))
+* **deps:** update dependency com.google.guava:guava to v33.4.5-jre ([#941](https://github.com/jeremylvln/Shulker/issues/941)) ([74e6fec](https://github.com/jeremylvln/Shulker/commit/74e6fece122ab2947f7037162442ddaf0200373e))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4.29.3 ([#841](https://github.com/jeremylvln/Shulker/issues/841)) ([9cefdd0](https://github.com/jeremylvln/Shulker/commit/9cefdd0981c7c5cd91a6c49875bdd22b256ae610))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4.30.0 ([#911](https://github.com/jeremylvln/Shulker/issues/911)) ([a168406](https://github.com/jeremylvln/Shulker/commit/a16840633ef4f04ea30fc74ed4328c93cdc83bb8))
+* **deps:** update dependency com.google.protobuf:protobuf-java to v4.30.1 ([#934](https://github.com/jeremylvln/Shulker/issues/934)) ([1df9528](https://github.com/jeremylvln/Shulker/commit/1df9528b173c4e3ddea16ca6974bff7bcea0fa64))
+* **deps:** update dependency net.kyori:adventure-api to v4.19.0 ([#888](https://github.com/jeremylvln/Shulker/issues/888)) ([e1797ea](https://github.com/jeremylvln/Shulker/commit/e1797eaf2ebf555be2d039df9e1cac1c1986ee82))
+* **deps:** update dependency org.yaml:snakeyaml to v2.4 ([#885](https://github.com/jeremylvln/Shulker/issues/885)) ([52f3385](https://github.com/jeremylvln/Shulker/commit/52f3385b149c27878925a2f562687cf9a1ee81df))
+* **deps:** update fabric8-kubernetes-client monorepo to v6.13.5 ([#866](https://github.com/jeremylvln/Shulker/issues/866)) ([db4e141](https://github.com/jeremylvln/Shulker/commit/db4e141e8aad6e2d50c28bc4eba213d60618f91d))
+* **deps:** update fabric8-kubernetes-client monorepo to v7 ([#785](https://github.com/jeremylvln/Shulker/issues/785)) ([c97a5a2](https://github.com/jeremylvln/Shulker/commit/c97a5a2d04ef7f124e5ba6857ba99206ae805ac3))
+* **deps:** update grpc-java monorepo to v1.69.1 ([#849](https://github.com/jeremylvln/Shulker/issues/849)) ([0a7fd73](https://github.com/jeremylvln/Shulker/commit/0a7fd7312e886db70015cca05246be5e3db024d9))
+* **deps:** update grpc-java monorepo to v1.70.0 ([#859](https://github.com/jeremylvln/Shulker/issues/859)) ([2268cb7](https://github.com/jeremylvln/Shulker/commit/2268cb7d1abac744c0aab0cc6bd8f485b5fccdc4))
+* **deps:** update grpc-java monorepo to v1.71.0 ([#910](https://github.com/jeremylvln/Shulker/issues/910)) ([79de9bf](https://github.com/jeremylvln/Shulker/commit/79de9bf99355c9b581042ebe4860ef3f79de3a5f))
+* **deps:** update kube-rs, k8s-openapi and thiserror crates ([c06959b](https://github.com/jeremylvln/Shulker/commit/c06959bcd720621541f355f21f9efa5f26ea7fb0))
+* **shulker-proxy-agent:** ingress IP can be null ([#749](https://github.com/jeremylvln/Shulker/issues/749)) ([fdd9bc5](https://github.com/jeremylvln/Shulker/commit/fdd9bc5663f7893cd01bbf50784036c0dda6e92b))
+
+### :books: Documentation :books:
+
+* fix typo ([100443e](https://github.com/jeremylvln/Shulker/commit/100443e79746529932d8e539e4f0343f84e31316))
+
 ## [0.12.0](https://github.com/jeremylvln/Shulker/compare/v0.11.0...v0.12.0) (2025-01-15)
 
 ### :sparkles: Features :sparkles:

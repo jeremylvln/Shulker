@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 ---
@@ -18,10 +18,10 @@ kind: ServiceAccount
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 ---
@@ -7180,7 +7180,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -7212,10 +7212,10 @@ kind: ClusterRole
 metadata:
   name: shulker-operator:workload
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -7280,7 +7280,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -7299,10 +7299,10 @@ kind: ClusterRoleBinding
 metadata:
   name: shulker-operator:workload
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -7324,7 +7324,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 rules:
@@ -7347,10 +7347,10 @@ kind: Role
 metadata:
   name: shulker-operator:leader-election
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 rules:
@@ -7376,7 +7376,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-rbac
 roleRef:
@@ -7395,10 +7395,10 @@ kind: RoleBinding
 metadata:
   name: shulker-operator:leader-election
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-rbac
 roleRef:
@@ -7420,7 +7420,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director-metrics
 spec:
@@ -7444,7 +7444,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -7469,10 +7469,10 @@ kind: Service
 metadata:
   name: shulker-operator-metrics
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator-metrics
 spec:
@@ -7493,10 +7493,10 @@ kind: Service
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -7520,7 +7520,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-director
 spec:
@@ -7536,14 +7536,14 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.12.0"
+        app.kubernetes.io/version: "0.13.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-director
     spec:
       serviceAccountName: shulker-addon-matchmaking
       containers:
         - name: shulker-addon-matchmaking-director
-          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.12.0"
+          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.13.0"
           imagePullPolicy: Always
           args:
             - --metrics-bind-address=0.0.0.0:8080
@@ -7619,7 +7619,7 @@ metadata:
     helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
     app.kubernetes.io/name: shulker-addon-matchmaking
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-addon-matchmaking-mmf
 spec:
@@ -7635,14 +7635,14 @@ spec:
         helm.sh/chart: shulker-addon-matchmaking-0.0.0-internal
         app.kubernetes.io/name: shulker-addon-matchmaking
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.12.0"
+        app.kubernetes.io/version: "0.13.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-addon-matchmaking-mmf
     spec:
       serviceAccountName: shulker-addon-matchmaking
       containers:
         - name: shulker-addon-matchmaking-mmf
-          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.12.0"
+          image: "ghcr.io/jeremylvln/shulker-addon-matchmaking:0.13.0"
           imagePullPolicy: Always
           command: ["/shulker-addon-matchmaking-mmf"]
           args:
@@ -7718,10 +7718,10 @@ kind: Deployment
 metadata:
   name: shulker-operator
   labels:
-    helm.sh/chart: shulker-operator-0.12.0
+    helm.sh/chart: shulker-operator-0.13.0
     app.kubernetes.io/name: shulker-operator
     app.kubernetes.io/instance: shulker-operator
-    app.kubernetes.io/version: "0.12.0"
+    app.kubernetes.io/version: "0.13.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: shulker-operator
 spec:
@@ -7734,10 +7734,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: shulker-operator-0.12.0
+        helm.sh/chart: shulker-operator-0.13.0
         app.kubernetes.io/name: shulker-operator
         app.kubernetes.io/instance: shulker-operator
-        app.kubernetes.io/version: "0.12.0"
+        app.kubernetes.io/version: "0.13.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: shulker-operator
     spec:
