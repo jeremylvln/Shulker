@@ -22,6 +22,9 @@ coverage:
       shulker-addon-matchmaking:
         flags:
           - shulker-addon-matchmaking
+      shulker-cli:
+        flags:
+          - shulker-cli
       shulker-crds:
         flags:
           - shulker-crds
@@ -53,6 +56,10 @@ flags:
   shulker-addon-matchmaking:
     paths:
       - packages/shulker-addon-matchmaking
+    carryforward: true
+  shulker-cli:
+    paths:
+      - packages/shulker-cli
     carryforward: true
   shulker-crds:
     paths:

@@ -5,6 +5,7 @@ members = [
   "packages/google-agones-sdk/bindings/rust",
   "packages/google-open-match-sdk/bindings/rust",
   "packages/shulker-addon-matchmaking",
+  "packages/shulker-cli",
   "packages/shulker-crds",
   "packages/shulker-kube-utils",
   "packages/shulker-operator",
@@ -33,6 +34,7 @@ shulker-utils = { path = "./packages/shulker-utils" }
 anyhow = "1.0.86"
 async-trait = "0.1.81"
 axum = "0.8.0"
+backon = "1.4.1"
 base64 = "0.22.1"
 chrono = { version = "0.4.38", features = ["serde"] }
 clap = { version = "4.5.16", features = ["derive", "env"] }

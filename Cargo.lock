@@ -2539,6 +2539,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "shulker-cli"
+version = "0.12.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "k8s-openapi",
+ "kube",
+ "shulker-sdk",
+ "tokio",
+ "tonic",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "shulker-crds"
 version = "0.12.0"
 dependencies = [
@@ -2582,6 +2597,7 @@ version = "0.12.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "backon",
  "clap",
  "const_format",
  "futures",
