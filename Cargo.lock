@@ -382,9 +382,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.32"
+version = "4.5.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6088f3ae8c3608d19260cd7445411865a485688711b78b5be70d78cd96136f83"
+checksum = "e958897981290da2a852763fe9cdb89cd36977a5d729023127095fa94d95e2ff"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -392,9 +392,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.32"
+version = "4.5.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22a7ef7f676155edfb82daa97f99441f3ebf4a58d5e32f295a56259f1b6facc8"
+checksum = "83b0f35019843db2160b5bb19ae09b4e6411ac33fc6a712003c33e03090e2489"
 dependencies = [
  "anstream",
  "anstyle",
@@ -845,7 +845,7 @@ dependencies = [
 
 [[package]]
 name = "google-agones-crds"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "k8s-openapi",
  "kube",
@@ -857,7 +857,7 @@ dependencies = [
 
 [[package]]
 name = "google-agones-sdk"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -867,7 +867,7 @@ dependencies = [
 
 [[package]]
 name = "google-open-match-sdk"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
@@ -2512,7 +2512,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "shulker-addon-matchmaking"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2540,7 +2540,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-cli"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2555,7 +2555,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-crds"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "base64 0.22.1",
  "google-agones-crds",
@@ -2571,7 +2571,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-kube-utils"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2593,7 +2593,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-operator"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2631,7 +2631,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-sdk"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "prost",
  "tonic",
@@ -2639,7 +2639,7 @@ dependencies = [
 
 [[package]]
 name = "shulker-utils"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "chrono",
  "tracing",
