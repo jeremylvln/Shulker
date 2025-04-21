@@ -18,7 +18,7 @@
     "proto:build": "nx run-many --target=buf --all --skipNxCache"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.51.0",
+    "@bufbuild/buf": "1.52.0",
     "@commitlint/cli": "19.8.0",
     "@commitlint/config-conventional": "19.8.0",
     "@nx/devkit": "20.7.1",
