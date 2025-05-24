@@ -26,7 +26,7 @@
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "10.0.1",
     "husky": "9.1.7",
-    "lint-staged": "15.5.2",
+    "lint-staged": "16.0.0",
     "nx": "20.7.1",
     "prettier": "3.5.3",
     "semantic-release": "24.2.3",
