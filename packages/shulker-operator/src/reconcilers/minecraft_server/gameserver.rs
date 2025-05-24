@@ -8,6 +8,7 @@ use k8s_openapi::api::core::v1::EmptyDirVolumeSource;
 use k8s_openapi::api::core::v1::EnvVar;
 use k8s_openapi::api::core::v1::EnvVarSource;
 use k8s_openapi::api::core::v1::ObjectFieldSelector;
+use k8s_openapi::api::core::v1::PodSecurityContext;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
 use k8s_openapi::api::core::v1::SecretKeySelector;
@@ -32,6 +33,7 @@ use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
 use google_agones_crds::v1::game_server::GameServerHealthSpec;
+use google_agones_crds::v1::game_server::GameServerPortSpec;
 use google_agones_crds::v1::game_server::GameServerSpec;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServer;
 use shulker_kube_utils::reconcilers::builder::ResourceBuilder;
@@ -44,11 +46,16 @@ const MINECRAFT_SERVER_CONFIG_DIR: &str = "/config";
 const MINECRAFT_SERVER_DATA_DIR: &str = "/data";
 
 lazy_static! {
+    static ref PROXY_POD_SECURITY_CONTEXT: PodSecurityContext = PodSecurityContext {
+        run_as_user: Some(1000),
+        run_as_group: Some(1000),
+        run_as_non_root: Some(true),
+        fs_group: Some(1000),
+        ..PodSecurityContext::default()
+    };
     static ref PROXY_SECURITY_CONTEXT: SecurityContext = SecurityContext {
         allow_privilege_escalation: Some(false),
         read_only_root_filesystem: Some(true),
-        run_as_non_root: Some(true),
-        run_as_user: Some(1000),
         capabilities: Some(Capabilities {
             drop: Some(vec!["ALL".to_string()]),
             ..Capabilities::default()
@@ -155,7 +162,14 @@ impl<'a> GameServerBuilder {
             Self::get_pod_template_spec(resourceref_resolver, context, minecraft_server).await?;
 
         let game_server_spec = GameServerSpec {
-            ports: Some(vec![]),
+            ports: Some(vec![GameServerPortSpec {
+                name: "minecraft".to_string(),
+                container: "minecraft-server".to_string(),
+                container_port: 25565,
+                protocol: "TCP".to_string(),
+                port_policy: "None".to_string(),
+                ..GameServerPortSpec::default()
+            }]),
             eviction: Some(GameServerEvictionSpec {
                 safe: "OnUpgrade".to_string(),
             }),
@@ -272,6 +286,7 @@ impl<'a> GameServerBuilder {
                     ..Volume::default()
                 },
             ]),
+            security_context: Some(PROXY_POD_SECURITY_CONTEXT.clone()),
             ..PodSpec::default()
         };
 
