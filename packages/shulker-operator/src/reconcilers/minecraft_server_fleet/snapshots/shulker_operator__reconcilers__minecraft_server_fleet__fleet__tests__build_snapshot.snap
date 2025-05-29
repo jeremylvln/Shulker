@@ -35,7 +35,12 @@ spec:
         minecraftserverfleet.shulkermc.io/name: my-server
         test-label/shulkermc.io: my-value
     spec:
-      ports: []
+      ports:
+        - name: minecraft
+          container: minecraft-server
+          containerPort: 25565
+          portPolicy: None
+          protocol: TCP
       health:
         disabled: false
         periodSeconds: 15
@@ -110,8 +115,6 @@ spec:
                   drop:
                     - ALL
                 readOnlyRootFilesystem: true
-                runAsNonRoot: true
-                runAsUser: 1000
               volumeMounts:
                 - mountPath: /config
                   name: server-config
@@ -146,8 +149,6 @@ spec:
                   drop:
                     - ALL
                 readOnlyRootFilesystem: true
-                runAsNonRoot: true
-                runAsUser: 1000
               volumeMounts:
                 - mountPath: /mnt/shulker/config
                   name: shulker-config
@@ -157,6 +158,11 @@ spec:
           nodeSelector:
             beta.kubernetes.io/os: linux
           restartPolicy: Never
+          securityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
           serviceAccountName: shulker-my-cluster-server
           subdomain: my-cluster-cluster
           volumes:
