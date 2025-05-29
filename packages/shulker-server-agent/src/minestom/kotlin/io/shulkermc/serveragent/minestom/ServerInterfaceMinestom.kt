@@ -9,7 +9,6 @@ import net.minestom.server.event.EventNode
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerDisconnectEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
-import net.minestom.server.permission.Permission
 import net.minestom.server.timer.Task
 import net.minestom.server.timer.TaskSchedule
 import java.time.Duration
@@ -27,7 +26,6 @@ class ServerInterfaceMinestom : ServerInterface {
         this.eventNode.addListener(AsyncPlayerConfigurationEvent::class.java) { event ->
             if (playerIds.contains(event.player.uuid)) {
                 event.player.permissionLevel = ADMIN_PERMISSION_LEVEL
-                event.player.addPermission(Permission("*"))
             }
         }
     }

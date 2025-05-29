@@ -34,8 +34,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm exec nx build shulker-addon-matchmaking -- --target=$(cat /.rust-triple) \
-  && cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-director dist/rust/release/shulker-addon-matchmaking-director \
+RUN cd packages/shulker-addon-matchmaking && cargo build --release --bins --target=$(cat /.rust-triple)
+RUN cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-director dist/rust/release/shulker-addon-matchmaking-director \
   && cp dist/rust/$(cat /.rust-triple)/release/shulker-addon-matchmaking-mmf dist/rust/release/shulker-addon-matchmaking-mmf
 
 FROM gcr.io/distroless/cc-debian12:nonroot

@@ -7,6 +7,7 @@ import net.minestom.server.MinecraftServer
 import net.minestom.server.extras.bungee.BungeeCordProxy
 import net.minestom.server.extras.velocity.VelocityProxy
 import java.util.logging.Logger
+import kotlin.system.exitProcess
 
 @Suppress("unused")
 class ShulkerServerAgentMinestom private constructor(private val logger: Logger) {
@@ -42,6 +43,11 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
     private val agent = ShulkerServerAgentCommon(ServerInterfaceMinestom(), this.logger)
 
     private fun onServerInitialization() {
+        if (System.getenv("EXEC_DIRECTLY") != "true") {
+            this.logger.severe("Please set the environment variable EXEC_DIRECTLY to true. It is required so the Minestom server can be shutdown properly.")
+            exitProcess(1)
+        }
+
         this.server = MinecraftServer.init()
 
         this.logger.info("Loading configuration files")
@@ -57,6 +63,15 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
         }
 
         this.agent.onServerInitialization()
+
+        Runtime.getRuntime().addShutdownHook(
+            object : Thread() {
+                override fun run() {
+                    logger.info("Shutdown signal received, stopping cleanly")
+                    MinecraftServer.stopCleanly()
+                }
+            },
+        )
     }
 
     private fun onServerReady() {

@@ -14,7 +14,7 @@ spec:
         - lobby
       version:
         channel: Paper
-        name: "1.21.1"
+        name: "1.21.4"
       config: {}
       podOverrides:
         volumeMounts:
