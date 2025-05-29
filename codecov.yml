@@ -13,12 +13,21 @@ coverage:
       google-agones-crds:
         flags:
           - google-agones-crds
+      google-agones-sdk-bindings-java:
+        flags:
+          - google-agones-sdk-bindings-java
       google-agones-sdk-bindings-rust:
         flags:
           - google-agones-sdk-bindings-rust
+      google-open-match-sdk-bindings-java:
+        flags:
+          - google-open-match-sdk-bindings-java
       google-open-match-sdk-bindings-rust:
         flags:
           - google-open-match-sdk-bindings-rust
+      shulker:
+        flags:
+          - shulker
       shulker-addon-matchmaking:
         flags:
           - shulker-addon-matchmaking
@@ -34,9 +43,27 @@ coverage:
       shulker-operator:
         flags:
           - shulker-operator
+      shulker-proxy-agent:
+        flags:
+          - shulker-proxy-agent
+      shulker-proxy-api:
+        flags:
+          - shulker-proxy-api
+      shulker-sdk-bindings-java:
+        flags:
+          - shulker-sdk-bindings-java
       shulker-sdk-bindings-rust:
         flags:
           - shulker-sdk-bindings-rust
+      shulker-server-agent:
+        flags:
+          - shulker-server-agent
+      shulker-server-api:
+        flags:
+          - shulker-server-api
+      shulker-server-minestom-demo:
+        flags:
+          - shulker-server-minestom-demo
       shulker-utils:
         flags:
           - shulker-utils
@@ -45,13 +72,25 @@ flags:
     paths:
       - packages/google-agones-crds
     carryforward: true
+  google-agones-sdk-bindings-java:
+    paths:
+      - packages/google-agones-sdk/bindings/java
+    carryforward: true
   google-agones-sdk-bindings-rust:
     paths:
       - packages/google-agones-sdk/bindings/rust
     carryforward: true
+  google-open-match-sdk-bindings-java:
+    paths:
+      - packages/google-open-match-sdk/bindings/java
+    carryforward: true
   google-open-match-sdk-bindings-rust:
     paths:
       - packages/google-open-match-sdk/bindings/rust
+    carryforward: true
+  shulker:
+    paths:
+      - .
     carryforward: true
   shulker-addon-matchmaking:
     paths:
@@ -73,9 +112,33 @@ flags:
     paths:
       - packages/shulker-operator
     carryforward: true
+  shulker-proxy-agent:
+    paths:
+      - packages/shulker-proxy-agent
+    carryforward: true
+  shulker-proxy-api:
+    paths:
+      - packages/shulker-proxy-api
+    carryforward: true
+  shulker-sdk-bindings-java:
+    paths:
+      - packages/shulker-sdk/bindings/java
+    carryforward: true
   shulker-sdk-bindings-rust:
     paths:
       - packages/shulker-sdk/bindings/rust
+    carryforward: true
+  shulker-server-agent:
+    paths:
+      - packages/shulker-server-agent
+    carryforward: true
+  shulker-server-api:
+    paths:
+      - packages/shulker-server-api
+    carryforward: true
+  shulker-server-minestom-demo:
+    paths:
+      - packages/shulker-server-minestom-demo
     carryforward: true
   shulker-utils:
     paths:

@@ -1,8 +1,14 @@
 {
-  "name": "shulker-operator",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-operator/src",
+  "name": "shulker-operator",
   "projectType": "application",
+  "implicitDependencies": [
+    "google-agones-crds",
+    "shulker-crds",
+    "shulker-kube-utils",
+    "shulker-sdk-bindings-rust"
+  ],
+  "sourceRoot": "packages/shulker-operator/src",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -38,12 +44,5 @@
       },
       "inputs": ["default", "docker:dependencies"]
     }
-  },
-  "implicitDependencies": [
-    "google-agones-crds",
-    "shulker-crds",
-    "shulker-kube-utils",
-    "shulker-sdk-bindings-rust"
-  ],
-  "tags": ["lang:rust"]
+  }
 }

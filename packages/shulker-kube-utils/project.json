@@ -1,8 +1,8 @@
 {
-  "name": "shulker-kube-utils",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "shulker-kube-utils",
+  "implicitDependencies": ["shulker-utils"],
   "sourceRoot": "packages/shulker-kube-utils/src",
-  "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -31,7 +31,5 @@
       },
       "inputs": ["default", "rust:dependencies"]
     }
-  },
-  "implicitDependencies": ["shulker-utils"],
-  "tags": ["lang:rust"]
+  }
 }

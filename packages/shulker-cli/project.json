@@ -1,8 +1,9 @@
 {
-  "name": "shulker-cli",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-cli/src",
+  "name": "shulker-cli",
   "projectType": "application",
+  "implicitDependencies": ["shulker-crds", "shulker-sdk-bindings-rust"],
+  "sourceRoot": "packages/shulker-cli/src",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -29,7 +30,5 @@
       },
       "inputs": ["default", "rust:dependencies"]
     }
-  },
-  "implicitDependencies": ["shulker-crds", "shulker-sdk-bindings-rust"],
-  "tags": ["lang:rust"]
+  }
 }
