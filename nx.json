@@ -35,7 +35,8 @@
       "options": {
         "testTargetName": "test",
         "classesTargetName": "classes",
-        "buildTargetName": "build"
+        "buildTargetName": "build",
+        "lintTargetName": "ktlintCheck"
       }
     }
   ]

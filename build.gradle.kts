@@ -77,6 +77,11 @@ subprojects {
         }
     }
 
+    afterEvaluate {
+        val buildTask = tasks.findByPath("build")!!
+        buildTask.setDependsOn(buildTask.dependsOn - listOf(tasks.findByPath("check"), "check"))
+    }
+
     if (!project.hasProperty("javaOnly")) {
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = libs.plugins.ktlint.get().pluginId)
