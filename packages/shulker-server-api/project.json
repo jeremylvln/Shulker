@@ -1,31 +1,12 @@
 {
-  "name": "shulker-server-api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shulker-server-api/src",
-  "projectType": "library",
+  "name": "shulker-server-api",
   "targets": {
-    "build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew :packages:shulker-server-api:build -x check"
-      },
-      "inputs": ["default", "java:dependencies"],
-      "outputs": ["{workspaceRoot}/dist/java/shulker-server-api"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew :packages:shulker-server-api:test"
-      },
-      "inputs": ["default", "java:dependencies"]
-    },
     "lint": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/gradle:gradle",
       "options": {
-        "command": "./gradlew :packages:shulker-server-api:ktlintCheck"
-      },
-      "inputs": ["default", "java:dependencies"]
+        "taskName": "ktlintCheck"
+      }
     }
-  },
-  "tags": ["lang:java"]
+  }
 }

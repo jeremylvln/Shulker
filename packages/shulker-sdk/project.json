@@ -1,8 +1,7 @@
 {
-  "name": "shulker-sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "shulker-sdk",
   "sourceRoot": "packages/shulker-sdk/proto",
-  "projectType": "library",
   "targets": {
     "buf": {
       "executor": "nx:run-commands",
@@ -21,6 +20,5 @@
         "{projectRoot}/bindings/java/src/generated"
       ]
     }
-  },
-  "tags": []
+  }
 }

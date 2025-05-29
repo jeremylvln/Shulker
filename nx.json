@@ -25,13 +25,18 @@
       "{workspaceRoot}/Cargo.lock"
     ],
     "rust:test:dependencies": ["{workspaceRoot}/tarpaulin.toml"],
-    "java:dependencies": [
-      "{workspaceRoot}/build.gradle.kts",
-      "{workspaceRoot}/gradle.properties",
-      "{workspaceRoot}/settings.gradle.kts",
-      "{projectRoot}/build.gradle.kts",
-      "{projectRoot}/gradle.properties"
-    ],
-    "docker:dependencies": ["{projectRoot}/Dockerfile"]
-  }
+    "docker:dependencies": ["{projectRoot}/Dockerfile"],
+    "default": ["{projectRoot}/**/*"],
+    "production": ["default", "!{projectRoot}/src/test/**/*"]
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/gradle",
+      "options": {
+        "testTargetName": "test",
+        "classesTargetName": "classes",
+        "buildTargetName": "build"
+      }
+    }
+  ]
 }

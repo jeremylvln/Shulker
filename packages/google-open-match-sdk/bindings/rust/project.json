@@ -1,8 +1,8 @@
 {
-  "name": "google-open-match-sdk-bindings-rust",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "google-open-match-sdk-bindings-rust",
+  "implicitDependencies": ["google-open-match-sdk"],
   "sourceRoot": "packages/google-open-match-sdk/bindings/rust/src",
-  "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -31,7 +31,5 @@
       },
       "inputs": ["default", "rust:dependencies"]
     }
-  },
-  "implicitDependencies": ["google-open-match-sdk"],
-  "tags": ["lang:rust"]
+  }
 }

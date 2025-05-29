@@ -9,6 +9,7 @@ plugins {
     id("jacoco")
     id("maven-publish")
     id("signing")
+    id("dev.nx.gradle.project-graph") version("+") apply false
     kotlin("jvm") version libs.versions.kotlin.get()
     kotlin("kapt") version libs.versions.kotlin.get()
     alias(libs.plugins.shadow)
@@ -41,6 +42,7 @@ subprojects {
     apply(plugin = "jacoco")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
+    apply(plugin = "dev.nx.gradle.project-graph")
 
     group = "io.shulkermc"
 
@@ -72,6 +74,11 @@ subprojects {
         jacocoTestReport {
             dependsOn("test")
         }
+    }
+
+    afterEvaluate {
+        val buildTask = tasks.findByPath("build")!!
+        buildTask.setDependsOn(buildTask.dependsOn - listOf(tasks.findByPath("check"), "check"))
     }
 
     if (!project.hasProperty("javaOnly")) {
