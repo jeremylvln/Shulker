@@ -64,12 +64,14 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
 
         this.agent.onServerInitialization()
 
-        Runtime.getRuntime().addShutdownHook(object : Thread() {
-            override fun run() {
-                logger.info("Shutdown signal received, stopping cleanly")
-                MinecraftServer.stopCleanly()
-            }
-        })
+        Runtime.getRuntime().addShutdownHook(
+            object : Thread() {
+                override fun run() {
+                    logger.info("Shutdown signal received, stopping cleanly")
+                    MinecraftServer.stopCleanly()
+                }
+            },
+        )
     }
 
     private fun onServerReady() {
