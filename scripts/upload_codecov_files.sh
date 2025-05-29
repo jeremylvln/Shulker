@@ -5,7 +5,6 @@ $CODECOV -t $CODECOV_TOKEN -F google-agones-sdk-bindings-java -f ./dist/java/pac
 $CODECOV -t $CODECOV_TOKEN -F google-agones-sdk-bindings-rust -f ./coverage/rust/google-agones-sdk-bindings-rust/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F google-open-match-sdk-bindings-java -f ./dist/java/packages/google-open-match-sdk/test-results/test/binary -f ./dist/java/packages/google-open-match-sdk/jacoco/test.exec -f ./dist/java/packages/google-open-match-sdk/reports/tests/test -f ./dist/java/packages/google-open-match-sdk/test-results/test
 $CODECOV -t $CODECOV_TOKEN -F google-open-match-sdk-bindings-rust -f ./coverage/rust/google-open-match-sdk-bindings-rust/cobertura.xml
-$CODECOV -t $CODECOV_TOKEN -F shulker -f {projectRoot}/build/test-results/test/binary -f {projectRoot}/build/jacoco/test.exec -f {projectRoot}/build/reports/tests/test -f {projectRoot}/build/test-results/test
 $CODECOV -t $CODECOV_TOKEN -F shulker-addon-matchmaking -f ./coverage/rust/shulker-addon-matchmaking/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F shulker-cli -f ./coverage/rust/shulker-cli/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F shulker-crds -f ./coverage/rust/shulker-crds/cobertura.xml

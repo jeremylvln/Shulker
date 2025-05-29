@@ -25,9 +25,6 @@ coverage:
       google-open-match-sdk-bindings-rust:
         flags:
           - google-open-match-sdk-bindings-rust
-      shulker:
-        flags:
-          - shulker
       shulker-addon-matchmaking:
         flags:
           - shulker-addon-matchmaking
@@ -87,10 +84,6 @@ flags:
   google-open-match-sdk-bindings-rust:
     paths:
       - packages/google-open-match-sdk/bindings/rust
-    carryforward: true
-  shulker:
-    paths:
-      - .
     carryforward: true
   shulker-addon-matchmaking:
     paths:
