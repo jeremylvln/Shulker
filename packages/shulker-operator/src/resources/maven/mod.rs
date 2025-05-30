@@ -20,7 +20,7 @@ pub struct MavenMetadataVersionning {
 #[derive(Deserialize, Clone, Debug, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct MavenMetadataVersionningSnapshotVersions {
-    #[serde(rename = "$value")]
+    #[serde(rename = "#content")]
     pub versions: Vec<MavenMetadataVersionningSnapshotVersion>,
 }
 
