@@ -239,9 +239,9 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    override fun countPlayersOnServer(serverName: String): Int {
+    override fun countPlayersOnServers(serverNames: Set<String>): Int {
         this.jedisPool.resource.use { jedis ->
-            return jedis.scard(SERVERS_PLAYERS_SET_KEY(serverName)).toInt()
+            return serverNames.sumOf { serverName -> jedis.scard(SERVERS_PLAYERS_SET_KEY(serverName)).toInt() }
         }
     }
 

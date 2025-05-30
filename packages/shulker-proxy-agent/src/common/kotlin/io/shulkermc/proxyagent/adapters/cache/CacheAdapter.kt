@@ -49,7 +49,7 @@ interface CacheAdapter {
 
     fun countPlayerCapacity(): Int
 
-    fun countPlayersOnServer(serverName: String): Int
+    fun countPlayersOnServers(serverNames: Set<String>): Int
 
     data class RegisteredProxy(val proxyName: String, val proxyCapacity: Int, val lastSeenMillis: Long)
 

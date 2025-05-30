@@ -4,6 +4,7 @@ import io.shulkermc.proxyagent.utils.addressFromHostString
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor
 import org.apache.commons.io.monitor.FileAlterationMonitor
 import org.apache.commons.io.monitor.FileAlterationObserver
+import org.apache.commons.io.monitor.FileEntry
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 import java.nio.file.Files
@@ -38,7 +39,13 @@ class LocalFileSystemAdapter : FileSystemAdapter {
     override fun watchExternalServersUpdates(
         callback: (servers: Map<String, FileSystemAdapter.ExternalServer>) -> Unit,
     ) {
-        val observer = FileAlterationObserver(EXTERNAL_SERVERS_PATH.parent.toFile())
+        val observer = (
+            FileAlterationObserver
+                .builder()
+                .setRootEntry(FileEntry(EXTERNAL_SERVERS_PATH.parent.toFile()))
+                .get()
+        )
+
         observer.addListener(
             object : FileAlterationListenerAdaptor() {
                 override fun onFileChange(file: File) {

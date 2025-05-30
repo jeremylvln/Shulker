@@ -26,9 +26,7 @@ class ShulkerProxyAPIImpl(private val agent: ShulkerProxyAgentCommon) : ShulkerP
 
     override fun countOnlinePlayers(): Int = this.agent.cache.countOnlinePlayers()
 
-    override fun countOnlinePlayersInTag(tag: String): Int {
-        return this.getServersByTag(tag).sumOf { server -> this.agent.cache.countPlayersOnServer(server) }
-    }
+    override fun countOnlinePlayersInTag(tag: String): Int = this.agent.cache.countPlayersOnServers(this.getServersByTag(tag))
 
     override fun getPlayerIdFromName(playerName: String): Optional<UUID> {
         val cachedValue = this.agent.cache.getPlayerIdFromName(playerName)
