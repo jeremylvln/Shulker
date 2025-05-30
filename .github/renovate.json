@@ -19,8 +19,8 @@
     },
     {
       "matchManagers": ["npm"],
-      "matchSourceUrlPrefixes": ["https://github.com/nrwl/"],
-      "enabled": false
+      "enabled": false,
+      "matchSourceUrls": ["https://github.com/nrwl/{/,}**"]
     }
   ]
 }
