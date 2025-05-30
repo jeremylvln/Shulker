@@ -239,6 +239,12 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
+    override fun countPlayersOnServer(serverName: String): Int {
+        this.jedisPool.resource.use { jedis ->
+            return jedis.scard(SERVERS_PLAYERS_SET_KEY(serverName)).toInt()
+        }
+    }
+
     private fun tryLock(
         ownerProxyName: String,
         key: String,
