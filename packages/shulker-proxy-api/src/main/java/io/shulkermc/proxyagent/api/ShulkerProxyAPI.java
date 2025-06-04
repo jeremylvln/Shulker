@@ -19,6 +19,7 @@ public abstract class ShulkerProxyAPI {
     abstract public @NotNull Optional<PlayerPosition> getPlayerPosition(@NotNull UUID playerId);
     abstract public boolean isPlayerConnected(@NotNull UUID playerId);
     abstract public int countOnlinePlayers();
+    abstract public int countOnlinePlayersInTag(@NotNull String tag);
 
     abstract public @NotNull Optional<UUID> getPlayerIdFromName(@NotNull String playerName);
     abstract public @NotNull Optional<String> getPlayerNameFromId(@NotNull UUID playerId);
