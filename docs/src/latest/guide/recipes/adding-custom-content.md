@@ -29,7 +29,7 @@ containing the credentials to use to authenticate agaisnt the repository.
 ```yaml
 urlFrom:
   mavenRef:
-    repository: https://example.com/maven
+    repositoryUrl: https://example.com/maven
     groupId: com.example
     artifactId: myplugin
     version: '1.0.0'
@@ -68,7 +68,7 @@ spec:
           - url: https://example.com/my-plugin.jar // [!code focus]
           - urlFrom: // [!code focus]
               mavenRef: // [!code focus]
-                repository: https://example.com/maven // [!code focus]
+                repositoryUrl: https://example.com/maven // [!code focus]
                 groupId: com.example // [!code focus]
                 artifactId: myplugin // [!code focus]
                 version: '1.0.0' // [!code focus]
