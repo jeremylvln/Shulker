@@ -34,7 +34,7 @@
     "semantic-release-replace-plugin": "1.2.7",
     "yaml": "2.8.0"
   },
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.1",
   "pnpm": {
     "overrides": {
       "conventional-changelog-conventionalcommits": "8.0.0"
