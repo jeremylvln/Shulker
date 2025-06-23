@@ -1,15 +1,10 @@
-package io.shulkermc.proxyagent.adapters.kubernetes
+package io.shulkermc.agent.adapters.kubernetes
 
-import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
+import io.shulkermc.agent.adapters.kubernetes.models.AgonesV1GameServer
+import io.shulkermc.agent.adapters.kubernetes.models.WatchAction
 import java.net.InetSocketAddress
 import java.util.Optional
 import java.util.concurrent.CompletionStage
-
-enum class WatchAction {
-    ADDED,
-    MODIFIED,
-    DELETED,
-}
 
 interface KubernetesGatewayAdapter {
     fun destroy()

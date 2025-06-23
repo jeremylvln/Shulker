@@ -1,6 +1,6 @@
 package io.shulkermc.proxyagent.handlers
 
-import io.shulkermc.proxyagent.Configuration
+import io.shulkermc.agent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 
 class ReconnectProxyHandler(private val agent: ShulkerProxyAgentCommon) {

@@ -4,6 +4,8 @@ plugins {
 
 dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
+    commonApi(project(":packages:shulker-agent-api"))
+    commonImplementation(project(":packages:shulker-agent"))
 
     // Filesystem
     commonImplementation(libs.apache.commons.io)

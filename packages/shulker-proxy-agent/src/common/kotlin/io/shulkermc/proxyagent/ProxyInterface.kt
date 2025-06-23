@@ -1,5 +1,6 @@
 package io.shulkermc.proxyagent
 
+import io.shulkermc.agent.adapters.proxy.ProxyAdapter
 import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.PlayerDisconnectHook
 import io.shulkermc.proxyagent.platform.PlayerLoginHook
@@ -12,7 +13,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
-interface ProxyInterface {
+interface ProxyInterface : ProxyAdapter {
     fun registerServer(
         name: String,
         address: InetSocketAddress,
@@ -54,7 +55,7 @@ interface ProxyInterface {
 
     fun prepareNetworkAdminsPermissions(playerIds: List<UUID>)
 
-    fun teleportPlayerOnServer(
+    override fun teleportPlayerOnServer(
         playerId: UUID,
         serverName: String,
     )

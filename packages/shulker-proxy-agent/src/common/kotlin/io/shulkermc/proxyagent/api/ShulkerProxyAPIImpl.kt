@@ -1,10 +1,15 @@
 package io.shulkermc.proxyagent.api
 
+import io.shulkermc.agent.api.ShulkerAPI.PlayerPosition
+import io.shulkermc.agent.api.ShulkerAPIHandler
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import java.util.Optional
 import java.util.UUID
 
-class ShulkerProxyAPIImpl(private val agent: ShulkerProxyAgentCommon) : ShulkerProxyAPI() {
+class ShulkerProxyAPIImpl(
+    private val agent: ShulkerProxyAgentCommon,
+    private val apiHandler: ShulkerAPIHandler
+) : ShulkerProxyAPI() {
     override fun shutdown() = this.agent.shutdown()
 
     override fun reconnectPlayerToCluster(playerId: UUID) = this.agent.playerMovementService.reconnectPlayerToCluster(playerId)
@@ -26,31 +31,7 @@ class ShulkerProxyAPIImpl(private val agent: ShulkerProxyAgentCommon) : ShulkerP
 
     override fun countOnlinePlayers(): Int = this.agent.cache.countOnlinePlayers()
 
-    override fun getPlayerIdFromName(playerName: String): Optional<UUID> {
-        val cachedValue = this.agent.cache.getPlayerIdFromName(playerName)
-        if (cachedValue.isPresent) return cachedValue
+    override fun getPlayerIdFromName(playerName: String): Optional<UUID> = apiHandler.getPlayerIdFromName(playerName)
 
-        val mojangProfile = this.agent.mojangGateway.getProfileFromName(playerName)
-        if (mojangProfile.isPresent) {
-            val playerId = mojangProfile.get().playerId
-            this.agent.cache.updateCachedPlayerName(playerId, playerName)
-            return Optional.of(playerId)
-        }
-
-        return Optional.empty()
-    }
-
-    override fun getPlayerNameFromId(playerId: UUID): Optional<String> {
-        val cachedValue = this.agent.cache.getPlayerNameFromId(playerId)
-        if (cachedValue.isPresent) return cachedValue
-
-        val mojangProfile = this.agent.mojangGateway.getProfileFromId(playerId)
-        if (mojangProfile.isPresent) {
-            val playerName = mojangProfile.get().playerName
-            this.agent.cache.updateCachedPlayerName(playerId, playerName)
-            return Optional.of(playerName)
-        }
-
-        return Optional.empty()
-    }
+    override fun getPlayerNameFromId(playerId: UUID): Optional<String> = apiHandler.getPlayerNameFromId(playerId)
 }

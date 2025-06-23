@@ -1,6 +1,6 @@
 package io.shulkermc.proxyagent.tasks
 
-import io.shulkermc.proxyagent.Configuration
+import io.shulkermc.agent.Configuration
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import java.util.concurrent.TimeUnit

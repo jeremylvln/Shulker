@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.adapters.kubernetes
+package io.shulkermc.agent.adapters.kubernetes
 
 import io.fabric8.kubernetes.api.model.ObjectReference
 import io.fabric8.kubernetes.api.model.ObjectReferenceBuilder
@@ -8,9 +8,10 @@ import io.fabric8.kubernetes.client.KubernetesClientBuilder
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer
 import io.fabric8.kubernetes.client.okhttp.OkHttpClientFactory
-import io.shulkermc.proxyagent.Configuration
-import io.shulkermc.proxyagent.adapters.kubernetes.models.AgonesV1GameServer
-import io.shulkermc.proxyagent.utils.addressFromHostString
+import io.shulkermc.agent.Configuration
+import io.shulkermc.agent.adapters.kubernetes.models.AgonesV1GameServer
+import io.shulkermc.agent.adapters.kubernetes.models.WatchAction
+import io.shulkermc.agent.utils.addressFromHostString
 import java.net.InetSocketAddress
 import java.util.Optional
 import java.util.concurrent.CompletionStage

@@ -1,9 +1,9 @@
 package io.shulkermc.proxyagent.services
 
-import io.shulkermc.proxyagent.Configuration
+import io.shulkermc.agent.Configuration
+import io.shulkermc.agent.adapters.kubernetes.models.WatchAction
 import io.shulkermc.proxyagent.ProxyInterface
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
-import io.shulkermc.proxyagent.adapters.kubernetes.WatchAction
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 

@@ -1,7 +1,6 @@
 package io.shulkermc.proxyagent.commands
 
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
-import io.shulkermc.proxyagent.api.ShulkerProxyAPI.PlayerPosition
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
