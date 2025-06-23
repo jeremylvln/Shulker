@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.adapters.pubsub
+package io.shulkermc.agent.adapters.pubsub
 
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPubSub
@@ -8,7 +8,7 @@ import java.util.concurrent.Executors
 class RedisPubSubAdapter(private val jedisPool: JedisPool) : PubSubAdapter {
     private val executor = Executors.newCachedThreadPool()
 
-    fun destroy() {
+    override fun destroy() {
         this.executor.shutdownNow()
     }
 

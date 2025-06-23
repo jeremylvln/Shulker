@@ -11,8 +11,6 @@ interface KubernetesGatewayAdapter {
 
     fun listMinecraftServers(): AgonesV1GameServer.List
 
-    fun getExternalAddress(): Optional<InetSocketAddress>
-
     fun watchProxyEvents(
         callback: (action: WatchAction, proxy: AgonesV1GameServer) -> Unit,
     ): CompletionStage<EventWatcher>
@@ -21,9 +19,6 @@ interface KubernetesGatewayAdapter {
         callback: (action: WatchAction, minecraftServer: AgonesV1GameServer) -> Unit,
     ): CompletionStage<EventWatcher>
 
-    fun watchExternalAddressUpdates(
-        callback: (address: Optional<InetSocketAddress>) -> Unit,
-    ): CompletionStage<EventWatcher>
 
     interface EventWatcher {
         fun stop()

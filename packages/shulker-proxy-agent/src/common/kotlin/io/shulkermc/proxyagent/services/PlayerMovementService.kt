@@ -2,7 +2,7 @@ package io.shulkermc.proxyagent.services
 
 import com.google.common.base.Preconditions
 import com.google.common.base.Suppliers
-import io.shulkermc.agent.Configuration
+import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import io.shulkermc.proxyagent.platform.HookPostOrder
 import io.shulkermc.proxyagent.platform.Player

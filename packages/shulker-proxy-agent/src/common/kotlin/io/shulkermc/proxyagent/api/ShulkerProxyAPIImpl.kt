@@ -1,6 +1,6 @@
 package io.shulkermc.proxyagent.api
 
-import io.shulkermc.agent.api.ShulkerAPI.PlayerPosition
+import io.shulkermc.agent.api.PlayerPosition
 import io.shulkermc.agent.api.ShulkerAPIHandler
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon
 import java.util.Optional

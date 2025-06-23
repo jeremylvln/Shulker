@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.adapters.pubsub
+package io.shulkermc.agent.adapters.pubsub
 
 import java.util.UUID
 
@@ -17,4 +17,6 @@ interface PubSubAdapter {
     fun reconnectProxy(proxyName: String)
 
     fun onReconnectProxy(callback: (proxyName: String) -> Unit)
+
+    fun destroy()
 }

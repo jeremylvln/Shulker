@@ -1,5 +1,5 @@
 package io.shulkermc.proxyagent.services
-import io.shulkermc.agent.Configuration
+import io.shulkermc.proxyagent.Configuration
 import io.shulkermc.agent.adapters.kubernetes.models.AgonesV1GameServer
 import io.shulkermc.agent.services.ServerDirectoryService
 import io.shulkermc.proxyagent.ShulkerProxyAgentCommon

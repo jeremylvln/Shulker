@@ -2,10 +2,21 @@ package io.shulkermc.serveragent
 
 import com.agones.dev.sdk.AgonesSDK
 import com.agones.dev.sdk.AgonesSDKImpl
+import io.shulkermc.agent.adapters.cache.CacheAdapter
+import io.shulkermc.agent.adapters.cache.RedisCacheAdapter
+import io.shulkermc.agent.adapters.kubernetes.ImplKubernetesGatewayAdapter
+import io.shulkermc.agent.adapters.kubernetes.KubernetesGatewayAdapter
+import io.shulkermc.agent.adapters.mojang.HttpMojangGatewayAdapter
+import io.shulkermc.agent.adapters.mojang.MojangGatewayAdapter
+import io.shulkermc.agent.adapters.pubsub.PubSubAdapter
+import io.shulkermc.agent.adapters.pubsub.RedisPubSubAdapter
+import io.shulkermc.agent.api.ShulkerAPIHandler
+import io.shulkermc.agent.services.ServerDirectoryService
 import io.shulkermc.serveragent.api.ShulkerServerAPI
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
 import io.shulkermc.serveragent.services.PlayerMovementService
 import io.shulkermc.serveragent.tasks.HealthcheckTask
+import redis.clients.jedis.JedisPool
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -17,9 +28,16 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
         private const val SUMMON_TIMEOUT_MINUTES = 5L
     }
 
+    private lateinit var jedisPool: JedisPool
+
+    lateinit var kubernetesGateway: KubernetesGatewayAdapter
+    lateinit var mojangGateway: MojangGatewayAdapter
+    lateinit var cache: CacheAdapter
+    lateinit var pubSub: PubSubAdapter
     lateinit var agonesGateway: AgonesSDK
 
     // Services
+    lateinit var serverDirectoryService: ServerDirectoryService
     lateinit var playerMovementService: PlayerMovementService
 
     // Tasks
@@ -35,7 +53,16 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
                 "Identified Shulker server: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}",
             )
 
-            ShulkerServerAPI.INSTANCE = ShulkerServerAPIImpl(this)
+            this.logger.fine("Creating Redis pool")
+            this.jedisPool = this.createJedisPool()
+            this.jedisPool.resource.use { jedis -> jedis.ping() }
+
+            this.kubernetesGateway = ImplKubernetesGatewayAdapter(Configuration.SERVER_NAMESPACE)
+            this.mojangGateway = HttpMojangGatewayAdapter()
+            this.cache = RedisCacheAdapter(this.jedisPool)
+            this.pubSub = RedisPubSubAdapter(this.jedisPool)
+
+            ShulkerServerAPI.INSTANCE = ShulkerServerAPIImpl(this, ShulkerAPIHandler(this.cache, this.mojangGateway))
 
             this.playerMovementService = PlayerMovementService(this)
 
@@ -110,4 +137,17 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
                 }
             }
         }
+
+    private fun createJedisPool(): JedisPool {
+        if (Configuration.REDIS_USERNAME.isPresent && Configuration.REDIS_PASSWORD.isPresent) {
+            return JedisPool(
+                Configuration.REDIS_HOST,
+                Configuration.REDIS_PORT,
+                Configuration.REDIS_USERNAME.get(),
+                Configuration.REDIS_PASSWORD.get(),
+            )
+        }
+
+        return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT)
+    }
 }
