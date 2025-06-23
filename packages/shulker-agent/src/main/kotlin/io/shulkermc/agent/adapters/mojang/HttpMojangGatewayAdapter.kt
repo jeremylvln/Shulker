@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.adapters.mojang
+package io.shulkermc.agent.adapters.mojang
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser

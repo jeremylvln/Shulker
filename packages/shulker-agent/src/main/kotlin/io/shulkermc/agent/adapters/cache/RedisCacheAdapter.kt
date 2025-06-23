@@ -1,6 +1,6 @@
-package io.shulkermc.proxyagent.adapters.cache
+package io.shulkermc.agent.adapters.cache
 
-import io.shulkermc.proxyagent.api.ShulkerProxyAPI.PlayerPosition
+import io.shulkermc.agent.api.PlayerPosition
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.params.SetParams
 import java.util.Optional

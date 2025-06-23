@@ -28,6 +28,12 @@ coverage:
       shulker-addon-matchmaking:
         flags:
           - shulker-addon-matchmaking
+      shulker-agent:
+        flags:
+          - shulker-agent
+      shulker-agent-api:
+        flags:
+          - shulker-agent-api
       shulker-cli:
         flags:
           - shulker-cli
@@ -88,6 +94,14 @@ flags:
   shulker-addon-matchmaking:
     paths:
       - packages/shulker-addon-matchmaking
+    carryforward: true
+  shulker-agent:
+    paths:
+      - packages/shulker-agent
+    carryforward: true
+  shulker-agent-api:
+    paths:
+      - packages/shulker-agent-api
     carryforward: true
   shulker-cli:
     paths:

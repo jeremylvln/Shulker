@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.adapters.kubernetes.models
+package io.shulkermc.agent.adapters.kubernetes.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude

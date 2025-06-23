@@ -18,7 +18,18 @@ object Configuration {
             .map { value -> LifecycleStrategy.byEnvValue(value) }
             .orElse(LifecycleStrategy.ALLOCATE_WHEN_NOT_EMPTY)
 
+    val REDIS_HOST = getStringEnv("SHULKER_SERVER_REDIS_HOST")
+    val REDIS_PORT = getIntEnv("SHULKER_SERVER_REDIS_PORT")
+    val REDIS_USERNAME = getOptionalStringEnv("SHULKER_SERVER_REDIS_USERNAME")
+    val REDIS_PASSWORD = getOptionalStringEnv("SHULKER_SERVER_REDIS_PASSWORD")
+
+    val SERVER_NAMESPACE = getStringEnv("SHULKER_SERVER_NAMESPACE")
+
+    private fun getStringEnv(name: String): String = requireNotNull(System.getenv(name)) { "Missing $name" }
+
     private fun getOptionalStringEnv(name: String): Optional<String> = Optional.ofNullable(System.getenv(name))
+
+    private fun getIntEnv(name: String): Int = getStringEnv(name).toInt()
 
     enum class LifecycleStrategy(private val strategy: String) {
         ALLOCATE_WHEN_NOT_EMPTY("AllocateWhenNotEmpty"),

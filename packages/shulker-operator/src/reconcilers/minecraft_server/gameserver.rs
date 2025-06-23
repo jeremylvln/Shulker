@@ -28,6 +28,7 @@ use crate::agent::AgentConfig;
 use crate::constants;
 use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
+use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
@@ -434,6 +435,7 @@ impl<'a> GameServerBuilder {
         minecraft_server: &MinecraftServer,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let spec = &minecraft_server.spec;
+        let redis_ref = RedisRef::from_cluster(context.as_ref().unwrap().cluster)?;
 
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
@@ -528,6 +530,16 @@ impl<'a> GameServerBuilder {
                 value: Some("-XX:MaxRAMPercentage=75".to_string()),
                 ..EnvVar::default()
             },
+            EnvVar {
+                    name: "SHULKER_SERVER_REDIS_HOST".to_string(),
+                    value: Some(redis_ref.host),
+                    ..EnvVar::default()
+                },
+                EnvVar {
+                    name: "SHULKER_SERVER_REDIS_PORT".to_string(),
+                    value: Some(redis_ref.port.to_string()),
+                    ..EnvVar::default()
+                },
         ];
 
         if let Some(custom_jar) = spec.version.custom_jar.as_ref() {
@@ -568,6 +580,35 @@ impl<'a> GameServerBuilder {
             if let Some(env_overrides) = &pod_overrides.env {
                 env.extend(env_overrides.clone());
             }
+        }
+
+        if let Some(redis_ref_credentials_secret_name) = redis_ref.credentials_secret_name.as_ref() {
+            env.append(&mut vec![
+                EnvVar {
+                    name: "SHULKER_SERVER_REDIS_USERNAME".to_string(),
+                    value_from: Some(EnvVarSource {
+                        secret_key_ref: Some(SecretKeySelector {
+                            name: redis_ref_credentials_secret_name.clone(),
+                            key: "username".to_string(),
+                            ..SecretKeySelector::default()
+                        }),
+                        ..EnvVarSource::default()
+                    }),
+                    ..EnvVar::default()
+                },
+                EnvVar {
+                    name: "SHULKER_SERVER_REDIS_PASSWORD".to_string(),
+                    value_from: Some(EnvVarSource {
+                        secret_key_ref: Some(SecretKeySelector {
+                            name: redis_ref_credentials_secret_name.clone(),
+                            key: "password".to_string(),
+                            ..SecretKeySelector::default()
+                        }),
+                        ..EnvVarSource::default()
+                    }),
+                    ..EnvVar::default()
+                },
+            ]);
         }
 
         Ok(env)

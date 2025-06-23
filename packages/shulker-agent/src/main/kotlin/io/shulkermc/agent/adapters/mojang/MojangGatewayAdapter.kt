@@ -1,4 +1,4 @@
-package io.shulkermc.proxyagent.adapters.mojang
+package io.shulkermc.agent.adapters.mojang
 
 import java.util.Optional
 import java.util.UUID

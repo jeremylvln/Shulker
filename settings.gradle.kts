@@ -45,6 +45,9 @@ includeBindingProject("google-agones-sdk")
 includeBindingProject("google-open-match-sdk")
 includeBindingProject("shulker-sdk")
 
+include(":packages:shulker-agent")
+include(":packages:shulker-agent-api")
+
 include(":packages:shulker-proxy-api")
 include(":packages:shulker-proxy-agent")
 
