@@ -27,9 +27,7 @@ class ShulkerServerAPIImpl(
 
     override fun isPlayerConnected(playerId: UUID): Boolean = this.agent.cache.isPlayerConnected(playerId)
 
-    override fun teleportPlayerOnServer(playerId: UUID, serverName: String) {
-        TODO("Not yet implemented")
-    }
+    override fun teleportPlayerOnServer(playerId: UUID, serverName: String) = this.agent.pubSub.teleportPlayerOnServer(playerId, serverName)
 
     override fun getPlayerIdFromName(playerName: String): Optional<UUID> = apiHandler.getPlayerIdFromName(playerName)
 
