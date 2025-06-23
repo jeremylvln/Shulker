@@ -6,7 +6,6 @@ import io.shulkermc.serveragent.api.ShulkerServerAPI
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
 import io.shulkermc.serveragent.services.PlayerMovementService
 import io.shulkermc.serveragent.tasks.HealthcheckTask
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger

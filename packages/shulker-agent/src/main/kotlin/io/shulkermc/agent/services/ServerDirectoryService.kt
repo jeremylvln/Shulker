@@ -5,7 +5,6 @@ import io.shulkermc.agent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.agent.adapters.kubernetes.models.AgonesV1GameServer
 import io.shulkermc.agent.adapters.kubernetes.models.WatchAction
 import java.util.logging.Logger
-import kotlin.collections.forEach
 
 abstract class ServerDirectoryService(
     private val kubernetesGateway: KubernetesGatewayAdapter,

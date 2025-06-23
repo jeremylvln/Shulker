@@ -2,16 +2,16 @@ package io.shulkermc.proxyagent
 
 import com.agones.dev.sdk.AgonesSDK
 import com.agones.dev.sdk.AgonesSDKImpl
-import io.shulkermc.agent.Configuration
 import io.shulkermc.agent.adapters.cache.CacheAdapter
 import io.shulkermc.agent.adapters.cache.RedisCacheAdapter
-import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
-import io.shulkermc.proxyagent.adapters.filesystem.LocalFileSystemAdapter
 import io.shulkermc.agent.adapters.kubernetes.ImplKubernetesGatewayAdapter
 import io.shulkermc.agent.adapters.kubernetes.KubernetesGatewayAdapter
 import io.shulkermc.agent.adapters.mojang.HttpMojangGatewayAdapter
 import io.shulkermc.agent.adapters.mojang.MojangGatewayAdapter
 import io.shulkermc.agent.api.ShulkerAPIHandler
+import io.shulkermc.agent.services.ServerDirectoryService
+import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
+import io.shulkermc.proxyagent.adapters.filesystem.LocalFileSystemAdapter
 import io.shulkermc.proxyagent.adapters.pubsub.RedisPubSubAdapter
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI
 import io.shulkermc.proxyagent.api.ShulkerProxyAPIImpl
@@ -20,12 +20,10 @@ import io.shulkermc.proxyagent.handlers.ReconnectProxyHandler
 import io.shulkermc.proxyagent.handlers.TeleportPlayerOnServerHandler
 import io.shulkermc.proxyagent.services.PlayerMovementService
 import io.shulkermc.proxyagent.services.ProxyLifecycleService
-import io.shulkermc.agent.services.ServerDirectoryService
 import io.shulkermc.proxyagent.services.ProxyServerDirectoryService
 import io.shulkermc.proxyagent.tasks.HealthcheckTask
 import io.shulkermc.proxyagent.tasks.LostProxyPurgeTask
 import redis.clients.jedis.JedisPool
-import java.lang.Exception
 import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
