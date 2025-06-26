@@ -74,6 +74,31 @@ spec:
             effect: "NoSchedule" // [!code focus]
 ```
 
+## Customizing agones health check
+
+Agones uses a health check to determine if a server is ready and healthy.
+You may want to customize the health check to better suit your needs
+(e.g. your server takes 1 minute to start, you may want to increase the `initial_delay_seconds` to 60).
+
+```yaml
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: my-server
+spec:
+  clusterRef:
+    name: my-cluster
+  replicas: 1
+  template:
+    spec: // [!code focus]
+      podOverrides: // [!code focus]
+        health: // [!code focus]
+          disabled: false // [!code focus]
+          initial_delay_seconds: 30 // [!code focus]
+          period_seconds: 15 // [!code focus]
+          failureThreshold: 5 // [!code focus]
+```
+
 ## Mounting volumes <Badge type="tip" text="servers" />
 
 Additional volumes can be injected to the `MinecraftServer`'s
