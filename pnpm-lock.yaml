@@ -39,8 +39,8 @@ importers:
         specifier: 9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: 16.1.0
-        version: 16.1.0
+        specifier: 16.1.1
+        version: 16.1.1
       nx:
         specifier: 21.1.2
         version: 21.1.2
@@ -1838,8 +1838,8 @@ packages:
     resolution: {integrity: sha512-cNOjgCnLB+FnvWWtyRTzmB3POJ+cXxTA81LoW7u8JdmhfXzriropYwpjShnz1QLLWsQwY7nIxoDmcPTwphDK9w==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  lint-staged@16.1.0:
-    resolution: {integrity: sha512-HkpQh69XHxgCjObjejBT3s2ILwNjFx8M3nw+tJ/ssBauDlIpkx2RpqWSi1fBgkXLSSXnbR3iEq1NkVtpvV+FLQ==}
+  lint-staged@16.1.1:
+    resolution: {integrity: sha512-kVZvRAHw9WuufENnwuZLiB1X/8B8YpGszzjMET0bP+uJSjjB7KXeaX2ckYRtQyHfeQdCWMc6tRK34t4geHL9sg==}
     engines: {node: '>=20.17'}
     hasBin: true
 
@@ -4676,7 +4676,7 @@ snapshots:
 
   lines-and-columns@2.0.3: {}
 
-  lint-staged@16.1.0:
+  lint-staged@16.1.1:
     dependencies:
       chalk: 5.4.1
       commander: 14.0.0
