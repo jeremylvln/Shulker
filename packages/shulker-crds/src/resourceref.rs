@@ -24,3 +24,10 @@ pub struct ResourceRefFromMavenSpec {
     pub classifier: Option<String>,
     pub credentials_secret_name: Option<String>,
 }
+
+#[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct LocationResourceRefSpec {
+    pub location: String,
+    pub file: ResourceRefSpec,
+}

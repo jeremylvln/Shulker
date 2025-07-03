@@ -8,7 +8,7 @@ use strum::{Display, IntoStaticStr};
 
 use super::minecraft_cluster::MinecraftClusterRef;
 
-use crate::{condition::HasConditions, resourceref::ResourceRefSpec, schemas::ImageOverrideSpec};
+use crate::{condition::HasConditions, resourceref::ResourceRefSpec, resourceref::LocationResourceRefSpec, schemas::ImageOverrideSpec};
 
 #[derive(CustomResource, Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
 #[kube(
@@ -90,6 +90,11 @@ pub struct MinecraftServerConfigurationSpec {
     /// and extract at the root of the server. Gzippied tarballs only
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<ResourceRefSpec>>,
+
+    /// List of optional references to files to download
+    /// and save at the defined path inside the server.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<LocationResourceRefSpec>>,
 
     /// Number of maximum players that can connect to the
     /// MinecraftServer Deployment
