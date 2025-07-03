@@ -7,7 +7,7 @@ dependencyResolutionManagement {
             version("kubernetes-client", "7.3.1")
             version("grpc", "1.73.0")
 
-            library("adventure-api", "net.kyori:adventure-api:4.22.0")
+            library("adventure-api", "net.kyori:adventure-api:4.23.0")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.4.0")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
             library("apache-commons-io", "commons-io:commons-io:2.19.0")
