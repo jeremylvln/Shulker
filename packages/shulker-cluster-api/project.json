@@ -1,0 +1,12 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "shulker-cluster-api",
+  "targets": {
+    "lint": {
+      "executor": "@nx/gradle:gradle",
+      "options": {
+        "taskName": "ktlintCheck"
+      }
+    }
+  }
+}

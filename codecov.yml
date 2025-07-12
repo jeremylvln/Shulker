@@ -31,6 +31,12 @@ coverage:
       shulker-cli:
         flags:
           - shulker-cli
+      shulker-cluster-api:
+        flags:
+          - shulker-cluster-api
+      shulker-cluster-api-impl:
+        flags:
+          - shulker-cluster-api-impl
       shulker-crds:
         flags:
           - shulker-crds
@@ -92,6 +98,14 @@ flags:
   shulker-cli:
     paths:
       - packages/shulker-cli
+    carryforward: true
+  shulker-cluster-api:
+    paths:
+      - packages/shulker-cluster-api
+    carryforward: true
+  shulker-cluster-api-impl:
+    paths:
+      - packages/shulker-cluster-api-impl
     carryforward: true
   shulker-crds:
     paths:

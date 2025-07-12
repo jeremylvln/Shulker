@@ -14,16 +14,7 @@ object ControlCommandHandler {
         source: Audience,
         proxyName: String,
     ) {
-        agent.pubSub.drainProxy(proxyName)
+        agent.cluster.pubSub.drainProxy(proxyName)
         source.sendMessage(Component.text("Sent drain request to proxy $proxyName", NamedTextColor.GREEN))
-    }
-
-    fun executeReconnectProxy(
-        agent: ShulkerProxyAgentCommon,
-        source: Audience,
-        proxyName: String,
-    ) {
-        agent.pubSub.reconnectProxy(proxyName)
-        source.sendMessage(Component.text("Sent reconnect request to proxy $proxyName", NamedTextColor.GREEN))
     }
 }

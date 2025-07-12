@@ -4,21 +4,19 @@ plugins {
 
 dependencies {
     commonApi(project(":packages:shulker-proxy-api"))
+    commonApi(project(":packages:shulker-cluster-api-impl"))
 
-    // Filesystem
-    commonImplementation(libs.apache.commons.io)
-    commonImplementation(libs.snakeyaml)
+    // Agones
+    commonImplementation(project(":packages:google-agones-sdk"))
 
     // Kubernetes
     commonCompileOnly(libs.kubernetes.client.api)
     commonRuntimeOnly(libs.kubernetes.client)
     commonImplementation(libs.kubernetes.client.http)
 
-    // Agones
-    commonImplementation(project(":packages:google-agones-sdk"))
-
-    // Sync
-    commonImplementation(libs.jedis)
+    // Utils
+    commonImplementation(libs.apache.commons.io)
+    commonImplementation(libs.snakeyaml)
     commonImplementation(libs.guava)
 }
 

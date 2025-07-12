@@ -1,8 +1,10 @@
-package io.shulkermc.proxyagent.adapters.cache
+package io.shulkermc.clusterapi.impl.adapters.cache
 
-import io.shulkermc.proxyagent.api.ShulkerProxyAPI.PlayerPosition
+import io.shulkermc.cluster.data.PlayerPosition
+import io.shulkermc.cluster.data.RegisteredProxy
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.params.SetParams
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -81,7 +83,7 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         }
     }
 
-    override fun listRegisteredProxies(): List<CacheAdapter.RegisteredProxy> {
+    override fun listRegisteredProxies(): List<RegisteredProxy> {
         this.jedisPool.resource.use { jedis ->
             val registeredProxies = jedis.smembers(PROXIES_SET_KEY)
             val capacities = jedis.hgetAll(PROXIES_CAPACITY_HASH_KEY)
@@ -89,8 +91,8 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
 
             return registeredProxies.map { proxyName ->
                 val capacity = capacities[proxyName]?.toInt() ?: 0
-                val lastSeen = lastSeenMillis[proxyName]?.toLong() ?: 0L
-                CacheAdapter.RegisteredProxy(proxyName, capacity, lastSeen)
+                val lastSeen = lastSeenMillis[proxyName]?.toLong()?.let(Instant::ofEpochMilli) ?: Instant.now()
+                RegisteredProxy(proxyName, capacity, lastSeen)
             }
         }
     }

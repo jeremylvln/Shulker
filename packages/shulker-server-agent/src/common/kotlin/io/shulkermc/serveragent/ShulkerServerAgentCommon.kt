@@ -2,6 +2,7 @@ package io.shulkermc.serveragent
 
 import com.agones.dev.sdk.AgonesSDK
 import com.agones.dev.sdk.AgonesSDKImpl
+import io.shulkermc.clusterapi.impl.adapters.ShulkerClusterAPIImpl
 import io.shulkermc.serveragent.api.ShulkerServerAPI
 import io.shulkermc.serveragent.api.ShulkerServerAPIImpl
 import io.shulkermc.serveragent.services.PlayerMovementService
@@ -19,6 +20,7 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
     }
 
     lateinit var agonesGateway: AgonesSDK
+    lateinit var cluster: ShulkerClusterAPIImpl
 
     // Services
     lateinit var playerMovementService: PlayerMovementService
@@ -31,11 +33,13 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
         try {
             this.logger.fine("Creating Agones SDK from environment")
             this.agonesGateway = AgonesSDKImpl.createFromEnvironment()
+
             val gameServer = this.agonesGateway.getGameServer().get()
             this.logger.info(
                 "Identified Shulker server: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}",
             )
 
+            this.cluster = ShulkerClusterAPIImpl(gameServer.objectMeta.name)
             ShulkerServerAPI.INSTANCE = ShulkerServerAPIImpl(this)
 
             this.playerMovementService = PlayerMovementService(this)

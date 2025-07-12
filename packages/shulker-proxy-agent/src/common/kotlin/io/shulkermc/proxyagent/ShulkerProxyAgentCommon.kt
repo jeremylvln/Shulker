@@ -2,26 +2,21 @@ package io.shulkermc.proxyagent
 
 import com.agones.dev.sdk.AgonesSDK
 import com.agones.dev.sdk.AgonesSDKImpl
-import io.shulkermc.proxyagent.adapters.cache.CacheAdapter
-import io.shulkermc.proxyagent.adapters.cache.RedisCacheAdapter
+import io.shulkermc.clusterapi.impl.adapters.ShulkerClusterAPIImpl
 import io.shulkermc.proxyagent.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxyagent.adapters.filesystem.LocalFileSystemAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.ImplKubernetesGatewayAdapter
 import io.shulkermc.proxyagent.adapters.kubernetes.KubernetesGatewayAdapter
-import io.shulkermc.proxyagent.adapters.mojang.HttpMojangGatewayAdapter
-import io.shulkermc.proxyagent.adapters.mojang.MojangGatewayAdapter
-import io.shulkermc.proxyagent.adapters.pubsub.RedisPubSubAdapter
 import io.shulkermc.proxyagent.api.ShulkerProxyAPI
 import io.shulkermc.proxyagent.api.ShulkerProxyAPIImpl
 import io.shulkermc.proxyagent.handlers.DrainProxyHandler
-import io.shulkermc.proxyagent.handlers.ReconnectProxyHandler
+import io.shulkermc.proxyagent.handlers.ReconnectPlayerOnProxyHandler
 import io.shulkermc.proxyagent.handlers.TeleportPlayerOnServerHandler
 import io.shulkermc.proxyagent.services.PlayerMovementService
 import io.shulkermc.proxyagent.services.ProxyLifecycleService
 import io.shulkermc.proxyagent.services.ServerDirectoryService
 import io.shulkermc.proxyagent.tasks.HealthcheckTask
 import io.shulkermc.proxyagent.tasks.LostProxyPurgeTask
-import redis.clients.jedis.JedisPool
 import java.lang.Exception
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -29,14 +24,11 @@ import kotlin.system.exitProcess
 
 class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Logger) {
     lateinit var agonesGateway: AgonesSDK
-    private lateinit var jedisPool: JedisPool
+    lateinit var cluster: ShulkerClusterAPIImpl
 
     // Adapters
     lateinit var kubernetesGateway: KubernetesGatewayAdapter
     lateinit var fileSystem: FileSystemAdapter
-    lateinit var mojangGateway: MojangGatewayAdapter
-    lateinit var cache: CacheAdapter
-    lateinit var pubSub: RedisPubSubAdapter
 
     // Services
     lateinit var serverDirectoryService: ServerDirectoryService
@@ -57,11 +49,8 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 "Identified Shulker proxy: ${gameServer.objectMeta.namespace}/${gameServer.objectMeta.name}",
             )
 
+            this.cluster = ShulkerClusterAPIImpl(gameServer.objectMeta.name)
             ShulkerProxyAPI.INSTANCE = ShulkerProxyAPIImpl(this)
-
-            this.logger.fine("Creating Redis pool")
-            this.jedisPool = this.createJedisPool()
-            this.jedisPool.resource.use { jedis -> jedis.ping() }
 
             this.kubernetesGateway =
                 ImplKubernetesGatewayAdapter(
@@ -69,17 +58,14 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                     Configuration.PROXY_NAME,
                 )
             this.fileSystem = LocalFileSystemAdapter()
-            this.mojangGateway = HttpMojangGatewayAdapter()
-            this.cache = RedisCacheAdapter(this.jedisPool)
-            this.pubSub = RedisPubSubAdapter(this.jedisPool)
 
             this.serverDirectoryService = ServerDirectoryService(this)
             this.playerMovementService = PlayerMovementService(this)
             this.proxyLifecycleService = ProxyLifecycleService(this)
 
-            this.pubSub.onTeleportPlayerOnServer(TeleportPlayerOnServerHandler(this)::handle)
-            this.pubSub.onDrainProxy(DrainProxyHandler(this)::handle)
-            this.pubSub.onReconnectProxy(ReconnectProxyHandler(this)::handle)
+            this.cluster.pubSub.onTeleportPlayerOnServer(TeleportPlayerOnServerHandler(this)::handle)
+            this.cluster.pubSub.onDrainProxy(DrainProxyHandler(this)::handle)
+            this.cluster.pubSub.onReconnectPlayerToCluster(ReconnectPlayerOnProxyHandler(this)::handle)
 
             this.healthcheckTask = HealthcheckTask(this).schedule()
             this.lostProxyPurgeTask = LostProxyPurgeTask(this).schedule()
@@ -91,7 +77,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 )
             }
 
-            this.cache.registerProxy(Configuration.PROXY_NAME, this.proxyInterface.getPlayerCapacity())
+            this.cluster.cache.registerProxy(Configuration.PROXY_NAME, this.proxyInterface.getPlayerCapacity())
             this.agonesGateway.setReady()
 
             this.logger.info("Proxy is ready")
@@ -107,7 +93,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     }
 
     fun shutdown() {
-        this.cache.unregisterProxy(Configuration.PROXY_NAME)
+        this.cluster.cache.unregisterProxy(Configuration.PROXY_NAME)
 
         try {
             this.logger.info("Trying to reconnect everyone to cluster")
@@ -131,13 +117,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 this.kubernetesGateway.destroy()
             }
 
-            if (this::pubSub.isInitialized) {
-                this.pubSub.destroy()
-            }
-
-            if (this::jedisPool.isInitialized) {
-                this.jedisPool.destroy()
-            }
+            this.cluster.close()
         } catch (
             @Suppress("TooGenericExceptionCaught") e: Exception,
         ) {
@@ -157,18 +137,5 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
 
             exitProcess(0)
         }
-    }
-
-    private fun createJedisPool(): JedisPool {
-        if (Configuration.REDIS_USERNAME.isPresent && Configuration.REDIS_PASSWORD.isPresent) {
-            return JedisPool(
-                Configuration.REDIS_HOST,
-                Configuration.REDIS_PORT,
-                Configuration.REDIS_USERNAME.get(),
-                Configuration.REDIS_PASSWORD.get(),
-            )
-        }
-
-        return JedisPool(Configuration.REDIS_HOST, Configuration.REDIS_PORT)
     }
 }

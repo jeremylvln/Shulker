@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 dependencies {
     commonApi(project(":packages:shulker-server-api"))
+    commonApi(project(":packages:shulker-cluster-api-impl"))
 
     // Agones
     commonImplementation(project(":packages:google-agones-sdk"))

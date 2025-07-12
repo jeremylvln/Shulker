@@ -18,7 +18,7 @@ object TeleportCommandHandler {
         val (playerId, playerPosition) = CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
         val server = playerPosition.serverName
 
-        agent.pubSub.teleportPlayerOnServer(playerId, server)
+        agent.cluster.pubSub.teleportPlayerOnServer(playerId, server)
         source.sendMessage(Component.text("Teleported to server $server", NamedTextColor.GREEN))
     }
 
@@ -30,7 +30,7 @@ object TeleportCommandHandler {
     ) {
         val (playerId, _) = CommandHandlerHelper.findPlayerOrMessage(agent, source, playerName).getOrNull() ?: return
 
-        agent.pubSub.teleportPlayerOnServer(playerId, serverName)
+        agent.cluster.pubSub.teleportPlayerOnServer(playerId, serverName)
         source.sendMessage(
             Component.text("Teleported $playerName to server $serverName", NamedTextColor.GREEN),
         )

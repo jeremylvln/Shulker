@@ -21,6 +21,6 @@ class HealthcheckTask(private val agent: ShulkerProxyAgentCommon) : Runnable {
 
     override fun run() {
         this.agent.agonesGateway.sendHealthcheck()
-        this.agent.cache.updateProxyLastSeen(Configuration.PROXY_NAME)
+        this.agent.cluster.cache.updateProxyLastSeen(Configuration.PROXY_NAME)
     }
 }
