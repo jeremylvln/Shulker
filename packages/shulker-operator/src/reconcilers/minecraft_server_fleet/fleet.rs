@@ -53,7 +53,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         &self,
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
-        _existing_fleet: Option<&Self::ResourceType>,
+        existing_fleet: Option<&Self::ResourceType>,
         context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let mut config_clone = minecraft_server_fleet.spec.template.spec.config.clone();
@@ -112,9 +112,10 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
             &game_server_context,
             &fake_mincraft_server,
         ).await?;
-        let replicas = match &minecraft_server_fleet.spec.autoscaling {
-            Some(_) => 0,
-            None => minecraft_server_fleet.spec.replicas as i32,
+        let replicas = if minecraft_server_fleet.spec.autoscaling.is_some() {
+            existing_fleet.and_then(|fleet| fleet.spec.replicas)
+        } else {
+            Some(minecraft_server_fleet.spec.replicas as i32)
         };
 
         let fleet = Fleet {
@@ -129,7 +130,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
                 ..ObjectMeta::default()
             },
             spec: FleetSpec {
-                replicas: Some(replicas),
+                replicas: replicas,
                 strategy: Some(DeploymentStrategy {
                     type_: Some("Recreate".to_string()),
                     ..DeploymentStrategy::default()

@@ -99,15 +99,16 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
-        _existing_fleet: Option<&Self::ResourceType>,
+        existing_fleet: Option<&Self::ResourceType>,
         context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server_spec = self
             .get_game_server_spec(context.as_ref().unwrap(), proxy_fleet)
             .await?;
-        let replicas = match &proxy_fleet.spec.autoscaling {
-            Some(_) => 0,
-            None => proxy_fleet.spec.replicas as i32,
+        let replicas = if proxy_fleet.spec.autoscaling.is_some() {
+            existing_fleet.and_then(|fleet| fleet.spec.replicas)
+        } else {
+            Some(proxy_fleet.spec.replicas as i32)
         };
 
         let fleet = Fleet {
@@ -122,7 +123,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
                 ..ObjectMeta::default()
             },
             spec: FleetSpec {
-                replicas: Some(replicas),
+                replicas: replicas,
                 strategy: Some(DeploymentStrategy {
                     type_: Some("RollingUpdate".to_string()),
                     rolling_update: Some(RollingUpdateDeployment {
