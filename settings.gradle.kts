@@ -9,6 +9,7 @@ dependencyResolutionManagement {
 
             library("adventure-api", "net.kyori:adventure-api:4.23.0")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.4.0")
+            library("adventure-text-serializer-gson", "net.kyori:adventure-text-serializer-gson:4.23.0")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
             library("apache-commons-io", "commons-io:commons-io:2.19.0")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.21-R0.3")
@@ -44,6 +45,9 @@ fun includeBindingProject(name: String) {
 includeBindingProject("google-agones-sdk")
 includeBindingProject("google-open-match-sdk")
 includeBindingProject("shulker-sdk")
+
+include(":packages:shulker-cluster-api")
+include(":packages:shulker-cluster-api-impl")
 
 include(":packages:shulker-proxy-api")
 include(":packages:shulker-proxy-agent")

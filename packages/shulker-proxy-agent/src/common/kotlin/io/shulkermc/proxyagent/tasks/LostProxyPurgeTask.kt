@@ -22,14 +22,14 @@ class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable 
     }
 
     override fun run() {
-        val maybeLock = this.agent.cache.tryLockLostProxiesPurgeTask(Configuration.PROXY_NAME)
+        val maybeLock = this.agent.cluster.cache.tryLockLostProxiesPurgeTask(Configuration.PROXY_NAME)
 
         maybeLock.ifPresent { lock ->
             lock.use { _ ->
-                this.agent.cache.listRegisteredProxies()
-                    .filter { System.currentTimeMillis() - it.lastSeenMillis > PROXY_LOST_MILLIS_THRESHOLD }
+                this.agent.cluster.cache.listRegisteredProxies()
+                    .filter { System.currentTimeMillis() - it.lastSeenAt.toEpochMilli() > PROXY_LOST_MILLIS_THRESHOLD }
                     .forEach { proxy ->
-                        this.agent.cache.unregisterProxy(proxy.proxyName)
+                        this.agent.cluster.cache.unregisterProxy(proxy.proxyName)
                         this.agent.logger.info("Unregistered lost proxy ${proxy.proxyName}")
                     }
             }

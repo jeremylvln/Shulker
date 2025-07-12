@@ -29,7 +29,7 @@ object GlobalControlCommand {
                         .then(
                             RequiredArgumentBuilder.argument<CommandSource, String>("proxy", StringArgumentType.word())
                                 .suggests { _, builder ->
-                                    agent.cache.listRegisteredProxies().forEach { proxy ->
+                                    agent.cluster.cache.listRegisteredProxies().forEach { proxy ->
                                         builder.suggest(proxy.proxyName)
                                     }
 
@@ -40,26 +40,6 @@ object GlobalControlCommand {
                                     val proxyName = context.getArgument("proxy", String::class.java)
 
                                     ControlCommandHandler.executeDrainProxy(agent, source, proxyName)
-                                    return@executes Command.SINGLE_SUCCESS
-                                },
-                        ),
-                )
-                .then(
-                    LiteralArgumentBuilder.literal<CommandSource>("reconnect")
-                        .then(
-                            RequiredArgumentBuilder.argument<CommandSource, String>("proxy", StringArgumentType.word())
-                                .suggests { _, builder ->
-                                    agent.cache.listRegisteredProxies().forEach { proxy ->
-                                        builder.suggest(proxy.proxyName)
-                                    }
-
-                                    return@suggests builder.buildFuture()
-                                }
-                                .executes { context ->
-                                    val source = context.source
-                                    val proxyName = context.getArgument("proxy", String::class.java)
-
-                                    ControlCommandHandler.executeReconnectProxy(agent, source, proxyName)
                                     return@executes Command.SINGLE_SUCCESS
                                 },
                         ),

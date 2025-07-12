@@ -1,6 +1,7 @@
-package io.shulkermc.proxyagent.adapters.cache
+package io.shulkermc.clusterapi.impl.adapters.cache
 
-import io.shulkermc.proxyagent.api.ShulkerProxyAPI.PlayerPosition
+import io.shulkermc.cluster.data.PlayerPosition
+import io.shulkermc.cluster.data.RegisteredProxy
 import java.util.Optional
 import java.util.UUID
 
@@ -48,8 +49,6 @@ interface CacheAdapter {
     fun countOnlinePlayers(): Int
 
     fun countPlayerCapacity(): Int
-
-    data class RegisteredProxy(val proxyName: String, val proxyCapacity: Int, val lastSeenMillis: Long)
 
     interface Lock : AutoCloseable
 }

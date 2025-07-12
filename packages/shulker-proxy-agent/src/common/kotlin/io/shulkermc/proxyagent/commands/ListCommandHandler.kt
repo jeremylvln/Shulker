@@ -21,7 +21,7 @@ object ListCommandHandler {
 
         serverNames.mapIndexed { index, serverName ->
             val boxCharacter = if (index == serverNames.size - 1) "└" else "├"
-            val playerNames = agent.cache.getPlayerNamesFromIds(agent.cache.listPlayersInServer(serverName)).values
+            val playerNames = agent.cluster.cache.getPlayerNamesFromIds(agent.cluster.cache.listPlayersInServer(serverName)).values
             val playerNamesJoined =
                 playerNames
                     .sortedBy { it.lowercase() }

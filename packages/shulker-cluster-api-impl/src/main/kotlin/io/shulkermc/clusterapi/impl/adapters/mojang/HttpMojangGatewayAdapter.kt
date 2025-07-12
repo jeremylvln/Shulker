@@ -1,7 +1,8 @@
-package io.shulkermc.proxyagent.adapters.mojang
+package io.shulkermc.clusterapi.impl.adapters.mojang
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import io.shulkermc.cluster.data.MojangProfile
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.Optional
@@ -12,7 +13,7 @@ class HttpMojangGatewayAdapter : MojangGatewayAdapter {
         private const val HTTP_OK = 200
     }
 
-    override fun getProfileFromName(playerName: String): Optional<MojangGatewayAdapter.MojangProfile> {
+    override fun getProfileFromName(playerName: String): Optional<MojangProfile> {
         val url = URI("https://api.mojang.com/users/profiles/minecraft/$playerName").toURL()
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
@@ -25,7 +26,7 @@ class HttpMojangGatewayAdapter : MojangGatewayAdapter {
         return Optional.of(this.getProfileFromJson(responseJson))
     }
 
-    override fun getProfileFromId(playerId: UUID): Optional<MojangGatewayAdapter.MojangProfile> {
+    override fun getProfileFromId(playerId: UUID): Optional<MojangProfile> {
         val undashedPlayerId = playerId.toString().replace("-", "")
         val url = URI("https://sessionserver.mojang.com/session/minecraft/profile/$undashedPlayerId").toURL()
         val connection = url.openConnection() as HttpURLConnection
@@ -39,7 +40,7 @@ class HttpMojangGatewayAdapter : MojangGatewayAdapter {
         return Optional.of(this.getProfileFromJson(responseJson))
     }
 
-    private fun getProfileFromJson(json: JsonObject): MojangGatewayAdapter.MojangProfile {
+    private fun getProfileFromJson(json: JsonObject): MojangProfile {
         val uuid =
             UUID.fromString(
                 json.get("id").asString.replaceFirst(
@@ -49,6 +50,6 @@ class HttpMojangGatewayAdapter : MojangGatewayAdapter {
             )
         val name = json.get("name").asString
 
-        return MojangGatewayAdapter.MojangProfile(uuid, name)
+        return MojangProfile(uuid, name)
     }
 }

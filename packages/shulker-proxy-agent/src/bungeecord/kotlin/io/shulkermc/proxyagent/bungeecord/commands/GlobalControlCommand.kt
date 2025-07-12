@@ -40,7 +40,6 @@ class GlobalControlCommand(
 
         when (args[0]) {
             "drain" -> executeDrainSubcommand(audience, subArguments)
-            "reconnect" -> this.executeReconnectSubcommand(audience, subArguments)
         }
     }
 
@@ -55,18 +54,5 @@ class GlobalControlCommand(
 
         val proxyName = args[0]
         ControlCommandHandler.executeDrainProxy(this.agent, audience, proxyName)
-    }
-
-    private fun executeReconnectSubcommand(
-        audience: Audience,
-        args: Array<out String>,
-    ) {
-        if (args.isEmpty()) {
-            audience.sendMessage(USAGE_MESSAGE)
-            return
-        }
-
-        val proxyName = args[0]
-        ControlCommandHandler.executeReconnectProxy(this.agent, audience, proxyName)
     }
 }

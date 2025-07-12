@@ -20,7 +20,6 @@ class ImplKubernetesGatewayAdapter(proxyNamespace: String, proxyName: String) : 
         private const val PROXY_INFORMER_SYNC_MS = 30L * 1000
         private const val SERVER_INFORMER_SYNC_MS = 10L * 1000
         private const val SERVICE_INFORMER_SYNC_MS = 30L * 1000
-        private const val MINECRAFT_DEFAULT_PORT = 25565
     }
 
     private val kubernetesClient: KubernetesClient =

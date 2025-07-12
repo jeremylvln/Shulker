@@ -41,13 +41,13 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
 
     private val onlinePlayerCountSupplier =
         Suppliers.memoizeWithExpiration(
-            { this.agent.cache.countOnlinePlayers() },
+            { this.agent.cluster.cache.countOnlinePlayers() },
             ONLINE_PLAYERS_COUNT_MEMOIZE_SECONDS,
             java.util.concurrent.TimeUnit.SECONDS,
         )
     private val playerCapacityCountSupplier =
         Suppliers.memoizeWithExpiration(
-            { this.agent.cache.countPlayerCapacity() },
+            { this.agent.cluster.cache.countPlayerCapacity() },
             PLAYER_CAPACITY_COUNT_MEMOIZE_SECONDS,
             java.util.concurrent.TimeUnit.SECONDS,
         )
@@ -126,7 +126,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onPlayerLogin(player: Player) {
-        this.agent.cache.updateCachedPlayerName(player.uniqueId, player.name)
+        this.agent.cluster.cache.updateCachedPlayerName(player.uniqueId, player.name)
 
         if (!this.isAllocatedByAgones) {
             this.isAllocatedByAgones = true
@@ -139,7 +139,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
     }
 
     private fun onPlayerDisconnect(player: Player) {
-        this.agent.cache.unsetPlayerPosition(player.uniqueId)
+        this.agent.cluster.cache.unsetPlayerPosition(player.uniqueId)
 
         if (this.isAllocatedByAgones && this.agent.proxyInterface.getPlayerCount() == 0) {
             this.isAllocatedByAgones = false
@@ -181,7 +181,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         player: Player,
         serverName: String,
     ) {
-        this.agent.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
+        this.agent.cluster.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
     }
 
     private fun onExternalAddressUpdate(address: Optional<InetSocketAddress>) {

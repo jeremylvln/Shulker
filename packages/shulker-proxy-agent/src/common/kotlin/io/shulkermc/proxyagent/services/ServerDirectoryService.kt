@@ -80,7 +80,7 @@ class ServerDirectoryService(
                 this.tagsByServer.remove(name)
             }
 
-            this.agent.cache.unregisterServer(name)
+            this.agent.cluster.cache.unregisterServer(name)
             this.agent.logger.info("Removed server '$name' from directory")
         }
     }
