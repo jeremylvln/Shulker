@@ -16,7 +16,6 @@ metadata:
   name: my-server
   namespace: default
 spec:
-  replicas: 0
   strategy:
     type: Recreate
   scheduling: Packed
