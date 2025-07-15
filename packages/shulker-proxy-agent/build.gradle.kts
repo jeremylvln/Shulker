@@ -3,16 +3,9 @@ plugins {
 }
 
 dependencies {
-    commonApi(project(":packages:shulker-proxy-api"))
-    commonApi(project(":packages:shulker-cluster-api-impl"))
-
-    // Agones
-    commonImplementation(project(":packages:google-agones-sdk"))
-
-    // Kubernetes
-    commonCompileOnly(libs.kubernetes.client.api)
-    commonRuntimeOnly(libs.kubernetes.client)
-    commonImplementation(libs.kubernetes.client.http)
+    // Shulker
+    commonImplementation(project(":packages:shulker-proxy-api"))
+    commonImplementation(project(":packages:shulker-cluster-api-impl"))
 
     // Utils
     commonImplementation(libs.apache.commons.io)
@@ -34,7 +27,7 @@ ktlint {
 }
 
 buildConfig {
-    packageName("io.shulkermc.proxyagent")
+    packageName("io.shulkermc.proxy")
 
     sourceSets.getByName("velocity") {
         buildConfigField("String", "VERSION", "\"${project.version}\"")

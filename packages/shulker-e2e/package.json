@@ -1,0 +1,15 @@
+{
+  "name": "@shulkermc/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "e2e": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "30.0.0",
+    "@types/node": "^24.0.14",
+    "jest": "30.0.4",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.0.0"
+  }
+}
