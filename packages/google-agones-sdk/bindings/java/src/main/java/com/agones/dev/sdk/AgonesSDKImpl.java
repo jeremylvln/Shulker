@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public final class AgonesSDKImpl implements AgonesSDK {
     private static final Empty EMPTY_PAYLOAD = Empty.getDefaultInstance();
@@ -73,6 +74,33 @@ public final class AgonesSDKImpl implements AgonesSDK {
         return this.wrapGrpcFuture(
             this.asyncStub.reserve(Duration.newBuilder().setSeconds(seconds).build())
         ).thenAccept((reply) -> {});
+    }
+
+    @Override
+    public void watchGameServer(Consumer<GameServer> consumer) {
+        // Create a StreamObserver that forwards each GameServer to the Consumer
+        StreamObserver<GameServer> responseObserver = new StreamObserver<>() {
+            @Override
+            public void onNext(GameServer value) {
+                // Forward the GameServer to the Consumer for handling
+                consumer.accept(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                // Optionally handle errors
+                System.err.println("Error during stream: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                // Optionally handle completion of the stream
+                System.out.println("Stream completed.");
+            }
+        };
+
+        // Make the gRPC call to start watching the GameServer stream
+        this.stub.watchGameServer(EMPTY_PAYLOAD, responseObserver);
     }
 
     @Override

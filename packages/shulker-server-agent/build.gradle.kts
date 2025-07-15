@@ -5,6 +5,8 @@ dependencies {
 
     // Agones
     commonImplementation(project(":packages:google-agones-sdk"))
+
+    commonImplementation(libs.grpc.stub)
 }
 
 setOf("processPaperResources").forEach { taskName ->
