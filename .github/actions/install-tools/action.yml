@@ -13,7 +13,7 @@ inputs:
   node-version:
     description: "The Node.js version to use"
     required: true
-    default: "22"
+    default: "24"
   rust-version:
     description: "The Rust version to use"
     required: true
