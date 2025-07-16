@@ -1,5 +1,7 @@
 const { execSync } = require('child_process');
 
+const SKIP_PUSH = process.env.SKIP_PUSH === 'true';
+
 const showUsage = () => {
   console.log(
     'Usage: node build_docker.cjs <appName> <dockerfilePath> <version>',
@@ -41,7 +43,7 @@ const command = [
   'docker',
   'buildx',
   'build',
-  '--push',
+  ...(!SKIP_PUSH ? ['--push'] : []),
   '-f',
   dockerfilePath,
   ...tags.flatMap((tag) => ['-t', tag]),

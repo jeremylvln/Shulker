@@ -104,6 +104,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         let game_server_context = GameServerBuilderContext {
             cluster: context.as_ref().unwrap().cluster,
             agent_config: context.as_ref().unwrap().agent_config,
+            owning_fleet: Some(minecraft_server_fleet),
         };
 
         let game_server_spec = crate::reconcilers::minecraft_server::gameserver::GameServerBuilder::get_game_server_spec(

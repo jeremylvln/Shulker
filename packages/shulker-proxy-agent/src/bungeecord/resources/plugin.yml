@@ -1,4 +1,4 @@
 name: ShulkerProxyAgent
-main: io.shulkermc.proxyagent.bungeecord.ShulkerProxyAgentBungeeCord
+main: io.shulkermc.proxy.bungeecord.ShulkerProxyAgentBungeeCord
 version: ${version}
 author: Jérémy Levilain <jeremy@jeremylvln.fr>

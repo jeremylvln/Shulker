@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "shulker-e2e",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "cache": false
+    }
+  }
+}

@@ -7,7 +7,6 @@ use k8s_openapi::api::core::v1::ContainerPort;
 use k8s_openapi::api::core::v1::EmptyDirVolumeSource;
 use k8s_openapi::api::core::v1::EnvVar;
 use k8s_openapi::api::core::v1::EnvVarSource;
-use k8s_openapi::api::core::v1::ObjectFieldSelector;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
 use k8s_openapi::api::core::v1::SecretKeySelector;
@@ -21,6 +20,7 @@ use kube::ResourceExt;
 use lazy_static::lazy_static;
 use shulker_crds::v1alpha1::minecraft_cluster::MinecraftCluster;
 use shulker_crds::v1alpha1::minecraft_server::MinecraftServerVersion;
+use shulker_crds::v1alpha1::minecraft_server_fleet::MinecraftServerFleet;
 use shulker_kube_utils::reconcilers::BuilderReconcilerError;
 use url::Url;
 
@@ -28,6 +28,7 @@ use crate::agent::AgentConfig;
 use crate::constants;
 use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
+use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
@@ -66,6 +67,7 @@ pub struct GameServerBuilder {
 pub struct GameServerBuilderContext<'a> {
     pub cluster: &'a MinecraftCluster,
     pub agent_config: &'a AgentConfig,
+    pub owning_fleet: Option<&'a MinecraftServerFleet>,
 }
 
 #[async_trait::async_trait]
@@ -434,28 +436,22 @@ impl<'a> GameServerBuilder {
         minecraft_server: &MinecraftServer,
     ) -> Result<Vec<EnvVar>, anyhow::Error> {
         let spec = &minecraft_server.spec;
+        let redis_ref = RedisRef::from_cluster(context.cluster)?;
 
         let mut env: Vec<EnvVar> = vec![
             EnvVar {
-                name: "SHULKER_SERVER_NAME".to_string(),
-                value_from: Some(EnvVarSource {
-                    field_ref: Some(ObjectFieldSelector {
-                        field_path: "metadata.name".to_string(),
-                        ..ObjectFieldSelector::default()
-                    }),
-                    ..EnvVarSource::default()
-                }),
+                name: "SHULKER_CLUSTER_NAME".to_string(),
+                value: Some(context.cluster.name_any()),
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_SERVER_NAMESPACE".to_string(),
-                value_from: Some(EnvVarSource {
-                    field_ref: Some(ObjectFieldSelector {
-                        field_path: "metadata.namespace".to_string(),
-                        ..ObjectFieldSelector::default()
-                    }),
-                    ..EnvVarSource::default()
-                }),
+                name: "SHULKER_REDIS_HOST".to_string(),
+                value: Some(redis_ref.host),
+                ..EnvVar::default()
+            },
+            EnvVar {
+                name: "SHULKER_REDIS_PORT".to_string(),
+                value: Some(redis_ref.port.to_string()),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -529,6 +525,14 @@ impl<'a> GameServerBuilder {
                 ..EnvVar::default()
             },
         ];
+
+        if let Some(owning_fleet) = context.owning_fleet {
+            env.append(&mut vec![EnvVar {
+                name: "SHULKER_OWNING_FLEET_NAME".to_string(),
+                value: Some(owning_fleet.name_any()),
+                ..EnvVar::default()
+            }])
+        }
 
         if let Some(custom_jar) = spec.version.custom_jar.as_ref() {
             env.append(&mut vec![
@@ -668,6 +672,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -699,6 +704,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -724,6 +730,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -773,6 +780,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -809,6 +817,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -846,6 +855,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -884,6 +894,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -925,6 +936,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -957,6 +969,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -987,6 +1000,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -1017,6 +1031,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -1052,6 +1067,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -1080,6 +1096,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W
@@ -1116,6 +1133,7 @@ mod tests {
                 maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
                 version: constants::SHULKER_PLUGIN_VERSION.to_string(),
             },
+            owning_fleet: None,
         };
 
         // W

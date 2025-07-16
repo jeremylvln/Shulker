@@ -1,8 +1,8 @@
 {
-  "name": "docs",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "docs/docs",
+  "name": "docs",
   "projectType": "application",
+  "sourceRoot": "docs/src",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -26,6 +26,5 @@
         "cwd": "docs/scripts"
       }
     }
-  },
-  "tags": ["lang:js"]
+  }
 }

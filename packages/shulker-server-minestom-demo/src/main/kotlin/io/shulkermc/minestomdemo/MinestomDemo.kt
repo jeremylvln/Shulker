@@ -1,6 +1,6 @@
 package io.shulkermc.minestomdemo
 
-import io.shulkermc.serveragent.minestom.ShulkerServerAgentMinestom
+import io.shulkermc.server.minestom.ShulkerServerAgentMinestom
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
