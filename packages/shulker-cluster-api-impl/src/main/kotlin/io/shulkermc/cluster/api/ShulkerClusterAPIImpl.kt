@@ -54,9 +54,9 @@ class ShulkerClusterAPIImpl(val logger: Logger) : ShulkerClusterAPI(), Closeable
             this.configuration.owningFleetName
                 .map { objectRefFromFleetName(this.selfGameServer.objectMeta.namespace, it) }
 
-        this.logger.info("Identified game server: ${this.selfReference.toNamespacedString()}")
+        this.logger.info("Identified game server: ${this.selfReference}")
         if (this.owningFleetReference.isPresent) {
-            this.logger.info("Identified owning fleet: ${this.owningFleetReference.get().toNamespacedString()}")
+            this.logger.info("Identified owning fleet: ${this.owningFleetReference.get()}")
         }
 
         this.kubernetesGateway = ImplKubernetesGatewayAdapter(this.selfReference, this.owningFleetReference)
