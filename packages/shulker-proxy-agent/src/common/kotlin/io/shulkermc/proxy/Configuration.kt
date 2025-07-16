@@ -10,7 +10,7 @@ import kotlin.jvm.optionals.getOrDefault
 object Configuration {
     val CLUSTER_NAME = getStringEnv("SHULKER_CLUSTER_NAME")
 
-   val PROXY_TTL_SECONDS = getLongEnv("SHULKER_PROXY_TTL_SECONDS")
+    val PROXY_TTL_SECONDS = getLongEnv("SHULKER_PROXY_TTL_SECONDS")
     val PROXY_PLAYER_DELTA_BEFORE_EXCLUSION =
         getOptionalIntEnv("SHULKER_PROXY_PLAYER_DELTA_BEFORE_EXCLUSION")
             .getOrDefault(15)

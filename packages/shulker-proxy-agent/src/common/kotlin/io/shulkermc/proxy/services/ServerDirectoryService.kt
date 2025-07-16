@@ -3,9 +3,9 @@ package io.shulkermc.proxy.services
 import io.shulkermc.cluster.api.adapters.kubernetes.WatchAction
 import io.shulkermc.cluster.api.adapters.kubernetes.models.AgonesV1GameServer
 import io.shulkermc.proxy.Configuration
+import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import io.shulkermc.proxy.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxy.utils.addressFromHostString
-import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import java.net.InetSocketAddress
 import java.util.Optional
 import kotlin.text.get

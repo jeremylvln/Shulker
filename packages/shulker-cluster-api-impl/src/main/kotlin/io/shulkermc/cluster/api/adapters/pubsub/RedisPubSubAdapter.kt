@@ -25,7 +25,10 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
         this.executor.shutdownNow()
     }
 
-    override fun subscribe(channel: String, callback: Consumer<String>) {
+    override fun subscribe(
+        channel: String,
+        callback: Consumer<String>,
+    ) {
         this.executor.submit {
             this.jedisPool.resource.use { jedis ->
                 jedis.subscribe(
@@ -38,33 +41,47 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
                         }
                     },
                     channel,
-                    "${channel}@${this.instanceIdentity}"
+                    "$channel@${this.instanceIdentity}",
                 )
             }
         }
     }
 
-    override fun broadcastToAllProxies(channel: String, message: String) {
+    override fun broadcastToAllProxies(
+        channel: String,
+        message: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
             jedis.publish(channel, message)
         }
     }
 
-    override fun sendToProxy(proxyName: String, channel: String, message: String) {
+    override fun sendToProxy(
+        proxyName: String,
+        channel: String,
+        message: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
-            jedis.publish("${channel}@${proxyName}", message)
+            jedis.publish("$channel@$proxyName", message)
         }
     }
 
-    override fun broadcastToAllServers(channel: String, message: String) {
+    override fun broadcastToAllServers(
+        channel: String,
+        message: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
             jedis.publish(channel, message)
         }
     }
 
-    override fun sendToServer(serverName: String, channel: String, message: String) {
+    override fun sendToServer(
+        serverName: String,
+        channel: String,
+        message: String,
+    ) {
         this.jedisPool.resource.use { jedis ->
-            jedis.publish("${channel}@${serverName}", message)
+            jedis.publish("$channel@$serverName", message)
         }
     }
 
@@ -82,7 +99,10 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
         }
     }
 
-    override fun disconnectPlayerFromCluster(playerId: UUID, message: Component) {
+    override fun disconnectPlayerFromCluster(
+        playerId: UUID,
+        message: Component,
+    ) {
         val encodedMessage = Base64.getEncoder().encodeToString(JSONComponentSerializer.json().serialize(message).toByteArray())
         this.broadcastToAllProxies(KICK_CHANNEL, "$playerId:$encodedMessage")
     }

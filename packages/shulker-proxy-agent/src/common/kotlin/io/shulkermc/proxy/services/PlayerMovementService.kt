@@ -3,13 +3,13 @@ package io.shulkermc.proxy.services
 import com.google.common.base.Preconditions
 import com.google.common.base.Suppliers
 import io.shulkermc.proxy.Configuration
+import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import io.shulkermc.proxy.platform.HookPostOrder
 import io.shulkermc.proxy.platform.Player
 import io.shulkermc.proxy.platform.PlayerPreLoginHookResult
 import io.shulkermc.proxy.platform.ProxyPingHookResult
 import io.shulkermc.proxy.platform.ServerPreConnectHookResult
 import io.shulkermc.proxy.utils.createDisconnectMessage
-import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import net.kyori.adventure.text.format.NamedTextColor
 import java.net.InetSocketAddress
 import java.util.Optional

@@ -14,7 +14,7 @@ import java.util.concurrent.CompletionStage
 
 class ImplKubernetesGatewayAdapter(
     private val selfReference: KubernetesObjectRef,
-    private val owningFleetReference: Optional<KubernetesObjectRef>
+    private val owningFleetReference: Optional<KubernetesObjectRef>,
 ) : KubernetesGatewayAdapter {
     companion object {
         private const val PROXY_INFORMER_SYNC_MS = 30L * 1000

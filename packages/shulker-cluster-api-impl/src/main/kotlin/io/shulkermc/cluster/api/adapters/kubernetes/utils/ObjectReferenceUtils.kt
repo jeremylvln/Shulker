@@ -10,15 +10,18 @@ fun objectRefFromGameServer(gameServer: GameServer): KubernetesObjectRef {
         apiVersion = "${AgonesV1GameServer.GROUP}/${AgonesV1GameServer.VERSION}",
         kind = AgonesV1GameServer.KIND,
         namespace = gameServer.objectMeta.namespace,
-        name = gameServer.objectMeta.name
+        name = gameServer.objectMeta.name,
     )
 }
 
-fun objectRefFromFleetName(fleetNamespace: String, fleetName: String): KubernetesObjectRef {
+fun objectRefFromFleetName(
+    fleetNamespace: String,
+    fleetName: String,
+): KubernetesObjectRef {
     return KubernetesObjectRef(
         apiVersion = "${AgonesV1Fleet.GROUP}/${AgonesV1Fleet.VERSION}",
         kind = AgonesV1Fleet.KIND,
         namespace = fleetNamespace,
-        name = fleetName
+        name = fleetName,
     )
 }

@@ -1,17 +1,15 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "extends": "nx/presets/npm.json",
+  "useDaemonProcess": false,
   "targetDefaults": {
     "build": {
-      "cache": true
-    },
-    "lint": {
       "cache": true
     },
     "test": {
       "cache": true
     },
-    "e2e": {
+    "lint": {
       "cache": true
     },
     "buf": {
@@ -19,15 +17,14 @@
     }
   },
   "namedInputs": {
+    "default": ["{projectRoot}/**/*"],
     "rust:dependencies": [
       "{workspaceRoot}/.cargo/",
       "{workspaceRoot}/Cargo.toml",
       "{workspaceRoot}/Cargo.lock"
     ],
     "rust:test:dependencies": ["{workspaceRoot}/tarpaulin.toml"],
-    "docker:dependencies": ["{projectRoot}/Dockerfile"],
-    "default": ["{projectRoot}/**/*"],
-    "production": ["default", "!{projectRoot}/src/test/**/*"]
+    "docker:dependencies": ["{projectRoot}/Dockerfile"]
   },
   "plugins": [
     {

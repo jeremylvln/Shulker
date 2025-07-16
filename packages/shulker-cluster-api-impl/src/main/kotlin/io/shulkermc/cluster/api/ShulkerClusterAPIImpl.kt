@@ -50,8 +50,9 @@ class ShulkerClusterAPIImpl(val logger: Logger) : ShulkerClusterAPI(), Closeable
 
         this.selfGameServer = this.agonesGateway.getGameServer().get()
         this.selfReference = objectRefFromGameServer(this.selfGameServer)
-        this.owningFleetReference = this.configuration.owningFleetName
-            .map { objectRefFromFleetName(this.selfGameServer.objectMeta.namespace, it) }
+        this.owningFleetReference =
+            this.configuration.owningFleetName
+                .map { objectRefFromFleetName(this.selfGameServer.objectMeta.namespace, it) }
 
         this.logger.info("Identified game server: ${this.selfReference.toNamespacedString()}")
         if (this.owningFleetReference.isPresent) {
@@ -96,13 +97,25 @@ class ShulkerClusterAPIImpl(val logger: Logger) : ShulkerClusterAPI(), Closeable
         this.operatorSdk = this.operatorSdk ?: ShulkerSDKImpl.createFromEnvironment()
         return this.operatorSdk!!
     }
+
     override fun messaging(): MessagingBus = this.pubSub
 
-    override fun teleportPlayerOnServer(playerId: UUID, serverName: String) = this.pubSub.teleportPlayerOnServer(playerId, serverName)
-    override fun disconnectPlayerFromCluster(playerId: UUID, message: Component) = this.pubSub.disconnectPlayerFromCluster(playerId, message)
+    override fun teleportPlayerOnServer(
+        playerId: UUID,
+        serverName: String,
+    ) = this.pubSub.teleportPlayerOnServer(playerId, serverName)
+
+    override fun disconnectPlayerFromCluster(
+        playerId: UUID,
+        message: Component,
+    ) = this.pubSub.disconnectPlayerFromCluster(playerId, message)
+
     override fun reconnectPlayerToCluster(playerId: UUID) = this.pubSub.reconnectPlayerToCluster(playerId)
+
     override fun getPlayerPosition(playerId: UUID): Optional<PlayerPosition> = this.cache.getPlayerPosition(playerId)
+
     override fun isPlayerConnected(playerId: UUID): Boolean = this.cache.isPlayerConnected(playerId)
+
     override fun countOnlinePlayers(): Int = this.cache.countOnlinePlayers()
 
     override fun getPlayerIdFromName(playerName: String): Optional<UUID> {

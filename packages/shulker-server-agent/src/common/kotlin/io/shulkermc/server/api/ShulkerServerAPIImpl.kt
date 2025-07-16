@@ -7,7 +7,9 @@ class ShulkerServerAPIImpl(private val agent: ShulkerServerAgentCommon) : Shulke
     override fun askShutdown() = this.agent.shutdown()
 
     override fun setReady(): CompletableFuture<Void> = this.agent.cluster.agonesGateway.setReady().thenAccept {}
+
     override fun setAllocated(): CompletableFuture<Void> = this.agent.cluster.agonesGateway.setAllocated().thenAccept {}
+
     override fun setReserved(seconds: Long): CompletableFuture<Void> =
         this.agent.cluster.agonesGateway.setReserved(seconds).thenAccept {}
 }

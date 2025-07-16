@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.ir.backend.js.compile
-
 configure<JavaPluginExtension> {
     withJavadocJar()
     withSourcesJar()
