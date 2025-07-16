@@ -4,7 +4,7 @@ fullnameOverride: "shulker-addon-matchmaking"
 director:
   image:
     repository: ghcr.io/jeremylvln/shulker-addon-matchmaking
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
@@ -12,8 +12,7 @@ director:
   extraArgs: []
 
   # Additional environment variables to add to the pod.
-  extraEnv:
-    []
+  extraEnv: []
     # - name: MY_ENV_KEY
     #   value: 'my value'
 
@@ -108,8 +107,7 @@ mmf:
   extraArgs: []
 
   # Additional environment variables to add to the pod.
-  extraEnv:
-    []
+  extraEnv: []
     # - name: MY_ENV_KEY
     #   value: 'my value'
 

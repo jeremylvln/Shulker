@@ -1,6 +1,5 @@
 package io.shulkermc.proxy.tasks
 
-import io.shulkermc.proxy.Configuration
 import io.shulkermc.proxy.ProxyInterface
 import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import java.util.concurrent.TimeUnit
@@ -21,6 +20,6 @@ class HealthcheckTask(private val agent: ShulkerProxyAgentCommon) : Runnable {
 
     override fun run() {
         this.agent.cluster.agonesGateway.sendHealthcheck()
-        this.agent.cluster.cache.updateProxyLastSeen(Configuration.PROXY_NAME)
+        this.agent.cluster.cache.updateProxyLastSeen(this.agent.cluster.selfReference.name)
     }
 }

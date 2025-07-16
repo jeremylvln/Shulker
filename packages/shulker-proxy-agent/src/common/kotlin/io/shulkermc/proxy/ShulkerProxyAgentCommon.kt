@@ -57,7 +57,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
                 )
             }
 
-            this.cluster.cache.registerProxy(Configuration.PROXY_NAME, this.proxyInterface.getPlayerCapacity())
+            this.cluster.cache.registerProxy(this.cluster.selfReference.name, this.proxyInterface.getPlayerCapacity())
             this.cluster.agonesGateway.setReady()
 
             this.logger.info("Proxy is ready")
@@ -73,7 +73,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     }
 
     fun shutdown() {
-        this.cluster.cache.unregisterProxy(Configuration.PROXY_NAME)
+        this.cluster.cache.unregisterProxy(this.cluster.selfReference.name)
 
         try {
             this.logger.info("Trying to reconnect everyone to cluster")

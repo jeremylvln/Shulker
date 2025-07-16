@@ -1,16 +1,26 @@
+import * as k8s from '@kubernetes/client-node';
 import path from 'path';
-import { execAndWait, logger } from './utils.ts';
-import { waitForPod } from './utils-cluster.ts';
+import { execAndWait } from './utils/process.ts';
+import type { MinecraftCluster } from './utils/types.ts';
+import { logger, REPOSITORY_ROOT } from './utils/index.ts';
+import { KC, TEST_NAMESPACE } from './utils/kubernetes.ts';
+import { waitForPod } from './utils/kubernetes-watch.ts';
+import { getProxyLogs, getServerLogs } from './utils/kubernetes-logs.ts';
+import retry from 'async-retry';
 
 describe('01 - Getting Started Example', () => {
   const GETTING_STARTED_EXAMPLE_PATH = path.join(
-    import.meta.dirname,
-    '..',
-    '..',
-    '..',
+    REPOSITORY_ROOT,
     'examples',
     'getting-started',
   );
+
+  let proxyPodName: string;
+  let serverPodName: string;
+
+  beforeAll(() => {
+    KC.loadFromDefault();
+  });
 
   afterAll(async () => {
     await execAndWait([
@@ -19,54 +29,126 @@ describe('01 - Getting Started Example', () => {
     ]);
   });
 
-  it('01.1 - Applies the manifests', async () => {
-    // Given
-
-    // When
+  it('applies the manifests', async () => {
     await execAndWait([
-      'kubectl apply -n shulker-test -k',
+      `kubectl apply -n ${TEST_NAMESPACE} -k`,
       GETTING_STARTED_EXAMPLE_PATH,
     ]);
 
-    // Then
-    const clusterName = await execAndWait(
-      'kubectl get minecraftclusters/getting-started -n shulker-test -o name',
-      { silent: true },
+    const minecraftClusters = await KC.makeApiClient(k8s.CustomObjectsApi)
+      .listNamespacedCustomObject({
+        namespace: TEST_NAMESPACE,
+        group: 'shulkermc.io',
+        version: 'v1alpha1',
+        plural: 'minecraftclusters',
+      })
+      .then((res) => res as k8s.KubernetesListObject<MinecraftCluster>);
+    const gettingStartedCluster = minecraftClusters.items.find(
+      (cluster) => cluster.metadata?.name === 'getting-started',
     );
-    expect(clusterName).toStrictEqual(
-      'minecraftcluster.shulkermc.io/getting-started',
-    );
+
+    expect(gettingStartedCluster).toBeDefined();
   });
 
-  it('01.2 - Creates a managed Redis deployment', async () => {
-    // Given
+  it('creates a managed Redis deployment', async () => {
+    await retry(
+      async () => {
+        const statefulSets = await KC.makeApiClient(
+          k8s.AppsV1Api,
+        ).listNamespacedStatefulSet({
+          namespace: TEST_NAMESPACE,
+        });
+        const redisStatefulSet = statefulSets.items.find(
+          (sts) => sts.metadata?.name === 'getting-started-redis-managed',
+        );
 
-    // When
-    const statefulSetName = await execAndWait(
-      'kubectl get sts getting-started-redis-managed -n shulker-test -o name',
-      { silent: true },
+        expect(redisStatefulSet).toBeDefined();
+      },
+      {
+        minTimeout: 500,
+        retries: 5,
+      },
     );
 
-    // Then
-    expect(statefulSetName).toStrictEqual(
-      'statefulset.apps/getting-started-redis-managed',
-    );
     logger.info('waiting for Redis pod to be ready');
-    await waitForPod('shulker-test', 'getting-started-redis-managed-0');
+    await waitForPod('getting-started-redis-managed-0');
   });
 
-  it('01.3 - Creates a proxy pod', async () => {
-    // Given
+  it('has created a proxy pod', async () => {
+    await retry(
+      async () => {
+        const pods = await KC.makeApiClient(k8s.CoreV1Api).listNamespacedPod({
+          namespace: TEST_NAMESPACE,
+        });
+        const proxyPod = pods.items.find((pod) =>
+          pod.metadata?.name?.startsWith('public-'),
+        );
 
-    // When
-    const podName = await execAndWait(
-      'kubectl get pods -n shulker-test -o name | grep public-',
-      { silent: true },
+        expect(proxyPod).toBeDefined();
+        proxyPodName = proxyPod!.metadata!.name!;
+      },
+      {
+        minTimeout: 500,
+        retries: 5,
+      },
     );
+  });
 
-    // Then
-    expect(podName).toStartWith('pod/public-');
-    logger.info('waiting for Proxy pod to be ready');
-    await waitForPod('shulker-test', podName);
+  it('waits until the proxy is ready', async () => {
+    await waitForPod(proxyPodName);
+
+    const proxyLogs = await getProxyLogs(proxyPodName);
+    expect(proxyLogs).toInclude('Proxy is ready');
+  });
+
+  it('has created a server pod', async () => {
+    await retry(
+      async () => {
+        const pods = await KC.makeApiClient(k8s.CoreV1Api).listNamespacedPod({
+          namespace: TEST_NAMESPACE,
+        });
+        const serverPod = pods.items.find((pod) =>
+          pod.metadata?.name?.startsWith('lobby-'),
+        );
+
+        // Then
+        expect(serverPod).toBeDefined();
+        serverPodName = serverPod!.metadata!.name!;
+      },
+      {
+        minTimeout: 500,
+        retries: 5,
+      },
+    );
+  });
+
+  it('waits until the server is ready', async () => {
+    await waitForPod(serverPodName);
+
+    await retry(
+      async () => {
+        const serverLogs = await getServerLogs(serverPodName);
+        expect(serverLogs).toInclude('For help, type \"help\"');
+      },
+      {
+        minTimeout: 1000,
+        retries: 10,
+      },
+    );
+  });
+
+  it('ensures the proxy has registered the server', async () => {
+    await retry(
+      async () => {
+        const proxyLogs = await getProxyLogs(proxyPodName);
+        expect(proxyLogs).toInclude(
+          `Added server '${serverPodName}' to directory`,
+        );
+      },
+      {
+        minTimeout: 500,
+        retries: 5,
+      },
+    );
   });
 });

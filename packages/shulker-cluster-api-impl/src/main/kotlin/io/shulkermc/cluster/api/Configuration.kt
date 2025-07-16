@@ -33,15 +33,15 @@ data class Configuration(
     companion object {
         fun fromEnvironment(): Configuration {
             return Configuration(
-                clusterName = requireNotNull(System.getenv("SHULKER_CLUSTER_NAME")),
+                clusterName = requireNotNull(System.getenv("SHULKER_CLUSTER_NAME")) { "Missing SHULKER_CLUSTER_NAME" },
                 owningFleetName = Optional.ofNullable(System.getenv("SHULKER_OWNING_FLEET_NAME")),
                 redis = Redis(
-                    host = System.getenv("REDIS_HOST"),
-                    port = Optional.ofNullable(System.getenv("REDIS_PORT"))
+                    host = requireNotNull(System.getenv("SHULKER_REDIS_HOST")) { "Missing SHULKER_REDIS_HOST" },
+                    port = Optional.ofNullable(System.getenv("SHULKER_REDIS_PORT"))
                         .map { it.toInt() }
                         .getOrDefault(6379),
-                    username = Optional.ofNullable(System.getenv("REDIS_USERNAME")),
-                    password = Optional.ofNullable(System.getenv("REDIS_PASSWORD"))
+                    username = Optional.ofNullable(System.getenv("SHULKER_REDIS_USERNAME")),
+                    password = Optional.ofNullable(System.getenv("SHULKER_REDIS_PASSWORD"))
                 )
             )
         }

@@ -182,7 +182,7 @@ class PlayerMovementService(private val agent: ShulkerProxyAgentCommon) {
         player: Player,
         serverName: String,
     ) {
-        this.agent.cluster.cache.setPlayerPosition(player.uniqueId, Configuration.PROXY_NAME, serverName)
+        this.agent.cluster.cache.setPlayerPosition(player.uniqueId, this.agent.cluster.selfReference.name, serverName)
     }
 
     private fun onExternalAddressUpdate(address: Optional<InetSocketAddress>) {

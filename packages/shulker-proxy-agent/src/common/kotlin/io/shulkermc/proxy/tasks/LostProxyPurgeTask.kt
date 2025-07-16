@@ -1,6 +1,5 @@
 package io.shulkermc.proxy.tasks
 
-import io.shulkermc.proxy.Configuration
 import io.shulkermc.proxy.ProxyInterface
 import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import java.util.concurrent.TimeUnit
@@ -22,7 +21,7 @@ class LostProxyPurgeTask(private val agent: ShulkerProxyAgentCommon) : Runnable 
     }
 
     override fun run() {
-        val maybeLock = this.agent.cluster.cache.tryLockLostProxiesPurgeTask(Configuration.PROXY_NAME)
+        val maybeLock = this.agent.cluster.cache.tryLockLostProxiesPurgeTask(this.agent.cluster.selfReference.name)
 
         maybeLock.ifPresent { lock ->
             lock.use { _ ->
