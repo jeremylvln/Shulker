@@ -159,7 +159,7 @@ mod tests {
 }
 
 mod vanilla {
-    use std::collections::BTreeMap;
+    use std::{collections::BTreeMap, fmt::Display};
 
     use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
 
@@ -182,15 +182,12 @@ mod vanilla {
         }
     }
 
-    impl ToString for VanillaProperties {
-        fn to_string(&self) -> String {
-            let mut properties = String::new();
-
+    impl Display for VanillaProperties {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             for (key, value) in &self.0 {
-                properties.push_str(&format!("{}={}\n", key, value));
+                writeln!(f, "{}={}", key, value)?;
             }
-
-            properties
+            Ok(())
         }
     }
 
@@ -230,6 +227,8 @@ mod vanilla {
 }
 
 mod bukkit {
+    use std::fmt::Display;
+
     use serde::{Deserialize, Serialize};
 
     use shulker_crds::v1alpha1::minecraft_server::MinecraftServerConfigurationSpec;
@@ -264,12 +263,9 @@ mod bukkit {
         }
     }
 
-    impl ToString for BukkitYml {
-        fn to_string(&self) -> String {
-            let mut yml = serde_yaml::to_string(&self).unwrap();
-            yml.push('\n');
-
-            yml
+    impl Display for BukkitYml {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            writeln!(f, "{}", serde_yaml::to_string(&self).unwrap())
         }
     }
 
@@ -307,6 +303,8 @@ mod bukkit {
 }
 
 mod spigot {
+    use std::fmt::Display;
+
     use serde::{Deserialize, Serialize};
 
     use shulker_crds::v1alpha1::minecraft_server::{
@@ -358,12 +356,9 @@ mod spigot {
         }
     }
 
-    impl ToString for SpigotYml {
-        fn to_string(&self) -> String {
-            let mut yml = serde_yaml::to_string(&self).unwrap();
-            yml.push('\n');
-
-            yml
+    impl Display for SpigotYml {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            writeln!(f, "{}", serde_yaml::to_string(&self).unwrap())
         }
     }
 
@@ -413,6 +408,8 @@ mod spigot {
 }
 
 mod paper {
+    use std::fmt::Display;
+
     use serde::{Deserialize, Serialize};
 
     use shulker_crds::v1alpha1::minecraft_server::{
@@ -465,12 +462,9 @@ mod paper {
         }
     }
 
-    impl ToString for PaperGlobalYml {
-        fn to_string(&self) -> String {
-            let mut yml = serde_yaml::to_string(&self).unwrap();
-            yml.push('\n');
-
-            yml
+    impl Display for PaperGlobalYml {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            writeln!(f, "{}", serde_yaml::to_string(&self).unwrap())
         }
     }
 

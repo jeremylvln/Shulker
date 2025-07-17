@@ -69,7 +69,7 @@ impl ResourceBuilder<'_> for RedisStatefulSetBuilder {
     }
 
     fn is_needed(&self, cluster: &Self::OwnerType) -> bool {
-        cluster.spec.redis.as_ref().map_or(true, |redis| {
+        cluster.spec.redis.as_ref().is_none_or(|redis| {
             redis.type_ == MinecraftClusterRedisDeploymentType::ManagedSingleNode
         })
     }

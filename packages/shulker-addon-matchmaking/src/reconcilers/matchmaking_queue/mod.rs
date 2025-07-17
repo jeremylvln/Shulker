@@ -85,7 +85,7 @@ fn error_policy(
     Action::requeue(Duration::from_secs(5))
 }
 
-pub async fn run<'a>(client: Client, queue_registry: Arc<Mutex<QueueRegistry>>) {
+pub async fn run(client: Client, queue_registry: Arc<Mutex<QueueRegistry>>) {
     let matchmaking_queues_api = Api::<MatchmakingQueue>::all(client.clone());
     if let Err(e) = matchmaking_queues_api
         .list(&ListParams::default().limit(1))
