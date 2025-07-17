@@ -14,9 +14,11 @@ pub struct RedisRef {
 
 impl RedisRef {
     pub fn from_cluster(cluster: &MinecraftCluster) -> Result<Self, anyhow::Error> {
-        let is_managed = cluster.spec.redis.as_ref().map_or(true, |r| {
-            r.type_ == MinecraftClusterRedisDeploymentType::ManagedSingleNode
-        });
+        let is_managed = cluster
+            .spec
+            .redis
+            .as_ref()
+            .is_none_or(|r| r.type_ == MinecraftClusterRedisDeploymentType::ManagedSingleNode);
 
         match is_managed {
             true => Ok(RedisRef {
