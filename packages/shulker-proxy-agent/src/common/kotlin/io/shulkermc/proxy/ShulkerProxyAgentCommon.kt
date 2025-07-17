@@ -4,6 +4,7 @@ import io.shulkermc.cluster.api.ShulkerClusterAPIImpl
 import io.shulkermc.proxy.adapters.filesystem.FileSystemAdapter
 import io.shulkermc.proxy.adapters.filesystem.LocalFileSystemAdapter
 import io.shulkermc.proxy.api.ShulkerProxyAPIImpl
+import io.shulkermc.proxy.handlers.DisconnectPlayerFromClusterHandler
 import io.shulkermc.proxy.handlers.DrainProxyHandler
 import io.shulkermc.proxy.handlers.ReconnectPlayerOnProxyHandler
 import io.shulkermc.proxy.handlers.TeleportPlayerOnServerHandler
@@ -33,6 +34,8 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
     private lateinit var lostProxyPurgeTask: ProxyInterface.ScheduledTask
 
     fun onProxyInitialization() {
+        this.logger.info("Agent version ${BuildConfig.VERSION} built on ${BuildConfig.BUILD_TIME}")
+
         try {
             this.cluster = ShulkerClusterAPIImpl(this.logger)
             this.api = ShulkerProxyAPIImpl(this)
@@ -46,6 +49,7 @@ class ShulkerProxyAgentCommon(val proxyInterface: ProxyInterface, val logger: Lo
             this.cluster.pubSub.onTeleportPlayerOnServer(TeleportPlayerOnServerHandler(this)::handle)
             this.cluster.pubSub.onDrainProxy(DrainProxyHandler(this)::handle)
             this.cluster.pubSub.onReconnectPlayerToCluster(ReconnectPlayerOnProxyHandler(this)::handle)
+            this.cluster.pubSub.onDisconnectPlayerFromCluster(DisconnectPlayerFromClusterHandler(this)::handle)
 
             this.healthcheckTask = HealthcheckTask(this).schedule()
             this.lostProxyPurgeTask = LostProxyPurgeTask(this).schedule()

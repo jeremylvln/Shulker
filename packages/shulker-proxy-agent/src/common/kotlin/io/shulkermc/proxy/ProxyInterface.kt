@@ -7,6 +7,7 @@ import io.shulkermc.proxy.platform.PlayerPreLoginHook
 import io.shulkermc.proxy.platform.ProxyPingHook
 import io.shulkermc.proxy.platform.ServerPostConnectHook
 import io.shulkermc.proxy.platform.ServerPreConnectHook
+import net.kyori.adventure.text.Component
 import java.net.InetSocketAddress
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -69,6 +70,8 @@ interface ProxyInterface {
     )
 
     fun transferEveryoneToAddress(address: InetSocketAddress)
+
+    fun disconnectPlayer(playerId: UUID, message: Component)
 
     fun scheduleDelayedTask(
         delay: Long,

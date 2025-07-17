@@ -9,8 +9,13 @@ import java.util.Base64
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.function.Consumer
+import java.util.logging.Logger
 
-class RedisPubSubAdapter(private val instanceIdentity: String, private val jedisPool: JedisPool) : PubSubAdapter, Closeable {
+class RedisPubSubAdapter(
+    private val logger: Logger,
+    private val instanceIdentity: String,
+    private val jedisPool: JedisPool
+) : PubSubAdapter, Closeable {
     companion object {
         private const val CHANNEL_PREFIX = "shulker"
         private const val TELEPORT_CHANNEL = "$CHANNEL_PREFIX:teleport"
@@ -20,30 +25,38 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
     }
 
     private val executor = Executors.newCachedThreadPool()
+    private var jedisSubscriber = this.jedisPool.resource
 
     override fun close() {
         this.executor.shutdownNow()
+        this.jedisPool.destroy()
     }
 
     override fun subscribe(
         channel: String,
         callback: Consumer<String>,
     ) {
+        this.logger.fine("Subscribing to Redis channel: $channel")
         this.executor.submit {
-            this.jedisPool.resource.use { jedis ->
-                jedis.subscribe(
-                    object : JedisPubSub() {
-                        override fun onMessage(
-                            channel: String,
-                            message: String,
-                        ) {
-                            callback.accept(message)
-                        }
-                    },
-                    channel,
-                    "$channel@${this.instanceIdentity}",
-                )
-            }
+            this.jedisSubscriber.subscribe(
+                object : JedisPubSub() {
+                    override fun onMessage(
+                        channel: String,
+                        message: String,
+                    ) {
+                        callback.accept(message)
+                    }
+                },
+                channel,
+                "$channel@${this.instanceIdentity}",
+            )
+        }
+    }
+
+    private fun publish(channel: String, message: String) {
+        this.logger.fine("Publishing message to Redis channel: $channel")
+        this.jedisPool.resource.use { jedis ->
+            jedis.publish(channel, message)
         }
     }
 
@@ -51,9 +64,7 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
         channel: String,
         message: String,
     ) {
-        this.jedisPool.resource.use { jedis ->
-            jedis.publish(channel, message)
-        }
+        this.publish(channel, message)
     }
 
     override fun sendToProxy(
@@ -61,18 +72,14 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
         channel: String,
         message: String,
     ) {
-        this.jedisPool.resource.use { jedis ->
-            jedis.publish("$channel@$proxyName", message)
-        }
+        this.publish("$channel@$proxyName", message)
     }
 
     override fun broadcastToAllServers(
         channel: String,
         message: String,
     ) {
-        this.jedisPool.resource.use { jedis ->
-            jedis.publish(channel, message)
-        }
+        this.publish(channel, message)
     }
 
     override fun sendToServer(
@@ -80,9 +87,7 @@ class RedisPubSubAdapter(private val instanceIdentity: String, private val jedis
         channel: String,
         message: String,
     ) {
-        this.jedisPool.resource.use { jedis ->
-            jedis.publish("$channel@$serverName", message)
-        }
+        this.publish("$channel@$serverName", message)
     }
 
     override fun teleportPlayerOnServer(

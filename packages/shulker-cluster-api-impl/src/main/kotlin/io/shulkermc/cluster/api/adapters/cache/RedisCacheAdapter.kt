@@ -4,11 +4,12 @@ import io.shulkermc.cluster.api.data.PlayerPosition
 import io.shulkermc.cluster.api.data.RegisteredProxy
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.params.SetParams
+import java.io.Closeable
 import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
-class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
+class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter, Closeable {
     companion object {
         private const val PROXY_LOST_PURGE_LOCK_SECONDS = 15L
         private const val PLAYER_ID_CACHE_TTL_SECONDS = 60L * 60 * 24 * 14
@@ -40,6 +41,10 @@ class RedisCacheAdapter(private val jedisPool: JedisPool) : CacheAdapter {
         // Lock keys
         private const val LOCKS_KEY_PREFIX = "$KEY_PREFIX:locks"
         private const val LOCKS_LOST_PROXIES_PURGE_KEY = "$LOCKS_KEY_PREFIX:lost-proxies-purge"
+    }
+
+    override fun close() {
+        this.jedisPool.destroy()
     }
 
     override fun registerProxy(

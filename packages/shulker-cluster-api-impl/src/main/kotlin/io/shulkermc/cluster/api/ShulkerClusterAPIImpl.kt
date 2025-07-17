@@ -3,7 +3,6 @@ package io.shulkermc.cluster.api
 import com.agones.dev.sdk.AgonesSDK
 import com.agones.dev.sdk.AgonesSDKImpl
 import com.agones.dev.sdk.GameServer
-import io.shulkermc.cluster.api.adapters.cache.CacheAdapter
 import io.shulkermc.cluster.api.adapters.cache.RedisCacheAdapter
 import io.shulkermc.cluster.api.adapters.kubernetes.ImplKubernetesGatewayAdapter
 import io.shulkermc.cluster.api.adapters.kubernetes.KubernetesGatewayAdapter
@@ -18,7 +17,6 @@ import io.shulkermc.cluster.api.messaging.MessagingBus
 import io.shulkermc.sdk.ShulkerSDK
 import io.shulkermc.sdk.ShulkerSDKImpl
 import net.kyori.adventure.text.Component
-import redis.clients.jedis.JedisPool
 import java.io.Closeable
 import java.lang.Exception
 import java.util.Optional
@@ -37,9 +35,8 @@ class ShulkerClusterAPIImpl(val logger: Logger) : ShulkerClusterAPI(), Closeable
     val owningFleetReference: Optional<KubernetesObjectRef>
 
     val kubernetesGateway: KubernetesGatewayAdapter
-    val jedisPool: JedisPool
     val mojangGateway: MojangGatewayAdapter
-    val cache: CacheAdapter
+    val cache: RedisCacheAdapter
     val pubSub: RedisPubSubAdapter
 
     var operatorSdk: ShulkerSDK? = null
@@ -60,17 +57,15 @@ class ShulkerClusterAPIImpl(val logger: Logger) : ShulkerClusterAPI(), Closeable
         }
 
         this.kubernetesGateway = ImplKubernetesGatewayAdapter(this.selfReference, this.owningFleetReference)
-        this.jedisPool = this.configuration.redis.createJedisPool()
-        this.jedisPool.resource.use { jedis -> jedis.ping() }
         this.mojangGateway = HttpMojangGatewayAdapter()
-        this.cache = RedisCacheAdapter(this.jedisPool)
-        this.pubSub = RedisPubSubAdapter(this.selfReference.name, this.jedisPool)
+        this.cache = RedisCacheAdapter(this.configuration.redis.createJedisPool())
+        this.pubSub = RedisPubSubAdapter(this.logger, this.selfReference.name, this.configuration.redis.createJedisPool())
     }
 
     override fun close() {
         try {
             this.pubSub.close()
-            this.jedisPool.destroy()
+            this.cache.close()
             this.kubernetesGateway.destroy()
         } catch (
             @Suppress("TooGenericExceptionCaught") e: Exception,
@@ -92,6 +87,8 @@ class ShulkerClusterAPIImpl(val logger: Logger) : ShulkerClusterAPI(), Closeable
             exitProcess(0)
         }
     }
+
+    override fun uniqueName(): String = this.selfGameServer.objectMeta.name
 
     override fun operator(): ShulkerSDK {
         this.operatorSdk = this.operatorSdk ?: ShulkerSDKImpl.createFromEnvironment()

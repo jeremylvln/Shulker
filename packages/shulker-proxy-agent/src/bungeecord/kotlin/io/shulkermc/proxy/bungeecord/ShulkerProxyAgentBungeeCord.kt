@@ -3,6 +3,7 @@ package io.shulkermc.proxy.bungeecord
 import io.shulkermc.proxy.ShulkerProxyAgentCommon
 import io.shulkermc.proxy.bungeecord.commands.GlobalControlCommand
 import io.shulkermc.proxy.bungeecord.commands.GlobalFindCommand
+import io.shulkermc.proxy.bungeecord.commands.GlobalKickCommand
 import io.shulkermc.proxy.bungeecord.commands.GlobalListCommand
 import io.shulkermc.proxy.bungeecord.commands.GlobalTeleportCommand
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences
@@ -20,6 +21,7 @@ class ShulkerProxyAgentBungeeCord : Plugin() {
         this.proxy.pluginManager.registerCommand(this, GlobalListCommand(this.agent, this.adventure, this.proxy))
         this.proxy.pluginManager.registerCommand(this, GlobalTeleportCommand(this.agent, this.adventure))
         this.proxy.pluginManager.registerCommand(this, GlobalFindCommand(this.agent, this.adventure))
+        this.proxy.pluginManager.registerCommand(this, GlobalKickCommand(this.agent, this.adventure))
         this.proxy.pluginManager.registerCommand(this, GlobalControlCommand(this.agent, this.adventure))
     }
 

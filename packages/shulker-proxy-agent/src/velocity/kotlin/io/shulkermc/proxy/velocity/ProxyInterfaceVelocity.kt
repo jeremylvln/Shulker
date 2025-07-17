@@ -184,6 +184,12 @@ class ProxyInterfaceVelocity(
         }
     }
 
+    override fun disconnectPlayer(playerId: UUID, message: Component) {
+        this.proxy.getPlayer(playerId).ifPresent { player ->
+            player.disconnect(message)
+        }
+    }
+
     override fun getPlayerCount(): Int {
         return this.proxy.playerCount
     }

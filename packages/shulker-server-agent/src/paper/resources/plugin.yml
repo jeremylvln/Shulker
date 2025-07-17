@@ -4,3 +4,4 @@ api-version: 1.18
 main: io.shulkermc.server.paper.ShulkerServerAgentPaper
 author: Jérémy Levilain <jeremy@jeremylvln.fr>
 folia-supported: true
+load: STARTUP

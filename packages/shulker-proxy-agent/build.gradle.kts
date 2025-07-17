@@ -1,3 +1,5 @@
+import java.time.Instant
+
 plugins {
     alias(libs.plugins.buildconfig)
 }
@@ -29,7 +31,13 @@ ktlint {
 buildConfig {
     packageName("io.shulkermc.proxy")
 
-    sourceSets.getByName("velocity") {
-        buildConfigField("String", "VERSION", "\"${project.version}\"")
+    useKotlinOutput {
+        internalVisibility = false
+    }
+
+    sourceSets.getByName("common") {
+        className("BuildConfig")
+        buildConfigField("VERSION", project.version.toString())
+        buildConfigField("BUILD_TIME", Instant.now().toString())
     }
 }

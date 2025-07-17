@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin
 
 @Suppress("unused")
 class ShulkerServerAgentPaper : JavaPlugin() {
-    private val agent = ShulkerServerAgentCommon(ServerInterfacePaper(this), this.getLogger())
+    private val agent = ShulkerServerAgentCommon(ServerInterfacePaper(this), this.logger)
 
     override fun onEnable() {
         this.agent.onServerInitialization()

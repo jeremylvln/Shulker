@@ -6,10 +6,11 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
+import io.shulkermc.proxy.BuildConfig
 import io.shulkermc.proxy.ShulkerProxyAgentCommon
-import io.shulkermc.proxy.VelocityBuildConfig
 import io.shulkermc.proxy.velocity.commands.GlobalControlCommand
 import io.shulkermc.proxy.velocity.commands.GlobalFindCommand
+import io.shulkermc.proxy.velocity.commands.GlobalKickCommand
 import io.shulkermc.proxy.velocity.commands.GlobalListCommand
 import io.shulkermc.proxy.velocity.commands.GlobalTeleportCommand
 import java.util.logging.Logger
@@ -17,7 +18,7 @@ import java.util.logging.Logger
 @Plugin(
     id = "shulker-proxy-agent",
     name = "ShulkerProxyAgent",
-    version = VelocityBuildConfig.VERSION,
+    version = BuildConfig.VERSION,
     authors = ["Jérémy Levilain <jeremy@jeremylvln.fr>"],
 )
 class ShulkerProxyAgentVelocity
@@ -37,6 +38,7 @@ class ShulkerProxyAgentVelocity
             GlobalListCommand.register(this)
             GlobalTeleportCommand.register(this)
             GlobalFindCommand.register(this)
+            GlobalKickCommand.register(this)
             GlobalControlCommand.register(this)
         }
 

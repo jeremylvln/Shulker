@@ -211,6 +211,10 @@ class ProxyInterfaceBungeeCord(
         }
     }
 
+    override fun disconnectPlayer(playerId: UUID, message: Component) {
+        this.proxy.getPlayer(playerId)?.disconnect(*BungeeComponentSerializer.get().serialize(message))
+    }
+
     override fun getPlayerCount(): Int {
         return this.proxy.players.size
     }

@@ -26,6 +26,8 @@ class ShulkerServerAgentCommon(val serverInterface: ServerInterface, val logger:
     private var summonTimeoutTask: ServerInterface.ScheduledTask? = null
 
     fun onServerInitialization() {
+        this.logger.info("Agent version ${BuildConfig.VERSION} built on ${BuildConfig.BUILD_TIME}")
+
         try {
             this.cluster = ShulkerClusterAPIImpl(this.logger)
             this.api = ShulkerServerAPIImpl(this)

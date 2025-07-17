@@ -32,7 +32,15 @@ public abstract class ShulkerClusterAPI {
     }
 
     /**
-     * Gets (and initialize if it is the first call) an instance of the
+     * Returns the name of the GameServer managing the running container.
+     * The name is guaranteed to be unique across the entire Shulker cluster.
+     *
+     * @return The GameServer name
+     */
+    abstract public @NotNull String uniqueName();
+
+    /**
+     * Returns (and initialize if it is the first call) an instance of the
      * gRPC SDK to interact with Shulker Operator.
      *
      * @return An instance of the gRPC SDK
@@ -40,7 +48,7 @@ public abstract class ShulkerClusterAPI {
     abstract public @NotNull ShulkerSDK operator();
 
     /**
-     * Gets the instance of the messaging bus. Can be used to send and/or
+     * Returns the instance of the messaging bus. Can be used to send and/or
      * receive messages from any component in the Shulker cluster.
      *
      * @see MessagingBus
