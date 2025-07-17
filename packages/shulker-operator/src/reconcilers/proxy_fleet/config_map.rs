@@ -238,7 +238,7 @@ mod tests {
 
 mod bungeecord {
     use serde::{Deserialize, Serialize};
-    use std::collections::BTreeMap;
+    use std::{collections::BTreeMap, fmt::Display};
 
     use shulker_crds::v1alpha1::proxy_fleet::{
         ProxyFleetServiceSpec, ProxyFleetServiceType, ProxyFleetTemplateConfigurationSpec,
@@ -331,12 +331,9 @@ mod bungeecord {
         }
     }
 
-    impl ToString for BungeeCordYml {
-        fn to_string(&self) -> String {
-            let mut yml = serde_yaml::to_string(&self).unwrap();
-            yml.push('\n');
-
-            yml
+    impl Display for BungeeCordYml {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            writeln!(f, "{}", serde_yaml::to_string(&self).unwrap())
         }
     }
 
@@ -461,6 +458,8 @@ mod bungeecord {
 }
 
 mod velocity {
+    use std::fmt::Display;
+
     use serde::{Deserialize, Serialize};
 
     use shulker_crds::v1alpha1::proxy_fleet::{
@@ -542,12 +541,9 @@ mod velocity {
         }
     }
 
-    impl ToString for VelocityToml {
-        fn to_string(&self) -> String {
-            let mut toml = toml::to_string(&self).unwrap();
-            toml.push('\n');
-
-            toml
+    impl Display for VelocityToml {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            writeln!(f, "{}", toml::to_string(&self).unwrap())
         }
     }
 

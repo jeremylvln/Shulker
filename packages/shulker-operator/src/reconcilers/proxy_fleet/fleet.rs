@@ -11,7 +11,6 @@ use k8s_openapi::api::core::v1::EmptyDirVolumeSource;
 use k8s_openapi::api::core::v1::EnvVar;
 use k8s_openapi::api::core::v1::EnvVarSource;
 use k8s_openapi::api::core::v1::ExecAction;
-use k8s_openapi::api::core::v1::ObjectFieldSelector;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
 use k8s_openapi::api::core::v1::Probe;
@@ -100,14 +99,17 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
-        _existing_fleet: Option<&Self::ResourceType>,
+        existing_fleet: Option<&Self::ResourceType>,
         context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server_spec = self
             .get_game_server_spec(context.as_ref().unwrap(), proxy_fleet)
             .await?;
+
         let replicas = match &proxy_fleet.spec.autoscaling {
-            Some(_) => 0,
+            Some(_) => existing_fleet
+                .and_then(|fleet| fleet.spec.replicas)
+                .unwrap_or(0),
             None => proxy_fleet.spec.replicas as i32,
         };
 
@@ -393,30 +395,18 @@ impl<'a> FleetBuilder {
                 ..EnvVar::default()
             },
             EnvVar {
-                name: "SHULKER_PROXY_NAMESPACE".to_string(),
-                value_from: Some(EnvVarSource {
-                    field_ref: Some(ObjectFieldSelector {
-                        field_path: "metadata.namespace".to_string(),
-                        ..ObjectFieldSelector::default()
-                    }),
-                    ..EnvVarSource::default()
-                }),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_PROXY_NAME".to_string(),
-                value_from: Some(EnvVarSource {
-                    field_ref: Some(ObjectFieldSelector {
-                        field_path: "metadata.name".to_string(),
-                        ..ObjectFieldSelector::default()
-                    }),
-                    ..EnvVarSource::default()
-                }),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_PROXY_FLEET_NAME".to_string(),
+                name: "SHULKER_OWNING_FLEET_NAME".to_string(),
                 value: Some(proxy_fleet.name_any()),
+                ..EnvVar::default()
+            },
+            EnvVar {
+                name: "SHULKER_REDIS_HOST".to_string(),
+                value: Some(redis_ref.host),
+                ..EnvVar::default()
+            },
+            EnvVar {
+                name: "SHULKER_REDIS_PORT".to_string(),
+                value: Some(redis_ref.port.to_string()),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -427,16 +417,6 @@ impl<'a> FleetBuilder {
             EnvVar {
                 name: "SHULKER_PROXY_PLAYER_DELTA_BEFORE_EXCLUSION".to_string(),
                 value: Some(spec.config.players_delta_before_exclusion.to_string()),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_PROXY_REDIS_HOST".to_string(),
-                value: Some(redis_ref.host),
-                ..EnvVar::default()
-            },
-            EnvVar {
-                name: "SHULKER_PROXY_REDIS_PORT".to_string(),
-                value: Some(redis_ref.port.to_string()),
                 ..EnvVar::default()
             },
             EnvVar {
@@ -625,7 +605,7 @@ impl<'a> FleetBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty());
+            .is_some_and(|list| !list.is_empty());
 
         if has_external_servers {
             volumes.push(Volume {
@@ -676,7 +656,7 @@ impl<'a> FleetBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty());
+            .is_some_and(|list| !list.is_empty());
 
         if has_external_servers {
             volume_mounts.push(VolumeMount {

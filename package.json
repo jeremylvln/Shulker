@@ -4,37 +4,37 @@
   "license": "AGPL-3.0-or-later",
   "private": true,
   "engines": {
-    "node": "^22"
+    "node": "^24"
   },
   "repository": {
     "url": "git@github.com:jeremylvln/Shulker.git"
   },
   "scripts": {
     "prepare": "husky && pnpm run proto:build",
-    "build": "nx run-many --target=build --all",
-    "test": "nx run-many --target=test --all",
+    "build": "nx run-many --target=build --parallel 5",
+    "test": "nx run-many --target=test",
     "format": "prettier --ignore-unknown --write '**/*'",
-    "lint": "nx run-many --target=lint --all",
+    "lint": "nx run-many --target=lint",
     "proto:build": "nx run-many --target=buf --all --skipNxCache"
   },
   "devDependencies": {
     "@bufbuild/buf": "1.55.1",
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
-    "@nx/devkit": "21.1.2",
-    "@nx/gradle": "21.1.2",
+    "@nx/devkit": "21.2.2",
+    "@nx/gradle": "21.2.2",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "10.0.1",
     "husky": "9.1.7",
     "lint-staged": "16.1.2",
-    "nx": "21.1.2",
-    "prettier": "3.5.3",
-    "semantic-release": "24.2.5",
+    "nx": "21.2.2",
+    "prettier": "3.6.2",
+    "semantic-release": "24.2.7",
     "semantic-release-replace-plugin": "1.2.7",
     "yaml": "2.8.0"
   },
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad",
   "pnpm": {
     "overrides": {
       "conventional-changelog-conventionalcommits": "8.0.0"

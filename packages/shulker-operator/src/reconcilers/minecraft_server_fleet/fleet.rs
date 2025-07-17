@@ -53,7 +53,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         &self,
         minecraft_server_fleet: &Self::OwnerType,
         name: &str,
-        _existing_fleet: Option<&Self::ResourceType>,
+        existing_fleet: Option<&Self::ResourceType>,
         context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let mut config_clone = minecraft_server_fleet.spec.template.spec.config.clone();
@@ -104,6 +104,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         let game_server_context = GameServerBuilderContext {
             cluster: context.as_ref().unwrap().cluster,
             agent_config: context.as_ref().unwrap().agent_config,
+            owning_fleet: Some(minecraft_server_fleet),
         };
 
         let game_server_spec = crate::reconcilers::minecraft_server::gameserver::GameServerBuilder::get_game_server_spec(
@@ -111,8 +112,11 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
             &game_server_context,
             &fake_mincraft_server,
         ).await?;
+
         let replicas = match &minecraft_server_fleet.spec.autoscaling {
-            Some(_) => 0,
+            Some(_) => existing_fleet
+                .and_then(|fleet| fleet.spec.replicas)
+                .unwrap_or(0),
             None => minecraft_server_fleet.spec.replicas as i32,
         };
 

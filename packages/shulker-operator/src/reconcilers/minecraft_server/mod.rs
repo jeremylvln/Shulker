@@ -62,6 +62,7 @@ impl MinecraftServerReconciler {
             Some(GameServerBuilderContext {
                 cluster: &cluster,
                 agent_config: &self.agent_config,
+                owning_fleet: None,
             }),
         )
         .await

@@ -34,7 +34,7 @@ impl ResourceBuilder<'_> for ExternalServersConfigMapBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty())
+            .is_some_and(|list| !list.is_empty())
     }
 
     async fn build(

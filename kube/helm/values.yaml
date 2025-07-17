@@ -14,7 +14,7 @@ global:
 operator:
   image:
     repository: ghcr.io/jeremylvln/shulker-operator
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
@@ -22,8 +22,7 @@ operator:
   extraArgs: []
 
   # Additional environment variables to add to the pod.
-  extraEnv:
-    []
+  extraEnv: []
     # - name: MY_ENV_KEY
     #   value: 'my value'
 

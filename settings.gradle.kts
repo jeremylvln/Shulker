@@ -9,12 +9,13 @@ dependencyResolutionManagement {
 
             library("adventure-api", "net.kyori:adventure-api:4.23.0")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.4.0")
+            library("adventure-text-serializer-gson", "net.kyori:adventure-text-serializer-gson:4.23.0")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
             library("apache-commons-io", "commons-io:commons-io:2.19.0")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.21-R0.3")
             library("folia-api", "dev.folia:folia-api:1.20.6-R0.1-SNAPSHOT")
             library("guava", "com.google.guava:guava:33.4.8-jre")
-            library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.58.2")
+            library("grpc-common-protos", "com.google.api.grpc:proto-google-common-protos:2.59.0")
             library("grpc-netty-shaded", "io.grpc", "grpc-netty-shaded").versionRef("grpc")
             library("grpc-protobuf", "io.grpc", "grpc-protobuf").versionRef("grpc")
             library("grpc-services", "io.grpc", "grpc-services").versionRef("grpc")
@@ -28,10 +29,10 @@ dependencyResolutionManagement {
             library("snakeyaml", "org.yaml:snakeyaml:2.4")
             library("velocity-api", "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
-            plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.6.6")
-            plugin("shadow", "com.gradleup.shadow").version("8.3.6")
-            plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("12.1.2")
-            plugin("detekt", "io.gitlab.arturbosch.detekt").version("1.23.7")
+            plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.6.7")
+            plugin("shadow", "com.gradleup.shadow").version("8.3.8")
+            plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("12.3.0")
+            plugin("detekt", "io.gitlab.arturbosch.detekt").version("1.23.8")
         }
     }
 }
@@ -44,6 +45,9 @@ fun includeBindingProject(name: String) {
 includeBindingProject("google-agones-sdk")
 includeBindingProject("google-open-match-sdk")
 includeBindingProject("shulker-sdk")
+
+include(":packages:shulker-cluster-api")
+include(":packages:shulker-cluster-api-impl")
 
 include(":packages:shulker-proxy-api")
 include(":packages:shulker-proxy-agent")
