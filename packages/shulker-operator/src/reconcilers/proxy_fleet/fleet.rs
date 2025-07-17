@@ -99,14 +99,17 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         &self,
         proxy_fleet: &Self::OwnerType,
         name: &str,
-        _existing_fleet: Option<&Self::ResourceType>,
+        existing_fleet: Option<&Self::ResourceType>,
         context: Option<FleetBuilderContext<'a>>,
     ) -> Result<Self::ResourceType, anyhow::Error> {
         let game_server_spec = self
             .get_game_server_spec(context.as_ref().unwrap(), proxy_fleet)
             .await?;
+
         let replicas = match &proxy_fleet.spec.autoscaling {
-            Some(_) => 0,
+            Some(_) => existing_fleet
+                .and_then(|fleet| fleet.spec.replicas)
+                .unwrap_or(0),
             None => proxy_fleet.spec.replicas as i32,
         };
 
@@ -602,7 +605,7 @@ impl<'a> FleetBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty());
+            .is_some_and(|list| !list.is_empty());
 
         if has_external_servers {
             volumes.push(Volume {
@@ -653,7 +656,7 @@ impl<'a> FleetBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty());
+            .is_some_and(|list| !list.is_empty());
 
         if has_external_servers {
             volume_mounts.push(VolumeMount {
