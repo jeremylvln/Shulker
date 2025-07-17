@@ -105,10 +105,12 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
         let game_server_spec = self
             .get_game_server_spec(context.as_ref().unwrap(), proxy_fleet)
             .await?;
-        let replicas = if proxy_fleet.spec.autoscaling.is_some() {
-            existing_fleet.and_then(|fleet| fleet.spec.replicas)
-        } else {
-            Some(proxy_fleet.spec.replicas as i32)
+
+        let replicas = match &proxy_fleet.spec.autoscaling {
+            Some(_) => existing_fleet
+                .and_then(|fleet| fleet.spec.replicas)
+                .unwrap_or(0),
+            None => proxy_fleet.spec.replicas as i32,
         };
 
         let fleet = Fleet {
@@ -123,7 +125,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
                 ..ObjectMeta::default()
             },
             spec: FleetSpec {
-                replicas: replicas,
+                replicas: Some(replicas),
                 strategy: Some(DeploymentStrategy {
                     type_: Some("RollingUpdate".to_string()),
                     rolling_update: Some(RollingUpdateDeployment {
@@ -603,7 +605,7 @@ impl<'a> FleetBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty());
+            .is_some_and(|list| !list.is_empty());
 
         if has_external_servers {
             volumes.push(Volume {
@@ -654,7 +656,7 @@ impl<'a> FleetBuilder {
             .spec
             .external_servers
             .as_ref()
-            .map_or(false, |list| !list.is_empty());
+            .is_some_and(|list| !list.is_empty());
 
         if has_external_servers {
             volume_mounts.push(VolumeMount {

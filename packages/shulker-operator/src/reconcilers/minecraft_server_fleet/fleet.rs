@@ -112,10 +112,12 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
             &game_server_context,
             &fake_mincraft_server,
         ).await?;
-        let replicas = if minecraft_server_fleet.spec.autoscaling.is_some() {
-            existing_fleet.and_then(|fleet| fleet.spec.replicas)
-        } else {
-            Some(minecraft_server_fleet.spec.replicas as i32)
+
+        let replicas = match &minecraft_server_fleet.spec.autoscaling {
+            Some(_) => existing_fleet
+                .and_then(|fleet| fleet.spec.replicas)
+                .unwrap_or(0),
+            None => minecraft_server_fleet.spec.replicas as i32,
         };
 
         let fleet = Fleet {
@@ -130,7 +132,7 @@ impl<'a> ResourceBuilder<'a> for FleetBuilder {
                 ..ObjectMeta::default()
             },
             spec: FleetSpec {
-                replicas: replicas,
+                replicas: Some(replicas),
                 strategy: Some(DeploymentStrategy {
                     type_: Some("Recreate".to_string()),
                     ..DeploymentStrategy::default()

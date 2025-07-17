@@ -16,6 +16,7 @@ metadata:
   name: my-proxy
   namespace: default
 spec:
+  replicas: 0
   strategy:
     rollingUpdate:
       maxSurge: 25%
