@@ -7,7 +7,6 @@ use k8s_openapi::api::core::v1::ContainerPort;
 use k8s_openapi::api::core::v1::EmptyDirVolumeSource;
 use k8s_openapi::api::core::v1::EnvVar;
 use k8s_openapi::api::core::v1::EnvVarSource;
-use k8s_openapi::api::core::v1::ObjectFieldSelector;
 use k8s_openapi::api::core::v1::PodSpec;
 use k8s_openapi::api::core::v1::PodTemplateSpec;
 use k8s_openapi::api::core::v1::SecretKeySelector;
