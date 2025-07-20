@@ -30,6 +30,7 @@ use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
 use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
+use crate::resources::ResourceRefError;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
 use google_agones_crds::v1::game_server::GameServerHealthSpec;
@@ -428,15 +429,18 @@ impl<'a> GameServerBuilder {
         }
 
         if let Some(files) = &spec.config.files {
-            let file_locations: Vec<String> = futures::future::try_join_all(
-                files.iter().map(|loc_resourceref| async {
+            let file_locations: Vec<String> =
+                futures::future::try_join_all(files.iter().map(|loc_resourceref| async {
                     let url = resourceref_resolver
-                        .resolve(minecraft_server.namespace().as_ref().unwrap(), &loc_resourceref.file)
+                        .resolve(
+                            minecraft_server.namespace().as_ref().unwrap(),
+                            &loc_resourceref.file,
+                        )
                         .await?
                         .as_url()?;
                     Ok::<String, ResourceRefError>(format!("{};{}", loc_resourceref.location, url))
-                })
-            ).await?;
+                }))
+                .await?;
 
             env.push(EnvVar {
                 name: "SHULKER_SERVER_FILES".to_string(),
@@ -1101,8 +1105,8 @@ mod tests {
 
         // W
         let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &context, &server)
-                .await
-                .unwrap();
+            .await
+            .unwrap();
 
         // T
         let file_locations_env = env

@@ -7,8 +7,8 @@ $CODECOV -t $CODECOV_TOKEN -F google-open-match-sdk-bindings-java -f .\dist\java
 $CODECOV -t $CODECOV_TOKEN -F google-open-match-sdk-bindings-rust -f ./coverage/rust/google-open-match-sdk-bindings-rust/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F shulker-addon-matchmaking -f ./coverage/rust/shulker-addon-matchmaking/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F shulker-cli -f ./coverage/rust/shulker-cli/cobertura.xml
-$CODECOV -t $CODECOV_TOKEN -F shulker-cluster-api -f ./dist/java/packages/shulker-cluster-api/test-results/test/binary -f ./dist/java/packages/shulker-cluster-api/jacoco/test.exec -f ./dist/java/packages/shulker-cluster-api/reports/tests/test -f ./dist/java/packages/shulker-cluster-api/test-results/test
-$CODECOV -t $CODECOV_TOKEN -F shulker-cluster-api-impl -f ./dist/java/packages/shulker-cluster-api-impl/test-results/test/binary -f ./dist/java/packages/shulker-cluster-api-impl/jacoco/test.exec -f ./dist/java/packages/shulker-cluster-api-impl/reports/tests/test -f ./dist/java/packages/shulker-cluster-api-impl/test-results/test
+$CODECOV -t $CODECOV_TOKEN -F shulker-cluster-api -f .\dist\java\packages\shulker-cluster-api\test-results\test\binary -f .\dist\java\packages\shulker-cluster-api\jacoco\test.exec -f .\dist\java\packages\shulker-cluster-api\reports\tests\test -f .\dist\java\packages\shulker-cluster-api\test-results\test
+$CODECOV -t $CODECOV_TOKEN -F shulker-cluster-api-impl -f .\dist\java\packages\shulker-cluster-api-impl\test-results\test\binary -f .\dist\java\packages\shulker-cluster-api-impl\jacoco\test.exec -f .\dist\java\packages\shulker-cluster-api-impl\reports\tests\test -f .\dist\java\packages\shulker-cluster-api-impl\test-results\test
 $CODECOV -t $CODECOV_TOKEN -F shulker-crds -f ./coverage/rust/shulker-crds/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F shulker-kube-utils -f ./coverage/rust/shulker-kube-utils/cobertura.xml
 $CODECOV -t $CODECOV_TOKEN -F shulker-operator -f ./coverage/rust/shulker-operator/cobertura.xml
