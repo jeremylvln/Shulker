@@ -656,7 +656,8 @@ mod tests {
         ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
     };
     use shulker_crds::{
-        resourceref::ResourceRefSpec, schemas::ImageOverrideSpec,
+        resourceref::{LocationResourceRefSpec, ResourceRefSpec},
+        schemas::ImageOverrideSpec,
         v1alpha1::minecraft_server::MinecraftServerVersion,
     };
     use shulker_kube_utils::reconcilers::{builder::ResourceBuilder, BuilderReconcilerError};
