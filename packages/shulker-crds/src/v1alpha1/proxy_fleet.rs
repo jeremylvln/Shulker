@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
+use super::minecraft_cluster::MinecraftClusterRef;
+use google_agones_crds::v1::game_server::GameServerHealthSpec;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use strum::{Display, IntoStaticStr};
-
-use super::minecraft_cluster::MinecraftClusterRef;
 
 use crate::{
     condition::HasConditions,
@@ -221,6 +221,10 @@ pub struct ProxyFleetTemplatePodOverridesSpec {
     /// Extra ports to add to the created `Pod`'s main container
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ports: Option<Vec<k8s_openapi::api::core::v1::ContainerPort>>,
+
+    /// Overrides Agones Health checks
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health: Option<GameServerHealthSpec>,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, Default, JsonSchema)]
