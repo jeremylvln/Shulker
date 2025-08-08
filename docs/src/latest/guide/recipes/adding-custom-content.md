@@ -122,6 +122,45 @@ spec:
           - url: https://example.com/my-second-patch.tar.gz // [!code focus]
 ```
 
+## Adding files <Badge type="tip" text="servers" />
+
+Shulker supports injecting arbitrary files into your server or proxy at specific locations. This is useful for providing custom configuration files, scripts, or any other single file resource that needs to be present before the server or proxy starts.
+
+Each file injection is defined by a `location` (the path inside the container from the root of the server where the file will be placed) and a `file` (the source to download, which can use any supported resource reference).
+
+Different to patches, files are not extracted, they are simply downloaded and placed at the specified location.
+
+### Example for MinecraftServerFleet
+
+```yaml
+apiVersion: shulkermc.io/v1alpha1
+kind: MinecraftServerFleet
+metadata:
+  name: my-server
+spec:
+  clusterRef:
+    name: my-cluster
+  replicas: 1
+  template:
+    spec:
+      config:
+        files:
+          - location: plugins/config/settings.json
+            file:
+              url: https://example.com/settings.json
+          - location: other-name.yml
+            file:
+              url: https://example.com/custom.yml
+          - location: mods/my-mod.jar
+            file:
+              urlFrom:
+                mavenRef:
+                  repositoryUrl: https://example.com/maven
+                  groupId: com.example
+                  artifactId: mymod
+                  version: '1.0.0'
+```
+
 ## Real-world example
 
 You can find a real-world example of a `ProxyFleet` and `MinecraftServerFleet`
