@@ -155,18 +155,42 @@ impl<'a> GameServerBuilder {
     ) -> Result<GameServerSpec, anyhow::Error> {
         let pod_template_spec =
             Self::get_pod_template_spec(resourceref_resolver, context, minecraft_server).await?;
+        let spec = &minecraft_server.spec;
+
+        // Default health configuration
+        let default_health = GameServerHealthSpec {
+            disabled: Some(false),
+            initial_delay_seconds: Some(30),
+            period_seconds: Some(15),
+            failure_threshold: Some(5),
+        };
+
+        // Initialize health_spec with the default values
+        let mut health_spec = default_health.clone();
+
+        // Check if pod_overrides is present
+        if let Some(pod_overrides) = &spec.pod_overrides {
+            // Check if health is present within pod_overrides
+            if let Some(health) = &pod_overrides.health {
+                // Override the defaults with the values from health if they are present
+                health_spec.disabled = health.disabled.or(default_health.disabled);
+                health_spec.initial_delay_seconds = health
+                    .initial_delay_seconds
+                    .or(default_health.initial_delay_seconds);
+                health_spec.period_seconds =
+                    health.period_seconds.or(default_health.period_seconds);
+                health_spec.failure_threshold = health
+                    .failure_threshold
+                    .or(default_health.failure_threshold);
+            }
+        }
 
         let game_server_spec = GameServerSpec {
             ports: Some(vec![]),
             eviction: Some(GameServerEvictionSpec {
                 safe: "OnUpgrade".to_string(),
             }),
-            health: Some(GameServerHealthSpec {
-                disabled: Some(false),
-                initial_delay_seconds: Some(30),
-                period_seconds: Some(15),
-                failure_threshold: Some(5),
-            }),
+            health: Some(health_spec),
             template: pod_template_spec,
         };
 
@@ -630,6 +654,7 @@ impl<'a> GameServerBuilder {
 
 #[cfg(test)]
 mod tests {
+    use google_agones_crds::v1::game_server::GameServerHealthSpec;
     use k8s_openapi::api::core::v1::{
         ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
     };
@@ -1083,6 +1108,43 @@ mod tests {
             custom_server.value.as_ref().unwrap(),
             "https://example.com/my_custom.jar"
         );
+    }
+
+    #[tokio::test]
+    async fn get_health_settings_from_pod_overrides() {
+        // G
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.pod_overrides.as_mut().unwrap().health = Some(GameServerHealthSpec {
+            disabled: Some(true),
+            initial_delay_seconds: Some(10),
+            period_seconds: Some(20),
+            failure_threshold: Some(3),
+        });
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+        };
+
+        // W
+        let game_server_spec = super::GameServerBuilder::get_game_server_spec(
+            &resourceref_resolver,
+            &context,
+            &server,
+        )
+        .await
+        .unwrap();
+
+        // T
+        let health_spec = game_server_spec.health.unwrap();
+        assert_eq!(health_spec.disabled, Some(true));
+        assert_eq!(health_spec.initial_delay_seconds, Some(10));
+        assert_eq!(health_spec.period_seconds, Some(20));
+        assert_eq!(health_spec.failure_threshold, Some(3));
     }
 
     #[tokio::test]
