@@ -2,6 +2,6 @@
   "name": "@shulkermc/docs",
   "private": true,
   "devDependencies": {
-    "vitepress": "1.6.3"
+    "vitepress": "1.6.4"
   }
 }
