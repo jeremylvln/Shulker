@@ -64,7 +64,7 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
         this.serverProperties = ServerProperties.load()
         this.paperConfig = PaperConfiguration.load()
 
-        var auth = getConfiguredAuth()
+        val auth = getConfiguredAuth()
         this.logger.info("Configured auth type: ${auth.javaClass.simpleName}")
 
         this.server = MinecraftServer.init(auth)
