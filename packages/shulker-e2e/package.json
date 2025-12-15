@@ -9,7 +9,7 @@
     "@jest/test-result": "30.0.5",
     "@jest/types": "30.0.5",
     "@kubernetes/client-node": "^1.3.0",
-    "@tsconfig/node24": "24.0.1",
+    "@tsconfig/node24": "24.0.3",
     "@types/async-retry": "1.4.9",
     "@types/jest": "30.0.0",
     "@types/node": "24.2.0",
