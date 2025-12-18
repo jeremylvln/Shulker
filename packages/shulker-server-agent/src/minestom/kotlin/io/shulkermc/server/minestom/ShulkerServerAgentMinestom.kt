@@ -3,9 +3,8 @@ package io.shulkermc.server.minestom
 import io.shulkermc.server.ShulkerServerAgentCommon
 import io.shulkermc.server.minestom.config.PaperConfiguration
 import io.shulkermc.server.minestom.config.ServerProperties
+import net.minestom.server.Auth
 import net.minestom.server.MinecraftServer
-import net.minestom.server.extras.bungee.BungeeCordProxy
-import net.minestom.server.extras.velocity.VelocityProxy
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
@@ -34,6 +33,11 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
             checkNotNull(INSTANCE) { "Shulker Agent should have been initialized first" }
             INSTANCE!!.onServerReady()
         }
+
+        @JvmStatic
+        fun getInstance(): ShulkerServerAgentMinestom {
+            return checkNotNull(INSTANCE) { "Shulker Agent has not been initialized yet" }
+        }
     }
 
     private lateinit var server: MinecraftServer
@@ -42,25 +46,28 @@ class ShulkerServerAgentMinestom private constructor(private val logger: Logger)
 
     private val agent = ShulkerServerAgentCommon(ServerInterfaceMinestom(), this.logger)
 
+    fun getConfiguredAuth(): Auth { // public so that anyone can check the configured auth type
+        if (this.paperConfig.proxies.velocity.enabled) {
+            return Auth.Velocity(this.paperConfig.proxies.velocity.secret!!)
+        } else {
+            return Auth.Bungee()
+        }
+    }
+
     private fun onServerInitialization() {
         if (System.getenv("EXEC_DIRECTLY") != "true") {
             this.logger.severe("Please set the environment variable EXEC_DIRECTLY to true. It is required so the Minestom server can be shutdown properly.")
             exitProcess(1)
         }
 
-        this.server = MinecraftServer.init()
-
         this.logger.info("Loading configuration files")
         this.serverProperties = ServerProperties.load()
         this.paperConfig = PaperConfiguration.load()
 
-        if (this.paperConfig.proxies.velocity.enabled) {
-            this.logger.info("Enabling Velocity middleware")
-            VelocityProxy.enable(this.paperConfig.proxies.velocity.secret!!)
-        } else {
-            this.logger.info("Enabling BungeeCord middleware")
-            BungeeCordProxy.enable()
-        }
+        val auth = getConfiguredAuth()
+        this.logger.info("Configured auth type: ${auth.javaClass.simpleName}")
+
+        this.server = MinecraftServer.init(auth)
 
         this.agent.onServerInitialization()
 
