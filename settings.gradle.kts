@@ -11,7 +11,7 @@ dependencyResolutionManagement {
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.4.1")
             library("adventure-text-serializer-gson", "net.kyori:adventure-text-serializer-gson:4.24.0")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
-            library("apache-commons-io", "commons-io:commons-io:2.20.0")
+            library("apache-commons-io", "commons-io:commons-io:2.21.0")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.21-R0.4")
             library("folia-api", "dev.folia:folia-api:1.20.6-R0.1-SNAPSHOT")
             library("guava", "com.google.guava:guava:33.5.0-jre")
