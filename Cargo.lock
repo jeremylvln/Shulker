@@ -836,7 +836,7 @@ version = "0.13.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
- "prost",
+ "prost 0.13.5",
  "tonic",
 ]
 
@@ -846,7 +846,7 @@ version = "0.13.0"
 dependencies = [
  "futures-core",
  "pbjson-types",
- "prost",
+ "prost 0.13.5",
  "tonic",
 ]
 
@@ -1314,6 +1314,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1593,7 +1602,7 @@ version = "0.50.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1663,37 +1672,37 @@ checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "pbjson"
-version = "0.7.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7e6349fa080353f4a597daffd05cb81572a9c031a6d4fff7e504947496fcc68"
+checksum = "e8edd1efdd8ab23ba9cb9ace3d9987a72663d5d7c9f74fa00b51d6213645cf6c"
 dependencies = [
- "base64 0.21.7",
+ "base64 0.22.1",
  "serde",
 ]
 
 [[package]]
 name = "pbjson-build"
-version = "0.7.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6eea3058763d6e656105d1403cb04e0a41b7bbac6362d413e7c33be0c32279c9"
+checksum = "2ed4d5c6ae95e08ac768883c8401cf0e8deb4e6e1d6a4e1fd3d2ec4f0ec63200"
 dependencies = [
  "heck",
- "itertools",
- "prost",
+ "itertools 0.14.0",
+ "prost 0.14.1",
  "prost-types",
 ]
 
 [[package]]
 name = "pbjson-types"
-version = "0.7.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e54e5e7bfb1652f95bc361d76f3c780d8e526b134b85417e774166ee941f0887"
+checksum = "a14e2757d877c0f607a82ce1b8560e224370f159d66c5d52eb55ea187ef0350e"
 dependencies = [
  "bytes",
  "chrono",
  "pbjson",
  "pbjson-build",
- "prost",
+ "prost 0.14.1",
  "prost-build",
  "serde",
 ]
@@ -1851,24 +1860,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2796faa41db3ec313a31f7624d9286acf277b52de526150b7e69f3debf891ee5"
 dependencies = [
  "bytes",
- "prost-derive",
+ "prost-derive 0.13.5",
+]
+
+[[package]]
+name = "prost"
+version = "0.14.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7231bd9b3d3d33c86b58adbac74b5ec0ad9f496b19d22801d773636feaa95f3d"
+dependencies = [
+ "bytes",
+ "prost-derive 0.14.1",
 ]
 
 [[package]]
 name = "prost-build"
-version = "0.13.1"
+version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bb182580f71dd070f88d01ce3de9f4da5021db7115d2e1c3605a754153b77c1"
+checksum = "ac6c3320f9abac597dcbc668774ef006702672474aad53c6d596b62e487b40b1"
 dependencies = [
- "bytes",
  "heck",
- "itertools",
+ "itertools 0.13.0",
  "log",
  "multimap",
  "once_cell",
  "petgraph",
  "prettyplease",
- "prost",
+ "prost 0.14.1",
  "prost-types",
  "regex",
  "syn",
@@ -1882,7 +1900,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a56d757972c98b346a9b766e3f02746cde6dd1cd1d1d563472929fdd74bec4d"
 dependencies = [
  "anyhow",
- "itertools",
+ "itertools 0.13.0",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "prost-derive"
+version = "0.14.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9120690fafc389a67ba3803df527d0ec9cbbc9cc45e4cc20b332996dfb672425"
+dependencies = [
+ "anyhow",
+ "itertools 0.13.0",
  "proc-macro2",
  "quote",
  "syn",
@@ -1890,11 +1921,11 @@ dependencies = [
 
 [[package]]
 name = "prost-types"
-version = "0.13.1"
+version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cee5168b05f49d4b0ca581206eb14a7b22fafd963efe729ac48eb03266e25cc2"
+checksum = "b9b4db3d6da204ed77bb26ba83b6122a73aeb2e87e25fbf7ad2e84c4ccbf8f72"
 dependencies = [
- "prost",
+ "prost 0.14.1",
 ]
 
 [[package]]
@@ -2469,7 +2500,7 @@ dependencies = [
  "kube",
  "paste",
  "pbjson-types",
- "prost",
+ "prost 0.13.5",
  "shulker-crds",
  "shulker-kube-utils",
  "shulker-sdk",
@@ -2580,7 +2611,7 @@ dependencies = [
 name = "shulker-sdk"
 version = "0.13.0"
 dependencies = [
- "prost",
+ "prost 0.13.5",
  "tonic",
 ]
 
@@ -2730,7 +2761,7 @@ dependencies = [
  "getrandom 0.3.1",
  "once_cell",
  "rustix",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2953,7 +2984,7 @@ dependencies = [
  "hyper-util",
  "percent-encoding",
  "pin-project",
- "prost",
+ "prost 0.13.5",
  "rustls-pemfile",
  "socket2 0.5.10",
  "tokio",
