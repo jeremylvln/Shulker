@@ -37,7 +37,7 @@
   "packageManager": "pnpm@10.25.0",
   "pnpm": {
     "overrides": {
-      "conventional-changelog-conventionalcommits": "8.0.0"
+      "conventional-changelog-conventionalcommits": "9.1.0"
     },
     "onlyBuiltDependencies": [
       "@bufbuild/buf",
