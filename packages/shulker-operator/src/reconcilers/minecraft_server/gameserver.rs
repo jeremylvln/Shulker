@@ -30,6 +30,7 @@ use crate::reconcilers::agent::get_agent_plugin_url;
 use crate::reconcilers::agent::AgentSide;
 use crate::reconcilers::redis_ref::RedisRef;
 use crate::resources::resourceref_resolver::ResourceRefResolver;
+use crate::resources::ResourceRefError;
 use google_agones_crds::v1::game_server::GameServer;
 use google_agones_crds::v1::game_server::GameServerEvictionSpec;
 use google_agones_crds::v1::game_server::GameServerHealthSpec;
@@ -427,6 +428,27 @@ impl<'a> GameServerBuilder {
             })
         }
 
+        if let Some(files) = &spec.config.files {
+            let file_locations: Vec<String> =
+                futures::future::try_join_all(files.iter().map(|loc_resourceref| async {
+                    let url = resourceref_resolver
+                        .resolve(
+                            minecraft_server.namespace().as_ref().unwrap(),
+                            &loc_resourceref.file,
+                        )
+                        .await?
+                        .as_url()?;
+                    Ok::<String, ResourceRefError>(format!("{};{}", loc_resourceref.location, url))
+                }))
+                .await?;
+
+            env.push(EnvVar {
+                name: "SHULKER_SERVER_FILES".to_string(),
+                value: Some(file_locations.join(";")),
+                ..EnvVar::default()
+            })
+        }
+
         Ok(env)
     }
 
@@ -634,7 +656,8 @@ mod tests {
         ContainerPort, EmptyDirVolumeSource, LocalObjectReference, Volume, VolumeMount,
     };
     use shulker_crds::{
-        resourceref::ResourceRefSpec, schemas::ImageOverrideSpec,
+        resourceref::{LocationResourceRefSpec, ResourceRefSpec},
+        schemas::ImageOverrideSpec,
         v1alpha1::minecraft_server::MinecraftServerVersion,
     };
     use shulker_kube_utils::reconcilers::{builder::ResourceBuilder, BuilderReconcilerError};
@@ -1048,6 +1071,52 @@ mod tests {
         assert_eq!(
             patches_env.value.as_ref().unwrap(),
             "https://example.com/my_patch.tar.gz"
+        );
+    }
+
+    #[tokio::test]
+    async fn get_init_env_contains_file_locations() {
+        let client = create_client_mock();
+        let resourceref_resolver = ResourceRefResolver::new(client);
+        let mut server = TEST_SERVER.clone();
+        server.spec.config.files = Some(vec![
+            LocationResourceRefSpec {
+                location: "config/custom.yml".to_string(),
+                file: ResourceRefSpec {
+                    url: Some("https://example.com/custom.yml".to_string()),
+                    ..ResourceRefSpec::default()
+                },
+            },
+            LocationResourceRefSpec {
+                location: "plugins/config/settings.json".to_string(),
+                file: ResourceRefSpec {
+                    url: Some("https://example.com/settings.json".to_string()),
+                    ..ResourceRefSpec::default()
+                },
+            },
+        ]);
+        let context = super::GameServerBuilderContext {
+            cluster: &TEST_CLUSTER,
+            agent_config: &AgentConfig {
+                maven_repository: constants::SHULKER_PLUGIN_REPOSITORY.to_string(),
+                version: constants::SHULKER_PLUGIN_VERSION.to_string(),
+            },
+            owning_fleet: None,
+        };
+
+        // W
+        let env = super::GameServerBuilder::get_init_env(&resourceref_resolver, &context, &server)
+            .await
+            .unwrap();
+
+        // T
+        let file_locations_env = env
+            .iter()
+            .find(|env| env.name == "SHULKER_SERVER_FILES")
+            .unwrap();
+        assert_eq!(
+            file_locations_env.value.as_ref().unwrap(),
+            "config/custom.yml;https://example.com/custom.yml;plugins/config/settings.json;https://example.com/settings.json"
         );
     }
 

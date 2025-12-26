@@ -26,3 +26,20 @@ if [ ! -z "${SHULKER_SERVER_PATCH_URLS:-}" ]; then
     (cd "${SHULKER_SERVER_CONFIG_DIR}" && wget "${patch_url}" -O - | tar -xzv)
   done
 fi
+
+if [ ! -z "${SHULKER_SERVER_FILES:-}" ]; then
+  # Format expected: "location1;url1;location2;url2" (pairs of entries)
+  IFS=';' read -ra FILE_ENTRIES <<< "${SHULKER_SERVER_FILES}"
+  i=0
+  while [ $i -lt ${#FILE_ENTRIES[@]} ]; do
+    if [ $((i+1)) -lt ${#FILE_ENTRIES[@]} ]; then
+      location="${FILE_ENTRIES[$i]}"
+      url="${FILE_ENTRIES[$((i+1))]}"
+      target_path="${SHULKER_SERVER_CONFIG_DIR}/${location}"
+      mkdir -p "$(dirname "${target_path}")"
+      wget "${url}" -O "${target_path}"
+    fi
+    i=$((i+2))
+  done
+fi
+
