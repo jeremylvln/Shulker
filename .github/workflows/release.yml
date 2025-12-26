@@ -140,7 +140,7 @@ jobs:
         run: helm package .
 
       - name: Upload Helm chart as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: helm-chart-archive
           path: kube/helm/shulker-operator-*.tgz
@@ -168,7 +168,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download built Helm chart
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: helm-chart-archive
           path: helm-charts
