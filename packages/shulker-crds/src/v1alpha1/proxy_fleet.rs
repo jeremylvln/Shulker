@@ -235,6 +235,10 @@ pub struct ProxyFleetServiceSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotations: Option<BTreeMap<String, String>>,
 
+    // Labels to add to the `Service`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<BTreeMap<String, String>>,
+
     // Describe how nodes distribute service traffic to the proxy
     // #[schemars(schema_with = "ProxyFleetServiceSpec::schema_external_traffic_policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
