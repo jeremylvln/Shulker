@@ -9,7 +9,7 @@ use kube::client::Body;
 use kube::{core::ObjectMeta, Client};
 use lazy_static::lazy_static;
 use shulker_crds::{
-    resourceref::ResourceRefSpec,
+    resourceref::{ResourceRefSpec, LocationResourceRefSpec},
     schemas::{FleetAutoscalingSpec, TemplateSpec},
     v1alpha1::{
         minecraft_cluster::MinecraftClusterRef,
@@ -66,6 +66,13 @@ lazy_static! {
                         patches: Some(vec![ResourceRefSpec {
                             url: Some("https://example.com/my_patch.tar.gz".to_string()),
                             ..ResourceRefSpec::default()
+                        }]),
+                        files: Some(vec![LocationResourceRefSpec {
+                            location: "example/location/my_file.txt".to_string(),
+                            file: ResourceRefSpec {
+                                url: Some("https://example.com/my_file.txt".to_string()),
+                                ..ResourceRefSpec::default()
+                            },
                         }]),
                         max_players: 42,
                         disable_nether: false,
