@@ -9,7 +9,7 @@ dependencyResolutionManagement {
 
             library("adventure-api", "net.kyori:adventure-api:4.26.1")
             library("adventure-platform-bungeecord", "net.kyori:adventure-platform-bungeecord:4.4.1")
-            library("adventure-text-serializer-gson", "net.kyori:adventure-text-serializer-gson:4.25.0")
+            library("adventure-text-serializer-gson", "net.kyori:adventure-text-serializer-gson:4.26.1")
             library("annotations-api", "org.apache.tomcat:annotations-api:6.0.53")
             library("apache-commons-io", "commons-io:commons-io:2.22.0")
             library("bungeecord-api", "net.md-5:bungeecord-api:1.21-R0.4")
