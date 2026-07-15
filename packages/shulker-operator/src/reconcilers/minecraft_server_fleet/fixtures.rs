@@ -95,6 +95,7 @@ lazy_static! {
                         volume_mounts: None,
                         volumes: None,
                         ports: None,
+                        health: None,
                     })
                 },
             },
