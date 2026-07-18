@@ -95,7 +95,8 @@ lazy_static! {
                     "internal".to_string()
                 )])),
                 external_traffic_policy: Some(ProxyFleetServiceExternalTrafficPolicy::Cluster),
-                preferred_reconnection_address: Some("127.0.0.1".to_string())
+                preferred_reconnection_address: Some("127.0.0.1".to_string()),
+                labels: None,
             }),
             autoscaling: Some(FleetAutoscalingSpec {
                 agones_policy: Some(FleetAutoscalerPolicySpec {
