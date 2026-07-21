@@ -30,7 +30,7 @@ dependencyResolutionManagement {
             library("velocity-api", "com.velocitypowered:velocity-api:3.4.0")
 
             plugin("buildconfig", "com.github.gmazzo.buildconfig").version("5.7.1")
-            plugin("shadow", "com.gradleup.shadow").version("8.3.11")
+            plugin("shadow", "com.gradleup.shadow").version("9.5.1")
             plugin("ktlint", "org.jlleitschuh.gradle.ktlint").version("12.3.0")
             plugin("detekt", "io.gitlab.arturbosch.detekt").version("1.23.8")
         }
