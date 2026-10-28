@@ -32,7 +32,7 @@
     "prettier": "3.9.10",
     "semantic-release": "24.2.9",
     "semantic-release-replace-plugin": "1.2.7",
-    "yaml": "2.9.0"
+    "yaml": "2.9.1"
   },
   "packageManager": "pnpm@10.34.4",
   "pnpm": {
