@@ -12,8 +12,8 @@ importers:
   .:
     devDependencies:
       '@bufbuild/buf':
-        specifier: 1.71.0
-        version: 1.71.0
+        specifier: 1.74.0
+        version: 1.74.0
       '@commitlint/cli':
         specifier: 19.8.1
         version: 19.8.1(@types/node@24.13.2)(typescript@5.8.3)
@@ -345,50 +345,50 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@bufbuild/buf-darwin-arm64@1.71.0':
-    resolution: {integrity: sha512-qZ7xZQyen/jOKFPVs3dlN9pMA56PI4YEo3r4/9ixtiH9gyFgfowR31axsocUgXGThjiN8mvOA8WfpG2tvaSvsw==}
+  '@bufbuild/buf-darwin-arm64@1.74.0':
+    resolution: {integrity: sha512-494aZ7ISZrak9OJEa10f4k3exTR/XzsVnKBUoEGsTF2Zihjv+Fgl5F3ZKL7ICF4VwOgYAUEWiliY2yo/hTuLGw==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [darwin]
 
-  '@bufbuild/buf-darwin-x64@1.71.0':
-    resolution: {integrity: sha512-2w95pc3X+z06/J66i6uNzA8QPuVOpbPrwyb6tkK0AcJFNvKPVYr4BxVC2koyImrQ3rxY1n9q8qviWMjSvq9fOA==}
+  '@bufbuild/buf-darwin-x64@1.74.0':
+    resolution: {integrity: sha512-Hzuhkemc4OLdm/9KyTX3mHl00HU+tliZXgjOY017OLiAxQaOG8jRhNDgNeDVsJkyovxtc9OeUwydhMpzGq9hFg==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [darwin]
 
-  '@bufbuild/buf-linux-aarch64@1.71.0':
-    resolution: {integrity: sha512-dwxErryMI3MRwtP/IgfdrqEjiAmVpttGhmO3xihiJIV2EAXt9J5yjzHhEDvnSgQ6nmNjEvO5QczcIaQjZEwF6A==}
+  '@bufbuild/buf-linux-aarch64@1.74.0':
+    resolution: {integrity: sha512-2aEdC8r/ssiUGQpq09JIUjUVcyX7scPT4Run4NdEjZWt1MBExtlnSuInIVkirYWn3WOSSkJSqjJnfNe4IUNZng==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [linux]
 
-  '@bufbuild/buf-linux-armv7@1.71.0':
-    resolution: {integrity: sha512-pfc+Qexm5C59VeRUjVmEvxkCXT5QbMR1R/CUtcSlk+spOFVwna0bSpkqIsky3kkHfzxiNSOsz3iki9/pAVX+CA==}
+  '@bufbuild/buf-linux-armv7@1.74.0':
+    resolution: {integrity: sha512-+rF7DYcTsaN5fY46ouVvVvKNLLd/FVZtzRaEuAbIXxg4w/JkV48bXMyPzXPbfU6EaiXiGSZqnVFpcE2YBSudHA==}
     engines: {node: '>=12'}
     cpu: [arm]
     os: [linux]
 
-  '@bufbuild/buf-linux-x64@1.71.0':
-    resolution: {integrity: sha512-Y7jLxr3wpMkpQSqZU/MrDmDSCkF4GxvhIL7wnNdSRpkhYAY6TPRHN+5nNgV7jp6mQ0zQSYh0MGxBeMgt/UVdmQ==}
+  '@bufbuild/buf-linux-x64@1.74.0':
+    resolution: {integrity: sha512-F2VqhsWcbsOW9aHaoKio0o0A5X2YLwB6n9Jm/fIlsdXRoLskW9p2p1bTWQoAxXq0W8iPpXMxZFf1jhM2uTQ+ww==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
 
-  '@bufbuild/buf-win32-arm64@1.71.0':
-    resolution: {integrity: sha512-UrxtD99zLE1qImtQC/W3a9cuj0/kB53B1bK38kmCMRFow939FhdZtqTRjbnZWauRi/pzAsjDyPCvnTa2XKT8Cg==}
+  '@bufbuild/buf-win32-arm64@1.74.0':
+    resolution: {integrity: sha512-fTCHL3ccJSjlttH+VoTArUnccQCrOuxD0HkSAEqscBX22f4/rwvM7vFyuW5VkyYwM57h5S3fPlJ6Cpm2GJFk9w==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [win32]
 
-  '@bufbuild/buf-win32-x64@1.71.0':
-    resolution: {integrity: sha512-+npiOimJ7ggeLul3KFwSlOjZnAZYwt3el64dJ3nJQMnui0avyvsRmU02o1bZI5yUnBvhcnTWdEbfRXUnkkVtgQ==}
+  '@bufbuild/buf-win32-x64@1.74.0':
+    resolution: {integrity: sha512-iUa+mbJ3sYLE55HYxfCkSVrU8mxLx4IGDvb5IkbrxK+z+3Fg4SRTQuHqnnf+GUplYs8/1UfG8DSMd4c7gz+t5g==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
 
-  '@bufbuild/buf@1.71.0':
-    resolution: {integrity: sha512-GDcjBCwLgHT/4nX4YSnYatZ7sDZDpHV6dxQvoT2/P6gKvV23O6hl8NryzLIRKmeau0FRXpQKHVy1dMfnBSpy+w==}
+  '@bufbuild/buf@1.74.0':
+    resolution: {integrity: sha512-EMoeP7tlIWErM69Lp7QJI30pIDa675rPD1SoEEncCps3by8JlzA8qxwjb7IkJNu10Ma0ggynk5lt/qUmTbaHIw==}
     engines: {node: '>=12'}
     hasBin: true
 
@@ -4415,36 +4415,36 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@bufbuild/buf-darwin-arm64@1.71.0':
+  '@bufbuild/buf-darwin-arm64@1.74.0':
     optional: true
 
-  '@bufbuild/buf-darwin-x64@1.71.0':
+  '@bufbuild/buf-darwin-x64@1.74.0':
     optional: true
 
-  '@bufbuild/buf-linux-aarch64@1.71.0':
+  '@bufbuild/buf-linux-aarch64@1.74.0':
     optional: true
 
-  '@bufbuild/buf-linux-armv7@1.71.0':
+  '@bufbuild/buf-linux-armv7@1.74.0':
     optional: true
 
-  '@bufbuild/buf-linux-x64@1.71.0':
+  '@bufbuild/buf-linux-x64@1.74.0':
     optional: true
 
-  '@bufbuild/buf-win32-arm64@1.71.0':
+  '@bufbuild/buf-win32-arm64@1.74.0':
     optional: true
 
-  '@bufbuild/buf-win32-x64@1.71.0':
+  '@bufbuild/buf-win32-x64@1.74.0':
     optional: true
 
-  '@bufbuild/buf@1.71.0':
+  '@bufbuild/buf@1.74.0':
     optionalDependencies:
-      '@bufbuild/buf-darwin-arm64': 1.71.0
-      '@bufbuild/buf-darwin-x64': 1.71.0
-      '@bufbuild/buf-linux-aarch64': 1.71.0
-      '@bufbuild/buf-linux-armv7': 1.71.0
-      '@bufbuild/buf-linux-x64': 1.71.0
-      '@bufbuild/buf-win32-arm64': 1.71.0
-      '@bufbuild/buf-win32-x64': 1.71.0
+      '@bufbuild/buf-darwin-arm64': 1.74.0
+      '@bufbuild/buf-darwin-x64': 1.74.0
+      '@bufbuild/buf-linux-aarch64': 1.74.0
+      '@bufbuild/buf-linux-armv7': 1.74.0
+      '@bufbuild/buf-linux-x64': 1.74.0
+      '@bufbuild/buf-win32-arm64': 1.74.0
+      '@bufbuild/buf-win32-x64': 1.74.0
 
   '@colors/colors@1.5.0':
     optional: true
