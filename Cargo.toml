@@ -35,7 +35,7 @@ anyhow = "1.0.86"
 async-trait = "0.1.81"
 axum = "0.8.0"
 backon = "1.4.1"
-base64 = "0.22.1"
+base64 = "0.23.0"
 chrono = { version = "0.4.38", features = ["serde"] }
 clap = { version = "4.5.16", features = ["derive", "env"] }
 const_format = "0.2.32"
