@@ -49,11 +49,17 @@ impl ResourceBuilder<'_> for ServiceBuilder {
             metadata: ObjectMeta {
                 name: Some(name.to_string()),
                 namespace: Some(proxy_fleet.namespace().unwrap().clone()),
-                labels: Some(ProxyFleetReconciler::get_labels(
-                    proxy_fleet,
-                    "proxy".to_string(),
-                    "proxy".to_string(),
-                )),
+                labels: Some({
+                    let mut labels = ProxyFleetReconciler::get_labels(
+                        proxy_fleet,
+                        "proxy".to_string(),
+                        "proxy".to_string(),
+                    );
+                    if let Some(custom_labels) = &service_config.labels {
+                        labels.extend(custom_labels.clone());
+                    }
+                    labels
+                }),
                 annotations: service_config.annotations.clone(),
                 ..ObjectMeta::default()
             },
@@ -174,4 +180,30 @@ mod tests {
         // T
         assert_eq!(service.metadata.annotations.unwrap(), custom_annotations);
     }
+    #[tokio::test]
+    async fn build_add_custom_labels() {
+        // G
+        let client = create_client_mock();
+        let builder = super::ServiceBuilder::new(client);
+        let custom_labels = BTreeMap::from([(
+            "my-custom-label".to_string(),
+            "my-value".to_string(),
+        )]);
+        let mut proxy_fleet = TEST_PROXY_FLEET.clone();
+        proxy_fleet.spec.service.as_mut().unwrap().labels = Some(custom_labels.clone());
+        let name = super::ServiceBuilder::name(&proxy_fleet);
+
+        // W
+        let service = builder
+            .build(&proxy_fleet, &name, None, None)
+            .await
+            .unwrap();
+
+        // T
+        let service_labels = service.metadata.labels.unwrap();
+        assert_eq!(service_labels.get("my-custom-label").unwrap(), "my-value");
+        // Ensure default labels are still present
+        assert!(service_labels.contains_key("app.kubernetes.io/name"));
+    }
 }
+

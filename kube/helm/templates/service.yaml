@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "shulker-operator.labels" . | nindent 4 }}
     app.kubernetes.io/component: shulker-operator
+  {{- with .Values.operator.service.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .Values.operator.service.annotations }}
   annotations:
     {{ toYaml . | indent 4 }}
