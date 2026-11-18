@@ -5,7 +5,7 @@
 Shulker should be able to be installed on any Kubernetes cluster meeting
 the following criterias:
 
-- The minimum known working Kubernetes version is **1.27**, but it way
+- The minimum known working Kubernetes version is **1.27**, but it may
   work on older versions as well
 - At least one **Linux node** is needed for the Shulker operators to work
   (amd64 or arm64 architectures are supported)
